@@ -1,0 +1,12 @@
+- Penser à ajouter les vérifications d'existance d'une entité si l'on fait un insert ou update, sinon cela produit une erreur 500.
+- (?) Meilleure découpage au niveau du routing, ne pas stocker le router dans BundleManager mais plutôt créer une classe Router dans vendor easy, qu'on pourra récupérer en tant que dépendance avec BundleManager.js
+- BundleManager (?) can inject config file into any bundle file with method like getConfig( configFileName )
+- Respecter Revealing Object Pattern
+- add security (verify type, parsing, etc.)
+- permettre des options dans les vérifications de requête, par exemple: options: 'canBeEmpty' ou 'emptiable'
+- protéger les admins contre toutes requêtes (sauf si c'est un admin)
+- refactor security.js like Skeleton
+- get node-gd for uploads treatments
+
+- Surveiller comment se passe la gestion mémoire
+- tests de montée en charge api

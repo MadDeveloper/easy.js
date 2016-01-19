@@ -1,0 +1,48 @@
+{
+  "name": "PrepApp-API",
+  "version": "0.0.0",
+  "description": "Prep'App API",
+  "main": "index.js",
+  "repository": "bitbucket:prepapp/api",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "orm",
+    "node",
+    "prepapp",
+    "api",
+    "js"
+  ],
+  "author": "prepapp",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "bookshelf": "~0.9.1",
+    "colors": "^1.1.2",
+    "compression": "^1.6.0",
+    "cors": "^2.7.1",
+    "express": "^4.13.3",
+    "helmet": "^1.0.1",
+    "https": "~1.0.0",
+    "jsonwebtoken": "^5.4.1",
+    "knex": "~0.9.0",
+    "ksort": "0.0.6",
+    "lodash": "~3.10.1",
+    "minimist": "^1.2.0",
+    "morgan": "~1.6.1",
+    "multiparty": "^4.1.2",
+    "mysql": "~2.9.0",
+    "numeral": "^1.5.3",
+    "path": "^0.12.7",
+    "pathinfo": "^0.1.0",
+    "uniqid": "^1.0.0",
+    "when": "~3.7.5"
+  },
+  "devDependencies": {
+    "execsql": "0.0.3",
+    "unit.js": "^2.0.0",
+    "walk": "^2.3.9",
+    "mocha": "~2.3.4"
+  }
+}

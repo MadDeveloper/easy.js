@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+var execsql     = require( 'execsql' ),
+    dbConfig    = {
+		host: 'localhost',
+		user: 'root',
+		password: ''
+	},
+    sql         = 'use prepapp;',
+    sqlFile     = __dirname + '/prepapp.sql';
+
+execsql.config( dbConfig )
+	.exec( sql, function( err, results ) {
+        if ( err ) {
+            console.log( err );
+            process.exit();
+        }
+    })
+	.execFile( sqlFile, function( err, results ) {
+        if ( err ) {
+            console.log( err );
+        } else {
+            console.log( '---- Database imported ----' );
+        }
+        process.exit();
+	});
