@@ -41,6 +41,7 @@ module.exports = {
 
     /*
      * Json Web Token (JWT) configurations
+     * CHANGE IT
      */
      jwt: {
          secret: ':p19E}1%&gX1O*K2u8=36#9Jk7I9{f' // http://randomkeygen.com/ -> Ft. Knox Passwords
