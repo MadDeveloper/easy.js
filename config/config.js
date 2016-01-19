@@ -5,7 +5,7 @@ module.exports = {
      * App configurations
      */
     app: {
-        name: 'mydatabase'
+        name: 'myapp'
     },
 
     /*
