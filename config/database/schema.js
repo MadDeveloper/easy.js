@@ -13,8 +13,7 @@ var schema = {
 
     users: {
         id: {type: 'increments', nullable: false, primary: true},
-        first_name: {type: 'string', maxlength: 100, nullable: false},
-        last_name: {type: 'string', maxlength: 100, nullable: false},
+        username: {type: 'string', maxlength: 100, nullable: false},
         email: {type: 'string', maxlength: 255, nullable: false, unique: true},
         password: {type: 'text', fieldtype: 'text', nullable: false},
         role_id: {type: 'integer', nullable: false, unsigned: true, references: 'roles.id', onDelete: 'cascade', onUpdate: 'cascade'}
