@@ -5,7 +5,6 @@ var schema = {
      * because when you will generate database with migrate command
      * if you do inverse, SQL will generate FK ERROR
      */
-
     roles: {
         id: {type: 'increments', nullable: false, primary: true},
         name: {type: 'string', maxlength: 255, nullable: false, unique: true},

@@ -3,9 +3,7 @@ var access = function() {
      * You can edit as you want following roles.
      * Becareful: You must start your roles' id at 2
      */
-    var roleDirector    = 2;
-    var roleTeacher     = 3;
-    var roleStudent     = 4;
+    var roleUser    = 2;
 
     /*
      * DO NOT EDIT OR DELETE THE FOLLOWING VARIABLES
@@ -20,12 +18,7 @@ var access = function() {
         /*
          * You can change the following methods to suit your needs
          */
-        director: roleDirector,
-
-        teacher: roleTeacher,
-
-        student: roleStudent,
-
+        user: roleUser
 
 
         /*

@@ -12,7 +12,7 @@ function bootstrap( config, cliMode ) {
     }
 
     /*
-     * Modules Dependencies
+     * Node modules dependencies
      */
     var express         = require( 'express' );
     var app             = express();

@@ -9,7 +9,7 @@ function BundleManager ( Kernel, databaseConnector, router ) {
         register: function( bundle ) {
             var bundleDirPath = this.getBundlesDir() + '/' + bundle;
 
-            if ( fs.statSync( bundleDirPath).isDirectory() ) {
+            if ( fs.statSync( bundleDirPath ).isDirectory() ) {
                 this.bundlesRegistered.push( bundle );
             }
 

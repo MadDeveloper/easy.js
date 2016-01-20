@@ -16,11 +16,11 @@ var security = function( BundleManager, params ) {
             var token = req.token;
 
             access.restrict({
-                mustBe: [ access.director, access.teacher ],
+                mustBe: [ access.any ],
                 canRead: [],
-                canCreate: [ access.director ],
-                canUpdate: [ access.director ],
-                canDelete: [ access.director ]
+                canCreate: [ access.admin ],
+                canUpdate: [ access.admin ],
+                canDelete: [ access.admin ]
             });
 
             if ( access.focusOn( token.role_id ).canReach( req ) ) {

@@ -105,6 +105,7 @@ var routing = function( BundleManager, params ) {
                         var currentPatch = 0;
 
                         database.transaction( function( t ) {
+
                             ops.forEach( function( patch ) {
                                 switch ( patch.op ) {
                                     case 'replace':
@@ -125,6 +126,7 @@ var routing = function( BundleManager, params ) {
                                         break;
                                 }
                             });
+                            
                         });
                     }
                 });

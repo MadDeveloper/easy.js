@@ -3,9 +3,10 @@ var middlewares = function( BundleManager, params ) {
      * Global dependencies
      */
     var router              = BundleManager.getRouter();
-    var http                = BundleManager.getDependencyInjector().getDependency( 'Http' );
-    var Controller          = BundleManager.getDependencyInjector().getDependency( 'Controller' );
-    var Request             = BundleManager.getDependencyInjector().getDependency( 'Request' );
+    var DependencyInjector  = BundleManager.getDependencyInjector();
+    var http                = DependencyInjector.getDependency( 'Http' );
+    var Controller          = DependencyInjector.getDependency( 'Controller' );
+    var Request             = DependencyInjector.getDependency( 'Request' );
 
     /*
      * Middlewares

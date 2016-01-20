@@ -14,6 +14,7 @@ var routing = function( BundleManager ) {
          * Security
          */
         require( __dirname + '/security/authentication' )( BundleManager );
+        BundleManager.getDependencyInjector().getService( 'security.default' )( BundleManager );
 
     /*
     * bundles routes definitions
