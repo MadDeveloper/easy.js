@@ -1,16 +1,8 @@
-# Prep'App API #
-
-Notes:
-
-- En mode dev les tokens ne sont pas vérifiés, afin de faciliter le debuggage
-- Le framework peut être géré via la console dans le dossier /bin
-    - créer un bundle : node createBundle MyBundle
-    - migrer la db: node migrate (migrate on windows)
-- chaque bundle qui possède ses propres routes doit être enregistré via le BundleManager dans le fichier /config/bundlesRegistered.js
-- Toutes les erreurs 500 sont enregistrées dans le fichier /logs/serverError via le fichier /vendor/easy/Http.js
+# Easy.js #
 
 ## Launch app
 
+    npm start
 
 ## Config
 
@@ -24,6 +16,7 @@ Notes:
 
 ### bundleRegistered
 
+- chaque bundle qui possède ses propres routes doit être enregistré via le BundleManager dans le fichier /config/bundlesRegistered.js
 
 
 ## Bundle
@@ -55,6 +48,7 @@ Notes:
 
 ## Logs
 
+- Toutes les erreurs 500 sont enregistrées dans le fichier /logs/serverError via le fichier /vendor/easy/Http.js
 
 
 ## Options (--expose-gc, --production, --memory)
@@ -63,6 +57,11 @@ Notes:
 
 ## Authentication (JWT)
 
+- En mode dev les tokens ne sont pas vérifiés, afin de faciliter le debuggage
 
 
 ## bin
+
+- Le framework peut être géré via la console dans le dossier /bin
+    - créer un bundle : node createBundle MyBundle
+    - migrer la db: node migrate (migrate on windows)

@@ -1,37 +1,39 @@
 var access = function() {
     /*
      * You can edit as you want following roles.
-     * Becareful: You must start your roles' id at 2
+     * Becareful: You must start your roles' id at 3
      * Roles' id are mapped with ids into database
+     * example: var roleModerator = 3;
      */
-    var roleUser    = 2;
+
 
     /*
-     * DO NOT EDIT OR DELETE THE FOLLOWING VARIABLES
+     * BECAREFUL WHEN EDITING OR DELETING THE FOLLOWING VARIABLES
      */
     var _               = require( 'lodash' );
     var roleAny         = 0;
     var roleAdmin       = 1;
+    var roleUser        = 2;
     var focus           = roleAny;
     var restrictions    = {};
 
     return {
         /*
-         * You can change the following methods to suit your needs
+         * You can add properties below to suit your needs about roles access
+         * example: moderator: roleModerator,
          */
-        user: roleUser
 
 
         /*
-         * DO NOT EDIT THE PART BELOW
+         * BECAREFUL WHEN EDITING THE PART BELOW
          */
+        admin: roleAdmin,
+        user: roleUser,
+        any: roleAny,
+
         isAdmin: function() {
             return focus === roleAdmin;
         },
-
-        admin: roleAdmin,
-
-        any: roleAny,
 
         focusOn: function( role ) {
             focus = role;

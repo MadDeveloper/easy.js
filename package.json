@@ -5,16 +5,17 @@
   "main": "app.js",
   "repository": "https://jsergent-prepapp@bitbucket.org/prepapp/easy.js.git",
   "scripts": {
+    "test": "npm run bundle-tests",
     "bundle-tests": "node bin/bundles/tests",
     "bundle-new": "node bin/bundles/new",
     "db-migrate": "node bin/database/migrate",
     "db-import": "node bin/database/import",
-    "db-roles": "node bin/database/roles"
+    "db-roles": "node bin/database/roles",
+    "start": "node app.js"
   },
   "keywords": [
     "orm",
     "node",
-    "Julien Sergent",
     "api",
     "js",
     "rest",
@@ -36,11 +37,11 @@
     "jsonwebtoken": "^5.4.1",
     "knex": "~0.9.0",
     "ksort": "0.0.6",
-    "lodash": "~3.10.1",
+    "lodash": "~4.0.0",
     "minimist": "^1.2.0",
     "morgan": "~1.6.1",
     "multiparty": "^4.1.2",
-    "mysql": "~2.9.0",
+    "mysql": "~2.10.2",
     "numeral": "^1.5.3",
     "path": "^0.12.7",
     "pathinfo": "^0.1.0",
