@@ -2,6 +2,7 @@ var access = function() {
     /*
      * You can edit as you want following roles.
      * Becareful: You must start your roles' id at 2
+     * Roles' id are mapped with ids into database
      */
     var roleUser    = 2;
 

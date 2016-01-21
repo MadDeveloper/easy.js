@@ -3,20 +3,20 @@
 var fs      = require( 'fs' ),
     walk    = require( 'walk' ),
     path    = require( 'path' ),
-    Message = require( __dirname + '/../vendor/easy/Message' )(),
+    Message = require( __dirname + '/../../vendor/easy/Message' )(),
     argv    = require( 'minimist' )( process.argv.slice( 2 ) );
 
 /*
  * Apply Polyfills
  */
-require( __dirname + '/../vendor/easy/Polyfills' );
+require( __dirname + '/../../vendor/easy/Polyfills' );
 
 var nameBundleFromArgv = argv._[ 0 ] || argv.name || argv.n || "";
 
 if ( nameBundleFromArgv.length > 0 ) {
 
     var nameBundle          = nameBundleFromArgv.capitalizeFirstLetter(),
-        bundlesPath         = __dirname + "/../src/Bundles";
+        bundlesPath         = __dirname + "/../../src/Bundles";
     var nameBundleLowerCase = nameBundle.decapitalizeFirstLetter(),
         skeletonBundlePath  = bundlesPath + "/Skeleton",
         bundleCreatingPath  = bundlesPath + "/" + nameBundle;

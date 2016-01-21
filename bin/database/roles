@@ -9,6 +9,19 @@ var dbConfig    = {
 	password: config.database.connection.password
 };
 
+var Message 			= require( __dirname + '/../../vendor/easy/Message' )();
+var titleError			= "Error when initializing roles";
+var consequenceError	= "Initialization aborted.";
+
+function raiseError( err ) {
+	Message.error({
+		title: titleError,
+		message: err,
+		consequence: consequenceError,
+		exit: 0
+	});
+}
+
 var rolesTable = schema.roles;
 var rolesToAppend = {
 	admin: {
@@ -29,7 +42,7 @@ var usersToAppend = {
 	admin: {
 		id: 1,
 		username: 'admin',
-		email: 'admin@prepapp.com',
+		email: 'admin@example.com',
 		password: 'K18necxhS4G;ur4', // http://randomkeygen.com/ -> Strong passwords
 		role_id: rolesToAppend.admin.id
 	},
@@ -37,7 +50,7 @@ var usersToAppend = {
 	john: {
 		id: 2,
 		username: 'johndoe',
-		email: 'john.doe@prepapp.com',
+		email: 'john.doe@example.com',
 		password: '2Z7P97Y3o829gnr',
 		role_id: rolesToAppend.user.id
 	}
@@ -78,7 +91,6 @@ Object.keys( rolesToAppend ).forEach( function( role ) {
 		}
 	});
 	sqlRoles += ')';
-
 
 	if ( currentRole++ < rolesLength ) {
 		sqlRoles += ', ';
@@ -122,7 +134,6 @@ Object.keys( usersToAppend ).forEach( function( user ) {
 	});
 	sqlUsers += ')';
 
-
 	if ( currentUser++ < usersLength ) {
 		sqlUsers += ', ';
 	} else {
@@ -133,21 +144,19 @@ Object.keys( usersToAppend ).forEach( function( user ) {
 execsql.config( dbConfig )
 	.exec( sqlUse, function( err, results ) {
         if ( err ) {
-            console.log( err );
-            process.exit();
+			raiseError( err );
         }
     })
 	.exec( sqlRoles, function( err, results ) {
         if ( err ) {
-            console.log( err );
-            process.exit();
+			raiseError( err );
         }
 	})
 	.exec( sqlUsers, function( err, results ) {
         if ( err ) {
-            console.log( err );
+			raiseError( err );
         } else {
-            console.log( '---- Roles initialized ----' );
+			Message.success( "Roles initialized." );
         }
         process.exit();
 	});

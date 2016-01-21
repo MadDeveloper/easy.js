@@ -1,20 +1,28 @@
 {
-  "name": "PrepApp-API",
-  "version": "0.0.0",
-  "description": "Prep'App API",
-  "main": "index.js",
-  "repository": "bitbucket:prepapp/api",
+  "name": "Easy.js",
+  "version": "1.0.0",
+  "description": "Easy.js framework",
+  "main": "app.js",
+  "repository": "https://jsergent-prepapp@bitbucket.org/prepapp/easy.js.git",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "bundle-tests": "node bin/bundles/tests",
+    "bundle-new": "node bin/bundles/new",
+    "db-migrate": "node bin/database/migrate",
+    "db-import": "node bin/database/import",
+    "db-roles": "node bin/database/roles"
   },
   "keywords": [
     "orm",
     "node",
-    "prepapp",
+    "Julien Sergent",
     "api",
-    "js"
+    "js",
+    "rest",
+    "restful",
+    "framework",
+    "bundle"
   ],
-  "author": "prepapp",
+  "author": "Julien Sergent",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.14.1",

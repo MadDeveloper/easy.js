@@ -14,7 +14,7 @@ function Message() {
                 console.log( this.getLeftSpaces() + colors.bgRed( colors.white( consequence ) ) );
                 console.log( '\n' );
 
-                if ( typeof params.exit === "undefined" || !isNaN(params.exit) ) {
+                if ( typeof params.exit === "undefined" || !isNaN( params.exit ) ) {
                     process.exit( params.exit );
                 }
 

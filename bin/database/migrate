@@ -1,9 +1,22 @@
 #!/usr/bin/env node
 
-var knex = require( './../config/database/database' );
-var Schema = require( './../config/database/schema' );
+var knex = require( './../../config/database/database' );
+var Schema = require( './../../config/database/schema' );
 var sequence = require( 'when/sequence' );
 var _ = require( 'lodash' );
+
+var Message 			= require( __dirname + '/../../vendor/easy/Message' )();
+var titleError			= "Error when updating database";
+var consequenceError	= "Migration aborted.";
+
+function raiseError( err ) {
+	Message.error({
+		title: titleError,
+		message: err,
+		consequence: consequenceError,
+		exit: 0
+	});
+}
 
 
 function dropTable( tableName ) {
@@ -87,15 +100,12 @@ dropTables()
   .then(function() {
     createTables()
       .then(function() {
-        console.log('---- Schema updated ----');
-        process.exit( 1 );
+          Message.success( "Schema updated." );
       })
-      .catch(function (error) {
-        throw error;
-        process.exit();
+      .catch( function ( error ) {
+          raiseError( error );
     });
   })
   .catch(function (error) {
-    throw error;
-    process.exit();
+      raiseError( error );
   });
