@@ -123,7 +123,7 @@ function bootstrap( config, cliMode ) {
             if ( global.gc ) {
                 global.gc();
             } else if ( false === warnDisplayed ) {
-                Message.warn( "You should launch node server with --expose-gc option." );
+                Message.warn( "You should launch node server with npm start command in order to enable gc." );
                 console.log( '\n' );
                 warnDisplayed = true;
             }

@@ -11,7 +11,7 @@
     "db-migrate": "node bin/database/migrate",
     "db-import": "node bin/database/import",
     "db-roles": "node bin/database/roles",
-    "start": "node app.js"
+    "start": "node --expose-gc app.js"
   },
   "keywords": [
     "orm",
@@ -24,7 +24,7 @@
     "bundle"
   ],
   "author": "Julien Sergent",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.14.1",
     "bookshelf": "~0.9.1",

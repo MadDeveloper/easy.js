@@ -31,9 +31,9 @@ var routing = function( BundleManager, params ) {
     router.route( '/skeletons' )
         .get( function( req, res ) {
             SkeletonRepository.readAll()
-            .then( function( collection ) {
+            .then( function( skeletons ) {
 
-                http.ok( res, collection.toJSON() );
+                http.ok( res, skeletons.toJSON() );
 
             })
             .catch( function( error ) {
@@ -126,7 +126,7 @@ var routing = function( BundleManager, params ) {
                                         break;
                                 }
                             });
-                            
+
                         });
                     }
                 });

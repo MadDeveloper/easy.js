@@ -31,9 +31,9 @@ var routing = function( BundleManager, params ) {
     router.route( '/roles' )
         .get( function( req, res ) {
             RoleRepository.readAll()
-            .then( function( collection ) {
+            .then( function( roles ) {
 
-                http.ok( res, collection.toJSON() );
+                http.ok( res, roles.toJSON() );
 
             })
             .catch( function( error ) {
