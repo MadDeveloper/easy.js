@@ -3,7 +3,9 @@ var access = function() {
      * You can edit as you want following roles.
      * Becareful: You must start your roles' id at 3
      * Roles' id are mapped with ids into database
-     * example: var roleModerator = 3;
+     * example:
+     *
+     * var roleModerator = 3;
      */
 
 
@@ -20,7 +22,13 @@ var access = function() {
     return {
         /*
          * You can add properties below to suit your needs about roles access
-         * example: moderator: roleModerator,
+         * example:
+         *
+         * moderator: roleModerator,
+         *
+         * isModerator: function() {
+         *     return focus === roleModerator;
+         * },
          */
 
 
@@ -33,6 +41,14 @@ var access = function() {
 
         isAdmin: function() {
             return focus === roleAdmin;
+        },
+
+        isUser: function() {
+            return focus === roleUser;
+        },
+
+        isAny: function() {
+            return focus === roleAny;
         },
 
         focusOn: function( role ) {

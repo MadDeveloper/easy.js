@@ -11,11 +11,17 @@ module.exports = {
     /*
      * Server configurations
      */
-    server: {
-        protocol: 'https',
-        domain: 'localhost',
-        port: 443
-    },
+     server: {
+         protocol: {
+             http: 'http',
+             https: 'https'
+         },
+         domain: 'localhost',
+         port: {
+             http: 80,
+             https: 443
+         }
+     },
 
     /*
      * Database credentials
