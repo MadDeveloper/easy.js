@@ -10,7 +10,7 @@ function DependencyInjector( Kernel ) {
         container: {},
 
         servicesDirectoryExists: false,
-        checkExistanceOfServicesDirectory: false,
+        checkExistanceOfServicesDirectory: true,
         servicesDirectoryPath: __dirname + '/../../src/services',
 
         isDependencyAlreadyLoaded: function( dependency ) {
@@ -40,7 +40,7 @@ function DependencyInjector( Kernel ) {
         },
 
         getService: function( service ) {
-            if ( false === this.checkExistanceOfServicesDirectory ) {
+            if ( false !== this.checkExistanceOfServicesDirectory && false === this.servicesDirectoryExists ) {
                 var statsServiceDirectory = fs.lstatSync( this.getServiceDirectoryPath() );
                 if ( statsServiceDirectory.isDirectory() ) {
                     this.servicesDirectoryExists = true;
