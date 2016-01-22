@@ -109,8 +109,11 @@ function bootstrap( config, cliMode ) {
 
         /*
          * Displays everything that happens on the server
+         * when dev mode is used
          */
-        app.use( morgan( 'dev' ) );
+        if ( process.env.NODE_ENV === 'development' ) {
+            app.use( morgan( 'dev' ) );
+        }
 
         /*
          * Register bundles for routing

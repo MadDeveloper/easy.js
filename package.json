@@ -11,7 +11,8 @@
     "db-migrate": "node bin/database/migrate",
     "db-import": "node bin/database/import",
     "db-startup": "node bin/database/startup",
-    "start": "node --expose-gc app.js"
+    "start": "node --expose-gc app.js",
+    "start-prod": "node --expose-gc app.js --prod"
   },
   "keywords": [
     "orm",

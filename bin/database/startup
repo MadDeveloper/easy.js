@@ -56,7 +56,7 @@ function startup() {
 		admin: {
 			id: 1,
 			username: 'admin',
-			email: 'admin@example.com',
+			email: 'admin@easy.com',
 			password: 'K18necxhS4G;ur4', // http://randomkeygen.com/ -> Strong passwords
 			role_id: rolesToAppend.admin.id
 		},
@@ -64,7 +64,7 @@ function startup() {
 		john: {
 			id: 2,
 			username: 'johndoe',
-			email: 'john.doe@example.com',
+			email: 'john.doe@easy.com',
 			password: '2Z7P97Y3o829gnr',
 			role_id: rolesToAppend.user.id
 		}
