@@ -34,8 +34,12 @@ function Message() {
             console.log( this.getLeftSpaces() + colors.cyan( message ) );
         },
 
-        success: function( message ) {
+        success: function( message, exit ) {
             console.log( this.getLeftSpaces() + colors.green( message ) );
+
+            if ( exit ) {
+                process.exit();
+            }
         },
 
         getLeftSpaces: function() {

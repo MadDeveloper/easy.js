@@ -34,7 +34,7 @@ execsql.config( dbConfig )
         if ( err ) {
             raiseError( err );
         } else {
-			Message.success( "Database imported." );
+			Message.success( "Database imported.", true );
         }
         process.exit();
 	});

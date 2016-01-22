@@ -1,22 +1,28 @@
 #!/usr/bin/env node
 
-var fs      = require( 'fs' ),
-    walk    = require( 'walk' ),
-    path    = require( 'path' ),
-    Message = require( __dirname + '/../../vendor/easy/Message' )(),
-    argv    = require( 'minimist' )( process.argv.slice( 2 ) );
+var cliMode         = true;
+var config          = require( __dirname + '/../../config/config' );
+var app             = require( __dirname + '/../../bootstrap.js' )( config, cliMode );
+var schemaBuilder   = app.BundleManager.getDependencyInjector().getService( 'database.schema' );
+var fs              = require( 'fs' );
+var walk            = require( 'walk' );
+var path            = require( 'path' );
+var readline        = require( 'readline' );
+var _               = require( 'lodash' );
+var Message         = require( global.app.root + '/vendor/easy/Message' )();
+var argv            = require( 'minimist' )( process.argv.slice( 2 ) );
 
 /*
  * Apply Polyfills
  */
-require( __dirname + '/../../vendor/easy/Polyfills' );
+require( global.app.root + '/vendor/easy/Polyfills' );
 
 var nameBundleFromArgv = argv._[ 0 ] || argv.name || argv.n || "";
 
 if ( nameBundleFromArgv.length > 0 ) {
 
     var nameBundle          = nameBundleFromArgv.capitalizeFirstLetter(),
-        bundlesPath         = __dirname + "/../../src/Bundles";
+        bundlesPath         = global.app.root + "/src/Bundles";
     var nameBundleLowerCase = nameBundle.decapitalizeFirstLetter(),
         skeletonBundlePath  = bundlesPath + "/Skeleton",
         bundleCreatingPath  = bundlesPath + "/" + nameBundle;
@@ -29,102 +35,159 @@ if ( nameBundleFromArgv.length > 0 ) {
             Message.error({
                 title: "Impossible to create bundle",
                 message: nameBundle + " bundle already exists.",
-                consequence: "Creation aborted."
+                consequence: "Creation aborted.",
+                exit: 0
             });
+        } else {
+            checkIfSkeletonIsDefined();
         }
     });
 
-    /*
-     * Check if Skeleton bundle is defined
-     */
-    fs.lstat( skeletonBundlePath, function ( err, stats ) {
-        if ( err || !stats.isDirectory() ) {
-            Message.error({
-                title: "Impossible to create bundle",
-                message: "Skeleton bundle isn't defined.",
-                consequence: "Creation aborted."
-            });
-        }
-    });
-
-    /*
-     * Check if new bundle directory is correctly created
-     */
-    fs.mkdir( bundleCreatingPath, 0775, function( err ) {
-        if ( err ) {
-            Message.error({
-                title: "Impossible to create bundle",
-                message: "Error when trying create bundle directory.",
-                consequence: "Creation aborted."
-            });
-        }
-    });
-
-    var walker = walk.walk( skeletonBundlePath );
-
-    walker.on( "names", function ( root, nodeNamesArray ) {
-        nodeNamesArray.sort( function ( a, b ) {
-            if ( a > b ) return 1;
-            if ( a < b ) return -1;
-            return 0;
+    function checkIfSkeletonIsDefined() {
+        /*
+         * Check if Skeleton bundle is defined
+         */
+        fs.lstat( skeletonBundlePath, function ( err, stats ) {
+            if ( err || !stats.isDirectory() ) {
+                Message.error({
+                    title: "Impossible to create bundle",
+                    message: "Skeleton bundle isn't defined.",
+                    consequence: "Creation aborted.",
+                    exit: 0
+                });
+            } else {
+                askForTable();
+            }
         });
-    });
+    }
 
-    walker.on( "directories", function ( root, dirStatsArray, next ) {
-        // dirStatsArray is an array of `stat` objects with the additional attributes
-        // * type
-        // * error
-        // * name
-        var newDirName = '';
-        for ( i in dirStatsArray ) {
-          newDirName = dirStatsArray[ i ].name.replace( /Skeleton/gi, nameBundle );
-          fs.mkdir( bundleCreatingPath + '/' + newDirName, function( err ) {
-              if ( err ) {
-                  Message.error({
-                      title: "Impossible to create bundle",
-                      message: "Error when trying create bundle sub-directory <" + newDirName + ">.",
-                      consequence: "Creation aborted."
-                  });
-              }
-          });
-        }
+    function askForTable() {
+        var askForTablePrompt = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
 
-        next();
-    });
+        askForTablePrompt.question( 'Do you want create an associated table into database? (Y/n) ', function( answer ) {
+            var validAnswers = [ 'y', 'yes' ];
+            var wrongAnswers = [ 'n', 'no' ];
 
-    walker.on( "file", function ( root, fileStats, next ) {
-        var skeletonFilePath = path.join( root, fileStats.name );
-        var newBundleFilePath = skeletonFilePath.replace( /Skeleton/g, nameBundle);
+            if ( _.indexOf( validAnswers, answer ) !== -1 ) {
+                /*
+                 * Table associated requested
+                 */
+                 var properties = {};
 
-        fs.readFile( skeletonFilePath, 'utf8', function ( err, data ) {
-            fs.writeFile(
-                newBundleFilePath,
-                data.replace( /Skeleton/g, nameBundle).replace( /skeleton/g, nameBundleLowerCase),
-                {
-                    encoding: 'utf8',
-                    mode: 0775
-                },
-                function( err ) {
-                    if ( err ) {
-                        Message.error({
-                            title: "Impossible to create bundle",
-                            message: "Error when trying create bundle file <" + fileStats.name + ">.",
-                            consequence: "Creation aborted."
-                        });
-                    }
-                }
-            );
+            } else if ( _.indexOf( wrongAnswers, answer ) !== -1 ) [
+                /*
+                 * No table associated requested
+                 */
+                creatingBundleDirectory();
+            ] else {
+                console.log( '\nanswer not valid.\n' );
+                askForTable();
+            }
+
+            askForTablePrompt.close();
+        });
+    }
+
+    function createTable( properties ) {
+
+    }
+
+    function updateSchema( properties ) {
+        creatingBundleDirectory();
+    }
+
+    function creatingBundleDirectory() {
+        /*
+         * Check if new bundle directory is correctly created
+         */
+        fs.mkdir( bundleCreatingPath, 0775, function( err ) {
+            if ( err ) {
+                Message.error({
+                    title: "Impossible to create bundle",
+                    message: "Error when trying create bundle directory.",
+                    consequence: "Creation aborted.",
+                    exit: 0
+                });
+            } else {
+                launchWalker();
+            }
+        });
+    }
+
+    function launchWalker() {
+
+        var walker = walk.walk( skeletonBundlePath );
+
+        walker.on( "names", function ( root, nodeNamesArray ) {
+            nodeNamesArray.sort( function ( a, b ) {
+                if ( a > b ) return 1;
+                if ( a < b ) return -1;
+                return 0;
+            });
+        });
+
+        walker.on( "directories", function ( root, dirStatsArray, next ) {
+            // dirStatsArray is an array of `stat` objects with the additional attributes
+            // * type
+            // * error
+            // * name
+            var newDirName = '';
+            for ( i in dirStatsArray ) {
+              newDirName = dirStatsArray[ i ].name.replace( /Skeleton/gi, nameBundle );
+              fs.mkdir( bundleCreatingPath + '/' + newDirName, function( err ) {
+                  if ( err ) {
+                      Message.error({
+                          title: "Impossible to create bundle",
+                          message: "Error when trying create bundle sub-directory <" + newDirName + ">.",
+                          consequence: "Creation aborted.",
+                          exit: 0
+                      });
+                  }
+              });
+            }
+
             next();
         });
-    });
 
-    walker.on( "errors", function ( root, nodeStatsArray, next ) {
-        next();
-    });
+        walker.on( "file", function ( root, fileStats, next ) {
+            var skeletonFilePath = path.join( root, fileStats.name );
+            var newBundleFilePath = skeletonFilePath.replace( /Skeleton/g, nameBundle);
 
-    walker.on( "end", function () {
-        Message.success( "Bundle " + nameBundle + " created." );
-    });
+            fs.readFile( skeletonFilePath, 'utf8', function ( err, data ) {
+                fs.writeFile(
+                    newBundleFilePath,
+                    data.replace( /Skeleton/g, nameBundle).replace( /skeleton/g, nameBundleLowerCase),
+                    {
+                        encoding: 'utf8',
+                        mode: 0775
+                    },
+                    function( err ) {
+                        if ( err ) {
+                            Message.error({
+                                title: "Impossible to create bundle",
+                                message: "Error when trying create bundle file <" + fileStats.name + ">.",
+                                consequence: "Creation aborted.",
+                                exit: 0
+                            });
+                        }
+                    }
+                );
+                next();
+            });
+        });
+
+        walker.on( "errors", function ( root, nodeStatsArray, next ) {
+            next();
+        });
+
+        walker.on( "end", function () {
+            Message.success( "Bundle " + nameBundle + " created.", true );
+        });
+
+    }
 
 } else {
     Message.info( "\nCommand: \n[node] createBundle nameOfBundle\n" );

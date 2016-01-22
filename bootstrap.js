@@ -2,6 +2,13 @@ var _ = require( 'lodash' );
 
 function bootstrap( config, cliMode ) {
     /*
+     * Define root app path
+     */
+    var path = require( 'path' );
+    global.app = global.app || {};
+    global.app.root = path.resolve( __dirname );
+
+    /*
      * API environement
      */
     var argv = require( 'minimist' )( process.argv.slice( 2 ) );
@@ -12,7 +19,7 @@ function bootstrap( config, cliMode ) {
     }
 
     /*
-     * Node modules dependencies
+     * Modules Dependencies
      */
     var express         = require( 'express' );
     var app             = express();
@@ -158,7 +165,7 @@ function bootstrap( config, cliMode ) {
         return app;
     } else {
         /*
-         * Returns Kernel and BundlesManager into cliMode
+         * Returns Kernel and BundleManager into cliMode
          */
         return {
             Kernel: Kernel,

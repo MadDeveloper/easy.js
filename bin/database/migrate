@@ -100,7 +100,7 @@ dropTables()
   .then(function() {
     createTables()
       .then(function() {
-          Message.success( "Schema updated." );
+          Message.success( "Schema updated.", true );
       })
       .catch( function ( error ) {
           raiseError( error );
