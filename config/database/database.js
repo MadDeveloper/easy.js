@@ -6,7 +6,7 @@ var knex = require( 'knex' )({
         host     : params.connection.host,
         user     : params.connection.user,
         password : params.connection.password,
-        database : params.connection.database,
+        database : null,
         charset  : params.connection.charset
     }
 });
