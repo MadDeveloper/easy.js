@@ -1,6 +1,18 @@
 var knex = require( global.app.root + '/config/database/database' );
 
 module.exports = {
+    createSchema: function( schemaName ) {
+        return knex.raw( 'CREATE DATABASE ' + schemaName + ';' );
+    },
+
+    schemaExists: function( schemaName ) {
+        try {
+            return knex.schema.withSchema( schemaName );
+        } catch( error ) {
+            return false;
+        }
+    },
+
     dropTable: function( tableName ) {
         return knex.schema.dropTableIfExists( tableName );
     },

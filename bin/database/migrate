@@ -1,14 +1,23 @@
 #!/usr/bin/env node
 
-var knex = require( './../../config/database/database' );
-var Schema = require( './../../config/database/schema' );
+var cliMode         = true;
+var config          = require( __dirname + '/../../config/config' );
+var app             = require( __dirname + '/../../bootstrap.js' )( config, cliMode );
+var schemaBuilder   = app.BundleManager.getDependencyInjector().getService( 'database.schema' );
+
+var fs = require( 'fs' );
+var knex = require( global.app.root + '/config/database/database' );
+var Schema = require( global.app.root + '/config/database/schema' );
 var sequence = require( 'when/sequence' );
 var _ = require( 'lodash' );
 
-var Message 			= require( __dirname + '/../../vendor/easy/Message' )();
+var Message 			= require( global.app.root + '/vendor/easy/Message' )();
 var titleError			= "Error when updating database";
 var consequenceError	= "Migration aborted.";
 
+/*
+ * Functions
+ */
 function raiseError( err ) {
 	Message.error({
 		title: titleError,
@@ -96,16 +105,92 @@ function createTables () {
   return sequence(tables);
 }
 
-dropTables()
-  .then(function() {
-    createTables()
-      .then(function() {
-          Message.success( "Schema updated.", true );
-      })
-      .catch( function ( error ) {
-          raiseError( error );
-    });
-  })
-  .catch(function (error) {
-      raiseError( error );
-  });
+function migrate() {
+	dropTables()
+	.then( function() {
+
+		var standalone = true;
+		if ( false === process.argv.standalone ) {
+			standalone = false;
+		}
+
+		if ( standalone ) {
+			createTables()
+			.then( function() {
+				Message.success( "Schema updated.", true );
+			})
+			.catch( function ( error ) {
+				raiseError( error );
+			});
+		} else {
+			var callback = process.argv.callback || function() {};
+			createTables()
+			.then( function() {
+				Message.success( "Schema updated." );
+				callback();
+			})
+			.catch( function ( error ) {
+				raiseError( error );
+				callback();
+			});
+		}
+
+	})
+	.catch( function ( error ) {
+		raiseError( error );
+	});
+}
+
+
+function updateDatabaseNameInConfig() {
+	var databaseConfigFilePath = global.app.root + '/config/database/database.js';
+	fs.readFile( databaseConfigFilePath, { encoding: 'utf8' }, function( error, data ) {
+		if ( error ) {
+			errorUpdatingDatabaseConfigProperty( error );
+		} else {
+	   		var dataUpdated = data.replace( /database\s*:\s*\w+/, 'database : params.connection.database' );
+			fs.writeFile( databaseConfigFilePath, dataUpdated, 'utf8', function ( error ) {
+				if ( error ) {
+					errorUpdatingDatabaseConfigProperty( error );
+				} else {
+					/*
+					 * Configuration succefully edited
+					 * we reconnect database to new schema
+					 */
+					delete require.cache[ require.resolve( global.app.root + '/config/database/database' ) ];
+					knex = require( global.app.root + '/config/database/database' );
+
+					/*
+					 * Continue migration
+					 */
+					migrate();
+				}
+		  	});
+		}
+	});
+
+	function errorUpdatingDatabaseConfigProperty( error ) {
+		Message.error({
+			title: 'Error when trying to edit the database connection property into ' + global.app.root + '/config/config.js path',
+			message: error,
+			consequence: 'Migration aborted.',
+			exit: 0
+		});
+	}
+}
+
+
+/*
+ * Code executed first
+ */
+schemaBuilder.createSchema( config.database.connection.database )
+.then( function( schema ) {
+	/*
+	 * Database created for first time, we set the database config property into ~/config/config.js -> database.connection.database
+	 */
+ 	Message.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' );
+	updateDatabaseNameInConfig();
+})
+.catch( function( error ) {
+	migrate();
+});

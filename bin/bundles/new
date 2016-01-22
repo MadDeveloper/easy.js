@@ -56,7 +56,8 @@ if ( nameBundleFromArgv.length > 0 ) {
                     exit: 0
                 });
             } else {
-                askForTable();
+                // askForTable();
+                createBundleDirectory();
             }
         });
     }
@@ -71,24 +72,26 @@ if ( nameBundleFromArgv.length > 0 ) {
             var validAnswers = [ 'y', 'yes' ];
             var wrongAnswers = [ 'n', 'no' ];
 
+            answer = answer.toLowerCase();
+
             if ( _.indexOf( validAnswers, answer ) !== -1 ) {
                 /*
                  * Table associated requested
                  */
                  var properties = {};
 
-            } else if ( _.indexOf( wrongAnswers, answer ) !== -1 ) [
+            } else if ( _.indexOf( wrongAnswers, answer ) !== -1 ) {
                 /*
                  * No table associated requested
                  */
-                creatingBundleDirectory();
-            ] else {
+                createBundleDirectory();
+            } else {
                 console.log( '\nanswer not valid.\n' );
                 askForTable();
             }
-
-            askForTablePrompt.close();
         });
+
+        askForTablePrompt.close();
     }
 
     function createTable( properties ) {
@@ -96,10 +99,10 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function updateSchema( properties ) {
-        creatingBundleDirectory();
+        createBundleDirectory();
     }
 
-    function creatingBundleDirectory() {
+    function createBundleDirectory() {
         /*
          * Check if new bundle directory is correctly created
          */
