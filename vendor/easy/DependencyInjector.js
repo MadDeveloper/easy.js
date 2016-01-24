@@ -24,7 +24,7 @@ function DependencyInjector( Kernel ) {
                  */
                 switch ( dependency.toLowerCase() ) {
                     case 'http':
-                        params = this.getDependency( 'Logger' );
+                        params = this;
                         break;
                     case 'request':
                         params = Kernel.getAppName();

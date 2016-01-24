@@ -34,7 +34,7 @@ function RoleFactory( BundleManager, params ) {
 
         getController: function( controller ) {
             if ( typeof controller === "undefined" ) {
-                controller = this.currentBundle;
+                controller = 'Routing';
             }
 
             return new ( require( __dirname + '/../Controllers/' + controller + 'Controller' ) )( this );

@@ -3,10 +3,11 @@ var routing = function( BundleManager ) {
      * Middlewares
      */
         /*
-         * Use Request class as a middleware to manage request scope vars
+         * Use Request ans Response class as a middleware to manage respectively request and response scope vars
          */
         BundleManager.getRouter().use( function( req, res, next ) {
             BundleManager.getDependencyInjector().getDependency( 'Request' ).registerRequestScope( req );
+            BundleManager.getDependencyInjector().getDependency( 'Response' ).registerResponseScope( res );
             next();
         });
 
@@ -26,7 +27,7 @@ var routing = function( BundleManager ) {
      */
     BundleManager.getRouter().use( function( req, res ) {
         if ( !res.headersSent ) { // if you want strict mode, comment this condition
-             BundleManager.getDependencyInjector().getDependency( 'Http' ).notFound( res );
+             BundleManager.getDependencyInjector().getDependency( 'Http' ).notFound();
         }
     });
 };

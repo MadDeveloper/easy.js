@@ -3,34 +3,20 @@ var security = function( BundleManager, params ) {
      * Global dependencies
      */
     var router              = BundleManager.getRouter();
-    var DependencyInjector  = BundleManager.getDependencyInjector();
-    var http                = DependencyInjector.getDependency( 'Http' );
-    var Controller          = DependencyInjector.getDependency( 'Controller' );
-    var access              = DependencyInjector.getService( 'security.access' )();
+
+    /*
+     * Skeleton bundle dependencies
+     */
+    var UserSecurityController   = BundleManager.getFactory( 'User' ).getController( 'Security' );
 
     /*
      * Security middlewares
      */
     router.use( '/roles/:idrole/users', function( req, res, next ) {
-        if ( Controller.isProdEnv() ) {
-            var token = req.token;
-
-            access.restrict({
-                mustBe: [ access.any ],
-                canRead: [],
-                canCreate: [ access.admin ],
-                canUpdate: [ access.admin ],
-                canDelete: [ access.admin ]
-            });
-
-            if ( access.focusOn( token.role_id ).canReach( req ) ) {
-                next();
-            } else {
-                http.forbidden( res );
-            }
-        } else {
+        UserSecurityController.authorize()
+        .then( function() {
             next();
-        }
+        });
     });
 };
 

@@ -1,6 +1,9 @@
-var fs = require( 'fs' );
+function Http( DependencyInjector ) {
 
-function Http( Logger ) {
+    var fs          = require( 'fs' );
+    var Logger      = DependencyInjector.getDependency( 'Logger' );
+    var Request     = DependencyInjector.getDependency( 'Request' );
+    var Response    = DependencyInjector.getDependency( 'Response' );
 
     function formatParams( params, setDefault ) {
         if ( typeof params === "undefined" ) {
@@ -46,47 +49,59 @@ function Http( Logger ) {
             internalServerError: 500
         },
 
-        ok: function( res, params ) {
+        ok: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.ok ).json( formatParams( params ) );
         },
 
-        created: function( res, params ) {
+        created: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.created ).json( formatParams( params ) );
         },
 
-        notFound: function( res, params ) {
+        notFound: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.notFound ).json( formatParams( params ) );
         },
 
-        notModified: function( res, params ) {
+        notModified: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.notModified ).json( formatParams( params ) );
         },
 
-        gone: function( res, params ) {
+        gone: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.gone ).json( formatParams( params ) );
         },
 
-        unauthorized: function( res, params ) {
+        unauthorized: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.unauthorized ).json( formatParams( params ) );
         },
 
-        methodNotAllowed: function( res, params ) {
+        methodNotAllowed: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.methodNotAllowed ).json( formatParams( params ) );
         },
 
-        unsupportedMediaType: function( res, params ) {
+        unsupportedMediaType: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.unsupportedMediaType ).json( formatParams( params ) );
         },
 
-        tooManyRequests: function( res, params ) {
+        tooManyRequests: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.tooManyRequests ).json( formatParams( params ) );
         },
 
-        noContent: function( res, params ) {
+        noContent: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.noContent ).json( formatParams( params ) );
         },
 
-        internalServerError: function( req, res, params ) {
+        internalServerError: function( params ) {
+            var req = Request.getScope();
+            var res = Response.getScope();
             var alertLog = '[{currentDate}] -- {remoteHostIp} -- {method} {originalUrl} {statusCode} -- ' + params + '\n';
 
             Logger.alert( alertLog, {
@@ -100,19 +115,23 @@ function Http( Logger ) {
             res.status( this.status.internalServerError ).json( formatParams( params ) );
         },
 
-        badRequest: function( res, params ) {
+        badRequest: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.badRequest ).json( formatParams( params ) );
         },
 
-        unauthorized: function( res, params ) {
+        unauthorized: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.unauthorized ).json( formatParams( params ) );
         },
 
-        forbidden: function( res, params ) {
+        forbidden: function( params ) {
+            var res = Response.getScope();
             res.status( this.status.forbidden ).json( formatParams( params ) );
         },
 
-        attachment: function( res, filePath, options ) {
+        attachment: function( filePath, options ) {
+            var res = Response.getScope();
             // res.attachment( filePath );
             res.sendFile( filePath, options, function ( error ) {
                 if ( error ) {

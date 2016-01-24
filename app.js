@@ -30,7 +30,7 @@ if ( argv._[ 'http' ] || argv.http ) {
 
 var portInUse = function( port, callback ) {
     var serverTest = net.createServer( function( socket ) {
-	       socket.write( 'Echo server\r\n' );
+       socket.write( 'Echo server\r\n' );
 	   socket.pipe( socket );
     });
 

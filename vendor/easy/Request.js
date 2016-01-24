@@ -6,29 +6,49 @@ function Request( appName ) {
             this.requestScope = request;
         },
 
-        getRequestScope: function() {
+        getScope: function() {
             return this.requestScope;
+        },
+
+        getBody: function() {
+            return this.getScope().body;
+        },
+
+        getParams: function() {
+            return this.getScope().params;
+        },
+
+        getBodyParameter: function( key ) {
+            return this.getBody()[ key ];
+        },
+
+        setBodyParameter: function( key, value ) {
+            this.getBody()[ key ] = value;
+        },
+
+        getRouteParameter: function( param ) {
+            return this.getParams()[ param ];
         },
 
         define: function( property, value ) {
             /*
              * Defining global app scope in request
              */
-            if ( !this.getRequestScope().hasOwnProperty( this.getAppName() ) ) {
-                this.getRequestScope()[ this.getAppName() ] = {};
+            if ( !this.getScope().hasOwnProperty( this.getAppName() ) ) {
+                this.getScope()[ this.getAppName() ] = {};
             }
 
             /*
              * Defining or redefine property in app scope in request
              */
-            this.getRequestScope()[ this.getAppName() ][ property ] = value;
+            this.getScope()[ this.getAppName() ][ property ] = value;
 
             return this;
         },
 
         find: function( property ) {
-            if ( this.getRequestScope()[ this.getAppName() ].hasOwnProperty( property ) ) {
-                return this.getRequestScope()[ this.getAppName() ][ property ];
+            if ( this.getScope()[ this.getAppName() ].hasOwnProperty( property ) ) {
+                return this.getScope()[ this.getAppName() ][ property ];
             } else {
                 return undefined;
             }
