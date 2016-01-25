@@ -12,7 +12,8 @@ function authentication( BundleManager ) {
     /*
      * Provide Http helpers
      */
-    var http = BundleManager.getDependencyInjector().getDependency( 'Http' );
+    var Request = BundleManager.getDependencyInjector().getDependency( 'Request' );
+    var http    = BundleManager.getDependencyInjector().getDependency( 'Http' );
 
     /*
      * JWT
@@ -44,35 +45,35 @@ function authentication( BundleManager ) {
             );
 
             if ( requestValidity ) {
-                UserRepository.read({ email: req.body.email })
+                UserRepository.read({ email: Request.getBodyParameter( 'email' ) })
                 .then( function( user ) {
                     if ( user ) {
 
-                        if ( req.body.password == user.get('password') ) {
+                        if ( Request.getBodyParameter( 'password' ) == user.get('password') ) {
 
                             var token = jwt.sign( user.toJSON(), config.jwt.secret, { expiresIn: 86400 /* 24 hours */ } );
-                            http.ok( res, { token: token } );
+                            http.ok({ token: token });
 
                         } else {
-                            http.unauthorized( res );
+                            http.unauthorized();
                         }
 
                     } else {
-                        http.notFound( res );
+                        http.notFound();
                     }
                 })
                 .catch( function( error ) {
-                    http.internalServerError( req, res, error );
+                    http.internalServerError( error );
                 });
             } else {
-                http.badRequest( res );
+                http.badRequest();
             }
         });
 
     /*
      * Check token validity
      */
-    require( './authorized' )( http, jwt, config.jwt.secret, router );
+    require( './authorized' )( http, Request, jwt, config.jwt.secret, router );
 }
 
 module.exports = authentication;

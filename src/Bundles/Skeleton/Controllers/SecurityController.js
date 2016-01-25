@@ -5,6 +5,7 @@ function SecurityController( SkeletonFactory ) {
     var DependencyInjector  = BundleManager.getDependencyInjector();
     var http                = DependencyInjector.getDependency( 'Http' );
     var Controller          = DependencyInjector.getDependency( 'Controller' );
+    var Request             = DependencyInjector.getDependency( 'Request' );
     var access              = DependencyInjector.getService( 'security.access' )();
 
     return {
