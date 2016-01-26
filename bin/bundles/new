@@ -79,26 +79,44 @@ if ( nameBundleFromArgv.length > 0 ) {
                 /*
                  * Table associated requested
                  */
-                 var properties = {};
-
+                askForProperties();
             } else if ( _.indexOf( wrongAnswers, answer ) !== -1 ) {
                 /*
                  * No table associated requested
                  */
                 createBundleDirectory();
             } else {
-                console.log( '\nanswer not valid.\n' );
+                Message.error({
+                    title: "Answer not valid",
+                    message: "Answer must be: y or n."
+                });
                 askForTable();
             }
         });
     }
 
-    function createTable( properties ) {
+    function askForProperties() {
+        var properties = {};
 
+        /*
+         * We ask for properties
+         */
+        var askForPropertiesPrompt = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        askForPropertiesPrompt.question( '' );
+
+        createTable( properties );
+    }
+
+    function createTable( properties ) {
+        updateSchema( properties );
     }
 
     function updateSchema( properties ) {
-        createBundleDirectory();
+        //createBundleDirectory();
     }
 
     function createBundleDirectory() {

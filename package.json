@@ -12,7 +12,8 @@
     "db-import": "node bin/database/import",
     "db-startup": "node bin/database/startup",
     "start": "node --expose-gc app.js",
-    "start-prod": "node --expose-gc app.js --prod"
+    "start-prod": "node --expose-gc app.js --prod",
+    "start-forever": "node --expose-gc app.js --prod &"
   },
   "keywords": [
     "orm",

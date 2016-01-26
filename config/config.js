@@ -1,5 +1,17 @@
 var fs = require( 'fs' );
 
+function getCredentials() {
+    var credentials = { key: null, cert: null };
+
+    try {
+        credentials.key = fs.readFileSync( __dirname + '/keys/myapp-privkey.pem' );
+        credentials.cert = fs.readFileSync( __dirname + '/keys/myapp-cert.pem' );
+    }
+    finally {
+        return credentials;
+    }
+}
+
 module.exports = {
     /*
      * App configurations
@@ -40,10 +52,7 @@ module.exports = {
     /*
      * SSL/TLS security keys
      */
-    credentials: {
-        key: fs.readFileSync( __dirname + '/keys/myapp-privkey.pem' ),
-        cert: fs.readFileSync( __dirname + '/keys/myapp-cert.pem' )
-    },
+    credentials: getCredentials(),
 
     /*
      * Json Web Token (JWT) configurations

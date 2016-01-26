@@ -1,31 +1,35 @@
 /*
- * Start server: node app
+ * Start server: npm start
  */
 
 /*
  * App requirements
  */
-var config  = require( __dirname + '/config/config' );
-var https   = require( 'https' );
-var http    = require( 'http' );
-var app     = require( './bootstrap' )( config );
-var net     = require( 'net' );
-var argv    = require( 'minimist' )( process.argv.slice( 2 ) );
+var config      = require( __dirname + '/config/config' );
+var https       = require( 'https' );
+var http        = require( 'http' );
+var app         = require( './bootstrap' )( config );
+var net         = require( 'net' );
+var argv        = require( 'minimist' )( process.argv.slice( 2 ) );
 
-/*
- * By default, easy framework create an HTTPS server
- */
-var server      = https.createServer( config.credentials, app );
-var port        = config.server.port.https;
-var protocol    = config.server.protocol.https;
+var server      = null;
+var port        = 0;
+var protocol    = '';
 
-if ( argv._[ 'http' ] || argv.http ) {
+if ( argv._[ 'http' ] || argv.http || ( null === config.credentials.key && null === config.credentials.cert ) ) {
     /*
-     * If specified into options, we create an HTTP server
+     * If specified into options or if https credentials are not found (keys and cert), we create an HTTP server
      */
     port        = config.server.port.http;
     server      = http.createServer( app );
     protocol    = config.server.protocol.http;
+} else {
+    /*
+     * By default, easy framework create an HTTPS server or if https credentials are not found (keys and cert)
+     */
+    server      = https.createServer( config.credentials, app );
+    port        = config.server.port.https;
+    protocol    = config.server.protocol.https;
 }
 
 var portInUse = function( port, callback ) {
