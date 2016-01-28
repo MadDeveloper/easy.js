@@ -1,9 +1,9 @@
 /*
- * Database (Knex SQL query builder)
+ * Database
  */
-knex = require( './database' );
+var database = require( './database' );
 
 /*
  * ORM (Bookshelf)
  */
-module.exports = require( 'bookshelf' )( knex );
+module.exports = require( 'bookshelf' )( database );

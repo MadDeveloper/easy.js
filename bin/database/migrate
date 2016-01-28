@@ -6,7 +6,7 @@ var app             = require( __dirname + '/../../bootstrap.js' )( config, cliM
 var schemaBuilder   = app.BundleManager.getDependencyInjector().getService( 'database.schema' );
 
 var fs = require( 'fs' );
-var knex = require( global.app.root + '/config/database/database' );
+var database = require( global.app.root + '/config/database/database' );
 var Schema = require( global.app.root + '/config/database/schema' );
 var sequence = require( 'when/sequence' );
 var _ = require( 'lodash' );
@@ -29,11 +29,11 @@ function raiseError( err ) {
 
 
 function dropTable( tableName ) {
-    return knex.schema.dropTableIfExists( tableName );
+    return database.schema.dropTableIfExists( tableName );
 }
 
 function createTable(tableName) {
-  return knex.schema.createTable(tableName, function (table) {
+  return database.schema.createTable(tableName, function (table) {
         var column;
         var columnKeys = _.keys(Schema[tableName]);
         console.log( "Updating table : " + tableName );
@@ -158,7 +158,7 @@ function updateDatabaseNameInConfig() {
 					 * we reconnect database to new schema
 					 */
 					delete require.cache[ require.resolve( global.app.root + '/config/database/database' ) ];
-					knex = require( global.app.root + '/config/database/database' );
+					database = require( global.app.root + '/config/database/database' );
 
 					/*
 					 * Continue migration

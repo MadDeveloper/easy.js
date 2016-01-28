@@ -1,3 +1,6 @@
+/*
+ * Never change var name (schema) neither type
+ */
 var schema = {
     /*
      * First place your tables with primaries keys

@@ -1,72 +1,73 @@
-var knex = require( global.app.root + '/config/database/database' );
+var database    = require( global.app.root + '/config/database/database' );
+var _           = require( 'lodash' );
 
 module.exports = {
     createSchema: function( schemaName ) {
-        return knex.raw( 'CREATE DATABASE ' + schemaName + ';' );
+        return database.raw( 'CREATE DATABASE ' + schemaName + ';' );
     },
 
     schemaExists: function( schemaName ) {
         try {
-            return knex.schema.withSchema( schemaName );
+            return database.schema.withSchema( schemaName );
         } catch( error ) {
             return false;
         }
     },
 
     dropTable: function( tableName ) {
-        return knex.schema.dropTableIfExists( tableName );
+        return database.schema.dropTableIfExists( tableName );
     },
 
     tableExists: function( tableName ) {
-        knex.schema.hasTable( tableName ).then( function( exists ) {
+        database.schema.hasTable( tableName ).then( function( exists ) {
             return exists;
         });
     },
 
-    createTable: function( tableName ) {
-      return knex.schema.createTable(tableName, function (table) {
+    createTable: function( tableName, tableSchema ) {
+        return database.schema.createTable( tableName, function ( table ) {
             var column;
-            var columnKeys = _.keys(Schema[tableName]);
-            console.log( "Updating table : " + tableName );
-            _.each(columnKeys, function (key) {
-              if (Schema[tableName][key].type === 'text' && Schema[tableName][key].hasOwnProperty('fieldtype')) {
-                column = table[Schema[tableName][key].type](key, Schema[tableName][key].fieldtype);
+            var columnKeys = _.keys( tableSchema );
+
+            _.each( columnKeys, function ( key ) {
+              if (tableSchema[ key ].type === 'text' && tableSchema[ key ].hasOwnProperty('fieldtype')) {
+                column = table[tableSchema[ key ].type](key, tableSchema[ key ].fieldtype);
               }
-              else if (Schema[tableName][key].type === 'string' && Schema[tableName][key].hasOwnProperty('maxlength')) {
-                column = table[Schema[tableName][key].type](key, Schema[tableName][key].maxlength);
+              else if (tableSchema[ key ].type === 'string' && tableSchema[ key ].hasOwnProperty('maxlength')) {
+                column = table[tableSchema[ key ].type](key, tableSchema[ key ].maxlength);
               }
-              else if (Schema[tableName][key].type === 'decimal' && Schema[tableName][key].hasOwnProperty('precision')) {
-                column = table[Schema[tableName][key].type](key, Schema[tableName][key].precision);
+              else if ( ( tableSchema[ key ].type === 'float' || tableSchema[ key ].type === 'decimal' ) && tableSchema[ key ].hasOwnProperty('precision')) {
+                column = table[tableSchema[ key ].type](key, tableSchema[ key ].precision);
               }
               else {
-                column = table[Schema[tableName][key].type](key);
+                column = table[tableSchema[ key ].type](key);
               }
-              if (Schema[tableName][key].hasOwnProperty('nullable') && Schema[tableName][key].nullable === true) {
+              if (tableSchema[ key ].hasOwnProperty('nullable') && tableSchema[ key ].nullable === true) {
                 column.nullable();
               }
               else {
                 column.notNullable();
               }
-              if (Schema[tableName][key].hasOwnProperty('primary') && Schema[tableName][key].primary === true) {
+              if (tableSchema[ key ].hasOwnProperty('primary') && tableSchema[ key ].primary === true) {
                 column.primary();
               }
-              if (Schema[tableName][key].hasOwnProperty('unique') && Schema[tableName][key].unique) {
+              if (tableSchema[ key ].hasOwnProperty('unique') && tableSchema[ key ].unique) {
                 column.unique();
               }
-              if (Schema[tableName][key].hasOwnProperty('unsigned') && Schema[tableName][key].unsigned) {
+              if (tableSchema[ key ].hasOwnProperty('unsigned') && tableSchema[ key ].unsigned) {
                 column.unsigned();
               }
-              if (Schema[tableName][key].hasOwnProperty('references')) {
-                column.references(Schema[tableName][key].references);
+              if (tableSchema[ key ].hasOwnProperty('references')) {
+                column.references(tableSchema[ key ].references);
               }
-              if (Schema[tableName][key].hasOwnProperty('onDelete') && Schema[tableName][key].onDelete.length > 0) {
-                column.onDelete(Schema[tableName][key].onDelete);
+              if (tableSchema[ key ].hasOwnProperty('onDelete') && tableSchema[ key ].onDelete.length > 0) {
+                column.onDelete(tableSchema[ key ].onDelete);
               }
-              if (Schema[tableName][key].hasOwnProperty('onUpdate') && Schema[tableName][key].onUpdate.length > 0) {
-                column.onUpdate(Schema[tableName][key].onUpdate);
+              if (tableSchema[ key ].hasOwnProperty('onUpdate') && tableSchema[ key ].onUpdate.length > 0) {
+                column.onUpdate(tableSchema[ key ].onUpdate);
               }
-              if (Schema[tableName][key].hasOwnProperty('defaultTo')) {
-                column.defaultTo(Schema[tableName][key].defaultTo);
+              if (tableSchema[ key ].hasOwnProperty('defaultTo')) {
+                column.defaultTo(tableSchema[ key ].defaultTo);
               }
             });
         });

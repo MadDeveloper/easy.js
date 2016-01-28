@@ -47,6 +47,7 @@
     "numeral": "^1.5.3",
     "path": "^0.12.7",
     "pathinfo": "^0.1.0",
+    "readline-sync": "^1.3.0",
     "uniqid": "^1.0.0",
     "when": "~3.7.5"
   },

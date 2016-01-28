@@ -4,10 +4,11 @@ var cliMode         = true;
 var config          = require( __dirname + '/../../config/config' );
 var app             = require( __dirname + '/../../bootstrap.js' )( config, cliMode );
 var schemaBuilder   = app.BundleManager.getDependencyInjector().getService( 'database.schema' );
+var stringTransform = app.BundleManager.getDependencyInjector().getService( 'string.transform' );
 var fs              = require( 'fs' );
 var walk            = require( 'walk' );
 var path            = require( 'path' );
-var readline        = require( 'readline' );
+var readlineSync    = require( 'readline-sync' );
 var _               = require( 'lodash' );
 var Message         = require( global.app.root + '/vendor/easy/Message' )();
 var argv            = require( 'minimist' )( process.argv.slice( 2 ) );
@@ -21,11 +22,14 @@ var nameBundleFromArgv = argv._[ 0 ] || argv.name || argv.n || "";
 
 if ( nameBundleFromArgv.length > 0 ) {
 
-    var nameBundle          = nameBundleFromArgv.capitalizeFirstLetter(),
+    var nameBundle          = nameBundleFromArgv.capitalizeFirstLetter().trim(),
         bundlesPath         = global.app.root + "/src/Bundles";
     var nameBundleLowerCase = nameBundle.decapitalizeFirstLetter(),
         skeletonBundlePath  = bundlesPath + "/Skeleton",
         bundleCreatingPath  = bundlesPath + "/" + nameBundle;
+
+    var positiveAnswers = [ 'y', 'ye', 'yes' ];
+    var negativeAnswers = [ 'n', 'no' ];
 
     /*
      * Check if bundle isn't defined yet
@@ -62,61 +66,241 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForTable() {
-        var askForTablePrompt = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
+        var createAssociatedTable = readlineSync.question( 'Do you want create an associated table into database? (y/n) ' ).toLowerCase();
 
-        askForTablePrompt.question( 'Do you want create an associated table into database? (Y/n) ', function( answer ) {
-            askForTablePrompt.close();
-
-            var validAnswers = [ 'y', 'yes' ];
-            var wrongAnswers = [ 'n', 'no' ];
-
-            answer = answer.toLowerCase();
-
-            if ( _.indexOf( validAnswers, answer ) !== -1 ) {
-                /*
-                 * Table associated requested
-                 */
-                askForProperties();
-            } else if ( _.indexOf( wrongAnswers, answer ) !== -1 ) {
-                /*
-                 * No table associated requested
-                 */
-                createBundleDirectory();
-            } else {
-                Message.error({
-                    title: "Answer not valid",
-                    message: "Answer must be: y or n."
-                });
-                askForTable();
-            }
-        });
+        if ( _.indexOf( positiveAnswers, createAssociatedTable ) !== -1 ) {
+            /*
+             * Table associated requested
+             */
+            askForProperties();
+        } else if ( _.indexOf( negativeAnswers, createAssociatedTable ) !== -1 ) {
+            /*
+             * No table associated requested
+             */
+            createBundleDirectory();
+        } else {
+            askForTable();
+        }
     }
 
-    function askForProperties() {
-        var properties = {};
+    var properties              = [];
+    var availablesColumnType    = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal', 'boolean', 'date', 'datetime', 'time', 'timestamp', 'reference' ];
+    var specialColumnType       = [ 'integer', 'bigInteger', 'increments', 'text', 'string', 'float', 'decimal', 'reference' ];
 
+    function askForProperties() {
         /*
          * We ask for properties
          */
-        var askForPropertiesPrompt = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
+        var columnName          = stringTransform.asSnakeCase( readlineSync.question( 'Column name (let empty if the table is complete): ' ) );
+        var propertiesLength    = Object.keys( properties ).length;
+
+        if ( columnName.length === 0 && propertiesLength === 0 ) {
+            askForTable();
+        } else if ( columnName.length === 0 && propertiesLength > 0 ) {
+            createTable();
+        } else {
+            var columnType = stringTransform.cleanAccents( readlineSync.question( 'Column type: (availables type: ' + availablesColumnType.join( ', ' ) + '): ' ).toLowerCase().trim() );
+
+            if ( _.indexOf( availablesColumnType, columnType ) !== -1 ) {
+                /*
+                 * Everything is ok, we push new column
+                 */
+                properties[ columnName ] = {};
+                properties[ columnName ].type = columnType;
+
+                /*
+                 * Special property ? Ask for more details
+                 */
+                if ( _.indexOf( specialColumnType, columnType ) !== -1 ) {
+                    askDetailsForSpecialColumnType( columnType, columnName );
+                }
+
+                askForProperties();
+            } else {
+                Message.error({
+                    title: "Column type not valid",
+                    message: "Column type can be: " + availablesColumnType.join( ', ' )
+                });
+                askForProperties();
+            }
+        }
+    }
+
+    function askDetailsForSpecialColumnType( type, columnName ) {
+        var property = properties[ columnName ];
+
+        switch ( type ) {
+
+            case 'increments':
+                askForUniqueColumn( columnName );
+
+                property.nullable = false;
+
+                var anwserDefineAsPrimary = readlineSync.question( 'Defined as primary? (y/n) ' );
+
+                if ( _.indexOf( positiveAnswers, anwserDefineAsPrimary ) !== -1 ) {
+                    /*
+                     * Define as primary
+                     */
+                    property.primary = true;
+                } else if ( _.indexOf( negativeAnswers, anwserDefineAsPrimary ) === -1 ) {
+                    /*
+                     * Not recognized answer
+                     */
+                    askDetailsForSpecialColumnType( type, columnName );
+                }
+                break;
+
+            case 'integer':
+            case 'bigInteger':
+                askForNullableColumn( columnName );
+                askForUniqueColumn( columnName );
+
+                var answerIsAReference = readlineSync.question( 'Define as reference (foreign key)? (y/n) ' );
+
+                if ( _.indexOf( positiveAnswers, answerIsAReference ) !== -1 ) {
+                    /*
+                     * Define as reference
+                     */
+                    property.unsigned = true;
+
+                    var answerReference = readlineSync.question( 'Table.idColumn as reference (exemple: role.id): ' );
+
+                    if ( answerReference.indexOf( '.' ) !== -1 && answerReference.match( /^\w+\.\w+$/ ) ) {
+                        property.references = answerReference;
+
+                        var validsOnEventAction = [ 'restrict', 'cascade', 'set null', 'no action' ];
+
+                        /*
+                         * OnDelete
+                         */
+                        var answerOnDelete = readlineSync.question( 'On delete action: (' + validsOnEventAction.join( ', ' ) + ', default: restrict) ');
+
+                        if ( _.indexOf( validsOnEventAction, answerOnDelete ) !== -1 ) {
+                            property.onDelete = answerOnDelete;
+                        } else {
+                            property.onDelete = 'restrict';
+                        }
+
+                        /*
+                         * OnUpdate
+                         */
+                        var answerOnUpdate = readlineSync.question( 'On update action: (' + validsOnEventAction.join( ', ' ) + ', default: restrict) ');
+
+                        if ( _.indexOf( validsOnEventAction, answerOnUpdate ) !== -1 ) {
+                            property.onUpdate = answerOnUpdate;
+                        } else {
+                            property.onUpdate = 'restrict';
+                        }
+                    } else {
+                        /*
+                         * Wrong reference
+                         */
+                        delete property.unsigned;
+                        Message.error({
+                            title: "Wrong reference",
+                            message: "Reference -> " + answerReference + " is not a valid reference."
+                        });
+                        askDetailsForSpecialColumnType( type, columnName );
+                    }
+                }
+                break;
+
+            case 'text':
+                askForNullableColumn( columnName );
+
+                var validsTextType = [ 'text', 'mediumtext', 'longtext' ];
+                var anwserTypeOfText = readlineSync.question( 'Which kind of text? ( ' + validsTextType.join( ', ' ) + ') ' ).toLowerCase();
+
+                if ( _.indexOf( validsTextType, anwserTypeOfText ) !== -1 ) {
+                    property.fieldtype = anwserTypeOfText;
+                } else {
+                    property.fieldtype = 'text';
+                }
+                break;
+
+            case 'string':
+                askForNullableColumn( columnName );
+                askForUniqueColumn( columnName );
+
+                var answerMaxLength = parseInt( readlineSync.question( 'Max length (1-255): ' ) );
+
+                if ( answerMaxLength >= 1 && answerMaxLength <= 255 ) {
+                    property.maxlength = parseInt( answerMaxLength );
+                } else {
+                    askDetailsForSpecialColumnType( type, columnName );
+                }
+                break;
+
+            case 'float':
+            case 'decimal':
+                askForNullableColumn( columnName );
+                // Todo: ask for scale for decimal
+
+                var answerPrecision = parseInt( readlineSync.question( 'Precision (integer): ' ) );
+                property.precision = answerPrecision;
+                break;
+        }
+    }
+
+    function askForNullableColumn( columnName ) {
+        var answerNullable = readlineSync.question( 'Define as nullable? (y/n) ' );
+        if ( _.indexOf( positiveAnswers, answerNullable ) !== -1 ) {
+            /*
+             * Define as nullable
+             */
+            properties[ columnName ].nullable = true;
+        } else if ( _.indexOf( negativeAnswers, answerNullable ) !== -1 ) {
+            /*
+             * Not nullable
+             */
+            properties[ columnName ].nullable = false;
+        } else {
+            /*
+             * Wrong answer
+             */
+            askForNullableColumn( columnName );
+        }
+    }
+
+    function askForUniqueColumn( columnName ) {
+        var answerAsUnique = readlineSync.question( 'Define as unique? (y/n) ' );
+        if ( _.indexOf( positiveAnswers, answerAsUnique ) !== -1 ) {
+            /*
+             * Define as unique
+             */
+            properties[ columnName ].unique = true;
+        } else if ( _.indexOf( negativeAnswers, answerAsUnique ) !== -1 ) {
+            /*
+             * Not unique
+             */
+            properties[ columnName ].unique = false;
+        } else {
+            /*
+             * Wrong answer
+             */
+            askForUniqueColumn( columnName );
+        }
+    }
+
+    function createTable() {
+        schemaBuilder.createTable( stringTransform.asSnakeCase( nameBundleLowerCase ), properties )
+        .then( function() {
+            updateSchema();
+        })
+        .catch( function( error ) {
+            Message.error({
+                title: "Error when creating table",
+                message: error,
+                consequence: "Bundle creation aborted.",
+                exit: 0
+            });
         });
-
-        askForPropertiesPrompt.question( '' );
-
-        createTable( properties );
     }
 
-    function createTable( properties ) {
-        updateSchema( properties );
-    }
-
-    function updateSchema( properties ) {
-        //createBundleDirectory();
+    function updateSchema() {
+        console.log( 'Bundle created.' );
+        // createBundleDirectory();
     }
 
     function createBundleDirectory() {

@@ -38,7 +38,7 @@ function bootstrap( config, cliMode ) {
     var Database        = Kernel.load( 'Database/Connector' )( Kernel );
 
     /*
-     * Define database connector (default: /config/database/orm)
+     * Define database connector (default: ~/config/database/orm)
      */
     Database.connect();
 
