@@ -16,7 +16,7 @@ var server      = null;
 var port        = 0;
 var protocol    = '';
 
-if ( argv._[ 'http' ] || argv.http || ( null === config.credentials.key && null === config.credentials.cert ) ) {
+if ( argv._[ 'http' ] || argv.http || false === config.credentials.found ) {
     /*
      * If specified into options or if https credentials are not found (keys and cert), we create an HTTP server
      */

@@ -36,8 +36,17 @@ module.exports = {
               else if (tableSchema[ key ].type === 'string' && tableSchema[ key ].hasOwnProperty('maxlength')) {
                 column = table[tableSchema[ key ].type](key, tableSchema[ key ].maxlength);
               }
-              else if ( ( tableSchema[ key ].type === 'float' || tableSchema[ key ].type === 'decimal' ) && tableSchema[ key ].hasOwnProperty('precision')) {
-                column = table[tableSchema[ key ].type](key, tableSchema[ key ].precision);
+              else if ( ( tableSchema[ key ].type === 'float' || tableSchema[ key ].type === 'decimal' ) ) {
+                var defaultPrecision = 8;
+                var precision = ( tableSchema[ key ].hasOwnProperty('precision') ) ? tableSchema[ key ].precision : defaultPrecision;
+
+                if ( 'decimal' === tableSchema[ key ].type ) {
+                    var defaultScale = 2;
+                    var scale = ( tableSchema[ key ].hasOwnProperty( 'scale' ) ) ? tableSchema[ key ].scale : defaultScale;
+                    table[ tableSchema[ key ].type ]( key, tableSchema[ key ].precision, tableSchema[ key ].scale );
+                } else {
+                    table[ tableSchema[ key ].type ]( key, tableSchema[ key ].precision );
+                }
               }
               else {
                 column = table[tableSchema[ key ].type](key);

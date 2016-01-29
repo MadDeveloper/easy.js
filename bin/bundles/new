@@ -66,13 +66,15 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForTable() {
-        var createAssociatedTable = readlineSync.question( 'Do you want create an associated table into database? (y/n) ' ).toLowerCase();
+        var createAssociatedTable = readlineSync.question( 'Do you want create an associated table into database? (y/n) ' ).trim().toLowerCase();
 
         if ( _.indexOf( positiveAnswers, createAssociatedTable ) !== -1 ) {
             /*
              * Table associated requested
              */
-            askForProperties();
+            checkExistanceOfSchemaFile( function() {
+                askForTableName();
+            });
         } else if ( _.indexOf( negativeAnswers, createAssociatedTable ) !== -1 ) {
             /*
              * No table associated requested
@@ -83,11 +85,24 @@ if ( nameBundleFromArgv.length > 0 ) {
         }
     }
 
-    var properties              = [];
-    var availablesColumnType    = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal', 'boolean', 'date', 'datetime', 'time', 'timestamp', 'reference' ];
-    var specialColumnType       = [ 'integer', 'bigInteger', 'increments', 'text', 'string', 'float', 'decimal', 'reference' ];
+    var tableName = '';
+    function askForTableName() {
+        console.log( '\n' );
+
+        var defaultTableName    = stringTransform.asSnakeCase( nameBundleLowerCase ) + 's';
+        var answerTableName     = stringTransform.asSnakeCase( readlineSync.question( 'Table name (default: ' + defaultTableName + '): ' ) );
+
+        tableName = ( answerTableName.length > 0 ) ? answerTableName : defaultTableName;
+
+        askForProperties();
+    }
+
+    var properties              = {};
+    var availablesColumnType    = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal', 'boolean', 'date', 'datetime', 'time', 'timestamp' ];
+    var specialColumnType       = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal' ];
 
     function askForProperties() {
+        console.log( '\n' );
         /*
          * We ask for properties
          */
@@ -99,7 +114,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         } else if ( columnName.length === 0 && propertiesLength > 0 ) {
             createTable();
         } else {
-            var columnType = stringTransform.cleanAccents( readlineSync.question( 'Column type: (availables type: ' + availablesColumnType.join( ', ' ) + '): ' ).toLowerCase().trim() );
+            var columnType = stringTransform.cleanAccents( readlineSync.question( 'Column type: (availables: ' + availablesColumnType.join( ', ' ) + '): ' ).toLowerCase().trim() );
 
             if ( _.indexOf( availablesColumnType, columnType ) !== -1 ) {
                 /*
@@ -132,11 +147,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         switch ( type ) {
 
             case 'increments':
-                askForUniqueColumn( columnName );
-
-                property.nullable = false;
-
-                var anwserDefineAsPrimary = readlineSync.question( 'Defined as primary? (y/n) ' );
+                var anwserDefineAsPrimary = readlineSync.question( 'Defined as primary? (y/n) ' ).trim().toLowerCase();
 
                 if ( _.indexOf( positiveAnswers, anwserDefineAsPrimary ) !== -1 ) {
                     /*
@@ -149,14 +160,14 @@ if ( nameBundleFromArgv.length > 0 ) {
                      */
                     askDetailsForSpecialColumnType( type, columnName );
                 }
+
+                askForUniqueColumn( columnName );
+                property.nullable = false;
                 break;
 
             case 'integer':
             case 'bigInteger':
-                askForNullableColumn( columnName );
-                askForUniqueColumn( columnName );
-
-                var answerIsAReference = readlineSync.question( 'Define as reference (foreign key)? (y/n) ' );
+                var answerIsAReference = readlineSync.question( 'Define as reference (foreign key)? (y/n) ' ).trim().toLowerCase();
 
                 if ( _.indexOf( positiveAnswers, answerIsAReference ) !== -1 ) {
                     /*
@@ -164,33 +175,34 @@ if ( nameBundleFromArgv.length > 0 ) {
                      */
                     property.unsigned = true;
 
-                    var answerReference = readlineSync.question( 'Table.idColumn as reference (exemple: role.id): ' );
+                    var answerReference = readlineSync.question( 'Table.ColumnId as reference (exemple: roles.id): ' ).trim().toLowerCase();
 
                     if ( answerReference.indexOf( '.' ) !== -1 && answerReference.match( /^\w+\.\w+$/ ) ) {
                         property.references = answerReference;
 
-                        var validsOnEventAction = [ 'restrict', 'cascade', 'set null', 'no action' ];
+                        var validsOnEventAction     = [ 'restrict', 'cascade', 'set null', 'no action' ];
+                        var defaultOnEventAction    = 'restrict';
 
                         /*
                          * OnDelete
                          */
-                        var answerOnDelete = readlineSync.question( 'On delete action: (' + validsOnEventAction.join( ', ' ) + ', default: restrict) ');
+                        var answerOnDelete = readlineSync.question( 'On delete action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase();
 
                         if ( _.indexOf( validsOnEventAction, answerOnDelete ) !== -1 ) {
                             property.onDelete = answerOnDelete;
                         } else {
-                            property.onDelete = 'restrict';
+                            property.onDelete = defaultOnEventAction;
                         }
 
                         /*
                          * OnUpdate
                          */
-                        var answerOnUpdate = readlineSync.question( 'On update action: (' + validsOnEventAction.join( ', ' ) + ', default: restrict) ');
+                        var answerOnUpdate = readlineSync.question( 'On update action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase();
 
                         if ( _.indexOf( validsOnEventAction, answerOnUpdate ) !== -1 ) {
                             property.onUpdate = answerOnUpdate;
                         } else {
-                            property.onUpdate = 'restrict';
+                            property.onUpdate = defaultOnEventAction;
                         }
                     } else {
                         /*
@@ -204,47 +216,83 @@ if ( nameBundleFromArgv.length > 0 ) {
                         askDetailsForSpecialColumnType( type, columnName );
                     }
                 }
+
+                askForUniqueColumn( columnName );
+                askForNullableColumn( columnName );
                 break;
 
             case 'text':
-                askForNullableColumn( columnName );
-
-                var validsTextType = [ 'text', 'mediumtext', 'longtext' ];
-                var anwserTypeOfText = readlineSync.question( 'Which kind of text? ( ' + validsTextType.join( ', ' ) + ') ' ).toLowerCase();
+                var validsTextType  = [ 'text', 'mediumtext', 'longtext' ];
+                var defaultTextType = 'text';
+                var anwserTypeOfText = readlineSync.question( 'Which kind of text? ( ' + validsTextType.join( ', ' ) + ', default: ' + defaultTextType + ') ' ).trim().toLowerCase();
 
                 if ( _.indexOf( validsTextType, anwserTypeOfText ) !== -1 ) {
                     property.fieldtype = anwserTypeOfText;
                 } else {
-                    property.fieldtype = 'text';
+                    property.fieldtype = defaultTextType;
                 }
+
+                askForNullableColumn( columnName );
                 break;
 
             case 'string':
-                askForNullableColumn( columnName );
-                askForUniqueColumn( columnName );
+                var minLength = 1, maxLength = 255;
+                var answerMaxLength = readlineSync.question( 'Max length (' + minLength + '-' + maxLength + ', default: ' + maxLength + '): ' ).trim();
 
-                var answerMaxLength = parseInt( readlineSync.question( 'Max length (1-255): ' ) );
-
-                if ( answerMaxLength >= 1 && answerMaxLength <= 255 ) {
+                if ( !isNaN( answerMaxLength ) && answerMaxLength >= minLength && answerMaxLength <= maxLength ) {
+                    /*
+                     * Ok
+                     */
                     property.maxlength = parseInt( answerMaxLength );
+                } else if ( !isNaN( answerMaxLength ) ) {
+                    /*
+                     * Not in range, default value applicated
+                     */
+                    property.maxlength = maxLength;
                 } else {
+                    /*
+                     * Wrong answer, we ask again
+                     */
                     askDetailsForSpecialColumnType( type, columnName );
                 }
+
+                askForUniqueColumn( columnName );
+                askForNullableColumn( columnName );
                 break;
 
             case 'float':
             case 'decimal':
-                askForNullableColumn( columnName );
-                // Todo: ask for scale for decimal
+                var defaultPrecision = 8;
 
-                var answerPrecision = parseInt( readlineSync.question( 'Precision (integer): ' ) );
-                property.precision = answerPrecision;
+                var answerPrecision = readlineSync.question( 'Precision (integer, default: ' + defaultPrecision + '): ' ).trim();
+
+                if ( answerPrecision.length === 0 || isNaN( answerPrecision ) || !isFinite( answerPrecision ) ) {
+                    property.precision = defaultPrecision ;
+                } else {
+                    property.precision = parseInt( answerPrecision );
+                }
+
+                if ( 'decimal' === type ) {
+                    /*
+                     * Ask for scale
+                     */
+                    var defaultScale = 2;
+                    var answerScale = readlineSync.question( 'Scale (integer, default: ' + defaultScale + ')' ).trim();
+
+                    if ( answerScale.length === 0 || isNaN( answerScale ) || !isFinite( answerScale ) ) {
+                        property.scale = defaultScale ;
+                    } else {
+                        property.scale = parseInt( answerScale );
+                    }
+                }
+
+                askForNullableColumn( columnName );
                 break;
         }
     }
 
     function askForNullableColumn( columnName ) {
-        var answerNullable = readlineSync.question( 'Define as nullable? (y/n) ' );
+        var answerNullable = readlineSync.question( 'Define as nullable? (y/n) ' ).trim().toLowerCase();
         if ( _.indexOf( positiveAnswers, answerNullable ) !== -1 ) {
             /*
              * Define as nullable
@@ -264,7 +312,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForUniqueColumn( columnName ) {
-        var answerAsUnique = readlineSync.question( 'Define as unique? (y/n) ' );
+        var answerAsUnique = readlineSync.question( 'Define as unique? (y/n) ' ).trim().toLowerCase();
         if ( _.indexOf( positiveAnswers, answerAsUnique ) !== -1 ) {
             /*
              * Define as unique
@@ -284,7 +332,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function createTable() {
-        schemaBuilder.createTable( stringTransform.asSnakeCase( nameBundleLowerCase ), properties )
+        schemaBuilder.createTable( tableName, properties )
         .then( function() {
             updateSchema();
         })
@@ -299,8 +347,52 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function updateSchema() {
-        console.log( 'Bundle created.' );
-        // createBundleDirectory();
+        /*
+         * We stringify properties and insert it into ~/config/database/schema.js
+         */
+        checkExistanceOfSchemaFile( function() {
+            var pathSchema = global.app.root + '/config/database/schema.js';
+            fs.readFile( pathSchema, { encoding: 'utf8' }, function( error, data ) {
+                if ( !error ) {
+                    var stringToWrite = 'schema$1=$2{\r\t' + tableName + ': ' + JSON.stringify( properties ) + ',\r\r';
+                    var dataUpdated = data.replace( /schema(\s)*=(\s*)\{/i, stringToWrite );
+                    fs.writeFile( pathSchema, dataUpdated, 'utf8', function ( error ) {
+                        if ( !error ) {
+                            createBundleDirectory();
+                        } else {
+                            errorEditingSchema( error );
+                        }
+                    });
+                } else {
+                    errorEditingSchema( error );
+                }
+            });
+        });
+
+        function errorEditingSchema( error ) {
+            Message.error({
+                title: "Impossible to update schema",
+                message: "Error when editing schema.js file: " + error,
+                consequence: "Bundle creation aborted.",
+                exit: 0
+            });
+        }
+    }
+
+    function checkExistanceOfSchemaFile( cb ) {
+        var pathSchema = global.app.root + '/config/database/schema.js';
+        fs.lstat( pathSchema, function( error, stat ) {
+            if ( !error & stat.isFile() ) {
+                cb();
+            } else {
+                Message.error({
+                    title: "Impossible to update schema",
+                    message: "schema.js not found at: " + pathSchema,
+                    consequence: "Bundle creation aborted.",
+                    exit: 0
+                });
+            }
+        });
     }
 
     function createBundleDirectory() {
@@ -361,6 +453,14 @@ if ( nameBundleFromArgv.length > 0 ) {
             var newBundleFilePath = skeletonFilePath.replace( /Skeleton/g, nameBundle);
 
             fs.readFile( skeletonFilePath, 'utf8', function ( err, data ) {
+
+                /*
+                 * We write tableName specified above
+                 */
+                if ( fileStats.name.toLowerCase().indexOf( 'skeleton.js' ) !== -1 ) {
+                    data = data.replace( /tableName(\s*):(\s*)('|")\w*('|")/i, 'tableName$1:$2$3' + tableName + '$4' );
+                }
+
                 fs.writeFile(
                     newBundleFilePath,
                     data.replace( /Skeleton/g, nameBundle).replace( /skeleton/g, nameBundleLowerCase),
@@ -388,7 +488,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         });
 
         walker.on( "end", function () {
-            Message.success( "Bundle " + nameBundle + " created.", true );
+            Message.success( "\nBundle " + nameBundle + " created.", true );
         });
 
     }
