@@ -2,6 +2,7 @@ function SecurityController( SkeletonFactory ) {
     /*
      * Global dependencies
      */
+    var BundleManager       = SkeletonFactory.getBundleManager();
     var DependencyInjector  = BundleManager.getDependencyInjector();
     var http                = DependencyInjector.getDependency( 'Http' );
     var Controller          = DependencyInjector.getDependency( 'Controller' );

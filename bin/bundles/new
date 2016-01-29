@@ -147,7 +147,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         switch ( type ) {
 
             case 'increments':
-                var anwserDefineAsPrimary = readlineSync.question( 'Defined as primary? (y/n) ' ).trim().toLowerCase();
+                var anwserDefineAsPrimary = readlineSync.question( 'Define as primary? (y/n) ' ).trim().toLowerCase();
 
                 if ( _.indexOf( positiveAnswers, anwserDefineAsPrimary ) !== -1 ) {
                     /*
@@ -354,7 +354,7 @@ if ( nameBundleFromArgv.length > 0 ) {
             var pathSchema = global.app.root + '/config/database/schema.js';
             fs.readFile( pathSchema, { encoding: 'utf8' }, function( error, data ) {
                 if ( !error ) {
-                    var stringToWrite = 'schema$1=$2{\r\t' + tableName + ': ' + JSON.stringify( properties ) + ',\r\r';
+                    var stringToWrite = 'schema$1=$2{\n\t' + tableName + ': ' + JSON.stringify( properties ) + ',\n\n';
                     var dataUpdated = data.replace( /schema(\s)*=(\s*)\{/i, stringToWrite );
                     fs.writeFile( pathSchema, dataUpdated, 'utf8', function ( error ) {
                         if ( !error ) {
@@ -488,7 +488,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         });
 
         walker.on( "end", function () {
-            Message.success( "\nBundle " + nameBundle + " created.", true );
+            Message.success( "\nBundle " + nameBundle + " created." );
         });
 
     }
