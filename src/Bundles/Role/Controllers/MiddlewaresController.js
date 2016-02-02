@@ -15,20 +15,9 @@ function MiddlewaresController( RoleFactory ) {
                     options: {}
                 };
 
-                Controller.doesRequiredElementExists( 'Role', requireOptions, BundleManager, function( error, role ) {
-                    if ( role ) {
-
-                        Request.define( 'role', role );
-                        resolve();
-
-                    } else {
-                        if ( 'internalServerError' === error.type ) {
-                            http.internalServerError( error.exactly );
-                        } else {
-                            http[ error.type ]();
-                        }
-                        reject();
-                    }
+                Controller.doesRequiredElementExists( 'Role', requireOptions, BundleManager, function( role ) {
+                    Request.define( 'role', role );
+                    resolve();
                 });
             });
         }

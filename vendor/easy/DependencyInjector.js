@@ -32,6 +32,9 @@ function DependencyInjector( Kernel ) {
                     case 'logger':
                         params = this;
                         break;
+                    case 'controller':
+                        params = this;
+                        break;
                 }
 
                 this.container[ dependency ] = Kernel.load( dependency )( params );

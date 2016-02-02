@@ -15,20 +15,9 @@ function MiddlewaresController( SkeletonFactory ) {
                     options: {}
                 };
 
-                Controller.doesRequiredElementExists( 'Skeleton', requireOptions, BundleManager, function( error, skeleton ) {
-                    if ( skeleton ) {
-
-                        Request.define( 'skeleton', skeleton );
-                        resolve();
-
-                    } else {
-                        if ( 'internalServerError' === error.type ) {
-                            http.internalServerError( error.exactly );
-                        } else {
-                            http[ error.type ]();
-                        }
-                        reject();
-                    }
+                Controller.doesRequiredElementExists( 'Skeleton', requireOptions, BundleManager, function( skeleton ) {
+                    Request.define( 'skeleton', skeleton );
+                    resolve();
                 });
             });
         }

@@ -15,20 +15,9 @@ function MiddlewaresController( UserFactory ) {
                     options: {}
                 };
 
-                Controller.doesRequiredElementExists( 'User', requireOptions, BundleManager, function( error, user ) {
-                    if ( user ) {
-
-                        Request.define( 'user', user );
-                        resolve();
-
-                    } else {
-                        if ( 'internalServerError' === error.type ) {
-                            http.internalServerError( error.exactly );
-                        } else {
-                            http[ error.type ]();
-                        }
-                        reject();
-                    }
+                Controller.doesRequiredElementExists( 'User', requireOptions, BundleManager, function( user ) {
+                    Request.define( 'user', user );
+                    resolve();
                 });
             });
         }

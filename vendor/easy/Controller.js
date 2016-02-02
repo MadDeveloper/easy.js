@@ -1,4 +1,7 @@
-function Controller() {
+function Controller( DependencyInjector ) {
+
+    var http = DependencyInjector.getDependency( 'Http' );
+
     return {
         verifyParams: function( required, params ) {
             var verified = true;
@@ -52,28 +55,22 @@ function Controller() {
                 requireBy = options;
             }
 
-            var ElementRepository   = BundleManager.getFactory( element.capitalizeFirstLetter() ).getRepository();
-            if ( this.isNumber( requireBy ) ) {
+            var ElementRepository = BundleManager.getFactory( element.capitalizeFirstLetter() ).getRepository();
+            ElementRepository.read( requireBy, optionsFetch )
+            .then( function( element ) {
 
-                ElementRepository.read( requireBy, optionsFetch )
-                .then( function( element ) {
+                if ( element ) {
 
-                    if ( element ) {
+                    callback( element );
 
-                        callback( null, element );
+                } else {
+                    http.notFound();
+                }
 
-                    } else {
-                        callback({ type: 'notFound' });
-                    }
-
-                })
-                .catch( function( error ) {
-                    callback({ type: 'internalServerError', exactly: error});
-                })
-
-            } else {
-                callback({ type: 'badRequest' });
-            }
+            })
+            .catch( function( error ) {
+                http.internalServerError( error );
+            });
         },
 
         isDevEnv: function() {

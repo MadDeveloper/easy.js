@@ -452,8 +452,8 @@ if ( nameBundleFromArgv.length > 0 ) {
             var skeletonFilePath = path.join( root, fileStats.name );
             var newBundleFilePath = skeletonFilePath.replace( /Skeleton/g, nameBundle);
 
-            fs.readFile( skeletonFilePath, 'utf8', function ( err, data ) {
-
+            try {
+                var data = fs.readFileSync( skeletonFilePath, 'utf8' );
                 /*
                  * We write tableName specified above
                  */
@@ -461,26 +461,16 @@ if ( nameBundleFromArgv.length > 0 ) {
                     data = data.replace( /tableName(\s*):(\s*)('|")\w*('|")/i, 'tableName$1:$2$3' + tableName + '$4' );
                 }
 
-                fs.writeFile(
-                    newBundleFilePath,
-                    data.replace( /Skeleton/g, nameBundle).replace( /skeleton/g, nameBundleLowerCase),
-                    {
-                        encoding: 'utf8',
-                        mode: 0775
-                    },
-                    function( err ) {
-                        if ( err ) {
-                            Message.error({
-                                title: "Impossible to create bundle",
-                                message: "Error when trying create bundle file <" + fileStats.name + ">.",
-                                consequence: "Creation aborted.",
-                                exit: 0
-                            });
-                        }
-                    }
-                );
+                fs.writeFileSync( newBundleFilePath, data.replace( /Skeleton/g, nameBundle ).replace( /skeleton/g, nameBundleLowerCase ), { encoding: 'utf8', mode: 0775 } );
                 next();
-            });
+            } catch( error ) {
+                Message.error({
+                    title: "Impossible to create bundle",
+                    message: "Error: " + JSON.stringify( error ),
+                    consequence: "Creation aborted.",
+                    exit: 0
+                });
+            }
         });
 
         walker.on( "errors", function ( root, nodeStatsArray, next ) {
@@ -488,7 +478,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         });
 
         walker.on( "end", function () {
-            Message.success( "\nBundle " + nameBundle + " created." );
+            Message.success( "\nBundle " + nameBundle + " created.", true );
         });
 
     }
