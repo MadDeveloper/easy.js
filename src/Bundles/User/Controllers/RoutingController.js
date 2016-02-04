@@ -23,9 +23,6 @@ function RoutingController( UserFactory ) {
     var RoleRepository  = RoleFactory.getRepository();
 
     return {
-        /*
-         * Useful (deletable)
-         */
         isRequestWellParameterized: function() {
             var Controller = UserFactory.getVendorController();
             return Controller.verifyParams([

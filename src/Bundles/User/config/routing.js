@@ -20,14 +20,26 @@ var routing = function( BundleManager, params ) {
     * Routes definitions
     */
     router.route( '/roles/:idRole/users' )
-        .get( UserRoutingController.getUsers )
-        .post( UserRoutingController.createUser );
+        .get( function() {
+        	UserRoutingController.getUsers();
+        })
+        .post( function() {
+        	UserRoutingController.createUser();
+        });
 
     router.route( '/roles/:idRole/users/:idUser' )
-        .get( UserRoutingController.getUser )
-        .put( UserRoutingController.updateUser )
-        .patch( UserRoutingController.patchUser )
-        .delete( UserRoutingController.deleteUser );
+        .get( function() {
+        	UserRoutingController.getUser();
+        })
+        .put( function() {
+        	UserRoutingController.updateUser();
+        })
+        .patch( function() {
+        	UserRoutingController.patchUser();
+        })
+        .delete( function() {
+        	UserRoutingController.deleteUser();
+        });
 };
 
 module.exports = routing;

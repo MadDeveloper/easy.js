@@ -20,14 +20,26 @@ var routing = function( BundleManager, params ) {
     * Routes definitions
     */
     router.route( '/skeletons' )
-        .get( SkeletonRoutingController.getSkeletons )
-        .post( SkeletonRoutingController.createSkeleton );
+        .get( function() {
+        	SkeletonRoutingController.getSkeletons();
+        })
+        .post( function() {
+        	SkeletonRoutingController.createSkeleton();
+        });
 
     router.route( '/skeletons/:id' )
-        .get( SkeletonRoutingController.getSkeleton )
-        .put( SkeletonRoutingController.updateSkeleton )
-        .patch( SkeletonRoutingController.patchSkeleton )
-        .delete( SkeletonRoutingController.deleteSkeleton );
+        .get( function() {
+        	SkeletonRoutingController.getSkeleton();
+        })
+        .put( function() {
+        	SkeletonRoutingController.updateSkeleton();
+        })
+        .patch( function() {
+        	SkeletonRoutingController.patchSkeleton();
+        })
+        .delete( function() {
+        	SkeletonRoutingController.deleteSkeleton();
+        });
 };
 
 module.exports = routing;
