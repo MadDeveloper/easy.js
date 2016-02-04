@@ -4,6 +4,9 @@ var cliMode         = true;
 var config          = require( __dirname + '/../../config/config' );
 var app             = require( __dirname + '/../../bootstrap.js' )( config, cliMode );
 var schemaBuilder   = app.BundleManager.getDependencyInjector().getService( 'database.schema' );
+var argv			= require( 'minimist' )( process.argv.slice( 2 ) );
+var _				= require( 'lodash' );
+var sequence		= require( 'when/sequence' );
 
 var execsql     = require( 'execsql' );
 var config      = require( global.app.root + '/config/config' );
@@ -15,26 +18,75 @@ var dbConfig    = {
 };
 
 var Message 			= require( global.app.root + '/vendor/easy/Message' )();
-var titleError			= "Error when initializing roles";
+var titleError			= "Error when initializing roles and users";
 var consequenceError	= "Initialization aborted.";
 
-/*
- * Indicate to migrate we are waiting him to call callback passed with argv
- */
-process.argv.standalone = false;
-process.argv.callback	= startup;
-require( './migrate' );
+if ( _.indexOf( 'lite', argv._ ) !== -1 || argv.lite ) {
+	/*
+	 * Standalone mode, we first truncate users and then roles table, and init roles and users again
+	 */
+	truncateRolesAndUsersTables()
+	.then( function() {
+		startup();
+	})
+	.catch( function( error ) {
+		raiseError( error );
+	});
+} else {
+	/*
+	 * Normal mode, we call migrate before init roles and users
+	 * Indicate to migrate we are waiting him to call callback passed with argv
+	 */
+	process.argv.standalone = false;
+	process.argv.callback	= startup;
+	require( './migrate' );
+}
+
+function raiseError( err ) {
+	Message.error({
+		title: titleError,
+		message: err,
+		consequence: consequenceError,
+		exit: 0
+	});
+}
+
+function truncateRolesAndUsersTables() {
+	return new Promise( function( resolve, reject ) {
+		var usersTableName = _.has( schema, 'users' ) ? 'users' : _.has( schema, 'user' ) ? 'user' : false;
+		var rolesTableName = _.has( schema, 'roles' ) ? 'roles' : _.has( schema, 'role' ) ? 'role' : false;
+
+		if ( false === usersTableName ) {
+			raiseError( 'Users table not found into schema.js, possibilities tried: users, user' );
+		} else if ( false === rolesTableName ) {
+			raiseError( 'Roles table not found into schema.js, possibilities tried: roles, role' );
+		}
+
+		var tables = {
+			users: usersTableName,
+		  	roles: rolesTableName
+		};
+
+		var promiseTruncateUsersTable = schemaBuilder.truncateTable( tables.users );
+		var promiseClearRolesTable = schemaBuilder.clearTable( tables.roles );
+
+	  	promiseTruncateUsersTable
+		.then( function() {
+			promiseClearRolesTable
+			.then( function() {
+				resolve();
+			})
+			.catch( function( error ) {
+				reject( error );
+			})
+		})
+		.catch( function( error ) {
+			reject( error );
+		})
+	});
+}
 
 function startup() {
-
-	function raiseError( err ) {
-		Message.error({
-			title: titleError,
-			message: err,
-			consequence: consequenceError,
-			exit: 0
-		});
-	}
 
 	var rolesTable = schema.roles;
 	var rolesToAppend = {
@@ -174,5 +226,4 @@ function startup() {
 	        }
 	        process.exit();
 		});
-
 }

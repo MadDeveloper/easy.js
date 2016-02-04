@@ -19,9 +19,15 @@ module.exports = {
     },
 
     tableExists: function( tableName ) {
-        database.schema.hasTable( tableName ).then( function( exists ) {
-            return exists;
-        });
+        return database.schema.hasTable( tableName );
+    },
+
+    truncateTable: function( tableName ) {
+        return database.raw( 'truncate table ' + tableName );
+    },
+
+    clearTable: function( tableName ) {
+        return database( tableName ).del();
     },
 
     createTable: function( tableName, tableSchema ) {
