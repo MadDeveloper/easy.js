@@ -5,10 +5,10 @@ var routing = function( BundleManager, params ) {
     var router = BundleManager.getRouter();
 
     /*
-     * Role bundle dependencies
+     * Skeleton bundle dependencies
      */
-    var SkeletonFactory = BundleManager.getFactory( 'Skeleton' );
-    var SkeletonRoutingController = SkeletonFactory.getController( 'Routing' );
+    var SkeletonFactory             = BundleManager.getFactory( 'Skeleton' );
+    var SkeletonRoutingController   = SkeletonFactory.getController( 'Routing' );
 
     /*
      * Middlewares
@@ -20,26 +20,14 @@ var routing = function( BundleManager, params ) {
     * Routes definitions
     */
     router.route( '/skeletons' )
-        .get( function( req, res ) {
-            SkeletonRoutingController.getSkeletons();
-        })
-        .post( function( req, res ) {
-            SkeletonRoutingController.createSkeleton();
-        });
+        .get( SkeletonRoutingController.getSkeletons )
+        .post( SkeletonRoutingController.createSkeleton );
 
     router.route( '/skeletons/:id' )
-        .get( function( req, res ) {
-            SkeletonRoutingController.getSkeleton();
-        })
-        .put( function( req, res ) {
-            SkeletonRoutingController.updateSkeleton();
-        })
-        .patch( function( req, res ) {
-            SkeletonRoutingController.patchSkeleton();
-        })
-        .delete( function( req, res ) {
-            SkeletonRoutingController.deleteSkeleton();
-        });
+        .get( SkeletonRoutingController.getSkeleton )
+        .put( SkeletonRoutingController.updateSkeleton )
+        .patch( SkeletonRoutingController.patchSkeleton )
+        .delete( SkeletonRoutingController.deleteSkeleton );
 };
 
 module.exports = routing;

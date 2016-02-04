@@ -23,7 +23,7 @@ function SecurityController( RoleFactory ) {
                         canDelete: [ access.admin ]
                     });
 
-                    if ( access.focusOn( token.role_id ).canReach( Request.getScope() ) ) {
+                    if ( access.focusOn( token.role_id ).canReach( Request.getMethod() ) ) {
                         resolve();
                     } else {
                         http.forbidden();

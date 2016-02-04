@@ -12,15 +12,11 @@ function RoutingController( SkeletonFactory ) {
     var _                   = require( 'lodash' );
 
     /*
-     * Current bundle dependencies
+     * Skeleton bundle dependencies
      */
     var SkeletonRepository  = SkeletonFactory.getRepository();
-    var Skeleton            = SkeletonFactory.getModel();
 
     return {
-        /*
-         * Useful (deletable)
-         */
         isRequestWellParameterized: function() {
             var Controller = SkeletonFactory.getVendorController();
             return Controller.verifyParams([
@@ -74,10 +70,10 @@ function RoutingController( SkeletonFactory ) {
                 database.transaction( function( t ) {
 
                     SkeletonRepository.save( Request.find( 'skeleton' ), Request.getBody(), { transacting: t } )
-                    .then( function( skeletonUpdated ) {
+                    .then( function( skeleton ) {
 
                         t.commit();
-                        http.ok( skeletonUpdated.toJSON() );
+                        http.ok( skeleton.toJSON() );
 
                     })
                     .catch( function( error ) {
@@ -112,11 +108,11 @@ function RoutingController( SkeletonFactory ) {
                                     case 'replace':
                                         if ( _.indexOf( validPaths, patch.path ) >= 0 ) {
                                             SkeletonRepository.patch( Request.find( 'skeleton' ), patch, { transacting: t, patch: true } )
-                                            .then( function( skeletonPatched ) {
+                                            .then( function( skeleton ) {
                                                 if ( ++currentPatch >= opsLength ) {
                                                     // It's ok
                                                     t.commit();
-                                                    resolve( skeletonPatched );
+                                                    resolve( skeleton );
                                                 }
                                             })
                                             .catch( function( error ) {
@@ -135,9 +131,9 @@ function RoutingController( SkeletonFactory ) {
                 if ( patchRequestCorrectlyFormed ) {
 
                     patchSkeleton
-                    .then( function( skeletonPatched ) {
+                    .then( function( skeleton ) {
 
-                        http.ok( skeletonPatched.toJSON() );
+                        http.ok( skeleton.toJSON() );
 
                     })
                     .catch( function( error ) {

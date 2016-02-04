@@ -14,7 +14,6 @@ function RoutingController( RoleFactory ) {
      * Role bundle dependencies
      */
     var RoleRepository  = RoleFactory.getRepository();
-    var Role            = RoleFactory.getModel();
 
     return {
         /*
@@ -74,10 +73,10 @@ function RoutingController( RoleFactory ) {
                 database.transaction( function( t ) {
 
                     RoleRepository.save( Request.find( 'role' ), Request.getBody(), { transacting: t } )
-                    .then( function( roleUpdated ) {
+                    .then( function( role ) {
 
                         t.commit();
-                        http.ok( roleUpdated.toJSON() );
+                        http.ok( role.toJSON() );
 
                     })
                     .catch( function( error ) {

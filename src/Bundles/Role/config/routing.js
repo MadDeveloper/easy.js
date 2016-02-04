@@ -20,23 +20,13 @@ var routing = function( BundleManager, params ) {
      * Routes definitions
      */
     router.route( '/roles' )
-        .get( function( req, res ) {
-            RoleRoutingController.getRoles();
-        })
-        .post( function( req, res ) {
-            RoleRoutingController.createRole();
-        });
+        .get( RoleRoutingController.getRoles )
+        .post( RoleRoutingController.createRole );
 
     router.route( '/roles/:id' )
-        .get( function( req, res ) {
-            RoleRoutingController.getRole();
-        })
-        .put( function( req, res ) {
-            RoleRoutingController.updateRole();
-        })
-        .delete( function( req, res ) {
-            RoleRoutingController.deleteRole();
-        });
+        .get( RoleRoutingController.getRole )
+        .put( RoleRoutingController.updateRole )
+        .delete( RoleRoutingController.deleteRole );
 };
 
 module.exports = routing;

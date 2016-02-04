@@ -10,6 +10,10 @@ function Request( appName ) {
             return this.requestScope;
         },
 
+        getMethod: function() {
+            return this.getScope().method;
+        },
+
         getBody: function() {
             return this.getScope().body;
         },

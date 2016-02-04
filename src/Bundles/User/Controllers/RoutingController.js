@@ -12,10 +12,9 @@ function RoutingController( UserFactory ) {
     var _                   = require( 'lodash' );
 
     /*
-     * Current bundle dependencies
+     * User bundle dependencies
      */
     var UserRepository  = UserFactory.getRepository();
-    var User            = UserFactory.getModel();
 
     /*
      * Associations dependencies
@@ -87,10 +86,10 @@ function RoutingController( UserFactory ) {
                     }
 
                     UserRepository.save( Request.find( 'user' ), Request.getBody(), { transacting: t } )
-                    .then( function( userUpdated ) {
+                    .then( function( user ) {
 
                         t.commit();
-                        http.ok( userUpdated.toJSON() );
+                        http.ok( user.toJSON() );
 
                     })
                     .catch( function( error ) {

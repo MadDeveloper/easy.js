@@ -7,7 +7,7 @@ var middlewares = function( BundleManager, params ) {
     /*
      * Skeleton bundle dependencies
      */
-    var SkeletonMiddlewaresController   = BundleManager.getFactory( 'Skeleton' ).getController( 'Middlewares' );
+    var SkeletonMiddlewaresController = BundleManager.getFactory( 'Skeleton' ).getController( 'Middlewares' );
 
     /*
      * Middlewares
