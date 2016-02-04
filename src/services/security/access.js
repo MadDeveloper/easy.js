@@ -104,10 +104,10 @@ var access = function() {
             return this;
         },
 
-        canReach: function( req ) {
+        canReach: function( httpMethod ) {
             var isAuthorizedToReach = false;
 
-            var method      = req.method.toLowerCase();
+            var method      = httpMethod.toLowerCase();
             var authorized  = _.indexOf( restrictions.mustBe, focus ) !== -1 || _.indexOf( restrictions.mustBe, this.any ) !== -1;
 
             if ( authorized ) {
