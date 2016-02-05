@@ -14,7 +14,8 @@
     "db-startup-lite": "node bin/database/startup --lite",
     "start": "node --expose-gc app.js",
     "start-prod": "node --expose-gc app.js --prod",
-    "start-forever": "node --expose-gc app.js --prod > stdout.txt 2> stderr.txt &"
+    "start-forever": "node --expose-gc app.js --prod > stdout.txt 2> stderr.txt &",
+    "start-forever-dev": "node --expose-gc app.js > stdout.txt 2> stderr.txt &"
   },
   "keywords": [
     "orm",
