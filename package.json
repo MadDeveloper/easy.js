@@ -14,7 +14,7 @@
     "db-startup-lite": "node bin/database/startup --lite",
     "start": "node --expose-gc app.js",
     "start-prod": "node --expose-gc app.js --prod",
-    "start-forever": "node --expose-gc bin/application/forever"
+    "start-forever": "node --expose-gc app.js --prod > stdout.txt 2> stderr.txt &"
   },
   "keywords": [
     "orm",
@@ -35,7 +35,6 @@
     "compression": "^1.6.0",
     "cors": "^2.7.1",
     "express": "^4.13.3",
-    "forever-monitor": "^1.7.0",
     "helmet": "^1.0.1",
     "https": "~1.0.0",
     "jsonwebtoken": "^5.4.1",
