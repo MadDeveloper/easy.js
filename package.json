@@ -14,7 +14,7 @@
     "db-startup-lite": "node bin/database/startup --lite",
     "start": "node --expose-gc app.js",
     "start-prod": "node --expose-gc app.js --prod",
-    "start-forever": "node --expose-gc app.js --prod &"
+    "start-forever": "node --expose-gc bin/application/forever"
   },
   "keywords": [
     "orm",
