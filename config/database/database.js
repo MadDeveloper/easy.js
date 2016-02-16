@@ -1,18 +1,10 @@
-var params = require( __dirname + '/../config' ).database;
+module.exports = function( defaultConnector ) {
+    var connector = defaultConnector;
 
-var database = require( 'knex' )({
-    client: params.client,
-    connection: {
-        host     : params.connection.host,
-        user     : params.connection.user,
-        password : params.connection.password,
-        database : null,
-        charset  : params.connection.charset
-    },
-    pool: {
-        min: 0, // set pool min to 0 avoid to loose connection after idle time, realy usefull when you use binaries with prompts -> https://github.com/tgriesser/knex/issues/503
-        max: 10
+    if ( !defaultConnector ) {
+        var params = require( __dirname + '/../config' ).database;
+        connector = params.database.connector;
     }
-});
 
-module.exports = database;
+    return require( __dirname + '/connector/' + connector );
+};

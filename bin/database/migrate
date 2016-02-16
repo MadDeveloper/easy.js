@@ -6,7 +6,7 @@ var app             = require( __dirname + '/../../bootstrap.js' )( config, cliM
 var schemaBuilder   = app.BundleManager.getDependencyInjector().getService( 'database.schema' );
 
 var fs = require( 'fs' );
-var database = require( global.app.root + '/config/database/database' );
+var database = require( global.app.root + '/config/database/database' )();
 var Schema = require( global.app.root + '/config/database/schema' );
 var sequence = require( 'when/sequence' );
 var _ = require( 'lodash' );
@@ -143,7 +143,7 @@ function migrate() {
 
 
 function updateDatabaseNameInConfig() {
-	var databaseConfigFilePath = global.app.root + '/config/database/database.js';
+	var databaseConfigFilePath = global.app.root + '/config/database//connector/knex.js';
 	fs.readFile( databaseConfigFilePath, { encoding: 'utf8' }, function( error, data ) {
 		if ( error ) {
 			errorUpdatingDatabaseConfigProperty( error );

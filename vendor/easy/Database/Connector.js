@@ -1,46 +1,32 @@
-var fs = require( 'fs' );
-
 function Connector( Kernel ) {
+
+    var fs                      = require( 'fs' );
+    var path                    = require( 'path' );
+    var defaultConnector        = 'bookshelf';
+    var databasePath            = __dirname + '/../../../config/database/database';
+    var connection              = null;
+    var Message                 = Kernel.load( 'Message' )();
+
     return {
-        connection: null,
-
-        defaultConnectorPath: __dirname + '/../../../config/database/orm',
-
-        connect: function( connectorPath ) {
-            var Message = Kernel.load( 'Message' )();
-
-            if ( typeof connectorPath === 'undefined' ) {
-
-                // use default connector path
-                connectorPath = this.getDefaultConnectorPath();
-
-            } else {
-                var stats = fs.statSync( connectorPath );
-                if ( !stats || !stats.isFile() ) {
-                    Message.error({
-                        title: "Impossible to find database connector",
-                        message: "The connector path doesn't exists"
-                    });
-                }
+        connect: function( connector ) {
+            if ( !connector ) {
+                // use default connector
+                connector = defaultConnector;
             }
 
-            this.setConnection( require( connectorPath ) );
+            this.setConnection( require( databasePath )( connector ) );
             return this.getConnection();
         },
 
         // always use fluent setter to allow chained calls
         setConnection: function( newConnection ) {
-            this.connection = newConnection;
+            connection = newConnection;
 
             return this;
         },
 
         getConnection: function() {
-            return this.connection;
-        },
-
-        getDefaultConnectorPath: function() {
-            return this.defaultConnectorPath;
+            return connection;
         }
     }
 }

@@ -41,6 +41,7 @@ module.exports = {
      */
     database: {
         client: 'mysql',
+        connector: 'knex',
         connection: {
             host: 'localhost',
             user: 'root',

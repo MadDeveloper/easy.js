@@ -1,4 +1,4 @@
-var database    = require( global.app.root + '/config/database/database' );
+var database    = require( global.app.root + '/config/database/database' )();
 var _           = require( 'lodash' );
 
 module.exports = {
