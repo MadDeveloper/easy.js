@@ -83,7 +83,7 @@ function DependencyInjector( Kernel ) {
                     } catch ( error ) {
                         this.getMessage().error({
                             title: "Impossible to call service",
-                            message: "Maybe component " + serviceComponent + " with path: " + path.resolve( serviceComponentFile ) + " doesn\'t exits, or your component contains syntax error.",
+                            message: error,
                             type: 'error',
                             exit: 0
                         });
@@ -95,7 +95,7 @@ function DependencyInjector( Kernel ) {
             } catch ( error ) {
                 this.getMessage().error({
                     title: "Impossible to call service",
-                    message: "Service name " + serviceName + " not found, path: " + path.resolve( serviceNameDirectory ),
+                    message: "Service name " + serviceName + " not found, path: " + path.resolve( serviceNameDirectory ) + "\n" + error,
                     type: 'error',
                     exit: 0
                 });
