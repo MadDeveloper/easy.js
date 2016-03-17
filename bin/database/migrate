@@ -29,56 +29,12 @@ function raiseError( err ) {
 
 
 function dropTable( tableName ) {
-    return database.schema.dropTableIfExists( tableName );
+    return schemaBuilder.dropTable( tableName );
 }
 
 function createTable(tableName) {
-  return database.schema.createTable(tableName, function (table) {
-        var column;
-        var columnKeys = _.keys(Schema[tableName]);
-        console.log( "Updating table : " + tableName );
-        _.each(columnKeys, function (key) {
-          if (Schema[tableName][key].type === 'text' && Schema[tableName][key].hasOwnProperty('fieldtype')) {
-            column = table[Schema[tableName][key].type](key, Schema[tableName][key].fieldtype);
-          }
-          else if (Schema[tableName][key].type === 'string' && Schema[tableName][key].hasOwnProperty('maxlength')) {
-            column = table[Schema[tableName][key].type](key, Schema[tableName][key].maxlength);
-          }
-          else if (Schema[tableName][key].type === 'decimal' && Schema[tableName][key].hasOwnProperty('precision')) {
-            column = table[Schema[tableName][key].type](key, Schema[tableName][key].precision);
-          }
-          else {
-            column = table[Schema[tableName][key].type](key);
-          }
-          if (Schema[tableName][key].hasOwnProperty('nullable') && Schema[tableName][key].nullable === true) {
-            column.nullable();
-          }
-          else {
-            column.notNullable();
-          }
-          if (Schema[tableName][key].hasOwnProperty('primary') && Schema[tableName][key].primary === true) {
-            column.primary();
-          }
-          if (Schema[tableName][key].hasOwnProperty('unique') && Schema[tableName][key].unique) {
-            column.unique();
-          }
-          if (Schema[tableName][key].hasOwnProperty('unsigned') && Schema[tableName][key].unsigned) {
-            column.unsigned();
-          }
-          if (Schema[tableName][key].hasOwnProperty('references')) {
-            column.references(Schema[tableName][key].references);
-          }
-          if (Schema[tableName][key].hasOwnProperty('onDelete') && Schema[tableName][key].onDelete.length > 0) {
-            column.onDelete(Schema[tableName][key].onDelete);
-          }
-          if (Schema[tableName][key].hasOwnProperty('onUpdate') && Schema[tableName][key].onUpdate.length > 0) {
-            column.onUpdate(Schema[tableName][key].onUpdate);
-          }
-          if (Schema[tableName][key].hasOwnProperty('defaultTo')) {
-            column.defaultTo(Schema[tableName][key].defaultTo);
-          }
-        });
-    });
+	console.log( "Updating table : " + tableName );
+	return schemaBuilder.createTable( tableName, Schema[ tableName ] );
 }
 
 function dropTables() {
@@ -143,7 +99,7 @@ function migrate() {
 
 
 function updateDatabaseNameInConfig() {
-	var databaseConfigFilePath = global.app.root + '/config/database//connector/knex.js';
+	var databaseConfigFilePath = global.app.root + '/config/database/connector/knex.js';
 	fs.readFile( databaseConfigFilePath, { encoding: 'utf8' }, function( error, data ) {
 		if ( error ) {
 			errorUpdatingDatabaseConfigProperty( error );
@@ -158,7 +114,9 @@ function updateDatabaseNameInConfig() {
 					 * we reconnect database to new schema
 					 */
 					delete require.cache[ require.resolve( global.app.root + '/config/database/database' ) ];
-					database = require( global.app.root + '/config/database/database' );
+
+					var clearCache = true;
+					schemaBuilder = app.BundleManager.getDependencyInjector().getService( 'database.schema', clearCache );
 
 					/*
 					 * Continue migration
