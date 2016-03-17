@@ -48,8 +48,8 @@ var portInUse = function( port, callback ) {
     });
 };
 
-portInUse( port, function( returnValue ) {
-    if ( !returnValue ) {
+portInUse( port, function( used ) {
+    if ( !used ) {
         /*
          * Everything is ok, starting server
          */
@@ -68,7 +68,7 @@ portInUse( port, function( returnValue ) {
         /*
          * Port ${port} is used
          */
-        console.log( "\nPort " + port + " is already used, impossible to start server." );
+        console.log( "\nPort " + port + " is already used or you have no rights to launch server (try as root), impossible to start server." );
         process.exit();
     }
 });

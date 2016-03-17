@@ -42,7 +42,7 @@ function DependencyInjector( Kernel ) {
             return this.container[ dependency ];
         },
 
-        getService: function( service ) {
+        getService: function( service, clearCache ) {
             if ( false !== this.checkExistanceOfServicesDirectory && false === this.servicesDirectoryExists ) {
                 var statsServiceDirectory = fs.lstatSync( this.getServiceDirectoryPath() );
                 if ( statsServiceDirectory.isDirectory() ) {
@@ -74,6 +74,10 @@ function DependencyInjector( Kernel ) {
 
 
                         if ( statsServiceComponentDirectory.isFile() ) {
+
+                            if ( clearCache ) {
+            				   	delete require.cache[ require.resolve( serviceComponentFile ) ];
+                            }
 
                             return require( serviceComponentFile );
 

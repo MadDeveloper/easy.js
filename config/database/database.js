@@ -1,4 +1,4 @@
-module.exports = function( defaultConnector ) {
+module.exports = function( defaultConnector, clearCache ) {
     var connector = defaultConnector;
 
     if ( !defaultConnector ) {
@@ -6,5 +6,11 @@ module.exports = function( defaultConnector ) {
         connector = database.connector;
     }
 
-    return require( __dirname + '/connector/' + connector );
+    var connectorPath = __dirname + '/connector/' + connector;
+
+    if ( clearCache ) {
+        delete require.cache[ require.resolve( connectorPath ) ];
+    }
+
+    return require( connectorPath );
 };
