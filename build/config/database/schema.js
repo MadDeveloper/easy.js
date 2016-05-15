@@ -1,9 +1,9 @@
 'use strict';
 
-/*
- * Never change var name (schema) neither type
- */
-var schema = {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
     /*
      * First place your tables with primaries keys
      * then tables with foreign keys
@@ -24,5 +24,3 @@ var schema = {
         role_id: { type: 'integer', nullable: false, unsigned: true, references: 'roles.id', onDelete: 'cascade', onUpdate: 'cascade' }
     }
 };
-
-module.exports = schema;

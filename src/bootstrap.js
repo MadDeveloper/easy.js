@@ -12,8 +12,9 @@ import _                    from 'lodash'
 import path                 from 'path'
 import minimist             from 'minimist'
 
-import Kernel               from __dirname + '/vendor/easy/Kernel'
-import bundlesDefinition    from __dirname + '/config/bundlesDefinition'
+import Kernel               from './vendor/easy/Kernel'
+import bundlesDefinition    from './config/bundlesDefinition'
+import routing              from './config/routing'
 
 const argv =  minimist( process.argv.slice( 2 ) )
 
@@ -56,7 +57,7 @@ export default class Application {
         /*
          * Define bundle easy vendor
          */
-        const bundleManager = container.getComponent( 'BundleManager' )({ kernel, database, express.Router() })
+        const bundleManager = container.getComponent( 'BundleManager' )({ kernel, database, router: express.Router() })
 
         /*
          * Defines Polyfills
@@ -134,7 +135,6 @@ export default class Application {
             /*
              * Loads all the API routes
              */
-            import routing from __dirname + '/config/routing'
             routing( bundleManager )
 
             /*
@@ -174,7 +174,7 @@ export default class Application {
             /*
              * Registration router routes
              */
-            app.use( '/', bundleManager.getRouter() )
+            app.use( '/', bundleManager.router )
 
             /*
              * Returns app

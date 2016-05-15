@@ -2,7 +2,7 @@ var routing = function( BundleManager, params ) {
     /*
      * Global dependencies
      */
-    var router              = BundleManager.getRouter();
+    var router              = BundleManager.router;
 
     /*
      * User bundle dependencies

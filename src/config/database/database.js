@@ -1,6 +1,6 @@
-import config from __dirname + '/../config'
+import config from './../config'
 
-export default function( defaultConnector, clearCache ) {
+export default function database( defaultConnector, clearCache ) {
     let connector = defaultConnector;
 
     if ( !defaultConnector ) {

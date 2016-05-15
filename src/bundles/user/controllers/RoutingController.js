@@ -3,12 +3,12 @@ function RoutingController( UserFactory ) {
      * Global dependencies
      */
     var BundleManager       = UserFactory.getBundleManager();
-    var router              = BundleManager.getRouter();
+    var router              = BundleManager.router;
     var database            = BundleManager.getDatabase();
     var Container  = BundleManager.getContainer();
-    var http                = Container.getDependency( 'Http' );
-    var Controller          = Container.getDependency( 'Controller' );
-    var Request             = Container.getDependency( 'Request' );
+    var http                = Container.getComponent( 'Http' );
+    var Controller          = Container.getComponent( 'Controller' );
+    var Request             = Container.getComponent( 'Request' );
     var _                   = require( 'lodash' );
 
     /*
@@ -24,7 +24,7 @@ function RoutingController( UserFactory ) {
 
     return {
         isRequestWellParameterized: function() {
-            var Controller = UserFactory.getVendorController();
+            var Controller = UserFactory.getRootController();
             return Controller.verifyParams([
                     { property: 'username', typeExpected: 'string' },
                     { property: 'email', typeExpected: 'string' },

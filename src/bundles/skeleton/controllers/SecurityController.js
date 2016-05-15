@@ -1,40 +1,67 @@
-function SecurityController( SkeletonFactory ) {
-    /*
-     * Global dependencies
-     */
-    var BundleManager       = SkeletonFactory.getBundleManager();
-    var Container  = BundleManager.getContainer();
-    var http                = Container.getDependency( 'Http' );
-    var Controller          = Container.getDependency( 'Controller' );
-    var Request             = Container.getDependency( 'Request' );
-    var access              = Container.getService( 'security.access' )();
+export default class SecurityController {
+    constructor( skeletonFactory ) {
+        this._skeletonFactory   = skeletonFactory
+        this._bundleManager     = this._skeletonFactory.bundleManager
+        this._container         = this._bundleManager.container
+        this._http              = this._container.getComponent( 'Http' )
+        this._controller        = this._container.getComponent( 'Controller' )
+        this._request           = this._container.getComponent( 'Request' )
+        this._access            = new ( this._container.getService( 'security/access' ) )()
+    }
 
-    return {
-        authorize: function() {
-            return new Promise( function( resolve, reject ) {
-                if ( Controller.isProdEnv() ) {
-                    var token = Request.getBodyParameter( 'token' );
+    authorize() {
+        return new Promise( ( resolve, reject ) => {
+            if ( Controller.isProdEnv() ) {
+                const token = Request.getBodyParameter( 'token' )
 
-                    access.restrict({
-                        mustBe: [ access.any ],
-                        canCreate: [],
-                        canRead: [],
-                        canUpdate: [],
-                        canDelete: []
-                    });
+                access.restrict({
+                    mustBe: [ access.any ],
+                    canCreate: [],
+                    canRead: [],
+                    canUpdate: [],
+                    canDelete: []
+                })
 
-                    if ( access.focusOn( token.role_id ).canReach( Request.getMethod() ) ) {
-                        resolve();
-                    } else {
-                        http.forbidden();
-                        reject();
-                    }
+                if ( access.focusOn( token.role_id ).canReach( Request.getMethod() ) ) {
+                    resolve()
                 } else {
-                    resolve();
+                    http.forbidden()
+                    reject()
                 }
-            });
-        }
+            } else {
+                resolve()
+            }
+        })
+    }
+
+    /*
+     * Getters and setters
+     */
+    get skeletonFactory() {
+        return this._skeletonFactory
+    }
+
+    get bundleManager() {
+        return this._bundleManager
+    }
+
+    get container() {
+        return this._container
+    }
+
+    get http() {
+        return this._http
+    }
+
+    get controller() {
+        return this._controller
+    }
+
+    get request() {
+        return this._request
+    }
+
+    get access() {
+        return this._access
     }
 }
-
-module.exports = SecurityController;

@@ -7,7 +7,7 @@ function UserRepository( UserFactory ) {
 
         read: function( byParam, options ) {
             var User = UserFactory.getModel();
-            var forgeParam = ( UserFactory.getVendorController().isNumber( byParam ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } );
+            var forgeParam = ( UserFactory.getRootController().isNumber( byParam ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } );
             return User.forge( forgeParam ).fetch( options );
         },
 

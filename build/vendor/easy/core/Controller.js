@@ -1,13 +1,26 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-function Controller(Container) {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-    var http = Container.getDependency('Http');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    return {
-        verifyParams: function verifyParams(required, params) {
+var Controller = function () {
+    function Controller(container) {
+        _classCallCheck(this, Controller);
+
+        this._container = container;
+        this._http = this._container.getComponent('Http');
+    }
+
+    _createClass(Controller, [{
+        key: 'verifyParams',
+        value: function verifyParams(required, params) {
             var verified = true;
 
             for (var requiredParam in required) {
@@ -32,23 +45,29 @@ function Controller(Container) {
             }
 
             return verified;
-        },
-
-        isNumber: function isNumber(number) {
+        }
+    }, {
+        key: 'isNumber',
+        value: function isNumber(number) {
             return typeof number === "number" || typeof number === 'string' && number.isNumber();
-        },
-
-        parsePatchParams: function parsePatchParams(req) {
+        }
+    }, {
+        key: 'parsePatchParams',
+        value: function parsePatchParams(req) {
             try {
                 return JSON.parse(req.rawBody);
             } catch (error) {}
-        },
-
-        isPatchRequestWellParameterized: function isPatchRequestWellParameterized(req) {
+        }
+    }, {
+        key: 'isPatchRequestWellParameterized',
+        value: function isPatchRequestWellParameterized(req) {
             return req.rawBody.length > 0;
-        },
+        }
+    }, {
+        key: 'doesRequiredElementExists',
+        value: function doesRequiredElementExists(element, options, BundleManager, callback) {
+            var _this = this;
 
-        doesRequiredElementExists: function doesRequiredElementExists(element, options, BundleManager, callback) {
             var requireBy = null;
             var optionsFetch = null;
 
@@ -60,27 +79,47 @@ function Controller(Container) {
             }
 
             var ElementRepository = BundleManager.getFactory(element.capitalizeFirstLetter()).getRepository();
+
             ElementRepository.read(requireBy, optionsFetch).then(function (element) {
 
                 if (element) {
 
                     callback(element);
                 } else {
-                    http.notFound();
+                    _this.http.notFound();
                 }
             }).catch(function (error) {
-                http.internalServerError(error);
+                _this.http.internalServerError(error);
             });
-        },
-
-        isDevEnv: function isDevEnv() {
+        }
+    }, {
+        key: 'isDevEnv',
+        value: function isDevEnv() {
             return 'development' === process.env.NODE_ENV;
-        },
-
-        isProdEnv: function isProdEnv() {
+        }
+    }, {
+        key: 'isProdEnv',
+        value: function isProdEnv() {
             return !this.isDevEnv();
         }
-    };
-}
 
-module.exports = Controller;
+        /*
+         * Getters and setters
+         */
+
+    }, {
+        key: 'container',
+        get: function get() {
+            return this._container;
+        }
+    }, {
+        key: 'http',
+        get: function get() {
+            return this._http;
+        }
+    }]);
+
+    return Controller;
+}();
+
+exports.default = Controller;

@@ -1,27 +1,51 @@
-function MiddlewaresController( SkeletonFactory ) {
+export default class MiddlewaresController {
+    constructor( skeletonFactory ) {
+        this._skeletonFactory   = skeletonFactory
+        this._bundleManager     = this._skeletonFactory.bundleManager
+        this._container         = this._bundleManager.container
+        this._http              = this._container.getComponent( 'Http' )
+        this._controller        = this._container.getComponent( 'Controller' )
+        this._request           = this._container.getComponent( 'Request' )
+    }
+
+    skeletonExists() {
+        return new Promise( ( resolve, reject ) => {
+            const requireOptions = {
+                requireBy: this.request.getRouteParameter( 'id' ),
+                options: {}
+            }
+
+            this.controller.doesRequiredElementExists( 'Skeleton', requireOptions, this.bundleManager, skeleton => {
+                this.request.define( 'skeleton', skeleton )
+                resolve()
+            })
+        })
+    }
+
     /*
-     * Global dependencies
+     * Getters and setters
      */
-    var BundleManager       = SkeletonFactory.getBundleManager();
-    var http                = BundleManager.getContainer().getDependency( 'Http' );
-    var Controller          = BundleManager.getContainer().getDependency( 'Controller' );
-    var Request             = BundleManager.getContainer().getDependency( 'Request' );
+    get skeletonFactory() {
+        return this._skeletonFactory
+    }
 
-    return {
-        skeletonExists: function() {
-            return new Promise( function( resolve, reject ) {
-                var requireOptions = {
-                    requireBy: Request.getRouteParameter( 'id' ),
-                    options: {}
-                };
+    get bundleManager() {
+        return this._bundleManager
+    }
 
-                Controller.doesRequiredElementExists( 'Skeleton', requireOptions, BundleManager, function( skeleton ) {
-                    Request.define( 'skeleton', skeleton );
-                    resolve();
-                });
-            });
-        }
+    get container() {
+        return this._container
+    }
+
+    get http() {
+        return this._http
+    }
+
+    get controller() {
+        return this._controller
+    }
+
+    get request() {
+        return this._request
     }
 }
-
-module.exports = MiddlewaresController;

@@ -2,7 +2,7 @@
  * Not working!
  */
 import mongoose from 'mongoose'
-import config   from __dirname + '/../../config'
+import config   from './../../config'
 
 const params = config.database
 

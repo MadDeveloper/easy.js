@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-export default class Container
+export default class Container {
     contructor( kernel ) {
         this._kernel = kernel
         this._message = this.getComponent( 'Message' )
@@ -62,7 +62,7 @@ export default class Container
             }
         }
 
-        const serviceInfo             = service.split( '.' );
+        const serviceInfo             = service.split( '/' );
         const serviceName             = serviceInfo[ 0 ];
         const serviceComponent        = serviceInfo[ 1 ];
         const serviceNameDirectory    = this.servicesDirectoryPath + '/' + serviceName;

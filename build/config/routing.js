@@ -1,38 +1,40 @@
 'use strict';
 
-var routing = function routing(BundleManager) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = routing;
+function routing(bundleManager) {
   /*
    * Middlewares
    */
   /*
    * Use Request ans Response class as a middleware to manage respectively request and response scope vars
    */
-  BundleManager.getRouter().use(function (req, res, next) {
-    BundleManager.getContainer().getDependency('Request').registerRequestScope(req);
-    BundleManager.getContainer().getDependency('Response').registerResponseScope(res);
+  bundleManager.router.use(function (req, res, next) {
+    bundleManager.container.getComponent('Request').scope = req;
+    bundleManager.container.getComponent('Response').scope = res;
     next();
   });
 
   /*
    * Security
    */
-  require(__dirname + '/security/authentication')(BundleManager);
-  BundleManager.getContainer().getService('security.default')(BundleManager);
+  require(__dirname + '/security/authentication')(bundleManager);
+  bundleManager.container.getService('security.default')(bundleManager);
 
   /*
   * bundles routes definitions
   */
-  BundleManager.getBundlesRegisteredRouting();
+  bundleManager.getBundlesDefinitionRouting();
 
   /*
    * Final middleware: No route found
    */
-  BundleManager.getRouter().use(function (req, res) {
+  bundleManager.router.use(function (req, res) {
     if (!res.headersSent) {
       // if you want strict mode, comment this condition
-      BundleManager.getContainer().getDependency('Http').notFound();
+      bundleManager.container.getComponent('http').notFound();
     }
   });
-};
-
-module.exports = routing;
+}

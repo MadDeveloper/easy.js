@@ -1,45 +1,43 @@
-var routing = function( BundleManager, params ) {
+export default function routing( bundleManager, params ) {
     /*
      * Global dependencies
      */
-    var router = BundleManager.getRouter();
+    const router = bundleManager.router
 
     /*
      * Skeleton bundle dependencies
      */
-    var SkeletonFactory             = BundleManager.getFactory( 'Skeleton' );
-    var SkeletonRoutingController   = SkeletonFactory.getController( 'Routing' );
+    const skeletonFactory             = bundleManager.getFactory( 'Skeleton' )
+    const skeletonRoutingController   = skeletonFactory.getController( 'Routing' )
 
     /*
      * Middlewares
      */
-    SkeletonFactory.getConfig( 'security' );
-    SkeletonFactory.getConfig( 'middlewares' );
+    skeletonFactory.getConfig( 'security' )
+    skeletonFactory.getConfig( 'middlewares' )
 
     /*
     * Routes definitions
     */
     router.route( '/skeletons' )
-        .get( function() {
-        	SkeletonRoutingController.getSkeletons();
+        .get( () => {
+        	skeletonRoutingController.getSkeletons()
         })
-        .post( function() {
-        	SkeletonRoutingController.createSkeleton();
-        });
+        .post( () => {
+        	skeletonRoutingController.createSkeleton()
+        })
 
     router.route( '/skeletons/:id' )
-        .get( function() {
-        	SkeletonRoutingController.getSkeleton();
+        .get( () => {
+        	skeletonRoutingController.getSkeleton()
         })
-        .put( function() {
-        	SkeletonRoutingController.updateSkeleton();
+        .put( () => {
+        	skeletonRoutingController.updateSkeleton()
         })
-        .patch( function() {
-        	SkeletonRoutingController.patchSkeleton();
+        .patch( () => {
+        	skeletonRoutingController.patchSkeleton()
         })
-        .delete( function() {
-        	SkeletonRoutingController.deleteSkeleton();
-        });
-};
-
-module.exports = routing;
+        .delete( () => {
+        	skeletonRoutingController.deleteSkeleton()
+        })
+}

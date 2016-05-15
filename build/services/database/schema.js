@@ -1,14 +1,26 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _database = require('./../../config/database/database');
+
+var _database2 = _interopRequireDefault(_database);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var database = (0, _database2.default)(null, true);
 var clearCache = true;
-var database = require(global.app.root + '/config/database/database')(null, true);
-var _ = require('lodash');
 
-module.exports = {
+exports.default = {
   createSchema: function createSchema(schemaName) {
-    return database.raw('CREATE DATABASE ' + schemaName + ';');
+    return database.raw('CREATE DATABASE ' + schemaName + '');
   },
-
   schemaExists: function schemaExists(schemaName) {
     try {
       return database.schema.withSchema(schemaName);
@@ -16,29 +28,24 @@ module.exports = {
       return false;
     }
   },
-
   dropTable: function dropTable(tableName) {
     return database.schema.dropTableIfExists(tableName);
   },
-
   tableExists: function tableExists(tableName) {
     return database.schema.hasTable(tableName);
   },
-
   truncateTable: function truncateTable(tableName) {
     return database.raw('truncate table ' + tableName);
   },
-
   clearTable: function clearTable(tableName) {
     return database(tableName).del();
   },
-
   createTable: function createTable(tableName, tableSchema) {
     return database.schema.createTable(tableName, function (table) {
-      var column;
-      var columnKeys = _.keys(tableSchema);
+      var column = void 0;
+      var columnKeys = _lodash2.default.keys(tableSchema);
 
-      _.each(columnKeys, function (key) {
+      _lodash2.default.each(columnKeys, function (key) {
         if (tableSchema[key].type === 'text' && tableSchema[key].hasOwnProperty('fieldtype')) {
           column = table[tableSchema[key].type](key, tableSchema[key].fieldtype);
         } else if (tableSchema[key].type === 'string' && tableSchema[key].hasOwnProperty('maxlength')) {
@@ -50,6 +57,7 @@ module.exports = {
           if ('decimal' === tableSchema[key].type) {
             var defaultScale = 2;
             var scale = tableSchema[key].hasOwnProperty('scale') ? tableSchema[key].scale : defaultScale;
+
             table[tableSchema[key].type](key, tableSchema[key].precision, tableSchema[key].scale);
           } else {
             table[tableSchema[key].type](key, tableSchema[key].precision);

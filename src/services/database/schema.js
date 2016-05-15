@@ -1,5 +1,5 @@
 import _        from 'lodash'
-import Database from global.app.root + '/config/database/database' )
+import Database from './../../config/database/database'
 
 const database  = Database( null, true )
 let clearCache  = true

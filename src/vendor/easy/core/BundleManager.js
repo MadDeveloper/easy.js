@@ -20,7 +20,7 @@ export default class BundleManager {
     }
 
     getFactory( bundle, params ) {
-        const factoryPath = this.getBundlesDirectory() + '/' + bundle + '/Pattern/Factory.js'
+        const factoryPath = this.getBundlesDirectory() + '/' + bundle + '/Factory.js'
 
         if ( fs.statSync( factoryPath ).isFile() ) {
             return new ( require( factoryPath ) )( this, params )

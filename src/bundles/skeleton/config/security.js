@@ -1,23 +1,21 @@
-var security = function( BundleManager, params ) {
+export default function security( bundleManager, params ) {
     /*
      * Global dependencies
      */
-    var router = BundleManager.getRouter();
+    const router = bundleManager.router
 
     /*
      * Skeleton bundle dependencies
      */
-    var SkeletonSecurityController = BundleManager.getFactory( 'Skeleton' ).getController( 'Security' );
+    const skeletonSecurityController = bundleManager.getFactory( 'Skeleton' ).getController( 'Security' )
 
     /*
      * Security middlewares
      */
-    router.use( '/skeletons', function( req, res, next ) {
-        SkeletonSecurityController.authorize()
-        .then( function() {
-            next();
-        });
-    });
-};
-
-module.exports = security;
+    router.use( '/skeletons', ( req, res, next ) => {
+        skeletonSecurityController.authorize()
+        .then( () => {
+            next()
+        })
+    })
+}

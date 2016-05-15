@@ -1,82 +1,137 @@
 'use strict';
 
-var fs = require('fs');
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-function BundleManager(Kernel, databaseConnector, router) {
-    return {
-        bundlesRegistered: [],
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-        Container: null,
+var _fs = require('fs');
 
-        register: function register(bundle) {
-            var bundleDirPath = this.getBundlesDir() + '/' + bundle;
+var _fs2 = _interopRequireDefault(_fs);
 
-            if (fs.statSync(bundleDirPath).isDirectory()) {
-                this.bundlesRegistered.push(bundle);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var BundleManager = function () {
+    function BundleManager(components) {
+        _classCallCheck(this, BundleManager);
+
+        this._kernel = components.kernel;
+        this._database = components.database;
+        this._router = components.router;
+        this._bundlesDefinition = [];
+        this._container = null;
+    }
+
+    _createClass(BundleManager, [{
+        key: 'define',
+        value: function define(bundle) {
+            var bundleDirPath = this.getBundlesDirectory() + '/' + bundle;
+
+            if (_fs2.default.statSync(bundleDirPath).isDirectory()) {
+                this.bundlesDefinition.push(bundle);
             }
 
             return this;
-        },
+        }
+    }, {
+        key: 'getFactory',
+        value: function getFactory(bundle, params) {
+            var factoryPath = this.getBundlesDirectory() + '/' + bundle + '/Factory.js';
 
-        getFactory: function getFactory(bundle, params) {
-            var factoryPath = this.getBundlesDir() + '/' + bundle + '/Pattern/Factory.js';
-
-            if (fs.statSync(factoryPath).isFile()) {
+            if (_fs2.default.statSync(factoryPath).isFile()) {
                 return new (require(factoryPath))(this, params);
             }
-        },
+        }
+    }, {
+        key: 'getRouting',
+        value: function getRouting(bundle, params) {
+            var routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js';
 
-        getRouting: function getRouting(bundle, params) {
-            var routingPath = this.getBundlesDir() + '/' + bundle + '/config/routing.js';
-
-            if (fs.statSync(routingPath).isFile()) {
+            if (_fs2.default.statSync(routingPath).isFile()) {
                 return require(routingPath)(this, params);
             }
-        },
-
-        getBundlesRegisteredRouting: function getBundlesRegisteredRouting(params) {
-            var bundles = this.getBundlesRegistered();
+        }
+    }, {
+        key: 'getBundlesDefinitionRouting',
+        value: function getBundlesDefinitionRouting(params) {
             var routingPath = '';
 
-            for (var i in bundles) {
-                routingPath = this.getBundlesDir() + '/' + bundles[i] + '/config/routing.js';
+            for (var i in this.bundlesDefinition) {
+                routingPath = this.getBundlesDirectory() + '/' + bundles[i] + '/config/routing.js';
 
-                if (fs.statSync(routingPath).isFile()) {
+                if (_fs2.default.statSync(routingPath).isFile()) {
                     require(routingPath)(this, params);
                 }
             }
-        },
-
-        getContainer: function getContainer() {
-            if (null === this.Container) {
-                this.Container = Kernel.load('Container')(Kernel);
+        }
+    }, {
+        key: 'getContainer',
+        value: function getContainer() {
+            if (null === this.container) {
+                this.container = new (this.kernel.getContainer())(this.kernel);
             }
-            return this.Container;
-        },
 
-        getDatabase: function getDatabase() {
-            return databaseConnector.getConnection();
-        },
-
-        getBundlesDir: function getBundlesDir() {
-            return Kernel.path.Bundles;
-        },
-
-        getBundlesRegistered: function getBundlesRegistered() {
-            return this.bundlesRegistered;
-        },
-
-        getRouter: function getRouter() {
-            return router;
-        },
+            return this.container;
+        }
+    }, {
+        key: 'getDatabase',
+        value: function getDatabase() {
+            return this.database.connection;
+        }
+    }, {
+        key: 'getBundlesDirectory',
+        value: function getBundlesDirectory() {
+            return this.kernel.path.bundles;
+        }
 
         /*
-         * Aliases
+         * Getters and setter
          */
-        getAppName: function getAppName() {
-            return Kernel.getAppName();
-        }
-    };
-}
 
-module.exports = BundleManager;
+    }, {
+        key: 'appName',
+        get: function get() {
+            return this.kernel.appName;
+        }
+    }, {
+        key: 'kernel',
+        get: function get() {
+            return this._kernel;
+        }
+    }, {
+        key: 'router',
+        get: function get() {
+            return this._router;
+        },
+        set: function set(router) {
+            this._router = router;
+            return this;
+        }
+    }, {
+        key: 'database',
+        get: function get() {
+            return this._database;
+        },
+        set: function set(database) {
+            this._database = database;
+            return this;
+        }
+    }, {
+        key: 'bundlesDefinition',
+        get: function get() {
+            return this._bundlesDefinition;
+        }
+    }, {
+        key: 'container',
+        get: function get() {
+            return this._container;
+        }
+    }]);
+
+    return BundleManager;
+}();
+
+exports.default = BundleManager;

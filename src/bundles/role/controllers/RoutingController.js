@@ -3,12 +3,12 @@ function RoutingController( RoleFactory ) {
      * Global dependencies
      */
     var BundleManager       = RoleFactory.getBundleManager();
-    var router              = BundleManager.getRouter();
+    var router              = BundleManager.router;
     var database            = BundleManager.getDatabase();
     var Container  = BundleManager.getContainer();
-    var http                = Container.getDependency( 'Http' );
-    var Controller          = Container.getDependency( 'Controller' );
-    var Request             = Container.getDependency( 'Request' );
+    var http                = Container.getComponent( 'Http' );
+    var Controller          = Container.getComponent( 'Controller' );
+    var Request             = Container.getComponent( 'Request' );
 
     /*
      * Role bundle dependencies
@@ -17,7 +17,7 @@ function RoutingController( RoleFactory ) {
 
     return {
         isRequestWellParameterized: function() {
-            var Controller = RoleFactory.getVendorController();
+            var Controller = RoleFactory.getRootController();
             return Controller.verifyParams([
                     { property: 'name', typeExpected: 'string' },
                     { property: 'slug', typeExpected: 'string' }

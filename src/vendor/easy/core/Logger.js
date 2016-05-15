@@ -15,7 +15,7 @@
  */
 import fs from 'fs'
 
-export default class Logger( Container ) {
+export default class Logger {
     constructor( container ) {
         this._container = container
         this._message   = this._container.getComponent( 'Message' )

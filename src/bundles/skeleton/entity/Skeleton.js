@@ -1,12 +1,12 @@
 /*
  * Skeleton model
  */
-function Skeleton( SkeletonFactory ) {
-    var BundleManager = SkeletonFactory.getBundleManager();
-    
-    return SkeletonFactory.getDatabase().Model.extend({
-        tableName: 'skeletons'
-    });
-}
+export default class Skeleton {
+    constructor( skeletonFactory ) {
+        const bundleManager = SkeletonFactory.bundleManager
 
-module.exports = Skeleton;
+        return skeletonFactory.database.Model.extend({
+            tableName: 'skeletons'
+        })
+    }
+}

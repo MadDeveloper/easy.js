@@ -55,8 +55,8 @@ function UserFactory( BundleManager, params ) {
             return BundleManager.getDatabase();
         },
 
-        getVendorController: function() {
-            return this.getBundleManager().getContainer().getDependency( 'Controller' );
+        getRootController: function() {
+            return this.getBundleManager().getContainer().getComponent( 'Controller' );
         }
     }
 }

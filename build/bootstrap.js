@@ -1,183 +1,252 @@
 'use strict';
 
-var _ = require('lodash');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-function bootstrap(config, cliMode) {
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+var _express = require('express');
+
+var _express2 = _interopRequireDefault(_express);
+
+var _bodyParser = require('body-parser');
+
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
+
+var _morgan = require('morgan');
+
+var _morgan2 = _interopRequireDefault(_morgan);
+
+var _helmet = require('helmet');
+
+var _helmet2 = _interopRequireDefault(_helmet);
+
+var _cors = require('cors');
+
+var _cors2 = _interopRequireDefault(_cors);
+
+var _compression = require('compression');
+
+var _compression2 = _interopRequireDefault(_compression);
+
+var _numeral = require('numeral');
+
+var _numeral2 = _interopRequireDefault(_numeral);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _minimist = require('minimist');
+
+var _minimist2 = _interopRequireDefault(_minimist);
+
+var _Kernel = require('./vendor/easy/Kernel');
+
+var _Kernel2 = _interopRequireDefault(_Kernel);
+
+var _bundlesDefinition = require('./config/bundlesDefinition');
+
+var _bundlesDefinition2 = _interopRequireDefault(_bundlesDefinition);
+
+var _routing = require('./config/routing');
+
+var _routing2 = _interopRequireDefault(_routing);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } /*
+                                                                                                                                                           * Modules Dependencies
+                                                                                                                                                           */
+
+
+var argv = (0, _minimist2.default)(process.argv.slice(2));
+
+var Application =
+/**
+ * Constructor
+ */
+function Application(config, cliMode) {
+  _classCallCheck(this, Application);
+
   /*
    * Define root app path
    */
-  var path = require('path');
   global.app = global.app || {};
-  global.app.root = path.resolve(__dirname);
+  global.app.root = _path2.default.resolve(__dirname);
 
   /*
    * API environement
    */
-  var argv = require('minimist')(process.argv.slice(2));
+
   if ('p' === argv._[0] || 'production' === argv._[0] || 'prod' === argv._[0] || argv.p || argv.prod || argv.production) {
     process.env.NODE_ENV = 'production';
   } else {
     process.env.NODE_ENV = 'development';
   }
 
-  /*
-   * Modules Dependencies
-   */
-  var express = require('express');
-  var app = express();
-  var bodyParser = require('body-parser');
-  var morgan = require('morgan');
-  var helmet = require('helmet');
-  var cors = require('cors');
-  var compression = require('compression');
-  var numeral = require('numeral');
+  var app = (0, _express2.default)();
 
   /*
    * Easy.js dependencies
    */
-  var Kernel = require(__dirname + '/vendor/easy/Kernel')().init(__dirname, config);
-  var Message = Kernel.load('Message')();
-  var Database = Kernel.load('Database/Connector')(Kernel);
+  var kernel = new _Kernel2.default().init(__dirname, config);
+  var container = new (kernel.load('Container'))(kernel);
+  var message = container.getComponent('Message');
+  var database = container.getComponent('database/Connector');
 
   /*
    * Define database connector (default: ~/config/database/orm)
    */
-  Database.connect();
+  database.connect();
 
   /*
    * Define bundle easy vendor
    */
-  var BundleManager = Kernel.load('BundleManager')(Kernel, Database, express.Router());
+  var bundleManager = container.getComponent('BundleManager')({ kernel: kernel, database: database, router: _express2.default.Router() });
 
   /*
    * Defines Polyfills
    */
-  Kernel.load('polyfills');
+  kernel.load('polyfills');
 
   if (!cliMode) {
-    /*
-     * In normal mode we define middlewares, routes and bundles into app
-     */
+    var _ret = function () {
+      /*
+       * In normal mode we define middlewares, routes and bundles into app
+       */
 
-    /*
-     * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
-     */
-    app.enable('trust proxy');
+      /*
+       * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
+       */
+      app.enable('trust proxy');
 
-    /*
-     * Enable CORS: https://www.w3.org/TR/cors/
-     */
-    app.use(cors());
+      /*
+       * Enable CORS: https://www.w3.org/TR/cors/
+       */
+      app.use((0, _cors2.default)());
 
-    /*
-     * Just a collection of nine smaller middleware functions that set security-related HTTP headers
-     */
-    app.use(helmet());
+      /*
+       * Just a collection of nine smaller middleware functions that set security-related HTTP headers
+       */
+      app.use((0, _helmet2.default)());
 
-    /*
-     * Gzip compression (can greatly decrease the size of the response body)
-     */
-    app.use(compression());
+      /*
+       * Gzip compression (can greatly decrease the size of the response body)
+       */
+      app.use((0, _compression2.default)());
 
-    /*
-     * body-parser middleware for handling request variables
-     */
-    app.use(bodyParser.json()); // support json encoded bodies
-    app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+      /*
+       * body-parser middleware for handling request variables
+       */
+      app.use(_bodyParser2.default.json()); // support json encoded bodies
+      app.use(_bodyParser2.default.urlencoded({ extended: true })); // support encoded bodies
 
-    /*
-     * Permit to retrieve rawBody into PATCH method
-     */
-    app.use(function (req, res, next) {
-      var method = req.method.toLowerCase();
-      var data = '';
-      var enableMethods = ['patch'];
-
-      if (_.indexOf(enableMethods, method) < 0) {
-        return next();
-      }
-
-      req.setEncoding('utf8');
-
-      req.on('data', function (chunk) {
-        data += chunk;
-      });
-
-      req.on('end', function () {
-        req.rawBody = data;
-        next();
-      });
-    });
-
-    /*
-     * Displays everything that happens on the server
-     * when dev mode is used
-     */
-    if (process.env.NODE_ENV === 'development') {
-      app.use(morgan('dev'));
-    }
-
-    /*
-     * Register bundles for routing
-     */
-    require(__dirname + '/config/bundlesRegistered')(BundleManager);
-
-    /*
-     * Loads all the API routes
-     */
-    require(__dirname + '/config/routing')(BundleManager);
-
-    /*
-     * Auto call to gc
-     */
-    var warnDisplayed = false;
-    app.use(function (req, res, next) {
-      if (global.gc) {
-        global.gc();
-      } else if (false === warnDisplayed) {
-        Message.warn("You should launch node server with npm start command in order to enable gc.");
-        console.log('\n');
-        warnDisplayed = true;
-      }
-      next();
-    });
-
-    /*
-     * See memory usage if specified
-     */
-    if (argv.memory) {
+      /*
+       * Permit to retrieve rawBody into PATCH method
+       */
       app.use(function (req, res, next) {
-        var memory = process.memoryUsage();
+        var method = req.method.toLowerCase();
+        var enableMethods = ['patch'];
+        var data = '';
 
-        Message.info("---- Memory usage ----");
-        Message.info("RSS:        " + numeral(memory.rss).format('bytes'));
-        Message.info("Heap total: " + numeral(memory.heapTotal).format('bytes'));
-        Message.info("Heap used:  " + numeral(memory.heapUsed).format('bytes'));
-        Message.info("----------------------");
+        if (_lodash2.default.indexOf(enableMethods, method) < 0) {
+          return next();
+        }
+
+        req.setEncoding('utf8');
+
+        req.on('data', function (chunk) {
+          data += chunk;
+        });
+
+        req.on('end', function () {
+          req.rawBody = data;
+          next();
+        });
+      });
+
+      /*
+       * Displays everything that happens on the server
+       * when dev mode is used
+       */
+      if (process.env.NODE_ENV === 'development') {
+        app.use((0, _morgan2.default)('dev'));
+      }
+
+      /*
+       * Register bundles for routing
+       */
+      (0, _bundlesDefinition2.default)(bundleManager);
+
+      /*
+       * Loads all the API routes
+       */
+      (0, _routing2.default)(bundleManager);
+
+      /*
+       * Auto call to gc
+       */
+      var warnDisplayed = false;
+
+      app.use(function (req, res, next) {
+        if (global.gc) {
+          global.gc();
+        } else if (false === warnDisplayed) {
+          message.warn("You should launch node server with npm start command in order to enable gc.");
+          console.log('\n');
+          warnDisplayed = true;
+        }
 
         next();
       });
-    }
 
-    /*
-     * Registration router routes
-     */
-    app.use('/', BundleManager.getRouter());
+      /*
+       * See memory usage if specified
+       */
+      if (argv.memory) {
+        app.use(function (req, res, next) {
+          var memory = process.memoryUsage();
 
-    /*
-     * Returns app
-     */
-    return app;
+          message.info("---- Memory usage ----");
+          message.info("RSS:        " + (0, _numeral2.default)(memory.rss).format('bytes'));
+          message.info("Heap total: " + (0, _numeral2.default)(memory.heapTotal).format('bytes'));
+          message.info("Heap used:  " + (0, _numeral2.default)(memory.heapUsed).format('bytes'));
+          message.info("----------------------");
+
+          next();
+        });
+      }
+
+      /*
+       * Registration router routes
+       */
+      app.use('/', bundleManager.router);
+
+      /*
+       * Returns app
+       */
+      return {
+        v: app
+      };
+    }();
+
+    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
   } else {
     /*
-     * Returns Kernel and BundleManager into cliMode
+     * Returns kernel, bundleManager and app in cliMode
      */
     return {
-      Kernel: Kernel,
-      BundleManager: BundleManager,
+      kernel: kernel,
+      bundleManager: bundleManager,
       app: app
     };
   }
-}
+};
 
-module.exports = bootstrap;
+exports.default = Application;

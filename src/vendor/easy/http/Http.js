@@ -51,58 +51,58 @@ export default class Http {
     }
 
     ok( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.ok ).json( this.formatParams( params ) )
     }
 
     created( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.created ).json( this.formatParams( params ) )
     }
 
     notFound( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.notFound ).json( this.formatParams( params ) )
     }
 
     notModified( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.notModified ).json( this.formatParams( params ) )
     }
 
     gone( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.gone ).json( this.formatParams( params ) )
     }
 
     unauthorized( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.unauthorized ).json( this.formatParams( params ) )
     }
 
     methodNotAllowed( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.methodNotAllowed ).json( this.formatParams( params ) )
     }
 
     unsupportedMediaType( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.unsupportedMediaType ).json( this.formatParams( params ) )
     }
 
     tooManyRequests( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.tooManyRequests ).json( this.formatParams( params ) )
     }
 
-    noContent: function( params ) {
-        const res = this.response.getScope()
+    noContent( params ) {
+        const res = this.response.scope
         res.status( this.status.noContent ).json( this.formatParams( params ) )
     }
 
-    internalServerError: function( params ) {
-        const req = this.request.getScope()
-        const res = this.response.getScope()
+    internalServerError( params ) {
+        const req = this.request.scope
+        const res = this.response.scope
         const alertLog = '[{currentDate}] -- {remoteHostIp} -- {method} {originalUrl} {statusCode} -- ' + params + '\n'
 
         this.logger.alert( alertLog, {
@@ -117,22 +117,22 @@ export default class Http {
     }
 
     badRequest( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.badRequest ).json( this.formatParams( params ) )
     }
 
     unauthorized( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.unauthorized ).json( this.formatParams( params ) )
     }
 
     forbidden( params ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         res.status( this.status.forbidden ).json( this.formatParams( params ) )
     }
 
     attachment( filePath, options ) {
-        const res = this.response.getScope()
+        const res = this.response.scope
         // res.attachment( filePath )
         res.sendFile( filePath, options, error => {
             if ( error ) {

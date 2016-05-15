@@ -1,77 +1,71 @@
+import jwt          from 'jsonwebtoken'
+import config       from './../config'
+import authorized   from './authorized'
+
 export default function authentication( bundleManager ) {
     /*
      * retrieve Router
      */
-    var router = bundleManager.getRouter();
-
-    /*
-     * Configurations
-     */
-    var config = require( __dirname + '/../config' );
+    const router = bundleManager.router
 
     /*
      * Provide Http helpers
      */
-    var Request = bundleManager.getContainer().getDependency( 'Request' );
-    var http    = bundleManager.getContainer().getDependency( 'Http' );
-
-    /*
-     * JWT
-     */
-    var jwt = require( 'jsonwebtoken' );
+    const request = bundleManager.container.getComponent( 'Request' )
+    const http    = bundleManager.container.getComponent( 'Http' )
 
     /*
      * User classes
      */
-    var UserFactory     = bundleManager.getFactory( 'User' );
-    var UserRepository  = UserFactory.getRepository();
+    const userFactory     = bundleManager.getFactory( 'User' )
+    const userRepository  = userFactory.getRepository()
 
     /*
      * Vendor dependencies
      */
-    var Controller = bundleManager.getContainer().getDependency( 'Controller' );
+    const controller = bundleManager.container.getComponent( 'Controller' )
 
     /*
      * Defining routes with authorization required
      */
     router.route( '/authentication' )
-        .post( function( req, res ) {
-            var requestValidity = Controller.verifyParams(
+        .post(( req, res ) => {
+            const requestValidity = controller.verifyParams(
                 [
                     { property: 'email', typeExpected: 'string' },
                     { property: 'password', typeExpected: 'string' }
                 ],
                 req.body
-            );
+            )
 
             if ( requestValidity ) {
-                UserRepository.read({ email: Request.getBodyParameter( 'email' ) })
-                .then( function( user ) {
+                userRepository.read({ email: request.getBodyParameter( 'email' ) })
+                .then( user => {
                     if ( user ) {
 
-                        if ( Request.getBodyParameter( 'password' ) == user.get('password') ) {
+                        if ( request.getBodyParameter( 'password' ) == user.get('password') ) {
 
-                            var token = jwt.sign( user.toJSON(), config.jwt.secret, { expiresIn: 86400 /* 24 hours */ } );
-                            http.ok({ token: token });
+                            const token = jwt.sign( user.toJSON(), config.jwt.secret, { expiresIn: 86400 /* 24 hours */ } )
+                            http.ok({ token: token })
 
                         } else {
-                            http.unauthorized();
+                            http.unauthorized()
                         }
 
                     } else {
-                        http.notFound();
+                        http.notFound()
                     }
                 })
-                .catch( function( error ) {
-                    http.internalServerError( error );
-                });
+                .catch( error => {
+                    http.internalServerError( error )
+                })
             } else {
-                http.badRequest();
+                http.badRequest()
             }
-        });
+        })
 
     /*
      * Check token validity
      */
-    require( './authorized' )( http, Request, jwt, config.jwt.secret, router );
+    authorized( http, request, jwt, config.jwt.secret, router )
 }

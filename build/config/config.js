@@ -1,20 +1,28 @@
 'use strict';
 
-var fs = require('fs');
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getCredentials() {
     var credentials = { key: null, cert: null, found: false };
 
     try {
-        credentials.key = fs.readFileSync(__dirname + '/keys/myapp-privkey.pem');
-        credentials.cert = fs.readFileSync(__dirname + '/keys/myapp-cert.pem');
+        credentials.key = _fs2.default.readFileSync(__dirname + '/keys/myapp-privkey.pem');
+        credentials.cert = _fs2.default.readFileSync(__dirname + '/keys/myapp-cert.pem');
         credentials.found = true;
     } finally {
         return credentials;
     }
 }
 
-module.exports = {
+exports.default = {
     /*
      * App configurations
      */

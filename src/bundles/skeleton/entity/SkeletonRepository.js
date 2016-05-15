@@ -1,32 +1,39 @@
-function SkeletonRepository( SkeletonFactory ) {
-    return {
-        readAll: function( options ) {
-            var Skeletons = SkeletonFactory.getCollection();
-            return Skeletons.forge().fetch( options );
-        },
+export default class SkeletonRepository {
+    constructor( skeletonFactory ) {
+        this._skeletonFactory = skeletonFactory
+    }
 
-        read: function( id, options ) {
-            return SkeletonFactory.getModel().forge({ id: id }).fetch( options );
-        },
+    readAll( options ) {
+        let skeletons = this.skeletonFactory.getCollection()
+        return skeletons.forge().fetch( options )
+    }
 
-        save: function( skeleton, params, options ) {
-            return skeleton.save({
+    read( id, options ) {
+        return this.skeletonFactory.getModel().forge({ id: id }).fetch( options )
+    }
 
-            }, options );
-        },
+    save( skeleton, params, options ) {
+        return skeleton.save({
 
-        patch: function( skeleton, patch, options ) {
-            var patchToApply = {};
+        }, options )
+    }
 
-            patchToApply[ patch.path.substring( 1 ) ] = patch.value;
+    patch( skeleton, patch, options ) {
+        let patchToApply = {}
 
-            return skeleton.save( patchToApply, options );
-        },
+        patchToApply[ patch.path.substring( 1 ) ] = patch.value
 
-        delete: function( skeleton, options ) {
-            return skeleton.destroy( options );
-        }
+        return skeleton.save( patchToApply, options )
+    }
+
+    delete( skeleton, options ) {
+        return skeleton.destroy( options )
+    }
+
+    /*
+     * Getters and setters
+     */
+    get skeletonFactory() {
+        return this._skeletonFactory
     }
 }
-
-module.exports = SkeletonRepository;

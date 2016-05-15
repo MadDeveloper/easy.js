@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "repository": "https://jsergent-prepapp@bitbucket.org/prepapp/easy.js.git",
   "scripts": {
-    "clean-build": "rm -rf build/",
+    "clean-build": "rm -rf build/*",
     "build": "node_modules/.bin/babel -w src/ -d build/",
     "build-map": "node_modules/.bin/babel -w src/ -d build/ -s",
     "test": "npm run bundle-tests",

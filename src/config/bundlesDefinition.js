@@ -1,4 +1,4 @@
-export default function( bundleManager ) {
+export default function bundlesDefinition( bundleManager ) {
     /*
      * Register bundles to implements routing
      */

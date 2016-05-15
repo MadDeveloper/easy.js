@@ -1,38 +1,55 @@
 'use strict';
 
-/**
- * Describes a logger instance
- *
- * The message MUST be a string or object implementing toString().
- *
- * The message MAY contain placeholders in the form: {foo} where foo
- * will be replaced by the context data in key "foo".
- *
- * The context array can contain arbitrary data, the only assumption that
- * can be made by implementors is that if an Exception instance is given
- * to produce a stack trace, it MUST be in a key named "exception".
- *
- * See https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md
- * for the full specification.
- */
-function Logger(Container) {
-    /*
-     * Dependencies
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Describes a logger instance
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * The message MUST be a string or object implementing toString().
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * The message MAY contain placeholders in the form: {foo} where foo
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * will be replaced by the context data in key "foo".
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * The context array can contain arbitrary data, the only assumption that
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * can be made by implementors is that if an Exception instance is given
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * to produce a stack trace, it MUST be in a key named "exception".
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * See https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * for the full specification.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Logger = function () {
+    function Logger(container) {
+        _classCallCheck(this, Logger);
+
+        this._container = container;
+        this._message = this._container.getComponent('Message');
+        this._strtr = this._container.getService('string.strtr');
+    }
+
+    /**
+     * System is unusable.
+     *
+     * @param message
+     * @param context
+     * @return null
      */
-    var fs = require('fs'),
-        Message = Container.getDependency('Message'),
-        strtr = Container.getService('string.strtr');
 
-    return {
 
-        /**
-         * System is unusable.
-         *
-         * @param message
-         * @param context
-         * @return null
-         */
-        emergency: function emergency(message, context) {},
+    _createClass(Logger, [{
+        key: 'emergency',
+        value: function emergency(message, context) {}
 
         /**
          * Action must be taken immediately.
@@ -44,20 +61,25 @@ function Logger(Container) {
          * @param context
          * @return null
          */
-        alert: function alert(message, context) {
-            fs.open(__dirname + '/../../logs/serverErrors.log', 'a+', function (error, fd) {
+
+    }, {
+        key: 'alert',
+        value: function alert(message, context) {
+            var _this = this;
+
+            _fs2.default.open(__dirname + '/../../../../logs/serverErrors.log', 'a+', function (error, fd) {
                 if (!error) {
 
-                    fs.write(fd, strtr(message, context), null, 'utf8');
+                    _fs2.default.write(fd, _this.strtr(message, context), null, 'utf8');
                 } else {
-                    Message.error({
+                    _this.message.error({
                         title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
                         message: "",
                         type: 'error'
                     });
                 }
             });
-        },
+        }
 
         /**
          * Critical conditions.
@@ -68,20 +90,25 @@ function Logger(Container) {
          * @param context
          * @return null
          */
-        critical: function critical(message, context) {
-            fs.open(__dirname + '/../../logs/serverErrors.log', 'a+', function (error, fd) {
+
+    }, {
+        key: 'critical',
+        value: function critical(message, context) {
+            var _this2 = this;
+
+            _fs2.default.open(__dirname + '/../../../../logs/serverErrors.log', 'a+', function (error, fd) {
                 if (!error) {
 
-                    fs.write(fd, strtr(message, context), null, 'utf8');
+                    _fs2.default.write(fd, _this2.strtr(message, context), null, 'utf8');
                 } else {
-                    Message.error({
+                    _this2.message.error({
                         title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
                         message: "",
                         type: 'error'
                     });
                 }
             });
-        },
+        }
 
         /**
          * Runtime errors that do not require immediate action but should typically
@@ -91,7 +118,10 @@ function Logger(Container) {
          * @param context
          * @return null
          */
-        error: function error(message, context) {},
+
+    }, {
+        key: 'error',
+        value: function error(message, context) {}
 
         /**
          * Exceptional occurrences that are not errors.
@@ -103,7 +133,10 @@ function Logger(Container) {
          * @param context
          * @return null
          */
-        warning: function warning(message, context) {},
+
+    }, {
+        key: 'warning',
+        value: function warning(message, context) {}
 
         /**
          * Normal but significant events.
@@ -112,7 +145,10 @@ function Logger(Container) {
          * @param context
          * @return null
          */
-        notice: function notice(message, context) {},
+
+    }, {
+        key: 'notice',
+        value: function notice(message, context) {}
 
         /**
          * Interesting events.
@@ -123,7 +159,10 @@ function Logger(Container) {
          * @param context
          * @return null
          */
-        info: function info(message, context) {},
+
+    }, {
+        key: 'info',
+        value: function info(message, context) {}
 
         /**
          * Detailed debug information.
@@ -132,7 +171,10 @@ function Logger(Container) {
          * @param context
          * @return null
          */
-        debug: function debug(message, context) {},
+
+    }, {
+        key: 'debug',
+        value: function debug(message, context) {}
 
         /**
          * Logs with an arbitrary level.
@@ -142,8 +184,33 @@ function Logger(Container) {
          * @param context
          * @return null
          */
-        log: function log(level, message, context) {}
-    };
-}
 
-module.exports = Logger;
+    }, {
+        key: 'log',
+        value: function log(level, message, context) {}
+
+        /*
+         * Getters and setters
+         */
+
+    }, {
+        key: 'container',
+        get: function get() {
+            return this._container;
+        }
+    }, {
+        key: 'message',
+        get: function get() {
+            return this._message;
+        }
+    }, {
+        key: 'strtr',
+        get: function get() {
+            return this._strtr;
+        }
+    }]);
+
+    return Logger;
+}();
+
+exports.default = Logger;

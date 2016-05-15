@@ -1,17 +1,21 @@
 'use strict';
 
-function authorized(http, Request, jwt, secret, router) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = authorized;
+function authorized(http, request, jwt, secret, router) {
     /*
      * Define authorization control middleware
      */
     router.use(function (req, res, next) {
-        var token = Request.getBodyParameter('token') || Request.getRouteParameter('token') || Request.getScope().headers['x-access-token'];
+        var token = request.getBodyParameter('token') || request.getRouteParameter('token') || request.scope.headers['x-access-token'];
 
         if (token) {
 
             jwt.verify(token, secret, function (error, decoded) {
                 if (!error) {
-                    Request.setBodyParameter('token', decoded);
+                    request.setBodyParameter('token', decoded);
                     next();
                 } else {
                     // wrong token or expired
@@ -32,5 +36,3 @@ function authorized(http, Request, jwt, secret, router) {
         }
     });
 }
-
-module.exports = authorized;

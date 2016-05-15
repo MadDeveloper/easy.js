@@ -3,9 +3,9 @@ function MiddlewaresController( RoleFactory ) {
      * Global dependencies
      */
     var BundleManager       = RoleFactory.getBundleManager();
-    var http                = BundleManager.getContainer().getDependency( 'Http' );
-    var Controller          = BundleManager.getContainer().getDependency( 'Controller' );
-    var Request             = BundleManager.getContainer().getDependency( 'Request' );
+    var http                = BundleManager.getContainer().getComponent( 'Http' );
+    var Controller          = BundleManager.getContainer().getComponent( 'Controller' );
+    var Request             = BundleManager.getContainer().getComponent( 'Request' );
 
     return {
         roleExists: function() {

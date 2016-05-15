@@ -1,72 +1,99 @@
 "use strict";
 
-function Request(appName) {
-    return {
-        requestScope: null,
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-        registerRequestScope: function registerRequestScope(request) {
-            this.requestScope = request;
-        },
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-        getScope: function getScope() {
-            return this.requestScope;
-        },
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-        getMethod: function getMethod() {
-            return this.getScope().method;
-        },
+var Request = function () {
+    function Request(appName) {
+        _classCallCheck(this, Request);
 
-        getBody: function getBody() {
-            return this.getScope().body;
-        },
+        this._appName = appName;
+        this._scope = null;
+    }
 
-        getParams: function getParams() {
-            return this.getScope().params;
-        },
-
-        getBodyParameter: function getBodyParameter(key) {
+    _createClass(Request, [{
+        key: "getMethod",
+        value: function getMethod() {
+            return this.scope.method;
+        }
+    }, {
+        key: "getBody",
+        value: function getBody() {
+            return this.scope.body;
+        }
+    }, {
+        key: "getParams",
+        value: function getParams() {
+            return this.scope.params;
+        }
+    }, {
+        key: "getBodyParameter",
+        value: function getBodyParameter(key) {
             return this.getBody()[key];
-        },
-
-        setBodyParameter: function setBodyParameter(key, value) {
+        }
+    }, {
+        key: "setBodyParameter",
+        value: function setBodyParameter(key, value) {
             this.getBody()[key] = value;
-        },
-
-        getRouteParameter: function getRouteParameter(param) {
+        }
+    }, {
+        key: "getRouteParameter",
+        value: function getRouteParameter(param) {
             return this.getParams()[param];
-        },
-
-        define: function define(property, value) {
+        }
+    }, {
+        key: "define",
+        value: function define(property, value) {
             /*
              * Defining global app scope in request
              */
-            if (!this.getScope().hasOwnProperty(this.getAppName())) {
-                this.getScope()[this.getAppName()] = {};
+            if (!this.scope.hasOwnProperty(this.appName)) {
+                this.scope[this.appName] = {};
             }
 
             /*
              * Defining or redefine property in app scope in request
              */
-            this.getScope()[this.getAppName()][property] = value;
+            this.scope[this.appName][property] = value;
 
             return this;
-        },
-
-        find: function find(property) {
-            if (this.getScope()[this.getAppName()].hasOwnProperty(property)) {
-                return this.getScope()[this.getAppName()][property];
+        }
+    }, {
+        key: "find",
+        value: function find(property) {
+            if (this.scope[this.appName].hasOwnProperty(property)) {
+                return this.scope[this.appName][property];
             } else {
                 return undefined;
             }
-        },
+        }
 
         /*
-         * Aliases
+         * Getters and setters
          */
-        getAppName: function getAppName() {
-            return appName;
-        }
-    };
-}
 
-module.exports = Request;
+    }, {
+        key: "appName",
+        get: function get() {
+            return this._appName;
+        }
+    }, {
+        key: "scope",
+        get: function get() {
+            return this._scope;
+        },
+        set: function set(scope) {
+            this._scope = scope;
+            return this;
+        }
+    }]);
+
+    return Request;
+}();
+
+exports.default = Request;

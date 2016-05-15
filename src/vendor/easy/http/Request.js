@@ -1,4 +1,4 @@
-export default class Request( appName ) {
+export default class Request {
     constructor( appName ) {
         this._appName = appName
         this._scope = null

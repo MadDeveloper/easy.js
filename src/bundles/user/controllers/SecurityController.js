@@ -4,9 +4,9 @@ function SecurityController( UserFactory ) {
      */
     var BundleManager       = UserFactory.getBundleManager();
     var Container  = BundleManager.getContainer();
-    var http                = Container.getDependency( 'Http' );
-    var Controller          = Container.getDependency( 'Controller' );
-    var Request             = Container.getDependency( 'Request' );
+    var http                = Container.getComponent( 'Http' );
+    var Controller          = Container.getComponent( 'Controller' );
+    var Request             = Container.getComponent( 'Request' );
     var access              = Container.getService( 'security.access' )();
 
     return {

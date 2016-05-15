@@ -1,5 +1,5 @@
-import Knex from 'knex'
-import config from __dirname + '/../../config'
+import Knex     from 'knex'
+import config   from './../../config'
 
 const params = config.database
 

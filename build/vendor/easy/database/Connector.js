@@ -1,36 +1,82 @@
 'use strict';
 
-function Connector(Kernel) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-    var fs = require('fs');
-    var path = require('path');
-    var defaultConnector = 'bookshelf';
-    var databasePath = __dirname + '/../../../config/database/database';
-    var connection = null;
-    var Message = Kernel.load('Message')();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-    return {
-        connect: function connect(connector) {
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Connector = function () {
+    function Connector(kernel) {
+        _classCallCheck(this, Connector);
+
+        this._kernel = kernel;
+        this._defaultConnector = 'bookshelf';
+        this._databasePath = __dirname + '/../../../config/database/database';
+        this._message = new (kernel.load('Message'))();
+        this.connection = null;
+    }
+
+    _createClass(Connector, [{
+        key: 'connect',
+        value: function connect(connector) {
             if (!connector) {
                 // use default connector
-                connector = defaultConnector;
+                connector = this.defaultConnector;
             }
 
-            this.setConnection(require(databasePath)(connector));
-            return this.getConnection();
-        },
-
-        // always use fluent setter to allow chained calls
-        setConnection: function setConnection(newConnection) {
-            connection = newConnection;
-
-            return this;
-        },
-
-        getConnection: function getConnection() {
-            return connection;
+            this.connection = require(this.databasePath)(connector);
+            return this.connection;
         }
-    };
-}
 
-module.exports = Connector;
+        /*
+         * Getters and setters
+         */
+
+    }, {
+        key: 'connection',
+        get: function get() {
+            return this._connection;
+        },
+        set: function set(connection) {
+            this._connection = connection;
+            return this;
+        }
+    }, {
+        key: 'defaultConnector',
+        get: function get() {
+            return this._defaultConnector;
+        }
+    }, {
+        key: 'databasePath',
+        get: function get() {
+            return this._databasePath;
+        }
+    }, {
+        key: 'kernel',
+        get: function get() {
+            return this._kernel;
+        }
+    }, {
+        key: 'message',
+        get: function get() {
+            return this._message;
+        }
+    }]);
+
+    return Connector;
+}();
+
+exports.default = Connector;

@@ -12,14 +12,14 @@ var path        = require( 'path' );
 /*
  * Expose as global BundleManager
  */
-global.BundleManager = components.BundleManager;
+global.bundleManager = components.bundleManager;
 
 /*
  * Instantiate a Mocha instance
  */
 var mocha = new Mocha();
 
-var BundlesDirectory = __dirname + '/../../src/bundles';
+var bundlesDirectory = __dirname + '/../../src/bundles';
 
 /*
  * Add each .js file to the mocha instance

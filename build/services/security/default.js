@@ -1,12 +1,15 @@
 'use strict';
 
-module.exports = function (BundleManager) {
-    var _ = require('lodash');
-    var router = BundleManager.getRouter();
-    var Container = BundleManager.getContainer();
-    var http = Container.getDependency('Http');
-    var Controller = Container.getDependency('Controller');
-    var access = Container.getService('security.access')();
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+exports.default = function (bundleManager) {
+    var router = bundleManager.router;
+    var container = bundleManager.container;
+    var http = container.getComponent('Http');
+    var controller = container.getComponent('Controller');
+    var access = new (container.getService('security.Access'))();
 
     /*
      * Add your defaults policies security
@@ -15,3 +18,9 @@ module.exports = function (BundleManager) {
         next();
     });
 };
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

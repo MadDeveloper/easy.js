@@ -5,7 +5,7 @@
 /*
  * App requirements
  */
-import config   from __dirname + '/config/config'
+import config   from './config/config'
 import https    from 'https'
 import http     from 'http'
 import net      from 'net'
@@ -35,7 +35,7 @@ if ( argv._[ 'http' ] || argv.http || false === config.credentials.found ) {
 }
 
 let portInUse = ( port, callback ) => {
-    const serverTest = net.createServer(socket => {
+    const serverTest = net.createServer( socket => {
        socket.write( 'Echo server\r\n' )
 	   socket.pipe( socket )
     })

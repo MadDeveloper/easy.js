@@ -7,9 +7,9 @@
  */
 var test            = require('unit.js');
 var BundleManager   = global.BundleManager;
-var http            = BundleManager.getContainer().getDependency( 'Http' );
-var Controller      = BundleManager.getContainer().getDependency( 'Controller' );
-var Request         = BundleManager.getContainer().getDependency( 'Request' );
+var http            = BundleManager.getContainer().getComponent( 'Http' );
+var Controller      = BundleManager.getContainer().getComponent( 'Controller' );
+var Request         = BundleManager.getContainer().getComponent( 'Request' );
 var database        = BundleManager.getDatabase();
 
 /*
