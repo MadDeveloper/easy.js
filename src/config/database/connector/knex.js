@@ -1,7 +1,11 @@
-var params = require( __dirname + '/../../config' ).database;
+import Knex from 'knex'
+import config from __dirname + '/../../config'
 
-var knex = require( 'knex' )({
+const params = config.database
+
+export default Knex({
     client: params.client,
+
     connection: {
         host     : params.connection.host,
         user     : params.connection.user,
@@ -9,10 +13,9 @@ var knex = require( 'knex' )({
         database : null,
         charset  : params.connection.charset
     },
+
     pool: {
         min: 0, // set pool min to 0 avoid to loose connection after idle time, realy usefull when you use binaries with prompts -> https://github.com/tgriesser/knex/issues/503
         max: 10
     }
-});
-
-module.exports = knex;
+})

@@ -1,9 +1,11 @@
 /*
  * Knex
  */
-var knex = require( './knex' );
+import knex from './knex'
 
 /*
  * Bookshelf (ORM)
  */
-module.exports = require( 'bookshelf' )( knex );
+import Bookshelf from 'bookshelf'
+
+export default Bookshelf( knex )

@@ -13,151 +13,162 @@
  * See https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md
  * for the full specification.
  */
-function Logger( Container ) {
-    /*
-     * Dependencies
+import fs from 'fs'
+
+export default class Logger( Container ) {
+    constructor( container ) {
+        this._container = container
+        this._message   = this._container.getComponent( 'Message' )
+        this._strtr     = this._container.getService( 'string.strtr' )
+    }
+
+    /**
+     * System is unusable.
+     *
+     * @param message
+     * @param context
+     * @return null
      */
-    var fs      = require( 'fs' ),
-        Message = Container.getDependency( 'Message' ),
-        strtr   = Container.getService( 'string.strtr' );
+    emergency( message, context ) {
 
-    return {
+    }
 
-        /**
-         * System is unusable.
-         *
-         * @param message
-         * @param context
-         * @return null
-         */
-        emergency: function( message, context ) {
+    /**
+     * Action must be taken immediately.
+     *
+     * Example: Entire website down, database unavailable, etc. This should
+     * trigger the SMS alerts and wake you up.
+     *
+     * @param message
+     * @param context
+     * @return null
+     */
+    alert( message, context ) {
+        fs.open( __dirname + '/../../../../logs/serverErrors.log', 'a+', ( error, fd ) => {
+            if ( !error ) {
 
-        },
+                fs.write( fd, this.strtr( message, context ), null, 'utf8' )
 
-        /**
-         * Action must be taken immediately.
-         *
-         * Example: Entire website down, database unavailable, etc. This should
-         * trigger the SMS alerts and wake you up.
-         *
-         * @param message
-         * @param context
-         * @return null
-         */
-        alert: function( message, context ) {
-            fs.open( __dirname + '/../../logs/serverErrors.log', 'a+', function( error, fd ) {
-                if ( !error ) {
+            } else {
+                this.message.error({
+                    title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
+                    message: "",
+                    type: 'error'
+                })
+            }
+        })
+    }
 
-                    fs.write( fd, strtr( message, context ), null, 'utf8' );
+    /**
+     * Critical conditions.
+     *
+     * Example: Application component unavailable, unexpected exception.
+     *
+     * @param message
+     * @param context
+     * @return null
+     */
+    critical( message, context ) {
+        fs.open( __dirname + '/../../../../logs/serverErrors.log', 'a+', ( error, fd )  => {
+            if ( !error ) {
 
-                } else {
-                    Message.error({
-                        title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
-                        message: "",
-                        type: 'error'
-                    });
-                }
-            });
-        },
+                fs.write( fd, this.strtr( message, context ), null, 'utf8' )
 
-        /**
-         * Critical conditions.
-         *
-         * Example: Application component unavailable, unexpected exception.
-         *
-         * @param message
-         * @param context
-         * @return null
-         */
-        critical: function( message, context ) {
-            fs.open( __dirname + '/../../logs/serverErrors.log', 'a+', function( error, fd ) {
-                if ( !error ) {
+            } else {
+                this.message.error({
+                    title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
+                    message: "",
+                    type: 'error'
+                })
+            }
+        })
+    }
 
-                    fs.write( fd, strtr( message, context ), null, 'utf8' );
+    /**
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     *
+     * @param message
+     * @param context
+     * @return null
+     */
+    error( message, context ) {
 
-                } else {
-                    Message.error({
-                        title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
-                        message: "",
-                        type: 'error'
-                    });
-                }
-            });
-        },
+    }
 
-        /**
-         * Runtime errors that do not require immediate action but should typically
-         * be logged and monitored.
-         *
-         * @param message
-         * @param context
-         * @return null
-         */
-        error: function( message, context ) {
+    /**
+     * Exceptional occurrences that are not errors.
+     *
+     * Example: Use of deprecated APIs, poor use of an API, undesirable things
+     * that are not necessarily wrong.
+     *
+     * @param message
+     * @param context
+     * @return null
+     */
+    warning( message, context) {
 
-        },
+    }
 
-        /**
-         * Exceptional occurrences that are not errors.
-         *
-         * Example: Use of deprecated APIs, poor use of an API, undesirable things
-         * that are not necessarily wrong.
-         *
-         * @param message
-         * @param context
-         * @return null
-         */
-        warning: function( message, context) {
+    /**
+     * Normal but significant events.
+     *
+     * @param message
+     * @param context
+     * @return null
+     */
+    notice( message, context) {
 
-        },
+    }
 
-        /**
-         * Normal but significant events.
-         *
-         * @param message
-         * @param context
-         * @return null
-         */
-        notice: function( message, context) {
+    /**
+     * Interesting events.
+     *
+     * Example: User logs in, SQL logs.
+     *
+     * @param message
+     * @param context
+     * @return null
+     */
+    info( message, context ) {
 
-        },
+    }
 
-        /**
-         * Interesting events.
-         *
-         * Example: User logs in, SQL logs.
-         *
-         * @param message
-         * @param context
-         * @return null
-         */
-        info: function( message, context ) {
+    /**
+     * Detailed debug information.
+     *
+     * @param message
+     * @param context
+     * @return null
+     */
+    debug( message, context ) {
 
-        },
+    }
 
-        /**
-         * Detailed debug information.
-         *
-         * @param message
-         * @param context
-         * @return null
-         */
-        debug: function( message, context ) {
+    /**
+     * Logs with an arbitrary level.
+     *
+     * @param mixed level
+     * @param message
+     * @param context
+     * @return null
+     */
+    log( level, message, context ) {
 
-        },
+    }
 
-        /**
-         * Logs with an arbitrary level.
-         *
-         * @param mixed level
-         * @param message
-         * @param context
-         * @return null
-         */
-        log: function(level, message, context ) {
+    /*
+     * Getters and setters
+     */
+    get container() {
+        return this._container
+    }
 
-        }
+    get message() {
+        return this._message
+    }
+
+    get strtr() {
+        return this._strtr
     }
 }
-
-module.exports = Logger;

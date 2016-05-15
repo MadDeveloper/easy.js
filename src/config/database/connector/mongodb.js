@@ -1,10 +1,9 @@
 /*
  * Not working!
  */
+import mongoose from 'mongoose'
+import config   from __dirname + '/../../config'
 
-var params      = require( __dirname + '/../../config' ).database;
-var mongoose    = require( 'mongoose' );
+const params = config.database
 
-mongoose.connect( 'mongodb://' + params.connection.host + '/' + params.connection.database )
-
-module.exports = mongoose;
+export default mongoose.connect( 'mongodb://' + params.connection.host + '/' + params.connection.database )

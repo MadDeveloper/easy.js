@@ -1,15 +1,16 @@
-module.exports = function( BundleManager ) {
-    var _                   = require( 'lodash' );
-    var router              = BundleManager.getRouter();
-    var Container  = BundleManager.getContainer();
-    var http                = Container.getDependency( 'Http' );
-    var Controller          = Container.getDependency( 'Controller' );
-    var access              = Container.getService( 'security.access' )();
+import _ from 'lodash'
+
+export default function( bundleManager ) {
+    const router        = bundleManager.router
+    const container     = bundleManager.container
+    const http          = container.getComponent( 'Http' )
+    const controller    = container.getComponent( 'Controller' )
+    const access        = new ( container.getService( 'security.Access' ) )()
 
     /*
      * Add your defaults policies security
      */
-     router.use( function( req, res, next ) {
-         next();
-     });
-};
+    router.use(( req, res, next ) => {
+        next()
+    })
+}

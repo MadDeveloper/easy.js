@@ -1,6 +1,6 @@
-var ksort = require( 'ksort' );
+import ksort from 'ksort'
 
-function strtr(str, from, to) {
+export default function strtr(str, from, to) {
   //  discuss at: http://phpjs.org/functions/strtr/
   // original by: Brett Zamir (http://brett-zamir.me)
   //    input by: uestla
@@ -90,5 +90,3 @@ function strtr(str, from, to) {
 
   return ret;
 }
-
-module.exports = strtr;
