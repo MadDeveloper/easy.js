@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 var cliMode         = true;
-var config          = require( __dirname + '/../../config/config' );
-var app             = require( __dirname + '/../../bootstrap.js' )( config, cliMode );
-var schemaBuilder   = app.BundleManager.getDependencyInjector().getService( 'database.schema' );
+var config          = require( __dirname + '/../../src/config/config' );
+var app             = require( __dirname + '/../../src/bootstrap.js' )( config, cliMode );
+var schemaBuilder   = app.BundleManager.getContainer().getService( 'database.schema' );
 var argv			= require( 'minimist' )( process.argv.slice( 2 ) );
 var _				= require( 'lodash' );
 var sequence		= require( 'when/sequence' );

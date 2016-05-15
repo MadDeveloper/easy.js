@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 var cliMode         = true;
-var config          = require( __dirname + '/../../config/config' );
-var app             = require( __dirname + '/../../bootstrap.js' )( config, cliMode );
-var schemaBuilder   = app.BundleManager.getDependencyInjector().getService( 'database.schema' );
-var stringTransform = app.BundleManager.getDependencyInjector().getService( 'string.transform' );
+var config          = require( __dirname + '/../../src/config/config' );
+var app             = require( __dirname + '/../../src/bootstrap.js' )( config, cliMode );
+var schemaBuilder   = app.BundleManager.getContainer().getService( 'database.schema' );
+var stringTransform = app.BundleManager.getContainer().getService( 'string.transform' );
 var fs              = require( 'fs' );
 var walk            = require( 'walk' );
 var path            = require( 'path' );
@@ -16,7 +16,7 @@ var argv            = require( 'minimist' )( process.argv.slice( 2 ) );
 /*
  * Apply Polyfills
  */
-require( global.app.root + '/vendor/easy/Polyfills' );
+require( global.app.root + '/vendor/easy/polyfills' );
 
 var nameBundleFromArgv = argv._[ 0 ] || argv.name || argv.n || "";
 
@@ -354,8 +354,8 @@ if ( nameBundleFromArgv.length > 0 ) {
             var pathSchema = global.app.root + '/config/database/schema.js';
             fs.readFile( pathSchema, { encoding: 'utf8' }, function( error, data ) {
                 if ( !error ) {
-                    var stringToWrite = 'schema$1=$2{\n\t' + tableName + ': ' + JSON.stringify( properties ) + ',\n\n';
-                    var dataUpdated = data.replace( /schema(\s)*=(\s*)\{/i, stringToWrite );
+                    var stringToWrite = 'export default {\n\t' + tableName + ': ' + JSON.stringify( properties ) + ',\n\n';
+                    var dataUpdated = data.replace( /export(\s*)default(\s)\{/i, stringToWrite );
                     fs.writeFile( pathSchema, dataUpdated, 'utf8', function ( error ) {
                         if ( !error ) {
                             createBundleDirectory();

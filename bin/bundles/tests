@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 var cliMode     = true;
-var config      = require( __dirname + '/../../config/config' );
-var components  = require( __dirname + '/../../bootstrap' )( config, cliMode );
+var config      = require( __dirname + '/../../src/config/config' );
+var components  = require( __dirname + '/../../src/bootstrap' )( config, cliMode );
 var Message     = components.Kernel.load( 'Message' )();
 var fs          = require( 'fs' );
 var walk        = require( 'walk' );
@@ -19,7 +19,7 @@ global.BundleManager = components.BundleManager;
  */
 var mocha = new Mocha();
 
-var BundlesDirectory = __dirname + '/../../src/Bundles';
+var BundlesDirectory = __dirname + '/../../src/bundles';
 
 /*
  * Add each .js file to the mocha instance

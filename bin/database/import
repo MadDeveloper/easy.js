@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 var execsql     = require( 'execsql' );
-var config      = require( __dirname + '/../../config/config' );
+var config      = require( __dirname + '/../../src/config/config' );
 var dbConfig    = {
 	host: config.database.connection.host,
 	user: config.database.connection.user,
 	password: config.database.connection.password
 };
 
-var Message 			= require( __dirname + '/../../vendor/easy/Message' )();
+var Message 			= require( __dirname + '/../../src/vendor/easy/Message' )();
 var titleError			= "Error when importing database";
 var consequenceError	= "Importation aborted.";
 
@@ -22,7 +22,7 @@ function raiseError( err ) {
 }
 
 var sql         = 'use ' + config.database.connection.database + ';';
-var sqlFile     = __dirname + '/../../config/database/' + config.database.connection.database + '.sql';
+var sqlFile     = __dirname + '/../../src/config/database/' + config.database.connection.database + '.sql';
 
 execsql.config( dbConfig )
 	.exec( sql, function( err, results ) {
