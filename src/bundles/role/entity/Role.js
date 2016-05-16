@@ -1,16 +1,16 @@
 /*
  * Role model
  */
-function Role( RoleFactory ) {
-    var BundleManager = RoleFactory.getBundleManager();
+export default class Role {
+    constructor( roleFactory ) {
+        const bundleManager = roleFactory.bundleManager
 
-    return RoleFactory.getDatabase().Model.extend({
-        tableName: 'roles',
+        return roleFactory.database.Model.extend({
+            tableName: 'roles',
 
-        users: function() {
-            return this.hasMany( BundleManager.getFactory( 'User' ).getModel() );
-        }
-    });
+            users() {
+                return this.hasMany( bundleManager.getFactory( 'User' ).getModel() )
+            }
+        })
+    }
 }
-
-module.exports = Role;

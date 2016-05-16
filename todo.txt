@@ -1,3 +1,5 @@
 extends controllers from controller
 delegate work to response and request and no http from vendor !
 store request and response into root controller
+bundleManager dans les bundles ne doit pas être récupéré via la factory, il faut utiliser le container !
+faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response

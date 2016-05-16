@@ -1,14 +1,10 @@
 export default function routing( userFactory, params ) {
     /*
-     * Global dependencies
-     */
-    const bundleManager = userFactory.bundleManager
-    const router        = bundleManager.router
-
-    /*
-     * User bundle dependencies
+     * Dependencies
      */
     const userRoutingController = userFactory.getController( 'Routing' )
+    const bundleManager         = userFactory.bundleManager
+    const router                = bundleManager.router
 
     /*
      * Middlewares

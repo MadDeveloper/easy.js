@@ -1,29 +1,37 @@
-function RoleRepository( RoleFactory ) {
-    return {
-        readAll: function() {
-            var Roles = RoleFactory.getCollection();
-            return Roles.forge().fetch();
-        },
+export default class RoleRepository( RoleFactory ) {
+    constructor( roleFactory ) {
+        this._roleFactory = roleFactory
+    }
 
-        read: function( id, options ) {
-            return RoleFactory.getModel().forge({ id: id }).fetch( options );
-        },
+    readAll() {
+        let roles = this.roleFactory.getCollection()
 
-        save: function( role, params, options ) {
-            return role.save({
-                name: params.name,
-                slug: params.slug
-            }, options );
-        },
+        return roles.forge().fetch()
+    }
 
-        patch: function( params, options ) {
+    read( id, options ) {
+        return this.roleFactory.getModel().forge({ id: id }).fetch( options )
+    }
 
-        },
+    save( role, params, options ) {
+        return role.save({
+            name: params.name,
+            slug: params.slug
+        }, options )
+    }
 
-        delete: function( role, options ) {
-            return role.destroy( options );
-        }
+    patch( params, options ) {
+
+    }
+
+    delete( role, options ) {
+        return role.destroy( options )
+    }
+
+    /*
+     * Getters and setters
+     */
+    get skeletonFactory() {
+        return this._skeletonFactory
     }
 }
-
-module.exports = RoleRepository;

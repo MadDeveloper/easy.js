@@ -1,14 +1,10 @@
 export default function security( skeletonFactory, params ) {
     /*
-     * Global dependencies
+     * Dependencies
      */
-    const bundleManager = skeletonFactory.bundleManager
-    const router        = bundleManager.router
-
-    /*
-     * Skeleton bundle dependencies
-     */
-    const skeletonSecurityController = bundleManager.getFactory( 'Skeleton' ).getController( 'Security' )
+    const skeletonSecurityController    = skeletonFactory.getController( 'Security' )
+    const bundleManager                 = skeletonFactory.bundleManager
+    const router                        = bundleManager.router
 
     /*
      * Security middlewares

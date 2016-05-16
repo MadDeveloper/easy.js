@@ -1,23 +1,18 @@
-var security = function( BundleManager, params ) {
+export default function security( roleFactory, params ) {
     /*
-     * Global dependencies
+     * Dependencies
      */
-    var router = BundleManager.router;
-
-    /*
-     * Role bundle dependencies
-     */
-    var RoleSecurityController = BundleManager.getFactory( 'Role' ).getController( 'Security' );
+    const roleSecurityController    = roleFactory.getController( 'Security' )
+    const bundleManager             = roleFactory.bundleManager
+    const router                    = bundleManager.router
 
     /*
      * Security middlewares
      */
-    router.use( '/roles', function( req, res, next ) {
-        RoleSecurityController.authorize()
-        .then( function() {
-            next();
-        });
-    });
-};
-
-module.exports = security;
+    router.use( '/roles', ( req, res, next ) => {
+        roleSecurityController.authorize()
+        .then( () => {
+            next()
+        })
+    })
+}

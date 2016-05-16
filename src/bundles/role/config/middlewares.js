@@ -1,23 +1,18 @@
-var middlewares = function( BundleManager, params ) {
+export default function middlewares( roleFactory, params ) {
     /*
-     * Global dependencies
+     * Dependencies
      */
-    var router = BundleManager.router;
-
-    /*
-     * Role bundle dependencies
-     */
-    var RoleMiddlewaresController = BundleManager.getFactory( 'Role' ).getController( 'Middlewares' );
+    const roleMiddlewaresController = roleFactory.getController( 'Middlewares' )
+    const bundleManager             = roleFactory.bundleManager
+    const router                    = bundleManager.router
 
     /*
      * Middlewares
      */
-    router.use( '/roles/:id', function( req, res, next ) {
-        RoleMiddlewaresController.roleExists()
-        .then( function() {
-            next();
-        });
-    });
-};
-
-module.exports = middlewares;
+    router.use( '/roles/:id', ( req, res, next ) => {
+        roleMiddlewaresController.roleExists()
+        .then( () => {
+            next()
+        })
+    })
+}

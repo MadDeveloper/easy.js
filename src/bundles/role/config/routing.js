@@ -1,42 +1,36 @@
-var routing = function( BundleManager, params ) {
+export default function routing( roleFactory, params ) {
     /*
-     * Global dependencies
+     * Dependencies
      */
-    var router = BundleManager.router;
-
-    /*
-     * Role bundle dependencies
-     */
-    var RoleFactory = BundleManager.getFactory( 'Role' );
-    var RoleRoutingController = RoleFactory.getController( 'Routing' );
+    const roleRoutingController = roleFactory.getController( 'Routing' )
+    const bundleManager         = roleFactory.bundleManager
+    const router                = bundleManager.router
 
     /*
      * Middlewares
      */
-    RoleFactory.getConfig( 'security' );
-    RoleFactory.getConfig( 'middlewares' );
+    roleFactory.getConfig( 'security' )
+    roleFactory.getConfig( 'middlewares' )
 
     /*
      * Routes definitions
      */
     router.route( '/roles' )
-        .get( function() {
-        	RoleRoutingController.getRoles();
+        .get( () => {
+        	roleRoutingController.getRoles()
         })
-        .post( function() {
-        	RoleRoutingController.createRole();
-        });
+        .post( () => {
+        	roleRoutingController.createRole()
+        })
 
     router.route( '/roles/:id' )
-        .get( function() {
-        	RoleRoutingController.getRole();
+        .get( () => {
+        	roleRoutingController.getRole()
         })
-        .put( function() {
-        	RoleRoutingController.updateRole();
+        .put( () => {
+        	roleRoutingController.updateRole()
         })
-        .delete( function() {
-        	RoleRoutingController.deleteRole();
-        });
-};
-
-module.exports = routing;
+        .delete( () => {
+        	roleRoutingController.deleteRole()
+        })
+}

@@ -5,6 +5,7 @@ export default class UserRepository {
 
     readAll( role ) {
         let user = this.userFactory.getModel()
+        
         return user.where({ role_id: role.get( 'id' ) }).fetchAll()
     }
 

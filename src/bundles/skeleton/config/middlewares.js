@@ -1,14 +1,10 @@
 export default function middlewares( skeletonFactory, params ) {
     /*
-     * Global dependencies
+     * Dependencies
      */
-    const bundleManager = skeletonFactory.bundleManager
-    const router        = bundleManager.router
-
-    /*
-     * Skeleton bundle dependencies
-     */
-    const skeletonMiddlewaresController = bundleManager.getFactory( 'Skeleton' ).getController( 'Middlewares' )
+    const skeletonMiddlewaresController = skeletonFactory.getController( 'Middlewares' )
+    const bundleManager                 = skeletonFactory.bundleManager
+    const router                        = bundleManager.router
 
     /*
      * Middlewares
