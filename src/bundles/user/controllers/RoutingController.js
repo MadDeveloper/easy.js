@@ -1,128 +1,163 @@
-function RoutingController( UserFactory ) {
-    /*
-     * Global dependencies
-     */
-    var BundleManager       = UserFactory.getBundleManager();
-    var router              = BundleManager.router;
-    var database            = BundleManager.getDatabase();
-    var Container  = BundleManager.getContainer();
-    var http                = Container.getComponent( 'Http' );
-    var Controller          = Container.getComponent( 'Controller' );
-    var Request             = Container.getComponent( 'Request' );
-    var _                   = require( 'lodash' );
+import _ from 'lodash'
 
-    /*
-     * User bundle dependencies
-     */
-    var UserRepository  = UserFactory.getRepository();
+export default class RoutingController {
+    constructor( userFactory ) {
+        this._userFactory           = userFactory
+        this._bundleManager         = this._userFactory.bundleManager
+        this._router                = this._bundleManager.router
+        this._database              = this._bundleManager.database
+        this._container             = this._bundleManager.container
+        this._http                  = this._container.getComponent( 'Http' )
+        this._controller            = this._container.getComponent( 'Controller' )
+        this._request               = this._container.getComponent( 'Request' )
+        this._userRepository        = this._userFactory.getRepository()
+        this._roleFactory           = this._bundleManager.getFactory( 'Role' )
+        this._roleRepository        = this._roleFactory.getRepository()
+    }
 
-    /*
-     * Associations dependencies
-     */
-    var RoleFactory     = BundleManager.getFactory( 'Role' );
-    var RoleRepository  = RoleFactory.getRepository();
+    isRequestWellParameterized() {
+        return this.controller.verifyParams([
+            { property: 'username', typeExpected: 'string' },
+            { property: 'email', typeExpected: 'string' },
+            { property: 'password', typeExpected: 'string' },
+            { property: 'role_id', typeExpected: 'number', optional: true }
+        ], this.request.getBody() )
+    }
 
-    return {
-        isRequestWellParameterized: function() {
-            var Controller = UserFactory.getRootController();
-            return Controller.verifyParams([
-                    { property: 'username', typeExpected: 'string' },
-                    { property: 'email', typeExpected: 'string' },
-                    { property: 'password', typeExpected: 'string' },
-                    { property: 'role_id', typeExpected: 'number', optional: true }
-                ], Request.getBody() );
-        },
+    getUsers() {
+        this.userRepository.readAll( this.request.find( 'role' ) )
+        .then( users => {
 
-        getUsers: function() {
-            UserRepository.readAll( Request.find( 'role' ) )
-            .then( function( users ) {
+            this.http.ok( users.toJSON() )
 
-                http.ok( users.toJSON() );
+        })
+        .catch( error => {
+            this.http.internalServerError( error )
+        })
+    }
+
+    createUser() {
+        if ( this.isRequestWellParameterized() ) {
+
+            this.database.transaction( t => {
+
+                this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'idRole' ) )
+
+                this.userRepository.save( UserFactory.getNewModel(), this.request.getBody(), { transacting: t } )
+                .then( user => {
+                    t.commit()
+                    this.http.created( user.toJSON() )
+                })
+                .catch( error => {
+                    t.rollback()
+                    this.http.internalServerError( error )
+                })
 
             })
-            .catch( function( error ) {
-                http.internalServerError( error );
-            });
-        },
 
-        createUser: function() {
-            if ( this.isRequestWellParameterized() ) {
-
-                database.transaction( function( t ) {
-
-                    Request.setBodyParameter( 'role_id', Request.getRouteParameter( 'idRole' ) );
-
-                    UserRepository.save( UserFactory.getNewModel(), Request.getBody(), { transacting: t } )
-                    .then( function( user ) {
-                        t.commit();
-                        http.created( user.toJSON() );
-                    })
-                    .catch( function( error ) {
-                        t.rollback();
-                        http.internalServerError( error );
-                    })
-
-                });
-
-            } else {
-                http.badRequest();
-            }
-        },
-
-        getUser: function() {
-            http.ok( Request.find( 'user' ).toJSON() );
-        },
-
-        updateUser: function() {
-            if ( this.isRequestWellParameterized() ) {
-
-                database.transaction( function( t ) {
-
-                    if ( typeof Request.getBodyParameter( 'role_id' ) === "undefined" ) {
-                        Request.setBodyParameter( 'role_id', Request.getRouteParameter( 'idRole' ) );
-                    }
-
-                    UserRepository.save( Request.find( 'user' ), Request.getBody(), { transacting: t } )
-                    .then( function( user ) {
-
-                        t.commit();
-                        http.ok( user.toJSON() );
-
-                    })
-                    .catch( function( error ) {
-                        t.rollback();
-                        http.internalServerError( error );
-                    });
-
-                });
-
-            } else {
-                http.badRequest();
-            }
-        },
-
-        patchUser: function() {
-
-        },
-
-        deleteUser: function() {
-            database.transaction( function( t ) {
-
-                UserRepository.delete( Request.find( 'user' ), { transacting: t } )
-                .then( function() {
-
-                    t.commit();
-                    http.noContent();
-
-                })
-                .catch( function( error ) {
-                    t.rollback();
-                    http.internalServerError( error );
-                });
-
-            });
+        } else {
+            this.http.badRequest()
         }
     }
-}
 
-module.exports = RoutingController;
+    getUser() {
+        this.http.ok( this.request.find( 'user' ).toJSON() )
+    }
+
+    updateUser() {
+        if ( this.isRequestWellParameterized() ) {
+
+            this.database.transaction( t => {
+
+                if ( typeof this.request.getBodyParameter( 'role_id' ) === "undefined" ) {
+                    this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'idRole' ) )
+                }
+
+                this.userRepository.save( this.request.find( 'user' ), this.request.getBody(), { transacting: t } )
+                .then( user => {
+
+                    t.commit()
+                    this.http.ok( user.toJSON() )
+
+                })
+                .catch( error => {
+                    t.rollback()
+                    this.http.internalServerError( error )
+                })
+
+            })
+
+        } else {
+            this.http.badRequest()
+        }
+    }
+
+    patchUser() {
+
+    }
+
+    deleteUser() {
+        this.database.transaction( t => {
+
+            this.userRepository.delete( this.request.find( 'user' ), { transacting: t } )
+            .then( () => {
+
+                t.commit()
+                this.http.noContent()
+
+            })
+            .catch( error => {
+                t.rollback()
+                this.http.internalServerError( error )
+            })
+
+        })
+    }
+
+    /*
+     * Getters and setters
+     */
+    get userFactory() {
+        return this._userFactory
+    }
+
+    get bundleManager() {
+        return this._bundleManager
+    }
+
+    get router() {
+        return this._router
+    }
+
+    get database() {
+        return this._database
+    }
+
+    get container() {
+        return this._container
+    }
+
+    get http() {
+        return this._http
+    }
+
+    get controller() {
+        return this._controller
+    }
+
+    get request() {
+        return this._request
+    }
+
+    get userRepository() {
+        return this._userRepository
+    }
+
+    get roleFactory() {
+        return this._roleFactory
+    }
+
+    get roleRepository() {
+        return this._roleRepository
+    }
+}

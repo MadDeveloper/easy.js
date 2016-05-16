@@ -37,73 +37,75 @@ var RoutingController = function () {
     }, {
         key: 'getSkeletons',
         value: function getSkeletons() {
+            var _this = this;
+
             this.skeletonRepository.readAll().then(function (skeletons) {
 
-                http.ok(skeletons.toJSON());
+                _this.http.ok(skeletons.toJSON());
             }).catch(function (error) {
-                http.internalServerError(error);
+                _this.http.internalServerError(error);
             });
         }
     }, {
         key: 'createSkeleton',
         value: function createSkeleton() {
-            var _this = this;
-
-            if (this.isRequestWellParameterized()) {
-
-                this.database.transaction(function (t) {
-
-                    _this.skeletonRepository.save(_this.skeletonFactory.getNewModel(), _this.request.getBody(), { transacting: t }).then(function (skeleton) {
-
-                        t.commit();
-                        http.created(skeleton.toJSON());
-                    }).catch(function (error) {
-                        t.rollback();
-                        http.internalServerError(error);
-                    });
-                });
-            } else {
-                http.badRequest();
-            }
-        }
-    }, {
-        key: 'getSkeleton',
-        value: function getSkeleton() {
-            http.ok(this.request.find('skeleton').toJSON());
-        }
-    }, {
-        key: 'updateSkeleton',
-        value: function updateSkeleton() {
             var _this2 = this;
 
             if (this.isRequestWellParameterized()) {
 
                 this.database.transaction(function (t) {
 
-                    _this2.skeletonRepository.save(_this2.request.find('skeleton'), _this2.request.getBody(), { transacting: t }).then(function (skeleton) {
+                    _this2.skeletonRepository.save(_this2.skeletonFactory.getNewModel(), _this2.request.getBody(), { transacting: t }).then(function (skeleton) {
 
                         t.commit();
-                        http.ok(skeleton.toJSON());
+                        _this2.http.created(skeleton.toJSON());
                     }).catch(function (error) {
                         t.rollback();
-                        http.internalServerError(error);
+                        _this2.http.internalServerError(error);
                     });
                 });
             } else {
-                http.badRequest();
+                this.http.badRequest();
+            }
+        }
+    }, {
+        key: 'getSkeleton',
+        value: function getSkeleton() {
+            this.http.ok(this.request.find('skeleton').toJSON());
+        }
+    }, {
+        key: 'updateSkeleton',
+        value: function updateSkeleton() {
+            var _this3 = this;
+
+            if (this.isRequestWellParameterized()) {
+
+                this.database.transaction(function (t) {
+
+                    _this3.skeletonRepository.save(_this3.request.find('skeleton'), _this3.request.getBody(), { transacting: t }).then(function (skeleton) {
+
+                        t.commit();
+                        _this3.http.ok(skeleton.toJSON());
+                    }).catch(function (error) {
+                        t.rollback();
+                        _this3.http.internalServerError(error);
+                    });
+                });
+            } else {
+                this.http.badRequest();
             }
         }
     }, {
         key: 'patchSkeleton',
         value: function patchSkeleton() {
-            var _this3 = this;
+            var _this4 = this;
 
             if (this.controller.isPatchRequestWellParameterized(req)) {
                 var patchRequestCorrectlyFormed = false;
 
                 var patchSkeleton = new Promise(function (resolve, reject) {
                     var validPaths = ['/property'];
-                    var ops = _this3.controller.parsePatchParams(_this3.request.getScope());
+                    var ops = _this4.controller.parsePatchParams(_this4.request.getScope());
 
                     if (ops) {
                         (function () {
@@ -111,13 +113,13 @@ var RoutingController = function () {
                             var opsLength = ops.length;
                             var currentPatch = 0;
 
-                            _this3.database.transaction(function (t) {
+                            _this4.database.transaction(function (t) {
 
                                 ops.forEach(function (patch) {
                                     switch (patch.op) {
                                         case 'replace':
                                             if (_lodash2.default.indexOf(validPaths, patch.path) >= 0) {
-                                                _this3.skeletonRepository.patch(_this3.request.find('skeleton'), patch, { transacting: t, patch: true }).then(function (skeleton) {
+                                                _this4.skeletonRepository.patch(_this4.request.find('skeleton'), patch, { transacting: t, patch: true }).then(function (skeleton) {
                                                     if (++currentPatch >= opsLength) {
                                                         // It's ok
                                                         t.commit();
@@ -140,31 +142,31 @@ var RoutingController = function () {
 
                     patchSkeleton.then(function (skeleton) {
 
-                        http.ok(skeleton.toJSON());
+                        _this4.http.ok(skeleton.toJSON());
                     }).catch(function (error) {
-                        http.internalServerError(error);
+                        _this4.http.internalServerError(error);
                     });
                 } else {
-                    http.badRequest();
+                    this.http.badRequest();
                 }
             } else {
-                http.badRequest();
+                this.http.badRequest();
             }
         }
     }, {
         key: 'deleteSkeleton',
         value: function deleteSkeleton() {
-            var _this4 = this;
+            var _this5 = this;
 
             this.database.transaction(function (t) {
 
-                _this4.skeletonRepository.delete(_this4.request.find('skeleton'), { transacting: t }).then(function () {
+                _this5.skeletonRepository.delete(_this5.request.find('skeleton'), { transacting: t }).then(function () {
 
                     t.commit();
-                    http.noContent();
+                    _this5.http.noContent();
                 }).catch(function (error) {
                     t.rollback();
-                    http.internalServerError(error);
+                    _this5.http.internalServerError(error);
                 });
             });
         }

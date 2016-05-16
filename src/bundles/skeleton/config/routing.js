@@ -1,13 +1,13 @@
-export default function routing( bundleManager, params ) {
+export default function routing( skeletonFactory, params ) {
     /*
      * Global dependencies
      */
-    const router = bundleManager.router
+    const bundleManager = skeletonFactory.bundleManager
+    const router        = bundleManager.router
 
     /*
      * Skeleton bundle dependencies
      */
-    const skeletonFactory             = bundleManager.getFactory( 'Skeleton' )
     const skeletonRoutingController   = skeletonFactory.getController( 'Routing' )
 
     /*

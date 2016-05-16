@@ -4,16 +4,16 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = routing;
-function routing(bundleManager, params) {
+function routing(skeletonFactory, params) {
   /*
    * Global dependencies
    */
+  var bundleManager = skeletonFactory.bundleManager;
   var router = bundleManager.router;
 
   /*
    * Skeleton bundle dependencies
    */
-  var skeletonFactory = bundleManager.getFactory('Skeleton');
   var skeletonRoutingController = skeletonFactory.getController('Routing');
 
   /*

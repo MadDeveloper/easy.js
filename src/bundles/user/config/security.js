@@ -1,23 +1,22 @@
-var security = function( BundleManager, params ) {
+export default function security( userFactory, params ) {
     /*
      * Global dependencies
      */
-    var router              = BundleManager.router;
+    const bundleManager = userFactory.bundleManager
+    const router        = bundleManager.router
 
     /*
      * Skeleton bundle dependencies
      */
-    var UserSecurityController   = BundleManager.getFactory( 'User' ).getController( 'Security' );
+    const userSecurityController = bundleManager.getFactory( 'User' ).getController( 'Security' )
 
     /*
      * Security middlewares
      */
-    router.use( '/roles/:idrole/users', function( req, res, next ) {
-        UserSecurityController.authorize()
-        .then( function() {
-            next();
-        });
-    });
-};
-
-module.exports = security;
+    router.use( '/roles/:idrole/users', ( req, res, next ) => {
+        userSecurityController.authorize()
+        .then( () => {
+            next()
+        })
+    })
+}

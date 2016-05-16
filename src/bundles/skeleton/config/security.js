@@ -1,8 +1,9 @@
-export default function security( bundleManager, params ) {
+export default function security( skeletonFactory, params ) {
     /*
      * Global dependencies
      */
-    const router = bundleManager.router
+    const bundleManager = skeletonFactory.bundleManager
+    const router        = bundleManager.router
 
     /*
      * Skeleton bundle dependencies

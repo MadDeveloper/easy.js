@@ -1,27 +1,51 @@
-function MiddlewaresController( UserFactory ) {
+export default class MiddlewaresController {
+    constructor( userFactory ) {
+        this._userFactory   = userFactory
+        this._bundleManager     = this._userFactory.bundleManager
+        this._container         = this._bundleManager.container
+        this._http              = this._container.getComponent( 'Http' )
+        this._controller        = this._container.getComponent( 'Controller' )
+        this._request           = this._container.getComponent( 'Request' )
+    }
+
+    userExists() {
+        return new Promise( ( resolve, reject ) => {
+            const requireOptions = {
+                requireBy: this.request.getRouteParameter( 'idUser' ),
+                options: {}
+            }
+
+            this.controller.doesRequiredElementExists( 'User', requireOptions, this.bundleManager, user => {
+                this.request.define( 'user', user )
+                resolve()
+            })
+        })
+    }
+
     /*
-     * Global dependencies
+     * Getters and setters
      */
-    var BundleManager       = UserFactory.getBundleManager();
-    var http                = BundleManager.getContainer().getComponent( 'Http' );
-    var Controller          = BundleManager.getContainer().getComponent( 'Controller' );
-    var Request             = BundleManager.getContainer().getComponent( 'Request' );
+    get userFactory() {
+        return this._userFactory
+    }
 
-    return {
-        userExists: function() {
-            return new Promise( function( resolve, reject ) {
-                var requireOptions = {
-                    requireBy: Request.getRouteParameter( 'idUser' ),
-                    options: {}
-                };
+    get bundleManager() {
+        return this._bundleManager
+    }
 
-                Controller.doesRequiredElementExists( 'User', requireOptions, BundleManager, function( user ) {
-                    Request.define( 'user', user );
-                    resolve();
-                });
-            });
-        }
+    get container() {
+        return this._container
+    }
+
+    get http() {
+        return this._http
+    }
+
+    get controller() {
+        return this._controller
+    }
+
+    get request() {
+        return this._request
     }
 }
-
-module.exports = MiddlewaresController;

@@ -1,41 +1,43 @@
 'use strict';
 
-var routing = function routing(BundleManager, params) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = routing;
+function routing(userFactory, params) {
   /*
    * Global dependencies
    */
-  var router = BundleManager.router;
+  var bundleManager = userFactory.bundleManager;
+  var router = bundleManager.router;
 
   /*
    * User bundle dependencies
    */
-  var UserFactory = BundleManager.getFactory('User');
-  var UserRoutingController = UserFactory.getController('Routing');
+  var userRoutingController = userFactory.getController('Routing');
 
   /*
    * Middlewares
    */
-  UserFactory.getConfig('security');
-  UserFactory.getConfig('middlewares');
+  userFactory.getConfig('security');
+  userFactory.getConfig('middlewares');
 
   /*
   * Routes definitions
   */
   router.route('/roles/:idRole/users').get(function () {
-    UserRoutingController.getUsers();
+    userRoutingController.getUsers();
   }).post(function () {
-    UserRoutingController.createUser();
+    userRoutingController.createUser();
   });
 
   router.route('/roles/:idRole/users/:idUser').get(function () {
-    UserRoutingController.getUser();
+    userRoutingController.getUser();
   }).put(function () {
-    UserRoutingController.updateUser();
+    userRoutingController.updateUser();
   }).patch(function () {
-    UserRoutingController.patchUser();
+    userRoutingController.patchUser();
   }).delete(function () {
-    UserRoutingController.deleteUser();
+    userRoutingController.deleteUser();
   });
-};
-
-module.exports = routing;
+}

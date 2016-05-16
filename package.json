@@ -7,7 +7,7 @@
   "scripts": {
     "clean-build": "rm -rf build/*",
     "build": "node_modules/.bin/babel -w src/ -d build/",
-    "build-map": "node_modules/.bin/babel -w src/ -d build/ -s",
+    "build-maps": "node_modules/.bin/babel -w src/ -d build/ -s",
     "test": "npm run bundle-tests",
     "bundle-tests": "node bin/bundles/tests",
     "bundle-new": "node bin/bundles/new",

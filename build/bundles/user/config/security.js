@@ -1,24 +1,27 @@
 'use strict';
 
-var security = function security(BundleManager, params) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = security;
+function security(userFactory, params) {
   /*
    * Global dependencies
    */
-  var router = BundleManager.router;
+  var bundleManager = userFactory.bundleManager;
+  var router = bundleManager.router;
 
   /*
    * Skeleton bundle dependencies
    */
-  var UserSecurityController = BundleManager.getFactory('User').getController('Security');
+  var userSecurityController = bundleManager.getFactory('User').getController('Security');
 
   /*
    * Security middlewares
    */
   router.use('/roles/:idrole/users', function (req, res, next) {
-    UserSecurityController.authorize().then(function () {
+    userSecurityController.authorize().then(function () {
       next();
     });
   });
-};
-
-module.exports = security;
+}

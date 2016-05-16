@@ -24,22 +24,24 @@ var SecurityController = function () {
     _createClass(SecurityController, [{
         key: 'authorize',
         value: function authorize() {
-            return new Promise(function (resolve, reject) {
-                if (Controller.isProdEnv()) {
-                    var token = Request.getBodyParameter('token');
+            var _this = this;
 
-                    access.restrict({
-                        mustBe: [access.any],
+            return new Promise(function (resolve, reject) {
+                if (_this.controller.isProdEnv()) {
+                    var token = _this.request.getBodyParameter('token');
+
+                    _this.access.restrict({
+                        mustBe: [_this.access.any],
                         canCreate: [],
                         canRead: [],
                         canUpdate: [],
                         canDelete: []
                     });
 
-                    if (access.focusOn(token.role_id).canReach(Request.getMethod())) {
+                    if (_this.access.focusOn(token.role_id).canReach(_this.request.getMethod())) {
                         resolve();
                     } else {
-                        http.forbidden();
+                        _this.http.forbidden();
                         reject();
                     }
                 } else {

@@ -23,11 +23,11 @@ export default class RoutingController {
         this.skeletonRepository.readAll()
         .then( skeletons => {
 
-            http.ok( skeletons.toJSON() )
+            this.http.ok( skeletons.toJSON() )
 
         })
         .catch( error => {
-            http.internalServerError( error )
+            this.http.internalServerError( error )
         })
     }
 
@@ -40,23 +40,23 @@ export default class RoutingController {
                 .then( skeleton => {
 
                     t.commit()
-                    http.created( skeleton.toJSON() )
+                    this.http.created( skeleton.toJSON() )
 
                 })
                 .catch( error => {
                     t.rollback()
-                    http.internalServerError( error )
+                    this.http.internalServerError( error )
                 })
 
             })
 
         } else {
-            http.badRequest()
+            this.http.badRequest()
         }
     }
 
     getSkeleton() {
-        http.ok( this.request.find( 'skeleton' ).toJSON() )
+        this.http.ok( this.request.find( 'skeleton' ).toJSON() )
     }
 
     updateSkeleton() {
@@ -68,18 +68,18 @@ export default class RoutingController {
                 .then( skeleton => {
 
                     t.commit()
-                    http.ok( skeleton.toJSON() )
+                    this.http.ok( skeleton.toJSON() )
 
                 })
                 .catch( error => {
                     t.rollback()
-                    http.internalServerError( error )
+                    this.http.internalServerError( error )
                 })
 
             })
 
         } else {
-            http.badRequest()
+            this.http.badRequest()
         }
     }
 
@@ -128,19 +128,19 @@ export default class RoutingController {
                 patchSkeleton
                 .then( skeleton => {
 
-                    http.ok( skeleton.toJSON() )
+                    this.http.ok( skeleton.toJSON() )
 
                 })
                 .catch( error => {
-                    http.internalServerError( error )
+                    this.http.internalServerError( error )
                 })
 
             } else {
-                http.badRequest()
+                this.http.badRequest()
             }
 
         } else {
-            http.badRequest()
+            this.http.badRequest()
         }
     }
 
@@ -151,12 +151,12 @@ export default class RoutingController {
             .then( () => {
 
                 t.commit()
-                http.noContent()
+                this.http.noContent()
 
             })
             .catch( error => {
                 t.rollback()
-                http.internalServerError( error )
+                this.http.internalServerError( error )
             })
 
         })

@@ -8,17 +8,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SkeletonFactory = function () {
-    function SkeletonFactory(bundleManager, params) {
-        _classCallCheck(this, SkeletonFactory);
+var UserFactory = function () {
+    function UserFactory(bundleManager, params) {
+        _classCallCheck(this, UserFactory);
 
         this._bundleManager = bundleManager;
         this._params = params;
-        this._currentBundle = 'Skeleton';
+        this._currentBundle = 'User';
         this._database = this._bundleManager.database;
     }
 
-    _createClass(SkeletonFactory, [{
+    _createClass(UserFactory, [{
         key: 'getRepository',
         value: function getRepository(repository) {
             if (!repository) {
@@ -65,17 +65,12 @@ var SkeletonFactory = function () {
     }, {
         key: 'getConfig',
         value: function getConfig(config, params) {
-            return require(__dirname + '/../config/' + config)(this.bundleManager, params);
-        }
-    }, {
-        key: 'getBundleManager',
-        value: function getBundleManager() {
-            return BundleManager;
+            return require(__dirname + '/../config/' + config)(this, params);
         }
     }, {
         key: 'getRootController',
         value: function getRootController() {
-            return this.getBundleManager().container.getComponent('Controller');
+            return this.bundleManager.container.getComponent('Controller');
         }
 
         /*
@@ -108,7 +103,7 @@ var SkeletonFactory = function () {
         }
     }]);
 
-    return SkeletonFactory;
+    return UserFactory;
 }();
 
-exports.default = SkeletonFactory;
+exports.default = UserFactory;

@@ -1,24 +1,27 @@
 'use strict';
 
-var middlewares = function middlewares(BundleManager, params) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = middlewares;
+function middlewares(userFactory, params) {
   /*
    * Global dependencies
    */
-  var router = BundleManager.router;
+  var bundleManager = userFactory.bundleManager;
+  var router = bundleManager.router;
 
   /*
    * Skeleton bundle dependencies
    */
-  var UserMiddlewaresController = BundleManager.getFactory('User').getController('Middlewares');
+  var userMiddlewaresController = bundleManager.getFactory('User').getController('Middlewares');
 
   /*
    * Middlewares
    */
   router.use('/roles/:idRole/users/:idUser', function (req, res, next) {
-    UserMiddlewaresController.userExists().then(function () {
+    userMiddlewaresController.userExists().then(function () {
       next();
     });
   });
-};
-
-module.exports = middlewares;
+}

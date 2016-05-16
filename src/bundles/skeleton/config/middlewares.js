@@ -1,23 +1,22 @@
-export default function middlewares( bundleManager, params ) {
+export default function middlewares( skeletonFactory, params ) {
     /*
      * Global dependencies
      */
-    const router = bundleManager.router;
+    const bundleManager = skeletonFactory.bundleManager
+    const router        = bundleManager.router
 
     /*
      * Skeleton bundle dependencies
      */
-    const SkeletonMiddlewaresController = bundleManager.getFactory( 'Skeleton' ).getController( 'Middlewares' );
+    const skeletonMiddlewaresController = bundleManager.getFactory( 'Skeleton' ).getController( 'Middlewares' )
 
     /*
      * Middlewares
      */
     router.use( '/skeletons/:id', ( req, res, next ) => {
-        SkeletonMiddlewaresController.skeletonExists()
-        .then( function() {
-            next();
-        });
-    });
-};
-
-module.exports = middlewares;
+        skeletonMiddlewaresController.skeletonExists()
+        .then( () => {
+            next()
+        })
+    })
+}

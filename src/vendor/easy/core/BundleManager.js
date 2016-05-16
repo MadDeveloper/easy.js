@@ -20,7 +20,7 @@ export default class BundleManager {
     }
 
     getFactory( bundle, params ) {
-        const factoryPath = this.getBundlesDirectory() + '/' + bundle + '/Factory.js'
+        const factoryPath = this.getBundlesDirectory() + '/' + bundle.toLowerCase() + '/' + bundle.capitalizeFirstLetter() + 'Factory.js'
 
         if ( fs.statSync( factoryPath ).isFile() ) {
             return new ( require( factoryPath ) )( this, params )
@@ -31,7 +31,7 @@ export default class BundleManager {
         const routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js'
 
         if ( fs.statSync( routingPath ).isFile() ) {
-            return require( routingPath )( this, params )
+            return require( routingPath )( this.getFactory( bundle ), params )
         }
     }
 
@@ -42,7 +42,7 @@ export default class BundleManager {
             routingPath = this.getBundlesDirectory() + '/' + bundles[ i ] + '/config/routing.js'
 
             if ( fs.statSync( routingPath ).isFile() ) {
-                require( routingPath )( this, params )
+                require( routingPath )( this.getFactory( bundle ), params )
             }
         }
     }

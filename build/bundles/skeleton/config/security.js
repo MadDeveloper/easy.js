@@ -4,10 +4,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = security;
-function security(bundleManager, params) {
+function security(skeletonFactory, params) {
   /*
    * Global dependencies
    */
+  var bundleManager = skeletonFactory.bundleManager;
   var router = bundleManager.router;
 
   /*

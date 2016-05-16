@@ -39,7 +39,7 @@ var BundleManager = function () {
     }, {
         key: 'getFactory',
         value: function getFactory(bundle, params) {
-            var factoryPath = this.getBundlesDirectory() + '/' + bundle + '/Factory.js';
+            var factoryPath = this.getBundlesDirectory() + '/' + bundle.toLowerCase() + '/' + bundle.capitalizeFirstLetter() + 'Factory.js';
 
             if (_fs2.default.statSync(factoryPath).isFile()) {
                 return new (require(factoryPath))(this, params);
@@ -51,7 +51,7 @@ var BundleManager = function () {
             var routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js';
 
             if (_fs2.default.statSync(routingPath).isFile()) {
-                return require(routingPath)(this, params);
+                return require(routingPath)(this.getFactory(bundle), params);
             }
         }
     }, {
@@ -63,7 +63,7 @@ var BundleManager = function () {
                 routingPath = this.getBundlesDirectory() + '/' + bundles[i] + '/config/routing.js';
 
                 if (_fs2.default.statSync(routingPath).isFile()) {
-                    require(routingPath)(this, params);
+                    require(routingPath)(this.getFactory(bundle), params);
                 }
             }
         }

@@ -45,7 +45,7 @@ export default class SkeletonFactory {
     }
 
     getConfig( config, params ) {
-        return require( __dirname + '/../config/' + config )( this.bundleManager, params )
+        return require( __dirname + '/../config/' + config )( this, params )
     }
 
     getBundleManager() {
@@ -53,7 +53,7 @@ export default class SkeletonFactory {
     }
 
     getRootController() {
-        return this.getBundleManager().container.getComponent( 'Controller' )
+        return this.bundleManager.container.getComponent( 'Controller' )
     }
 
     /*

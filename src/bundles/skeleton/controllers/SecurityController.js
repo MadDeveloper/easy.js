@@ -11,21 +11,21 @@ export default class SecurityController {
 
     authorize() {
         return new Promise( ( resolve, reject ) => {
-            if ( Controller.isProdEnv() ) {
-                const token = Request.getBodyParameter( 'token' )
+            if ( this.controller.isProdEnv() ) {
+                const token = this.request.getBodyParameter( 'token' )
 
-                access.restrict({
-                    mustBe: [ access.any ],
+                this.access.restrict({
+                    mustBe: [ this.access.any ],
                     canCreate: [],
                     canRead: [],
                     canUpdate: [],
                     canDelete: []
                 })
 
-                if ( access.focusOn( token.role_id ).canReach( Request.getMethod() ) ) {
+                if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {
                     resolve()
                 } else {
-                    http.forbidden()
+                    this.http.forbidden()
                     reject()
                 }
             } else {

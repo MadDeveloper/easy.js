@@ -1,29 +1,37 @@
-function UserRepository( UserFactory ) {
-    return {
-        readAll: function( role ) {
-            var User = UserFactory.getModel();
-            return User.where({ role_id: role.get( 'id' ) }).fetchAll();
-        },
+export default class UserRepository {
+    constructor( userFactory ) {
+        this._userFactory = userFactory
+    }
 
-        read: function( byParam, options ) {
-            var User = UserFactory.getModel();
-            var forgeParam = ( UserFactory.getRootController().isNumber( byParam ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } );
-            return User.forge( forgeParam ).fetch( options );
-        },
+    readAll( role ) {
+        let user = this.userFactory.getModel()
+        return user.where({ role_id: role.get( 'id' ) }).fetchAll()
+    }
 
-        save: function( user, params, options ) {
-            return user.save({
-                username: params.username,
-                email: params.email,
-                password: params.password,
-                role_id: params.role_id
-            }, options );
-        },
+    read( byParam, options ) {
+        let user = this.userFactory.getModel()
+        const forgeParam = ( this.userFactory.getRootController().isNumber( byParam ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } )
 
-        delete: function( user, options ) {
-            return user.destroy( options );
-        }
+        return user.forge( forgeParam ).fetch( options )
+    }
+
+    save( user, params, options ) {
+        return user.save({
+            username: params.username,
+            email: params.email,
+            password: params.password,
+            role_id: params.role_id
+        }, options )
+    }
+
+    delete( user, options ) {
+        return user.destroy( options )
+    }
+
+    /*
+     * Getters and setters
+     */
+    get userFactory() {
+        return this._userFactory
     }
 }
-
-module.exports = UserRepository;

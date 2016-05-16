@@ -1,16 +1,16 @@
 /*
  * User model
  */
-function User( UserFactory ) {
-    var BundleManager = UserFactory.getBundleManager();
+export default class User {
+    constructor( userFactory ) {
+        const bundleManager = userFactory.bundleManager
 
-    return UserFactory.getDatabase().Model.extend({
-        tableName: 'users',
+        return userFactory.database.Model.extend({
+            tableName: 'users',
 
-        role: function() {
-            return this.belongsTo( BundleManager.getFactory( 'Role' ).getModel() );
-        }
-    });
+            role() {
+                return this.belongsTo( bundleManager.getFactory( 'Role' ).getModel() )
+            }
+        })
+    }
 }
-
-module.exports = User;

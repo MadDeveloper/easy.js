@@ -7,19 +7,19 @@
  */
 import test from 'unit.js'
 
-const bundleManager   = global.BundleManager
-const http            = bundleManager.container.getComponent( 'Http' )
-const controller      = bundleManager.container.getComponent( 'Controller' )
-const request         = bundleManager.container.getComponent( 'Request' )
-const database        = bundleManager.database
+const bundleManager = global.BundleManager
+const http          = bundleManager.container.getComponent( 'Http' )
+const controller    = bundleManager.container.getComponent( 'Controller' )
+const request       = bundleManager.container.getComponent( 'Request' )
+const database      = bundleManager.database
 
 /*
  * Local dependencies
  */
-const skeletonFactory               = bundleManager.getFactory( 'Skeleton' )
-const skeletonRoutingController     = skeletonFactory.getController()
-const skeletonRepository            = skeletonFactory.getRepository()
-const skeleton                      = skeletonFactory.getModel()
+const skeletonFactory           = bundleManager.getFactory( 'Skeleton' )
+const skeletonRoutingController = skeletonFactory.getController()
+const skeletonRepository        = skeletonFactory.getRepository()
+const skeleton                  = skeletonFactory.getModel()
 
 /*
  * Tests

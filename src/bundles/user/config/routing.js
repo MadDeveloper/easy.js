@@ -1,45 +1,43 @@
-var routing = function( BundleManager, params ) {
+export default function routing( userFactory, params ) {
     /*
      * Global dependencies
      */
-    var router              = BundleManager.router;
+    const bundleManager = userFactory.bundleManager
+    const router        = bundleManager.router
 
     /*
      * User bundle dependencies
      */
-    var UserFactory = BundleManager.getFactory( 'User' );
-    var UserRoutingController = UserFactory.getController( 'Routing' );
+    const userRoutingController = userFactory.getController( 'Routing' )
 
     /*
      * Middlewares
      */
-    UserFactory.getConfig( 'security' );
-    UserFactory.getConfig( 'middlewares' );
+    userFactory.getConfig( 'security' )
+    userFactory.getConfig( 'middlewares' )
 
     /*
     * Routes definitions
     */
     router.route( '/roles/:idRole/users' )
-        .get( function() {
-        	UserRoutingController.getUsers();
+        .get( () => {
+        	userRoutingController.getUsers()
         })
-        .post( function() {
-        	UserRoutingController.createUser();
-        });
+        .post( () => {
+        	userRoutingController.createUser()
+        })
 
     router.route( '/roles/:idRole/users/:idUser' )
-        .get( function() {
-        	UserRoutingController.getUser();
+        .get( () => {
+        	userRoutingController.getUser()
         })
-        .put( function() {
-        	UserRoutingController.updateUser();
+        .put( () => {
+        	userRoutingController.updateUser()
         })
-        .patch( function() {
-        	UserRoutingController.patchUser();
+        .patch( () => {
+        	userRoutingController.patchUser()
         })
-        .delete( function() {
-        	UserRoutingController.deleteUser();
-        });
-};
-
-module.exports = routing;
+        .delete( () => {
+        	userRoutingController.deleteUser()
+        })
+}
