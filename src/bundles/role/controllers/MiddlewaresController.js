@@ -1,11 +1,11 @@
 export default class MiddlewaresController {
     constructor( roleFactory ) {
-        this._roleFactory       = roleFactory
-        this._bundleManager     = this._roleFactory.bundleManager
-        this._container         = this._bundleManager.container
-        this._http              = this._container.getComponent( 'Http' )
-        this._controller        = this._container.getComponent( 'Controller' )
-        this._request           = this._container.getComponent( 'Request' )
+        this._roleFactory   = roleFactory
+        this._bundleManager = this._roleFactory.bundleManager
+        this._container     = this._bundleManager.container
+        this._http          = this._container.getComponent( 'Http' )
+        this._controller    = this._container.getComponent( 'Controller' )
+        this._request       = this._container.getComponent( 'Request' )
     }
 
     roleExists() {
@@ -25,7 +25,7 @@ export default class MiddlewaresController {
     /*
      * Getters and setters
      */
-    get rolesFactory() {
+    get roleFactory() {
         return this._roleFactory
     }
 

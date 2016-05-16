@@ -1,20 +1,16 @@
 import _ from 'lodash'
+import Controller from './../../../vendor/easy/core/Controller'
 
-export default class RoutingController {
-    constructor( skeletonFactory ) {
+export default class RoutingController extends Controller {
+    constructor( skeletonFactory, container ) {
+        super.constructor( container )
+
         this._skeletonFactory       = skeletonFactory
-        this._bundleManager         = this._skeletonFactory.bundleManager
-        this._router                = this._bundleManager.router
-        this._database              = this._bundleManager.database
-        this._container             = this._bundleManager.container
-        this._http                  = this._container.getComponent( 'Http' )
-        this._controller            = this._container.getComponent( 'Controller' )
-        this._request               = this._container.getComponent( 'Request' )
         this._skeletonRepository    = this._skeletonFactory.getRepository()
     }
 
     isRequestWellParameterized() {
-        return this.controller.verifyParams([
+        return this.verifyParams([
             { property: 'example', typeExpected: 'string' }
         ], this.request.getBody() )
     }
@@ -23,11 +19,11 @@ export default class RoutingController {
         this.skeletonRepository.readAll()
         .then( skeletons => {
 
-            this.http.ok( skeletons.toJSON() )
+            this.response.ok( skeletons.toJSON() )
 
         })
         .catch( error => {
-            this.http.internalServerError( error )
+            this.response.internalServerError( error )
         })
     }
 
@@ -40,23 +36,23 @@ export default class RoutingController {
                 .then( skeleton => {
 
                     t.commit()
-                    this.http.created( skeleton.toJSON() )
+                    this.response.created( skeleton.toJSON() )
 
                 })
                 .catch( error => {
                     t.rollback()
-                    this.http.internalServerError( error )
+                    this.response.internalServerError( error )
                 })
 
             })
 
         } else {
-            this.http.badRequest()
+            this.response.badRequest()
         }
     }
 
     getSkeleton() {
-        this.http.ok( this.request.find( 'skeleton' ).toJSON() )
+        this.response.ok( this.request.find( 'skeleton' ).toJSON() )
     }
 
     updateSkeleton() {
@@ -68,28 +64,28 @@ export default class RoutingController {
                 .then( skeleton => {
 
                     t.commit()
-                    this.http.ok( skeleton.toJSON() )
+                    this.response.ok( skeleton.toJSON() )
 
                 })
                 .catch( error => {
                     t.rollback()
-                    this.http.internalServerError( error )
+                    this.response.internalServerError( error )
                 })
 
             })
 
         } else {
-            this.http.badRequest()
+            this.response.badRequest()
         }
     }
 
     patchSkeleton() {
-        if ( this.controller.isPatchRequestWellParameterized( req ) ) {
+        if ( this.isPatchRequestWellParameterized( this.request ) ) {
             let patchRequestCorrectlyFormed = false
 
             let patchSkeleton = new Promise( ( resolve, reject ) => {
                 const validPaths = [ '/property' ]
-                const ops = this.controller.parsePatchParams( this.request.getScope() )
+                const ops = this.parsePatchParams( this.request.getScope() )
 
                 if ( ops ) {
                     patchRequestCorrectlyFormed = true
@@ -128,19 +124,19 @@ export default class RoutingController {
                 patchSkeleton
                 .then( skeleton => {
 
-                    this.http.ok( skeleton.toJSON() )
+                    this.response.ok( skeleton.toJSON() )
 
                 })
                 .catch( error => {
-                    this.http.internalServerError( error )
+                    this.response.internalServerError( error )
                 })
 
             } else {
-                this.http.badRequest()
+                this.response.badRequest()
             }
 
         } else {
-            this.http.badRequest()
+            this.response.badRequest()
         }
     }
 
@@ -151,12 +147,12 @@ export default class RoutingController {
             .then( () => {
 
                 t.commit()
-                this.http.noContent()
+                this.response.noContent()
 
             })
             .catch( error => {
                 t.rollback()
-                this.http.internalServerError( error )
+                this.response.internalServerError( error )
             })
 
         })
@@ -167,34 +163,6 @@ export default class RoutingController {
      */
     get skeletonFactory() {
         return this._skeletonFactory
-    }
-
-    get bundleManager() {
-        return this._bundleManager
-    }
-
-    get router() {
-        return this._router
-    }
-
-    get database() {
-        return this._database
-    }
-
-    get container() {
-        return this._container
-    }
-
-    get http() {
-        return this._http
-    }
-
-    get controller() {
-        return this._controller
-    }
-
-    get request() {
-        return this._request
     }
 
     get skeletonRepository() {

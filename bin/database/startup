@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 var cliMode         = true;
-var config          = require( __dirname + '/../../src/config/config' );
-var app             = require( __dirname + '/../../src/bootstrap.js' )( config, cliMode );
-var schemaBuilder   = app.BundleManager.getContainer().getService( 'database.schema' );
+var config          = require( __dirname + '/../../build/config/config' );
+var app             = require( __dirname + '/../../build/bootstrap.js' )( config, cliMode );
+var schemaBuilder   = app.bundleManager.container.getService( 'database/schema' );
 var argv			= require( 'minimist' )( process.argv.slice( 2 ) );
 var _				= require( 'lodash' );
 var sequence		= require( 'when/sequence' );
@@ -17,7 +17,7 @@ var dbConfig    = {
 	password: config.database.connection.password
 };
 
-var Message 			= require( global.app.root + '/vendor/easy/Message' )();
+var Message 			= require( global.app.root + '/vendor/easy/core/Message' )();
 var titleError			= "Error when initializing roles and users";
 var consequenceError	= "Initialization aborted.";
 

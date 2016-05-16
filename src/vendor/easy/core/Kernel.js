@@ -4,12 +4,24 @@ export default class Kernel {
     constructor() {
         this._appName = ''
         this._componentsLoaded = {}
-        this.path = {
+        this._path = {
             root: '',
             bundles: '',
             services: '',
             config: '',
             vendor: ''
+        }
+        this._componentsMapping = {
+            'bundleManager': './BundleManager',
+            'container': './Container',
+            'controller': './Controller',
+            'logger': './Logger',
+            'message': './Message',
+            'polyfills': './polyfills',
+            'connector': './../database/Connector',
+            'http': './../Http',
+            'request': './../http/Request',
+            'response': './../http/Response'
         }
     }
 
@@ -40,6 +52,14 @@ export default class Kernel {
     storeComponent( component, path ) {
         this.componentsLoaded[ component ] = require( path )
         return this
+    }
+
+    getComponent( component ) {
+        if ( "undefined" !== typeof this.componentsLoaded[ component ] ) {
+            return this.componentsLoaded[ component ]
+        } else {
+            return undefined
+        }
     }
 
     getContainer() {
@@ -81,5 +101,9 @@ export default class Kernel {
     set path( path ) {
         this._path = path
         return this
+    }
+
+    get componentsMapping() {
+        return this._componentsMapping
     }
 }

@@ -1,13 +1,17 @@
 export default class Controller {
     constructor( container ) {
         this._container = container
-        this._http = this._container.getComponent( 'Http' )
+        this._router    = this._container.router
+        this._database  = this._container.database
+        this._http      = this._container.getComponent( 'Http' )
+        this._request   = this._container.getComponent( 'Request' )
+        this._response  = this._container.getComponent( 'Response' )
     }
 
     verifyParams( required, params ) {
         let verified = true
 
-        for ( var requiredParam in required ) {
+        for ( let requiredParam in required ) {
             const optional = required[ requiredParam ].optional
 
             if ( !params.hasOwnProperty( required[ requiredParam ].property ) ) {
@@ -41,11 +45,11 @@ export default class Controller {
         } catch ( error ) {}
     }
 
-    isPatchRequestWellParameterized( req ) {
-        return req.rawBody.length > 0
+    isPatchRequestWellParameterized( request ) {
+        return request.scope.rawBody.length > 0
     }
 
-    doesRequiredElementExists( element, options, BundleManager, callback ) {
+    doesRequiredElementExists( element, options, bundleManager, callback ) {
         let requireBy = null
         let optionsFetch = null
 
@@ -56,9 +60,9 @@ export default class Controller {
             requireBy = options
         }
 
-        const ElementRepository = BundleManager.getFactory( element.capitalizeFirstLetter() ).getRepository()
+        const elementRepository = bundleManager.getFactory( element.capitalizeFirstLetter() ).getRepository()
 
-        ElementRepository.read( requireBy, optionsFetch )
+        elementRepository.read( requireBy, optionsFetch )
         .then( element => {
 
             if ( element ) {
@@ -90,7 +94,23 @@ export default class Controller {
         return this._container
     }
 
+    get router() {
+        return this._router
+    }
+
+    get database() {
+        return this._database
+    }
+
     get http() {
         return this._http
+    }
+
+    get request() {
+        return this._request
+    }
+
+    get response() {
+        return this._response
     }
 }

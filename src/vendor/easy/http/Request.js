@@ -1,7 +1,11 @@
-export default class Request {
-    constructor( appName ) {
-        this._appName = appName
-        this._scope = null
+import Http from './Http'
+
+export default class Request extends http {
+    constructor( appName, container ) {
+        super.constructor( container )
+        
+        this._appName   = appName
+        this._scope     = null
     }
 
     getMethod() {

@@ -1,111 +1,102 @@
-function RoutingController( RoleFactory ) {
-    /*
-     * Global dependencies
-     */
-    var BundleManager       = RoleFactory.getBundleManager();
-    var router              = BundleManager.router;
-    var database            = BundleManager.getDatabase();
-    var Container  = BundleManager.getContainer();
-    var http                = Container.getComponent( 'Http' );
-    var Controller          = Container.getComponent( 'Controller' );
-    var Request             = Container.getComponent( 'Request' );
+export default class RoutingController {
+    constructor( roleFactory ) {
+        this._roleFactory       = roleFactory
+        this._bundleManager     = this._roleFactory.bundleManager
+        this._router            = this._bundleManager.router
+        this._database          = this._bundleManager.database
+        this._container         = this._bundleManager.container
+        this._http              = this._container.getComponent( 'Http' )
+        this._controller        = this._container.getComponent( 'Controller' )
+        this._request           = this._container.getComponent( 'Request' )
+        this._roleRepository    = this._roleFactory.getRepository()
+    }
 
-    /*
-     * Role bundle dependencies
-     */
-    var RoleRepository  = RoleFactory.getRepository();
+    isRequestWellParameterized() {
+        return this.controller.verifyParams([
+            { property: 'name', typeExpected: 'string' },
+            { property: 'slug', typeExpected: 'string' }
+        ], this.request.getBody() )
+    }
 
-    return {
-        isRequestWellParameterized: function() {
-            var Controller = RoleFactory.getRootController();
-            return Controller.verifyParams([
-                    { property: 'name', typeExpected: 'string' },
-                    { property: 'slug', typeExpected: 'string' }
-                ], Request.getBody() );
-        },
+    getRoles() {
+        this.roleRepository.readAll()
+        .then( roles => {
 
-        getRoles: function() {
-            RoleRepository.readAll()
-            .then( function( roles ) {
+            this.http.ok( roles.toJSON() )
 
-                http.ok( roles.toJSON() );
+        })
+        .catch( error => {
+            this.http.internalServerError( error )
+        })
+    }
 
-            })
-            .catch( function( error ) {
-                http.internalServerError( error );
-            });
-        },
+    createRole() {
+        if ( this.isRequestWellParameterized() ) {
 
-        createRole: function() {
-            if ( this.isRequestWellParameterized() ) {
+            this.database.transaction( t => {
 
-                database.transaction( function( t ) {
+                this.roleRepository.save( this.roleFactory.getNewModel(), this.request.getBody(), { transacting: t } )
+                .then( role => {
 
-                    RoleRepository.save( RoleFactory.getNewModel(), Request.getBody(), { transacting: t } )
-                    .then( function( role ) {
-
-                        t.commit();
-                        http.created( role.toJSON() );
-
-                    })
-                    .catch( function( error ) {
-                        t.rollback();
-                        http.internalServerError( error );
-                    });
-
-                });
-
-            } else {
-                http.badRequest();
-            }
-        },
-
-        getRole: function() {
-            http.ok( Request.find( 'role' ).toJSON() );
-        },
-
-        updateRole: function() {
-            if ( this.isRequestWellParameterized() ) {
-
-                database.transaction( function( t ) {
-
-                    RoleRepository.save( Request.find( 'role' ), Request.getBody(), { transacting: t } )
-                    .then( function( role ) {
-
-                        t.commit();
-                        http.ok( role.toJSON() );
-
-                    })
-                    .catch( function( error ) {
-                        t.rollback();
-                        http.internalServerError( error );
-                    })
-
-                });
-
-            } else {
-                http.badRequest();
-            }
-        },
-
-        deleteRole: function() {
-            database.transaction( function( t ) {
-
-                RoleRepository.delete( Request.find( 'role' ), { transacting: t } )
-                .then( function() {
-
-                    t.commit();
-                    http.noContent();
+                    t.commit()
+                    this.http.created( role.toJSON() )
 
                 })
-                .catch( function( error ) {
-                    t.rollback();
-                    http.internalServerError( error );
-                });
+                .catch( error => {
+                    t.rollback()
+                    this.http.internalServerError( error )
+                })
 
-            });
+            })
+
+        } else {
+            this.http.badRequest()
         }
     }
-}
 
-module.exports = RoutingController;
+    getRole() {
+        this.http.ok( this.request.find( 'role' ).toJSON() )
+    }
+
+    updateRole() {
+        if ( this.isRequestWellParameterized() ) {
+
+            this.database.transaction( function( t ) {
+
+                this.roleRepository.save( this.request.find( 'role' ), this.request.getBody(), { transacting: t } )
+                .then( role => {
+
+                    t.commit()
+                    this.http.ok( role.toJSON() )
+
+                })
+                .catch( error => {
+                    t.rollback()
+                    this.http.internalServerError( error )
+                })
+
+            })
+
+        } else {
+            this.http.badRequest()
+        }
+    }
+
+    deleteRole() {
+        this.database.transaction( t => {
+
+            this.roleRepository.delete( this.request.find( 'role' ), { transacting: t } )
+            .then( () => {
+
+                t.commit()
+                this.http.noContent()
+
+            })
+            .catch( error => {
+                t.rollback()
+                this.http.internalServerError( error )
+            })
+
+        })
+    }
+}

@@ -1,12 +1,12 @@
 export default class SecurityController {
     constructor( userFactory ) {
         this._userFactory   = userFactory
-        this._bundleManager     = this._userFactory.bundleManager
-        this._container         = this._bundleManager.container
-        this._http              = this._container.getComponent( 'Http' )
-        this._controller        = this._container.getComponent( 'Controller' )
-        this._request           = this._container.getComponent( 'Request' )
-        this._access            = new ( this._container.getService( 'security/access' ) )()
+        this._bundleManager = this._userFactory.bundleManager
+        this._container     = this._bundleManager.container
+        this._http          = this._container.getComponent( 'Http' )
+        this._controller    = this._container.getComponent( 'Controller' )
+        this._request       = this._container.getComponent( 'Request' )
+        this._access        = new ( this._container.getService( 'security/access' ) )()
     }
 
     authorize() {

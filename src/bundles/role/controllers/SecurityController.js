@@ -1,40 +1,67 @@
-function SecurityController( RoleFactory ) {
-    /*
-     * Global dependencies
-     */
-    var BundleManager       = RoleFactory.getBundleManager();
-    var Container  = BundleManager.getContainer();
-    var http                = Container.getComponent( 'Http' );
-    var Controller          = Container.getComponent( 'Controller' );
-    var Request             = Container.getComponent( 'Request' );
-    var access              = Container.getService( 'security.access' )();
+export default class SecurityController {
+    constructor( roleFactory ) {
+        this._roleFactory   = roleFactory
+        this._bundleManager = this._roleFactory.bundleManager
+        this._container     = this._bundleManager.container
+        this._http          = this._container.getComponent( 'Http' )
+        this._controller    = this._container.getComponent( 'Controller' )
+        this._request       = this._container.getComponent( 'Request' )
+        this._access        = new ( this._container.getService( 'security/access' ) )()
+    }
 
-    return {
-        authorize: function() {
-            return new Promise( function( resolve, reject ) {
-                if ( Controller.isProdEnv() ) {
-                    var token = Request.getBodyParameter( 'token' );
+    authorize() {
+        return new Promise( ( resolve, reject ) => {
+            if ( this.controller.isProdEnv() ) {
+                const token = this.request.getBodyParameter( 'token' )
 
-                    access.restrict({
-                        mustBe: [ access.any ],
-                        canCreate: [ access.admin ],
-                        canRead: [],
-                        canUpdate: [ access.admin ],
-                        canDelete: [ access.admin ]
-                    });
+                this.access.restrict({
+                    mustBe: [ this.access.any ],
+                    canCreate: [ this.access.admin ],
+                    canRead: [],
+                    canUpdate: [ this.access.admin ],
+                    canDelete: [ this.access.admin ]
+                })
 
-                    if ( access.focusOn( token.role_id ).canReach( Request.getMethod() ) ) {
-                        resolve();
-                    } else {
-                        http.forbidden();
-                        reject();
-                    }
+                if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {
+                    resolve()
                 } else {
-                    resolve();
+                    this.http.forbidden()
+                    reject()
                 }
-            });
-        }
+            } else {
+                resolve()
+            }
+        })
+    }
+
+    /*
+     * Getters and setters
+     */
+    get roleFactory() {
+        return this._roleFactory
+    }
+
+    get bundleManager() {
+        return this._bundleManager
+    }
+
+    get container() {
+        return this._container
+    }
+
+    get http() {
+        return this._http
+    }
+
+    get controller() {
+        return this._controller
+    }
+
+    get request() {
+        return this._request
+    }
+
+    get access() {
+        return this._access
     }
 }
-
-module.exports = SecurityController;

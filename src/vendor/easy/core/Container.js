@@ -17,7 +17,7 @@ export default class Container {
     }
 
     isComponentAlreadyLoaded( component ) {
-        return this.shared.hasOwnProperty( component );
+        return this.shared.hasOwnProperty( component )
     }
 
     getComponent( component, params ) {
@@ -27,66 +27,69 @@ export default class Container {
              */
             switch ( component.toLowerCase() ) {
                 case 'http':
-                    params = this;
-                    break;
+                    params = this
+                    break
                 case 'request':
-                    params = this.kernel.getAppName();
-                    break;
+                    params = this.kernel.appName
+                    break
                 case 'logger':
-                    params = this;
-                    break;
+                    params = this
+                    break
                 case 'controller':
-                    params = this;
-                    break;
+                    params = this
+                    break
+                default:
+
+                    break
             }
 
-            this.shared[ component ] = new ( this.kernel.load( component ) )( params );
+            this.shared[ component ] = new ( this.kernel.load( component ) )( params )
         }
 
-        return this.shared[ component ];
+        return this.shared[ component ]
     }
 
     getService( service, clearCache ) {
         if ( false !== this.checkExistanceOfServicesDirectory && false === this.servicesDirectoryExists ) {
-            const statsServiceDirectory = fs.lstatSync( this.servicesDirectoryPath );
+            const statsServiceDirectory = fs.lstatSync( this.servicesDirectoryPath )
 
             if ( statsServiceDirectory.isDirectory() ) {
-                this.servicesDirectoryExists = true;
+                this.servicesDirectoryExists = true
             } else {
                 this.message.error({
                     title: "Service directory not found",
                     message: "Service directory, path: " + this.servicesDirectoryPath + " not found.",
                     type: 'error',
                     exit: 0
-                });
+                })
             }
         }
 
-        const serviceInfo             = service.split( '/' );
-        const serviceName             = serviceInfo[ 0 ];
-        const serviceComponent        = serviceInfo[ 1 ];
-        const serviceNameDirectory    = this.servicesDirectoryPath + '/' + serviceName;
-        const serviceComponentFile    = serviceNameDirectory + '/' + serviceComponent + '.js';
+        const serviceInfo             = service.split( '/' )
+        const serviceName             = serviceInfo[ 0 ]
+        const serviceComponent        = serviceInfo[ 1 ]
+        const serviceNameDirectory    = this.servicesDirectoryPath + '/' + serviceName
+        const serviceComponentFile    = serviceNameDirectory + '/' + serviceComponent + '.js'
 
         try {
-            const statsServiceNameDirectory = fs.lstatSync( serviceNameDirectory );
+            const statsServiceNameDirectory = fs.lstatSync( serviceNameDirectory )
 
             if ( statsServiceNameDirectory.isDirectory() ) {
 
                 try {
-                    const statsServiceComponentDirectory = fs.lstatSync( serviceComponentFile );
+                    const statsServiceComponentDirectory = fs.lstatSync( serviceComponentFile )
 
 
                     if ( statsServiceComponentDirectory.isFile() ) {
 
                         if ( clearCache ) {
-        				   	delete require.cache[ require.resolve( serviceComponentFile ) ];
+        				   	delete require.cache[ require.resolve( serviceComponentFile ) ]
                         }
 
-                        return require( serviceComponentFile );
+                        return require( serviceComponentFile )
 
                     } else {
-                        throw new Error();
+                        throw new Error()
                     }
                 } catch ( error ) {
                     this.message.error({
@@ -94,11 +97,11 @@ export default class Container {
                         message: error,
                         type: 'error',
                         exit: 0
-                    });
+                    })
                 }
 
             } else {
-                throw new Error();
+                throw new Error()
             }
         } catch ( error ) {
             this.message.error({
@@ -106,7 +109,7 @@ export default class Container {
                 message: "Service name " + serviceName + " not found, path: " + path.resolve( serviceNameDirectory ) + "\n" + error,
                 type: 'error',
                 exit: 0
-            });
+            })
         }
     }
 

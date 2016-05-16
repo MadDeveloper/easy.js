@@ -5,28 +5,30 @@
 /*
  * Global dependencies
  */
-var test            = require('unit.js');
-var BundleManager   = global.BundleManager;
-var http            = BundleManager.getContainer().getComponent( 'Http' );
-var Controller      = BundleManager.getContainer().getComponent( 'Controller' );
-var Request         = BundleManager.getContainer().getComponent( 'Request' );
-var database        = BundleManager.getDatabase();
+ import test from 'unit.js'
 
-/*
- * Local dependencies
- */
-var RoleFactory     = BundleManager.getFactory( 'Role' );
-var RoleController  = RoleFactory.getController();
-var RoleRepository  = RoleFactory.getRepository();
-var Role            = RoleFactory.getModel();
+ const bundleManager = global.BundleManager
+ const http          = bundleManager.container.getComponent( 'Http' )
+ const controller    = bundleManager.container.getComponent( 'Controller' )
+ const request       = bundleManager.container.getComponent( 'Request' )
+ const database      = bundleManager.database
+
+ /*
+  * Local dependencies
+  */
+ const roleFactory           = bundleManager.getFactory( 'Role' )
+ const roleRoutingController = roleFactory.getController()
+ const roleRepository        = roleFactory.getRepository()
+ const role                  = roleFactory.getModel()
 
 /*
  * Tests
  */
-describe('Role bundle tests', function() {
-  it('example variable', function(){
+describe('Role bundle tests', () => {
+  it('example variable', () => {
     // just for example of tested value
-    var example = 'hello world';
+    let example = 'hello world'
+
     test
       .string(example)
         .startsWith('hello')
@@ -35,30 +37,30 @@ describe('Role bundle tests', function() {
         .string(example)
           .endsWith('welcome')
           .contains('you')
-      .when('"example" becomes an object', function() {
+      .when('"example" becomes an object', () => {
         example = {
           message: 'hello world',
           name: 'Nico',
           job: 'developper',
           from: 'France'
-        };
+        }
       })
-      .then('test the "example" object', function() {
+      .then('test the "example" object', () => {
         test
           .object(example)
             .hasValue('developper')
             .hasProperty('name')
             .hasProperty('from', 'France')
             .contains({message: 'hello world'})
-        ;
+
       })
       .if(example = 'bad value')
-        .error(function(){
-          example.badMethod();
+        .error( () => {
+          example.badMethod()
         })
-    ;
-  });
-  it('other test case', function(){
+
+  })
+  it('other test case', () => {
     // other tests ...
-  });
-});
+  })
+})

@@ -3,3 +3,10 @@ delegate work to response and request and no http from vendor !
 store request and response into root controller
 bundleManager dans les bundles ne doit pas être récupéré via la factory, il faut utiliser le container !
 faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
+
+remplacer callback par promise
+
+le init kernel doit instancier tous les composants vendor
+résoudre les chargements composants de Kernel et Container
+
+refaire les binaires, car quand ils modifient des fichiers (db, schema, new bundle) il faut que tout soit écrit dans src puit builder !

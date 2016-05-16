@@ -2,17 +2,17 @@ import _ from 'lodash'
 
 export default class RoutingController {
     constructor( userFactory ) {
-        this._userFactory           = userFactory
-        this._bundleManager         = this._userFactory.bundleManager
-        this._router                = this._bundleManager.router
-        this._database              = this._bundleManager.database
-        this._container             = this._bundleManager.container
-        this._http                  = this._container.getComponent( 'Http' )
-        this._controller            = this._container.getComponent( 'Controller' )
-        this._request               = this._container.getComponent( 'Request' )
-        this._userRepository        = this._userFactory.getRepository()
-        this._roleFactory           = this._bundleManager.getFactory( 'Role' )
-        this._roleRepository        = this._roleFactory.getRepository()
+        this._userFactory       = userFactory
+        this._bundleManager     = this._userFactory.bundleManager
+        this._router            = this._bundleManager.router
+        this._database          = this._bundleManager.database
+        this._container         = this._bundleManager.container
+        this._http              = this._container.getComponent( 'Http' )
+        this._controller        = this._container.getComponent( 'Controller' )
+        this._request           = this._container.getComponent( 'Request' )
+        this._userRepository    = this._userFactory.getRepository()
+        this._roleFactory       = this._bundleManager.getFactory( 'Role' )
+        this._roleRepository    = this._roleFactory.getRepository()
     }
 
     isRequestWellParameterized() {

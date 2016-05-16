@@ -1,31 +1,31 @@
 #!/usr/bin/env node
-
-var cliMode         = true;
-var config          = require( __dirname + '/../../src/config/config' );
-var app             = require( __dirname + '/../../src/bootstrap.js' )( config, cliMode );
-var schemaBuilder   = app.BundleManager.getContainer().getService( 'database.schema' );
-var stringTransform = app.BundleManager.getContainer().getService( 'string.transform' );
 var fs              = require( 'fs' );
 var walk            = require( 'walk' );
 var path            = require( 'path' );
 var readlineSync    = require( 'readline-sync' );
 var _               = require( 'lodash' );
-var Message         = require( global.app.root + '/vendor/easy/Message' )();
 var argv            = require( 'minimist' )( process.argv.slice( 2 ) );
+
+var cliMode         = true;
+var config          = require( __dirname + '/../../build/config/config' );
+var app             = require( __dirname + '/../../build/bootstrap.js' )( config, cliMode );
+var Message         = app.kernel.load( 'Message' )();
+var schemaBuilder   = app.bundleManager.container.getService( 'database/schema' );
+var stringTransform = app.bundleManager.container.getService( 'string/transform' );
 
 /*
  * Apply Polyfills
  */
-require( global.app.root + '/vendor/easy/polyfills' );
+require( global.app.root + '/vendor/easy/core/polyfills' );
 
 var nameBundleFromArgv = argv._[ 0 ] || argv.name || argv.n || "";
 
 if ( nameBundleFromArgv.length > 0 ) {
 
-    var nameBundle          = nameBundleFromArgv.capitalizeFirstLetter().trim(),
-        bundlesPath         = global.app.root + "/src/Bundles";
+    var nameBundle          = nameBundleFromArgv.toLowerCase().trim(),
+        bundlesPath         = global.app.root + "/src/bundles";
     var nameBundleLowerCase = nameBundle.decapitalizeFirstLetter(),
-        skeletonBundlePath  = bundlesPath + "/Skeleton",
+        skeletonBundlePath  = bundlesPath + "/skeleton",
         bundleCreatingPath  = bundlesPath + "/" + nameBundle;
 
     var positiveAnswers = [ 'y', 'ye', 'yes' ];
