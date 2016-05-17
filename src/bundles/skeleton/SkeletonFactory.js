@@ -1,9 +1,10 @@
 export default class SkeletonFactory {
     constructor( bundleManager, params ) {
         this._bundleManager = bundleManager
-        this._params = params
+        this._container     = this._bundleManager.container
+        this._params        = params
         this._currentBundle = 'Skeleton'
-        this._database = this._bundleManager.database
+        this._database      = this._bundleManager.database
     }
 
     getRepository( repository ) {
@@ -78,5 +79,9 @@ export default class SkeletonFactory {
 
     get database() {
         return this._database
+    }
+
+    get container() {
+        return this._container
     }
 }

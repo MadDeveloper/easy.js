@@ -5,7 +5,7 @@ export default function( bundleManager ) {
     const container     = bundleManager.container
     const http          = container.getComponent( 'Http' )
     const controller    = container.getComponent( 'Controller' )
-    const access        = new ( container.getService( 'security.Access' ) )()
+    const access        = new ( container.getService( 'security/Access' ) )()
 
     /*
      * Add your defaults policies security
@@ -14,3 +14,4 @@ export default function( bundleManager ) {
         next()
     })
 }
+@

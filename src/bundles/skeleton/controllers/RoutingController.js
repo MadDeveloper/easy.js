@@ -2,8 +2,8 @@ import _ from 'lodash'
 import Controller from './../../../vendor/easy/core/Controller'
 
 export default class RoutingController extends Controller {
-    constructor( skeletonFactory, container ) {
-        super.constructor( container )
+    constructor( skeletonFactory ) {
+        super.constructor( skeletonFactory.container )
 
         this._skeletonFactory       = skeletonFactory
         this._skeletonRepository    = this._skeletonFactory.getRepository()

@@ -1,15 +1,16 @@
 import colors from 'colors'
 
 export default class Message {
-    constructor() {
-        this._leftSpaces = '  '
+    constructor( container ) {
+        this._container     = container
+        this._leftSpaces    = '  '
     }
 
     error( params ) {
         if ( undefined !== params.title && undefined !== params.message ) {
 
             const consequence = ( params.consequence ) ? params.consequence : ""
-            
+
             console.log( '\n' )
             console.log( this.leftSpaces + colors.bgRed( colors.white( "Error: " + params.title ) ) )
             console.log( this.leftSpaces + colors.bgRed( colors.white( "    -> " + params.message ) ) )
@@ -54,5 +55,9 @@ export default class Message {
     set leftSpaces( leftSpaces ) {
         this._leftSpaces = leftSpaces
         return this
+    }
+
+    get container() {
+        return this._container
     }
 }

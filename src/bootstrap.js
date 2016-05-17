@@ -44,10 +44,10 @@ export default class Application {
         /*
          * Easy.js dependencies
          */
-        const kernel = new Kernel().init( __dirname, config )
-        const container = new ( kernel.load( 'Container' ) )( kernel )
-        const message = container.getComponent( 'Message' )
-        const database = container.getComponent( 'database/Connector' )
+        const kernel    = new Kernel().init( __dirname, config )
+        const container = kernel.container
+        const message   = container.getComponent( 'Message' )
+        const database  = container.getComponent( 'Connector' )
 
         /*
          * Define database connector (default: ~/config/database/orm)
@@ -57,12 +57,14 @@ export default class Application {
         /*
          * Define bundle easy vendor
          */
-        const bundleManager = container.getComponent( 'BundleManager' )({ kernel, database, router: express.Router() })
+        const bundleManager     = container.getComponent( 'BundleManager' )( container )
+        bundleManager.database  = database
+        bundleManager.router    = express.Router()
 
         /*
          * Defines Polyfills
          */
-        kernel.load( 'polyfills' )
+        const polyfills = container.getComponent( 'Polyfills' )
 
         if ( !cliMode ) {
             /*

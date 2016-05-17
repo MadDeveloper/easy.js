@@ -1,17 +1,16 @@
-export default class SecurityController {
-    constructor( skeletonFactory ) {
+import Controller from './../../../vendor/easy/core/Controller'
+
+export default class SecurityController extends Controller {
+    constructor( skeletonFactory, container ) {
+        super.constructor( container )
+
         this._skeletonFactory   = skeletonFactory
-        this._bundleManager     = this._skeletonFactory.bundleManager
-        this._container         = this._bundleManager.container
-        this._http              = this._container.getComponent( 'Http' )
-        this._controller        = this._container.getComponent( 'Controller' )
-        this._request           = this._container.getComponent( 'Request' )
-        this._access            = new ( this._container.getService( 'security/access' ) )()
+        this._access            = this._container.getService( 'security/access', {} )
     }
 
     authorize() {
         return new Promise( ( resolve, reject ) => {
-            if ( this.controller.isProdEnv() ) {
+            if ( this.isProdEnv() ) {
                 const token = this.request.getBodyParameter( 'token' )
 
                 this.access.restrict({
@@ -25,7 +24,7 @@ export default class SecurityController {
                 if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {
                     resolve()
                 } else {
-                    this.http.forbidden()
+                    this.response.forbidden()
                     reject()
                 }
             } else {
@@ -39,26 +38,6 @@ export default class SecurityController {
      */
     get skeletonFactory() {
         return this._skeletonFactory
-    }
-
-    get bundleManager() {
-        return this._bundleManager
-    }
-
-    get container() {
-        return this._container
-    }
-
-    get http() {
-        return this._http
-    }
-
-    get controller() {
-        return this._controller
-    }
-
-    get request() {
-        return this._request
     }
 
     get access() {

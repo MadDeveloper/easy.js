@@ -6,7 +6,6 @@ faire de l'injection de dépendances dans les contructeurs, par exemples les con
 
 remplacer callback par promise
 
-le init kernel doit instancier tous les composants vendor
-résoudre les chargements composants de Kernel et Container
+faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
 
 refaire les binaires, car quand ils modifient des fichiers (db, schema, new bundle) il faut que tout soit écrit dans src puit builder !

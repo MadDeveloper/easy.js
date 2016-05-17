@@ -1,12 +1,12 @@
 import fs from 'fs'
 
 export default class BundleManager {
-    constructor( components ) {
-        this._kernel            = components.kernel
-        this._database          = components.database
-        this._router            = components.router
+    constructor( container ) {
+        this._container         = container
+        this._kernel            = this._container.kernel
+        this._database          = null
+        this._router            = null
         this._bundlesDefinition = []
-        this._container         = null
     }
 
     define( bundle ) {
@@ -20,7 +20,7 @@ export default class BundleManager {
     }
 
     getFactory( bundle, params ) {
-        const factoryPath = this.getBundlesDirectory() + '/' + bundle.toLowerCase() + '/' + bundle.capitalizeFirstLetter() + 'Factory.js'
+        const factoryPath = this.getBundlesDirectory() + '/' + bundle + '/' + bundle.capitalizeFirstLetter() + 'Factory.js'
 
         if ( fs.statSync( factoryPath ).isFile() ) {
             return new ( require( factoryPath ) )( this, params )
@@ -80,7 +80,6 @@ export default class BundleManager {
 
     set router( router ) {
         this._router = router
-        return this
     }
 
     get database() {
@@ -89,7 +88,6 @@ export default class BundleManager {
 
     set database( database ) {
         this._database = database
-        return this
     }
 
     get bundlesDefinition() {

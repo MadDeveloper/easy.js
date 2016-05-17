@@ -1,9 +1,10 @@
-import fs from 'fs'
+import fs           from 'fs'
+import Container    from './Container'
 
 export default class Kernel {
     constructor() {
-        this._appName = ''
-        this._componentsLoaded = {}
+        this._appName           = ''
+        this._container         = null
         this._path = {
             root: '',
             bundles: '',
@@ -11,18 +12,7 @@ export default class Kernel {
             config: '',
             vendor: ''
         }
-        this._componentsMapping = {
-            'bundleManager': './BundleManager',
-            'container': './Container',
-            'controller': './Controller',
-            'logger': './Logger',
-            'message': './Message',
-            'polyfills': './polyfills',
-            'connector': './../database/Connector',
-            'http': './../Http',
-            'request': './../http/Request',
-            'response': './../http/Response'
-        }
+
     }
 
     init( root, config ) {
@@ -34,36 +24,17 @@ export default class Kernel {
 
         this.appName = config.app.name
 
+        this.loadContainer()
+
         return this
     }
 
-    load( component ) {
-        if ( "undefined" === typeof this.componentsLoaded[ component ] ) {
-            const componentPath = __dirname + '/' + component + '.js'
-
-            if ( fs.statSync( componentPath ).isFile() ) {
-                this.storeComponent( component, componentPath )
-            }
-        }
-
-        return this.componentsLoaded[ component ]
+    loadContainer() {
+        this.container = new Container( this )
     }
 
-    storeComponent( component, path ) {
-        this.componentsLoaded[ component ] = require( path )
-        return this
-    }
-
-    getComponent( component ) {
-        if ( "undefined" !== typeof this.componentsLoaded[ component ] ) {
-            return this.componentsLoaded[ component ]
-        } else {
-            return undefined
-        }
-    }
-
-    getContainer() {
-        return this.load( 'Container' )
+    initContainer() {
+        this.container.loadComponents()
     }
 
     getEnv() {
@@ -90,8 +61,13 @@ export default class Kernel {
         return this
     }
 
-    get componentsLoaded() {
-        return this._componentsLoaded
+    get container() {
+        return this._container
+    }
+
+    set container( container ) {
+        this._container = container
+        return this
     }
 
     get path() {
@@ -101,9 +77,5 @@ export default class Kernel {
     set path( path ) {
         this._path = path
         return this
-    }
-
-    get componentsMapping() {
-        return this._componentsMapping
     }
 }

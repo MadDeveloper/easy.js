@@ -3,53 +3,94 @@ import path from 'path'
 
 export default class Container {
     contructor( kernel ) {
-        this._kernel = kernel
-        this._message = this.getComponent( 'Message' )
+        this._kernel    = kernel
+        this._message   = this.getComponent( 'Message' )
 
         /*
          * Dependencies shared
          */
-        this.shared = {}
+        this.componentsLoaded   = {}
+        this.shared             = {}
 
         this._servicesDirectoryExists = false
         this._checkExistanceOfServicesDirectory = true
-        this._servicesDirectoryPath = __dirname + '/../../../src/services'
+        this._servicesDirectoryPath = this._kernel.path.services
+        this._componentsMapping = {
+            'bundlemanager': './BundleManager',
+            'controller': './Controller',
+            'logger': './Logger',
+            'message': './Message',
+            'polyfills': './Polyfills',
+            'connector': './../database/Connector',
+            'http': './../http/Http',
+            'request': './../http/Request',
+            'response': './../http/Response'
+        }
     }
 
-    isComponentAlreadyLoaded( component ) {
-        return this.shared.hasOwnProperty( component )
+    /*
+     * Components
+     */
+
+    loadComponent( name ) {
+        if ( "undefined" === typeof this.componentsLoaded[ name ] ) {
+            if ( this.componentsMapping.hasOwnProperty( name ) ) {
+                const path = this.componentsMapping[ name ]
+
+                if ( fs.statSync( path ).isFile() ) {
+                    this.componentsLoaded[ name ] = new ( require( path ) )( this )
+                }
+            }
+        }
     }
 
-    getComponent( component, params ) {
-        if ( !this.isComponentAlreadyLoaded( component ) ) {
-            /*
-             * Special treatment for specifics dependencies
-             */
-            switch ( component.toLowerCase() ) {
-                case 'http':
-                    params = this
-                    break
-                case 'request':
-                    params = this.kernel.appName
-                    break
-                case 'logger':
-                    params = this
-                    break
-                case 'controller':
-                    params = this
-                    break
-                default:
+    loadComponents() {
+        for ( let componentName in this.componentsMapping ) {
+            if ( this.componentsMapping.hasOwnProperty( componentName ) ) {
+                this.loadComponent( componentName )
+            }
+        }
+    }
 
-                    break
+    getComponent( name ) {
+        name = name.toLowerCase()
+
+        if ( this.isComponentMapped( name ) ) {
+            if ( !this.isComponentLoaded( name ) ) {
+                this.loadComponent( name )
             }
 
-            this.shared[ component ] = new ( this.kernel.load( component ) )( params )
+            return this.componentsLoaded[ name ]
+        } else {
+            return undefined
         }
-
-        return this.shared[ component ]
     }
 
-    getService( service, clearCache ) {
+    isComponentLoaded( name ) {
+        return this.componentsLoaded.hasOwnProperty( name  )
+    }
+
+    isComponentMapped( name ) {
+        return this.componentsMapping.hasOwnProperty( name )
+    }
+
+    /*
+     * Services
+     */
+
+    isServicesLoaded( name ) {
+        return this.shared.hasOwnProperty( name )
+    }
+
+    storeService( name, params, path ) {
+        this.shared[ name ] = new ( require( path ) )( this, params )
+    }
+
+    resetService( name ) {
+        delete this.shared[ name ]
+    }
+
+    getService( service, params, clearCache ) {
         if ( false !== this.checkExistanceOfServicesDirectory && false === this.servicesDirectoryExists ) {
             const statsServiceDirectory = fs.lstatSync( this.servicesDirectoryPath )
 
@@ -65,11 +106,11 @@ export default class Container {
             }
         }
 
-        const serviceInfo             = service.split( '/' )
-        const serviceName             = serviceInfo[ 0 ]
-        const serviceComponent        = serviceInfo[ 1 ]
-        const serviceNameDirectory    = this.servicesDirectoryPath + '/' + serviceName
-        const serviceComponentFile    = serviceNameDirectory + '/' + serviceComponent + '.js'
+        const serviceInfo           = service.split( '/' )
+        const serviceName           = serviceInfo[ 0 ]
+        const serviceComponent      = serviceInfo[ 1 ]
+        const serviceNameDirectory  = this.servicesDirectoryPath + '/' + serviceName
+        const serviceComponentFile  = serviceNameDirectory + '/' + serviceComponent + '.js'
 
         try {
             const statsServiceNameDirectory = fs.lstatSync( serviceNameDirectory )
@@ -79,14 +120,15 @@ export default class Container {
                 try {
                     const statsServiceComponentDirectory = fs.lstatSync( serviceComponentFile )
 
-
                     if ( statsServiceComponentDirectory.isFile() ) {
 
                         if ( clearCache ) {
-        				   	delete require.cache[ require.resolve( serviceComponentFile ) ]
+                            this.resetService( service )
                         }
 
-                        return require( serviceComponentFile )
+                        this.storeService( service, params, serviceComponentFile )
+
+                        return this.shared[ service ]
 
                     } else {
                         throw new Error()
@@ -150,5 +192,13 @@ export default class Container {
     set servicesDirectoryPath( path ) {
         this._servicesDirectoryPath = path
         return this
+    }
+
+    get componentsLoaded() {
+        return this._componentsLoaded
+    }
+
+    get componentsMapping() {
+        return this._componentsMapping
     }
 }

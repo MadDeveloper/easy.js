@@ -2,12 +2,14 @@ import fs   from 'fs'
 import path from 'path'
 
 export default class Connector {
-    constructor( kernel ) {
-        this._kernel            = kernel
+    constructor( container ) {
+        this._container         = container
+        this._kernel            = this._container.kernel
+        this._message           = this._container.getComponent( 'Message' )
+
         this._defaultConnector  = 'bookshelf'
         this._databasePath      = __dirname + '/../../../config/database/database'
-        this._message           = new ( kernel.load( 'Message' ) )()
-        this.connection         = null
+        this._connection         = null
     }
 
     connect( connector ) {
@@ -23,6 +25,10 @@ export default class Connector {
     /*
      * Getters and setters
      */
+    get container() {
+        return this._container
+    }
+    
     get connection() {
         return this._connection
     }

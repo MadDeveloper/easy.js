@@ -19,7 +19,7 @@ export default class Logger {
     constructor( container ) {
         this._container = container
         this._message   = this._container.getComponent( 'Message' )
-        this._strtr     = this._container.getService( 'string.strtr' )
+        this._strtr     = this._container.getService( 'string/strtr' )
     }
 
     /**
