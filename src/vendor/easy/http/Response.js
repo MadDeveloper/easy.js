@@ -2,7 +2,7 @@ import Http from './Http'
 
 export default class Response extends Http {
     constructor( container ) {
-        super.constructor( container )
+        super( container )
 
         this._scope     = null
         this._logger    = this._container.getComponent( 'Logger' )

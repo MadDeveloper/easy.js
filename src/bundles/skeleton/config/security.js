@@ -1,4 +1,4 @@
-export default function security( skeletonFactory, params ) {
+export default function security( skeletonFactory ) {
     /*
      * Dependencies
      */

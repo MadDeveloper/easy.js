@@ -3,7 +3,7 @@ import Controller from './../../../vendor/easy/core/Controller'
 
 export default class RoutingController extends Controller {
     constructor( skeletonFactory ) {
-        super.constructor( skeletonFactory.container )
+        super( skeletonFactory.container )
 
         this._skeletonFactory       = skeletonFactory
         this._skeletonRepository    = this._skeletonFactory.getRepository()
@@ -80,12 +80,12 @@ export default class RoutingController extends Controller {
     }
 
     patchSkeleton() {
-        if ( this.isPatchRequestWellParameterized( this.request ) ) {
+        if ( this.isPatchRequestWellParameterized() ) {
             let patchRequestCorrectlyFormed = false
 
             let patchSkeleton = new Promise( ( resolve, reject ) => {
                 const validPaths = [ '/property' ]
-                const ops = this.parsePatchParams( this.request.getScope() )
+                const ops = this.parsePatchParams()
 
                 if ( ops ) {
                     patchRequestCorrectlyFormed = true

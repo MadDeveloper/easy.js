@@ -1,4 +1,4 @@
-export default function authorized( http, request, jwt, secret, router ) {
+export default function authorized( response, request, jwt, secret, router ) {
     /*
      * Define authorization control middleware
      */
@@ -16,7 +16,7 @@ export default function authorized( http, request, jwt, secret, router ) {
                     if ( 'development' == process.env.NODE_ENV ) {
                         next()
                     } else {
-                        http.unauthorized()
+                        response.unauthorized()
                     }
                 }
             })
@@ -26,7 +26,7 @@ export default function authorized( http, request, jwt, secret, router ) {
             if ( 'development' == process.env.NODE_ENV ) {
                 next()
             } else {
-                http.unauthorized()
+                response.unauthorized()
             }
         }
     })

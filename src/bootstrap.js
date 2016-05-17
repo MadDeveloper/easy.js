@@ -52,13 +52,13 @@ export default class Application {
         /*
          * Define database connector (default: ~/config/database/orm)
          */
-        database.connect()
+        const databaseConnection = database.connect()
 
         /*
          * Define bundle easy vendor
          */
         const bundleManager     = container.getComponent( 'BundleManager' )( container )
-        bundleManager.database  = database
+        bundleManager.database  = databaseConnection
         bundleManager.router    = express.Router()
 
         /*

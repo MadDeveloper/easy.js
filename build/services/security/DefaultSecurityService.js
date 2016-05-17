@@ -6,9 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Controller2 = require('./../../../vendor/easy/core/Controller');
+var _lodash = require('lodash');
 
-var _Controller3 = _interopRequireDefault(_Controller2);
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _Service2 = require('./../../vendor/easy/core/Service');
+
+var _Service3 = _interopRequireDefault(_Service2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18,40 +22,28 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var MiddlewaresController = function (_Controller) {
-    _inherits(MiddlewaresController, _Controller);
+var DefaultSecurityService = function (_Service) {
+    _inherits(DefaultSecurityService, _Service);
 
-    function MiddlewaresController(skeletonFactory) {
-        _classCallCheck(this, MiddlewaresController);
+    function DefaultSecurityService(container) {
+        _classCallCheck(this, DefaultSecurityService);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(MiddlewaresController).call(this, skeletonFactory.container));
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(DefaultSecurityService).call(this, container));
     }
 
-    _createClass(MiddlewaresController, [{
-        key: 'skeletonExists',
-        value: function skeletonExists() {
-            var _this2 = this;
-
-            return new Promise(function (resolve, reject) {
-                var requireOptions = {
-                    requireBy: _this2.request.getRouteParameter('id'),
-                    options: {}
-                };
-
-                _this2.controller.doesRequiredElementExists('Skeleton', requireOptions, _this2.bundleManager, function (skeleton) {
-                    _this2.request.define('skeleton', skeleton);
-                    resolve();
-                });
+    _createClass(DefaultSecurityService, [{
+        key: 'load',
+        value: function load() {
+            /*
+             * Add your defaults policies security
+             */
+            this.router.use(function (req, res, next) {
+                next();
             });
         }
-
-        /*
-         * Getters and setters
-         */
-
     }]);
 
-    return MiddlewaresController;
-}(_Controller3.default);
+    return DefaultSecurityService;
+}(_Service3.default);
 
-exports.default = MiddlewaresController;
+exports.default = DefaultSecurityService;

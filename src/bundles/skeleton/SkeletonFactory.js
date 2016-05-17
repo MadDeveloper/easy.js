@@ -1,9 +1,10 @@
 export default class SkeletonFactory {
-    constructor( bundleManager, params ) {
-        this._bundleManager = bundleManager
-        this._container     = this._bundleManager.container
-        this._params        = params
+    constructor( bundleManager ) {
         this._currentBundle = 'Skeleton'
+        this._bundleManager = bundleManager
+
+        /* alias */
+        this._container     = this._bundleManager.container
         this._database      = this._bundleManager.database
     }
 
@@ -45,16 +46,8 @@ export default class SkeletonFactory {
         return new ( require( __dirname + '/../controllers/' + controller + 'Controller' ) )( this )
     }
 
-    getConfig( config, params ) {
-        return require( __dirname + '/../config/' + config )( this, params )
-    }
-
-    getBundleManager() {
-        return BundleManager
-    }
-
-    getRootController() {
-        return this.bundleManager.container.getComponent( 'Controller' )
+    getConfig( config ) {
+        return require( __dirname + '/../config/' + config )( this )
     }
 
     /*
@@ -62,15 +55,6 @@ export default class SkeletonFactory {
      */
     get bundleManager() {
         return this._bundleManager
-    }
-
-    get params() {
-        return this._params
-    }
-
-    set params( params ) {
-        this._params = params
-        return this
     }
 
     get currentBundle() {

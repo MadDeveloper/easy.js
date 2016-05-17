@@ -1,4 +1,4 @@
-export default function routing( skeletonFactory, params ) {
+export default function routing( skeletonFactory ) {
     /*
      * Dependencies
      */

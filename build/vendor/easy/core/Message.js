@@ -15,9 +15,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Message = function () {
-    function Message() {
+    function Message(container) {
         _classCallCheck(this, Message);
 
+        this._container = container;
         this._leftSpaces = '  ';
     }
 
@@ -76,6 +77,11 @@ var Message = function () {
         set: function set(leftSpaces) {
             this._leftSpaces = leftSpaces;
             return this;
+        }
+    }, {
+        key: 'container',
+        get: function get() {
+            return this._container;
         }
     }]);
 

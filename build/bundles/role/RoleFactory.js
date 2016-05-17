@@ -1,66 +1,109 @@
 'use strict';
 
-function RoleFactory(BundleManager, params) {
-    return {
-        currentBundle: 'Role',
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-        getRepository: function getRepository(repository) {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var RoleFactory = function () {
+    function RoleFactory(bundleManager, params) {
+        _classCallCheck(this, RoleFactory);
+
+        this._bundleManager = bundleManager;
+        this._params = params;
+        this._currentBundle = 'Role';
+        this._database = this._bundleManager.database;
+    }
+
+    _createClass(RoleFactory, [{
+        key: 'getRepository',
+        value: function getRepository(repository) {
             if (!repository) {
                 repository = this.currentBundle;
             }
 
-            return require(__dirname + '/../Entity/' + repository + 'Repository')(this);
-        },
-
-        getForgedEntity: function getForgedEntity(paramsForForging) {
+            return require(__dirname + '/../entity/' + repository + 'Repository')(this);
+        }
+    }, {
+        key: 'getForgedEntity',
+        value: function getForgedEntity(paramsForForging) {
             return this.getModel()(paramsForForging);
-        },
-
-        getModel: function getModel(model) {
+        }
+    }, {
+        key: 'getModel',
+        value: function getModel(model) {
             if (!model) {
                 model = this.currentBundle;
             }
 
-            return require(__dirname + '/../Entity/' + model)(this);
-        },
-
-        getNewModel: function getNewModel() {
+            return new (require(__dirname + '/../entity/' + model))(this);
+        }
+    }, {
+        key: 'getNewModel',
+        value: function getNewModel() {
             return new (this.getModel())();
-        },
-
-        getCollection: function getCollection(fromModel) {
-            return this.getDatabase().Collection.extend({
+        }
+    }, {
+        key: 'getCollection',
+        value: function getCollection(fromModel) {
+            return this.database.Collection.extend({
                 model: this.getModel(fromModel)
             });
-        },
-
-        getController: function getController(controller) {
+        }
+    }, {
+        key: 'getController',
+        value: function getController(controller) {
             if (typeof controller === "undefined") {
                 controller = 'Routing';
             }
 
-            return new (require(__dirname + '/../Controllers/' + controller + 'Controller'))(this);
-        },
-
-        getConfig: function getConfig(config, params) {
-            return require(__dirname + '/../config/' + config)(this.getBundleManager(), params);
-        },
-
-        getBundleManager: function getBundleManager() {
-            return BundleManager;
-        },
+            return new (require(__dirname + '/../controllers/' + controller + 'Controller'))(this);
+        }
+    }, {
+        key: 'getConfig',
+        value: function getConfig(config, params) {
+            return require(__dirname + '/../config/' + config)(this, params);
+        }
+    }, {
+        key: 'getRootController',
+        value: function getRootController() {
+            return this.bundleManager.container.getComponent('Controller');
+        }
 
         /*
-         * Aliases
+         * Getters and setters
          */
-        getDatabase: function getDatabase() {
-            return BundleManager.getDatabase();
-        },
 
-        getRootController: function getRootController() {
-            return this.getBundleManager().getContainer().getComponent('Controller');
+    }, {
+        key: 'bundleManager',
+        get: function get() {
+            return this._bundleManager;
         }
-    };
-}
+    }, {
+        key: 'params',
+        get: function get() {
+            return this._params;
+        },
+        set: function set(params) {
+            this._params = params;
+            return this;
+        }
+    }, {
+        key: 'currentBundle',
+        get: function get() {
+            return this._currentBundle;
+        }
+    }, {
+        key: 'database',
+        get: function get() {
+            return this._database;
+        }
+    }]);
 
-module.exports = RoleFactory;
+    return RoleFactory;
+}();
+
+exports.default = RoleFactory;

@@ -1,11 +1,10 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
 export default class SecurityController extends Controller {
-    constructor( skeletonFactory, container ) {
-        super.constructor( container )
+    constructor( skeletonFactory ) {
+        super( skeletonFactory.container )
 
-        this._skeletonFactory   = skeletonFactory
-        this._access            = this._container.getService( 'security/access', {} )
+        this._access = this._container.getService( 'security.access' )
     }
 
     authorize() {
@@ -36,10 +35,6 @@ export default class SecurityController extends Controller {
     /*
      * Getters and setters
      */
-    get skeletonFactory() {
-        return this._skeletonFactory
-    }
-
     get access() {
         return this._access
     }

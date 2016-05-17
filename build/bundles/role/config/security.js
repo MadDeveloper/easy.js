@@ -1,24 +1,23 @@
 'use strict';
 
-var security = function security(BundleManager, params) {
-  /*
-   * Global dependencies
-   */
-  var router = BundleManager.router;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = security;
+function security(roleFactory, params) {
+    /*
+     * Dependencies
+     */
+    var roleSecurityController = roleFactory.getController('Security');
+    var bundleManager = roleFactory.bundleManager;
+    var router = bundleManager.router;
 
-  /*
-   * Role bundle dependencies
-   */
-  var RoleSecurityController = BundleManager.getFactory('Role').getController('Security');
-
-  /*
-   * Security middlewares
-   */
-  router.use('/roles', function (req, res, next) {
-    RoleSecurityController.authorize().then(function () {
-      next();
+    /*
+     * Security middlewares
+     */
+    router.use('/roles', function (req, res, next) {
+        roleSecurityController.authorize().then(function () {
+            next();
+        });
     });
-  });
-};
-
-module.exports = security;
+}

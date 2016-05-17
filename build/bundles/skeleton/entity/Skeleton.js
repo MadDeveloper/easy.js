@@ -13,7 +13,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Skeleton = function Skeleton(skeletonFactory) {
     _classCallCheck(this, Skeleton);
 
-    var bundleManager = SkeletonFactory.bundleManager;
+    var bundleManager = skeletonFactory.bundleManager;
 
     return skeletonFactory.database.Model.extend({
         tableName: 'skeletons'

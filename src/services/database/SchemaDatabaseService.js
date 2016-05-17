@@ -1,37 +1,40 @@
 import _        from 'lodash'
-import Database from './../../config/database/database'
+import Service  from './../../vendor/easy/core/Service'
 
-const database  = Database( null, true )
-let clearCache  = true
+export default class SchemaDatabaseService extends Service {
+    constructor( container ) {
+        super( container )
+    }
 
-export default {
+    load() {}
+
     createSchema( schemaName ) {
-        return database.raw( 'CREATE DATABASE ' + schemaName + '' )
-    },
+        return this.database.raw( 'CREATE DATABASE ' + schemaName + '' )
+    }
 
     schemaExists( schemaName ) {
         try {
-            return database.schema.withSchema( schemaName )
+            return this.database.schema.withSchema( schemaName )
         } catch( error ) {
             return false
         }
-    },
+    }
 
     dropTable( tableName ) {
-        return database.schema.dropTableIfExists( tableName )
-    },
+        return this.database.schema.dropTableIfExists( tableName )
+    }
 
     tableExists( tableName ) {
-        return database.schema.hasTable( tableName )
-    },
+        return this.database.schema.hasTable( tableName )
+    }
 
     truncateTable( tableName ) {
-        return database.raw( 'truncate table ' + tableName )
-    },
+        return this.database.raw( 'truncate table ' + tableName )
+    }
 
     clearTable( tableName ) {
-        return database( tableName ).del()
-    },
+        return this.database( tableName ).del()
+    }
 
     createTable( tableName, tableSchema ) {
         return database.schema.createTable( tableName, table => {

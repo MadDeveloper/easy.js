@@ -3,9 +3,9 @@ import Container    from './Container'
 
 export default class Kernel {
     constructor() {
-        this._appName           = ''
-        this._container         = null
-        this._path = {
+        this._appName   = ''
+        this._container = null
+        this._path      = {
             root: '',
             bundles: '',
             services: '',

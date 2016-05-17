@@ -15,7 +15,7 @@ export default function routing( bundleManager ) {
          * Security
          */
         require( __dirname + '/security/authentication' )( bundleManager )
-        bundleManager.container.getService( 'security/default' )( bundleManager )
+        bundleManager.container.getService( 'security.default' )
 
     /*
     * bundles routes definitions
@@ -27,7 +27,7 @@ export default function routing( bundleManager ) {
      */
     bundleManager.router.use(( req, res ) => {
         if ( !res.headersSent ) { // if you want strict mode, comment this condition
-             bundleManager.container.getComponent( 'Http' ).notFound()
+            bundleManager.container.getComponent( 'Response' ).notFound()
         }
     })
 }

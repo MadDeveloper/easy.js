@@ -15,14 +15,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var BundleManager = function () {
-    function BundleManager(components) {
+    function BundleManager(container) {
         _classCallCheck(this, BundleManager);
 
-        this._kernel = components.kernel;
-        this._database = components.database;
-        this._router = components.router;
+        this._container = container;
+        this._kernel = this._container.kernel;
+        this._database = null;
+        this._router = null;
         this._bundlesDefinition = [];
-        this._container = null;
     }
 
     _createClass(BundleManager, [{
@@ -38,11 +38,11 @@ var BundleManager = function () {
         }
     }, {
         key: 'getFactory',
-        value: function getFactory(bundle, params) {
-            var factoryPath = this.getBundlesDirectory() + '/' + bundle.toLowerCase() + '/' + bundle.capitalizeFirstLetter() + 'Factory.js';
+        value: function getFactory(bundle) {
+            var factoryPath = this.getBundlesDirectory() + '/' + bundle + '/' + bundle.capitalizeFirstLetter() + 'Factory.js';
 
             if (_fs2.default.statSync(factoryPath).isFile()) {
-                return new (require(factoryPath))(this, params);
+                return new (require(factoryPath))(this);
             }
         }
     }, {
@@ -51,7 +51,7 @@ var BundleManager = function () {
             var routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js';
 
             if (_fs2.default.statSync(routingPath).isFile()) {
-                return require(routingPath)(this.getFactory(bundle), params);
+                return require(routingPath)(this.getFactory(bundle));
             }
         }
     }, {
@@ -66,20 +66,6 @@ var BundleManager = function () {
                     require(routingPath)(this.getFactory(bundle), params);
                 }
             }
-        }
-    }, {
-        key: 'getContainer',
-        value: function getContainer() {
-            if (null === this.container) {
-                this.container = new (this.kernel.getContainer())(this.kernel);
-            }
-
-            return this.container;
-        }
-    }, {
-        key: 'getDatabase',
-        value: function getDatabase() {
-            return this.database.connection;
         }
     }, {
         key: 'getBundlesDirectory',
@@ -108,7 +94,6 @@ var BundleManager = function () {
         },
         set: function set(router) {
             this._router = router;
-            return this;
         }
     }, {
         key: 'database',
@@ -117,7 +102,6 @@ var BundleManager = function () {
         },
         set: function set(database) {
             this._database = database;
-            return this;
         }
     }, {
         key: 'bundlesDefinition',

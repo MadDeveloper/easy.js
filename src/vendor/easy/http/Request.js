@@ -2,7 +2,7 @@ import Http from './Http'
 
 export default class Request extends http {
     constructor( container ) {
-        super.constructor( container )
+        super( container )
 
         this._appName   = this._container.kernel.appName
         this._scope     = null

@@ -29,7 +29,7 @@ function authentication(bundleManager) {
      * Provide Http helpers
      */
     var request = bundleManager.container.getComponent('Request');
-    var http = bundleManager.container.getComponent('Http');
+    var response = bundleManager.container.getComponent('Response');
 
     /*
      * User classes
@@ -46,7 +46,7 @@ function authentication(bundleManager) {
      * Defining routes with authorization required
      */
     router.route('/authentication').post(function (req, res) {
-        var requestValidity = controller.verifyParams([{ property: 'email', typeExpected: 'string' }, { property: 'password', typeExpected: 'string' }], req.body);
+        var requestValidity = controller.verifyParams([{ property: 'email', typeExpected: 'string' }, { property: 'password', typeExpected: 'string' }], request.getBody());
 
         if (requestValidity) {
             userRepository.read({ email: request.getBodyParameter('email') }).then(function (user) {
@@ -55,23 +55,23 @@ function authentication(bundleManager) {
                     if (request.getBodyParameter('password') == user.get('password')) {
 
                         var token = _jsonwebtoken2.default.sign(user.toJSON(), _config2.default.jwt.secret, { expiresIn: 86400 /* 24 hours */ });
-                        http.ok({ token: token });
+                        response.ok({ token: token });
                     } else {
-                        http.unauthorized();
+                        response.unauthorized();
                     }
                 } else {
-                    http.notFound();
+                    response.notFound();
                 }
             }).catch(function (error) {
-                http.internalServerError(error);
+                response.internalServerError(error);
             });
         } else {
-            http.badRequest();
+            response.badRequest();
         }
     });
 
     /*
      * Check token validity
      */
-    (0, _authorized2.default)(http, request, _jsonwebtoken2.default, _config2.default.jwt.secret, router);
+    (0, _authorized2.default)(response, request, _jsonwebtoken2.default, _config2.default.jwt.secret, router);
 }

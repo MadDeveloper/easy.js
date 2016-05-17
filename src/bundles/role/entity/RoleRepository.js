@@ -1,4 +1,4 @@
-export default class RoleRepository( RoleFactory ) {
+export default class RoleRepository {
     constructor( roleFactory ) {
         this._roleFactory = roleFactory
     }

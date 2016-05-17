@@ -1,24 +1,23 @@
 'use strict';
 
-var middlewares = function middlewares(BundleManager, params) {
-  /*
-   * Global dependencies
-   */
-  var router = BundleManager.router;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = middlewares;
+function middlewares(roleFactory, params) {
+    /*
+     * Dependencies
+     */
+    var roleMiddlewaresController = roleFactory.getController('Middlewares');
+    var bundleManager = roleFactory.bundleManager;
+    var router = bundleManager.router;
 
-  /*
-   * Role bundle dependencies
-   */
-  var RoleMiddlewaresController = BundleManager.getFactory('Role').getController('Middlewares');
-
-  /*
-   * Middlewares
-   */
-  router.use('/roles/:id', function (req, res, next) {
-    RoleMiddlewaresController.roleExists().then(function () {
-      next();
+    /*
+     * Middlewares
+     */
+    router.use('/roles/:id', function (req, res, next) {
+        roleMiddlewaresController.roleExists().then(function () {
+            next();
+        });
     });
-  });
-};
-
-module.exports = middlewares;
+}

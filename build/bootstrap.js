@@ -96,24 +96,26 @@ function Application(config, cliMode) {
    * Easy.js dependencies
    */
   var kernel = new _Kernel2.default().init(__dirname, config);
-  var container = new (kernel.load('Container'))(kernel);
+  var container = kernel.container;
   var message = container.getComponent('Message');
-  var database = container.getComponent('database/Connector');
+  var database = container.getComponent('Connector');
 
   /*
    * Define database connector (default: ~/config/database/orm)
    */
-  database.connect();
+  var databaseConnection = database.connect();
 
   /*
    * Define bundle easy vendor
    */
-  var bundleManager = container.getComponent('BundleManager')({ kernel: kernel, database: database, router: _express2.default.Router() });
+  var bundleManager = container.getComponent('BundleManager')(container);
+  bundleManager.database = databaseConnection;
+  bundleManager.router = _express2.default.Router();
 
   /*
    * Defines Polyfills
    */
-  kernel.load('polyfills');
+  var polyfills = container.getComponent('Polyfills');
 
   if (!cliMode) {
     var _ret = function () {

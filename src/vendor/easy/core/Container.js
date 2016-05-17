@@ -1,5 +1,6 @@
-import fs from 'fs'
-import path from 'path'
+import fs               from 'fs'
+import path             from 'path'
+import servicesMapping  from './../../../config/services/config'
 
 export default class Container {
     contructor( kernel ) {
@@ -12,9 +13,10 @@ export default class Container {
         this.componentsLoaded   = {}
         this.shared             = {}
 
-        this._servicesDirectoryExists = false
+        this._servicesDirectoryExists           = false
         this._checkExistanceOfServicesDirectory = true
-        this._servicesDirectoryPath = this._kernel.path.services
+        this._servicesDirectoryPath             = this._kernel.path.services
+
         this._componentsMapping = {
             'bundlemanager': './BundleManager',
             'controller': './Controller',
@@ -26,6 +28,8 @@ export default class Container {
             'request': './../http/Request',
             'response': './../http/Response'
         }
+
+        this._servicesMapping = servicesMapping
     }
 
     /*
@@ -78,19 +82,56 @@ export default class Container {
      * Services
      */
 
+    isServiceMapped( name ) {
+        return this.servicesMapping.hasOwnProperty( name )
+    }
+
     isServicesLoaded( name ) {
         return this.shared.hasOwnProperty( name )
     }
 
-    storeService( name, params, path ) {
-        this.shared[ name ] = new ( require( path ) )( this, params )
+    storeService( name, path ) {
+        this.shared[ name ] = new ( require( path ) )( this )
     }
 
     resetService( name ) {
         delete this.shared[ name ]
     }
 
-    getService( service, params, clearCache ) {
+    getService( name, clearCache ) {
+        this.servicesCheckDirectory()
+
+        if ( this.isServiceMapped( name ) ) {
+
+            const serviceFile = this.servicesDirectoryPath + '/' + this.servicesMapping[ name ]
+
+            try {
+                const statsServiceFile = fs.lstatSync( serviceFile )
+
+                if ( statsServiceNameDirectory.isFile() ) {
+
+                    this.storeService( name, serviceFile )
+
+                    return this.shared[ service ]
+
+                } else {
+                    throw new Error()
+                }
+            } catch ( error ) {
+                this.message.error({
+                    title: "Impossible to call service",
+                    message: "Service " + name + " not found, path: " + path.resolve( serviceFile ) + "\n" + error,
+                    type: 'error',
+                    exit: 0
+                })
+            }
+
+        } else {
+            return undefined
+        }
+    }
+
+    servicesCheckDirectory() {
         if ( false !== this.checkExistanceOfServicesDirectory && false === this.servicesDirectoryExists ) {
             const statsServiceDirectory = fs.lstatSync( this.servicesDirectoryPath )
 
@@ -99,60 +140,14 @@ export default class Container {
             } else {
                 this.message.error({
                     title: "Service directory not found",
-                    message: "Service directory, path: " + this.servicesDirectoryPath + " not found.",
+                    message: "Service directory path resolved: " + this.servicesDirectoryPath,
                     type: 'error',
                     exit: 0
                 })
             }
         }
 
-        const serviceInfo           = service.split( '/' )
-        const serviceName           = serviceInfo[ 0 ]
-        const serviceComponent      = serviceInfo[ 1 ]
-        const serviceNameDirectory  = this.servicesDirectoryPath + '/' + serviceName
-        const serviceComponentFile  = serviceNameDirectory + '/' + serviceComponent + '.js'
-
-        try {
-            const statsServiceNameDirectory = fs.lstatSync( serviceNameDirectory )
-
-            if ( statsServiceNameDirectory.isDirectory() ) {
-
-                try {
-                    const statsServiceComponentDirectory = fs.lstatSync( serviceComponentFile )
-
-                    if ( statsServiceComponentDirectory.isFile() ) {
-
-                        if ( clearCache ) {
-                            this.resetService( service )
-                        }
-
-                        this.storeService( service, params, serviceComponentFile )
-
-                        return this.shared[ service ]
-
-                    } else {
-                        throw new Error()
-                    }
-                } catch ( error ) {
-                    this.message.error({
-                        title: "Impossible to call service",
-                        message: error,
-                        type: 'error',
-                        exit: 0
-                    })
-                }
-
-            } else {
-                throw new Error()
-            }
-        } catch ( error ) {
-            this.message.error({
-                title: "Impossible to call service",
-                message: "Service name " + serviceName + " not found, path: " + path.resolve( serviceNameDirectory ) + "\n" + error,
-                type: 'error',
-                exit: 0
-            })
-        }
+        return true
     }
 
     /*
@@ -200,5 +195,9 @@ export default class Container {
 
     get componentsMapping() {
         return this._componentsMapping
+    }
+
+    get servicesMapping() {
+        return this._servicesMapping
     }
 }

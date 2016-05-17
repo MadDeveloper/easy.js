@@ -39,7 +39,7 @@ var UserFactory = function () {
                 model = this.currentBundle;
             }
 
-            return require(__dirname + '/../entity/' + model)(this);
+            return new (require(__dirname + '/../entity/' + model))(this);
         }
     }, {
         key: 'getNewModel',

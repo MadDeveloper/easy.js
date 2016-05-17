@@ -2,7 +2,7 @@ import Controller from './../../../vendor/easy/core/Controller'
 
 export default class MiddlewaresController extends Controller {
     constructor( skeletonFactory ) {
-        this._skeletonFactory   = skeletonFactory
+        super( skeletonFactory.container )
     }
 
     skeletonExists() {
@@ -22,7 +22,4 @@ export default class MiddlewaresController extends Controller {
     /*
      * Getters and setters
      */
-    get skeletonFactory() {
-        return this._skeletonFactory
-    }
 }

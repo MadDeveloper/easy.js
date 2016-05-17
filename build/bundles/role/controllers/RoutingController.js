@@ -1,93 +1,113 @@
 'use strict';
 
-function RoutingController(RoleFactory) {
-    /*
-     * Global dependencies
-     */
-    var BundleManager = RoleFactory.getBundleManager();
-    var router = BundleManager.router;
-    var database = BundleManager.getDatabase();
-    var Container = BundleManager.getContainer();
-    var http = Container.getComponent('Http');
-    var Controller = Container.getComponent('Controller');
-    var Request = Container.getComponent('Request');
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-    /*
-     * Role bundle dependencies
-     */
-    var RoleRepository = RoleFactory.getRepository();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-    return {
-        isRequestWellParameterized: function isRequestWellParameterized() {
-            var Controller = RoleFactory.getRootController();
-            return Controller.verifyParams([{ property: 'name', typeExpected: 'string' }, { property: 'slug', typeExpected: 'string' }], Request.getBody());
-        },
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-        getRoles: function getRoles() {
-            RoleRepository.readAll().then(function (roles) {
+var RoutingController = function () {
+    function RoutingController(roleFactory) {
+        _classCallCheck(this, RoutingController);
 
-                http.ok(roles.toJSON());
+        this._roleFactory = roleFactory;
+        this._bundleManager = this._roleFactory.bundleManager;
+        this._router = this._bundleManager.router;
+        this._database = this._bundleManager.database;
+        this._container = this._bundleManager.container;
+        this._http = this._container.getComponent('Http');
+        this._controller = this._container.getComponent('Controller');
+        this._request = this._container.getComponent('Request');
+        this._roleRepository = this._roleFactory.getRepository();
+    }
+
+    _createClass(RoutingController, [{
+        key: 'isRequestWellParameterized',
+        value: function isRequestWellParameterized() {
+            return this.controller.verifyParams([{ property: 'name', typeExpected: 'string' }, { property: 'slug', typeExpected: 'string' }], this.request.getBody());
+        }
+    }, {
+        key: 'getRoles',
+        value: function getRoles() {
+            var _this = this;
+
+            this.roleRepository.readAll().then(function (roles) {
+
+                _this.http.ok(roles.toJSON());
             }).catch(function (error) {
-                http.internalServerError(error);
+                _this.http.internalServerError(error);
             });
-        },
+        }
+    }, {
+        key: 'createRole',
+        value: function createRole() {
+            var _this2 = this;
 
-        createRole: function createRole() {
             if (this.isRequestWellParameterized()) {
 
-                database.transaction(function (t) {
+                this.database.transaction(function (t) {
 
-                    RoleRepository.save(RoleFactory.getNewModel(), Request.getBody(), { transacting: t }).then(function (role) {
+                    _this2.roleRepository.save(_this2.roleFactory.getNewModel(), _this2.request.getBody(), { transacting: t }).then(function (role) {
 
                         t.commit();
-                        http.created(role.toJSON());
+                        _this2.http.created(role.toJSON());
                     }).catch(function (error) {
                         t.rollback();
-                        http.internalServerError(error);
+                        _this2.http.internalServerError(error);
                     });
                 });
             } else {
-                http.badRequest();
+                this.http.badRequest();
             }
-        },
-
-        getRole: function getRole() {
-            http.ok(Request.find('role').toJSON());
-        },
-
-        updateRole: function updateRole() {
+        }
+    }, {
+        key: 'getRole',
+        value: function getRole() {
+            this.http.ok(this.request.find('role').toJSON());
+        }
+    }, {
+        key: 'updateRole',
+        value: function updateRole() {
             if (this.isRequestWellParameterized()) {
 
-                database.transaction(function (t) {
+                this.database.transaction(function (t) {
+                    var _this3 = this;
 
-                    RoleRepository.save(Request.find('role'), Request.getBody(), { transacting: t }).then(function (role) {
+                    this.roleRepository.save(this.request.find('role'), this.request.getBody(), { transacting: t }).then(function (role) {
 
                         t.commit();
-                        http.ok(role.toJSON());
+                        _this3.http.ok(role.toJSON());
                     }).catch(function (error) {
                         t.rollback();
-                        http.internalServerError(error);
+                        _this3.http.internalServerError(error);
                     });
                 });
             } else {
-                http.badRequest();
+                this.http.badRequest();
             }
-        },
+        }
+    }, {
+        key: 'deleteRole',
+        value: function deleteRole() {
+            var _this4 = this;
 
-        deleteRole: function deleteRole() {
-            database.transaction(function (t) {
+            this.database.transaction(function (t) {
 
-                RoleRepository.delete(Request.find('role'), { transacting: t }).then(function () {
+                _this4.roleRepository.delete(_this4.request.find('role'), { transacting: t }).then(function () {
 
                     t.commit();
-                    http.noContent();
+                    _this4.http.noContent();
                 }).catch(function (error) {
                     t.rollback();
-                    http.internalServerError(error);
+                    _this4.http.internalServerError(error);
                 });
             });
         }
-    };
-}
+    }]);
 
-module.exports = RoutingController;
+    return RoutingController;
+}();
+
+exports.default = RoutingController;

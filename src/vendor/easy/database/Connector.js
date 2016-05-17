@@ -6,10 +6,9 @@ export default class Connector {
         this._container         = container
         this._kernel            = this._container.kernel
         this._message           = this._container.getComponent( 'Message' )
-
         this._defaultConnector  = 'bookshelf'
-        this._databasePath      = __dirname + '/../../../config/database/database'
-        this._connection         = null
+        this._databasePath      = this._kernel.path.config + '/database/database'
+        this._connection        = null
     }
 
     connect( connector ) {
@@ -28,7 +27,7 @@ export default class Connector {
     get container() {
         return this._container
     }
-    
+
     get connection() {
         return this._connection
     }

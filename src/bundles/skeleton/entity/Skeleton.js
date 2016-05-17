@@ -3,7 +3,7 @@
  */
 export default class Skeleton {
     constructor( skeletonFactory ) {
-        const bundleManager = SkeletonFactory.bundleManager
+        const bundleManager = skeletonFactory.bundleManager
 
         return skeletonFactory.database.Model.extend({
             tableName: 'skeletons'

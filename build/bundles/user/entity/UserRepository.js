@@ -19,6 +19,7 @@ var UserRepository = function () {
         key: 'readAll',
         value: function readAll(role) {
             var user = this.userFactory.getModel();
+
             return user.where({ role_id: role.get('id') }).fetchAll();
         }
     }, {

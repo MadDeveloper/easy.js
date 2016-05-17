@@ -9,12 +9,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var SkeletonFactory = function () {
-    function SkeletonFactory(bundleManager, params) {
+    function SkeletonFactory(bundleManager) {
         _classCallCheck(this, SkeletonFactory);
 
-        this._bundleManager = bundleManager;
-        this._params = params;
         this._currentBundle = 'Skeleton';
+        this._bundleManager = bundleManager;
+
+        /* alias */
+        this._container = this._bundleManager.container;
         this._database = this._bundleManager.database;
     }
 
@@ -39,7 +41,7 @@ var SkeletonFactory = function () {
                 model = this.currentBundle;
             }
 
-            return require(__dirname + '/../entity/' + model)(this);
+            return new (require(__dirname + '/../entity/' + model))(this);
         }
     }, {
         key: 'getNewModel',
@@ -64,18 +66,8 @@ var SkeletonFactory = function () {
         }
     }, {
         key: 'getConfig',
-        value: function getConfig(config, params) {
-            return require(__dirname + '/../config/' + config)(this, params);
-        }
-    }, {
-        key: 'getBundleManager',
-        value: function getBundleManager() {
-            return BundleManager;
-        }
-    }, {
-        key: 'getRootController',
-        value: function getRootController() {
-            return this.bundleManager.container.getComponent('Controller');
+        value: function getConfig(config) {
+            return require(__dirname + '/../config/' + config)(this);
         }
 
         /*
@@ -88,15 +80,6 @@ var SkeletonFactory = function () {
             return this._bundleManager;
         }
     }, {
-        key: 'params',
-        get: function get() {
-            return this._params;
-        },
-        set: function set(params) {
-            this._params = params;
-            return this;
-        }
-    }, {
         key: 'currentBundle',
         get: function get() {
             return this._currentBundle;
@@ -105,6 +88,11 @@ var SkeletonFactory = function () {
         key: 'database',
         get: function get() {
             return this._database;
+        }
+    }, {
+        key: 'container',
+        get: function get() {
+            return this._container;
         }
     }]);
 

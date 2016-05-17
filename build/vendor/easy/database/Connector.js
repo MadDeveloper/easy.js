@@ -19,14 +19,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Connector = function () {
-    function Connector(kernel) {
+    function Connector(container) {
         _classCallCheck(this, Connector);
 
-        this._kernel = kernel;
+        this._container = container;
+        this._kernel = this._container.kernel;
+        this._message = this._container.getComponent('Message');
         this._defaultConnector = 'bookshelf';
-        this._databasePath = __dirname + '/../../../config/database/database';
-        this._message = new (kernel.load('Message'))();
-        this.connection = null;
+        this._databasePath = this._kernel.path.config + '/database/database';
+        this._connection = null;
     }
 
     _createClass(Connector, [{
@@ -45,6 +46,11 @@ var Connector = function () {
          * Getters and setters
          */
 
+    }, {
+        key: 'container',
+        get: function get() {
+            return this._container;
+        }
     }, {
         key: 'connection',
         get: function get() {

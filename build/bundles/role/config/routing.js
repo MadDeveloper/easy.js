@@ -1,39 +1,37 @@
 'use strict';
 
-var routing = function routing(BundleManager, params) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = routing;
+function routing(roleFactory, params) {
   /*
-   * Global dependencies
+   * Dependencies
    */
-  var router = BundleManager.router;
-
-  /*
-   * Role bundle dependencies
-   */
-  var RoleFactory = BundleManager.getFactory('Role');
-  var RoleRoutingController = RoleFactory.getController('Routing');
+  var roleRoutingController = roleFactory.getController('Routing');
+  var bundleManager = roleFactory.bundleManager;
+  var router = bundleManager.router;
 
   /*
    * Middlewares
    */
-  RoleFactory.getConfig('security');
-  RoleFactory.getConfig('middlewares');
+  roleFactory.getConfig('security');
+  roleFactory.getConfig('middlewares');
 
   /*
    * Routes definitions
    */
   router.route('/roles').get(function () {
-    RoleRoutingController.getRoles();
+    roleRoutingController.getRoles();
   }).post(function () {
-    RoleRoutingController.createRole();
+    roleRoutingController.createRole();
   });
 
   router.route('/roles/:id').get(function () {
-    RoleRoutingController.getRole();
+    roleRoutingController.getRole();
   }).put(function () {
-    RoleRoutingController.updateRole();
+    roleRoutingController.updateRole();
   }).delete(function () {
-    RoleRoutingController.deleteRole();
+    roleRoutingController.deleteRole();
   });
-};
-
-module.exports = routing;
+}

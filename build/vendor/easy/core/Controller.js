@@ -15,7 +15,12 @@ var Controller = function () {
         _classCallCheck(this, Controller);
 
         this._container = container;
+        this._bundleManager = this._container.getComponent('BundleManager');
+        this._router = this._container.router;
+        this._database = this._container.database;
         this._http = this._container.getComponent('Http');
+        this._request = this._container.getComponent('Request');
+        this._response = this._container.getComponent('Response');
     }
 
     _createClass(Controller, [{
@@ -53,19 +58,19 @@ var Controller = function () {
         }
     }, {
         key: 'parsePatchParams',
-        value: function parsePatchParams(req) {
+        value: function parsePatchParams() {
             try {
-                return JSON.parse(req.rawBody);
+                return JSON.parse(this.request.scope.rawBody);
             } catch (error) {}
         }
     }, {
         key: 'isPatchRequestWellParameterized',
-        value: function isPatchRequestWellParameterized(req) {
-            return req.rawBody.length > 0;
+        value: function isPatchRequestWellParameterized() {
+            return this.request.scope.rawBody.length > 0;
         }
     }, {
         key: 'doesRequiredElementExists',
-        value: function doesRequiredElementExists(element, options, BundleManager, callback) {
+        value: function doesRequiredElementExists(element, options, callback) {
             var _this = this;
 
             var requireBy = null;
@@ -78,18 +83,18 @@ var Controller = function () {
                 requireBy = options;
             }
 
-            var ElementRepository = BundleManager.getFactory(element.capitalizeFirstLetter()).getRepository();
+            var elementRepository = this.bundleManager.getFactory(element.capitalizeFirstLetter()).getRepository();
 
-            ElementRepository.read(requireBy, optionsFetch).then(function (element) {
+            elementRepository.read(requireBy, optionsFetch).then(function (element) {
 
                 if (element) {
 
                     callback(element);
                 } else {
-                    _this.http.notFound();
+                    _this.response.notFound();
                 }
             }).catch(function (error) {
-                _this.http.internalServerError(error);
+                _this.response.internalServerError(error);
             });
         }
     }, {
@@ -113,9 +118,34 @@ var Controller = function () {
             return this._container;
         }
     }, {
+        key: 'bundleManager',
+        get: function get() {
+            return this._bundleManager;
+        }
+    }, {
+        key: 'router',
+        get: function get() {
+            return this._router;
+        }
+    }, {
+        key: 'database',
+        get: function get() {
+            return this._database;
+        }
+    }, {
         key: 'http',
         get: function get() {
             return this._http;
+        }
+    }, {
+        key: 'request',
+        get: function get() {
+            return this._request;
+        }
+    }, {
+        key: 'response',
+        get: function get() {
+            return this._response;
         }
     }]);
 

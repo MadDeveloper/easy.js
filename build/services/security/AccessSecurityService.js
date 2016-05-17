@@ -10,34 +10,48 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _Service2 = require('./../../vendor/easy/core/Service');
+
+var _Service3 = _interopRequireDefault(_Service2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /*
  * You can edit as you want following roles.
  * Becareful: You must start your roles' id at 3
  * Roles' id are mapped with ids into database
- * example:
- *
- * var roleModerator = 3
  */
 
-var Access = function () {
-    function Access() {
-        _classCallCheck(this, Access);
+var AccessSecurityService = function (_Service) {
+    _inherits(AccessSecurityService, _Service);
+
+    function AccessSecurityService(container) {
+        _classCallCheck(this, AccessSecurityService);
 
         /*
          * BECAREFUL WHEN EDITING OR DELETING THE FOLLOWING VARIABLES
          */
-        this._any = 0;
-        this._admin = 1;
-        this._user = 2;
-        this._focus = this._any;
-        this._restrictions = {};
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AccessSecurityService).call(this, container));
+
+        _this._any = 0;
+        _this._admin = 1;
+        _this._user = 2;
+        _this._focus = _this._any;
+        _this._restrictions = {};
+        return _this;
     }
 
-    _createClass(Access, [{
+    _createClass(AccessSecurityService, [{
+        key: 'load',
+        value: function load() {}
+    }, {
         key: 'isAdmin',
         value: function isAdmin() {
             return focus === roleAdmin;
@@ -192,7 +206,7 @@ var Access = function () {
         }
     }]);
 
-    return Access;
-}();
+    return AccessSecurityService;
+}(_Service3.default);
 
-exports.default = Access;
+exports.default = AccessSecurityService;

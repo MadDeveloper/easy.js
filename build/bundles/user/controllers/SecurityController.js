@@ -18,7 +18,7 @@ var SecurityController = function () {
         this._http = this._container.getComponent('Http');
         this._controller = this._container.getComponent('Controller');
         this._request = this._container.getComponent('Request');
-        this._access = new (this._container.getService('security/access'))();
+        this._access = new (this._container.getService('security.access'))();
     }
 
     _createClass(SecurityController, [{

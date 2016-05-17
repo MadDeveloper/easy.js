@@ -1,4 +1,4 @@
-export default function middlewares( skeletonFactory, params ) {
+export default function middlewares( skeletonFactory ) {
     /*
      * Dependencies
      */

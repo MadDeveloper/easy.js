@@ -1,11 +1,9 @@
-extends controllers from controller
-delegate work to response and request and no http from vendor !
-store request and response into root controller
-bundleManager dans les bundles ne doit pas être récupéré via la factory, il faut utiliser le container !
-faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
+- bundleManager dans les bundles ne doit pas être récupéré via la factory, il faut utiliser le container !
 
-remplacer callback par promise
+- faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
 
-faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
+- remplacer callback par promise
 
-refaire les binaires, car quand ils modifient des fichiers (db, schema, new bundle) il faut que tout soit écrit dans src puit builder !
+- faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
+
+- refactorer les repository avec une class dans core

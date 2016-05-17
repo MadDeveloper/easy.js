@@ -1,11 +1,12 @@
 export default class Controller {
     constructor( container ) {
-        this._container = container
-        this._router    = this._container.router
-        this._database  = this._container.database
-        this._http      = this._container.getComponent( 'Http' )
-        this._request   = this._container.getComponent( 'Request' )
-        this._response  = this._container.getComponent( 'Response' )
+        this._container     = container
+        this._bundleManager = this._container.getComponent( 'BundleManager' )
+        this._router        = this._container.router
+        this._database      = this._container.database
+        this._http          = this._container.getComponent( 'Http' )
+        this._request       = this._container.getComponent( 'Request' )
+        this._response      = this._container.getComponent( 'Response' )
     }
 
     verifyParams( required, params ) {
@@ -39,17 +40,17 @@ export default class Controller {
         return typeof number === "number" || ( typeof number === 'string' && number.isNumber() )
     }
 
-    parsePatchParams( req ) {
+    parsePatchParams() {
         try {
-            return JSON.parse( req.rawBody )
+            return JSON.parse( this.request.scope.rawBody )
         } catch ( error ) {}
     }
 
-    isPatchRequestWellParameterized( request ) {
-        return request.scope.rawBody.length > 0
+    isPatchRequestWellParameterized() {
+        return this.request.scope.rawBody.length > 0
     }
 
-    doesRequiredElementExists( element, options, bundleManager, callback ) {
+    doesRequiredElementExists( element, options, callback ) {
         let requireBy = null
         let optionsFetch = null
 
@@ -60,7 +61,7 @@ export default class Controller {
             requireBy = options
         }
 
-        const elementRepository = bundleManager.getFactory( element.capitalizeFirstLetter() ).getRepository()
+        const elementRepository = this.bundleManager.getFactory( element.capitalizeFirstLetter() ).getRepository()
 
         elementRepository.read( requireBy, optionsFetch )
         .then( element => {
@@ -70,12 +71,12 @@ export default class Controller {
                 callback( element )
 
             } else {
-                this.http.notFound()
+                this.response.notFound()
             }
 
         })
         .catch( error => {
-            this.http.internalServerError( error )
+            this.response.internalServerError( error )
         })
     }
 
@@ -92,6 +93,10 @@ export default class Controller {
      */
     get container() {
         return this._container
+    }
+
+    get bundleManager() {
+        return this._bundleManager
     }
 
     get router() {

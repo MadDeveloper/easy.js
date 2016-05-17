@@ -11,8 +11,8 @@ export default function authentication( bundleManager ) {
     /*
      * Provide Http helpers
      */
-    const request = bundleManager.container.getComponent( 'Request' )
-    const http    = bundleManager.container.getComponent( 'Http' )
+    const request   = bundleManager.container.getComponent( 'Request' )
+    const response  = bundleManager.container.getComponent( 'Response' )
 
     /*
      * User classes
@@ -35,7 +35,7 @@ export default function authentication( bundleManager ) {
                     { property: 'email', typeExpected: 'string' },
                     { property: 'password', typeExpected: 'string' }
                 ],
-                req.body
+                request.getBody()
             )
 
             if ( requestValidity ) {
@@ -46,26 +46,26 @@ export default function authentication( bundleManager ) {
                         if ( request.getBodyParameter( 'password' ) == user.get('password') ) {
 
                             const token = jwt.sign( user.toJSON(), config.jwt.secret, { expiresIn: 86400 /* 24 hours */ } )
-                            http.ok({ token: token })
+                            response.ok({ token: token })
 
                         } else {
-                            http.unauthorized()
+                            response.unauthorized()
                         }
 
                     } else {
-                        http.notFound()
+                        response.notFound()
                     }
                 })
                 .catch( error => {
-                    http.internalServerError( error )
+                    response.internalServerError( error )
                 })
             } else {
-                http.badRequest()
+                response.badRequest()
             }
         })
 
     /*
      * Check token validity
      */
-    authorized( http, request, jwt, config.jwt.secret, router )
+    authorized( response, request, jwt, config.jwt.secret, router )
 }

@@ -1,29 +1,80 @@
 'use strict';
 
-function MiddlewaresController(RoleFactory) {
-    /*
-     * Global dependencies
-     */
-    var BundleManager = RoleFactory.getBundleManager();
-    var http = BundleManager.getContainer().getComponent('Http');
-    var Controller = BundleManager.getContainer().getComponent('Controller');
-    var Request = BundleManager.getContainer().getComponent('Request');
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-    return {
-        roleExists: function roleExists() {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MiddlewaresController = function () {
+    function MiddlewaresController(roleFactory) {
+        _classCallCheck(this, MiddlewaresController);
+
+        this._roleFactory = roleFactory;
+        this._bundleManager = this._roleFactory.bundleManager;
+        this._container = this._bundleManager.container;
+        this._http = this._container.getComponent('Http');
+        this._controller = this._container.getComponent('Controller');
+        this._request = this._container.getComponent('Request');
+    }
+
+    _createClass(MiddlewaresController, [{
+        key: 'roleExists',
+        value: function roleExists() {
+            var _this = this;
+
             return new Promise(function (resolve, reject) {
                 var requireOptions = {
-                    requireBy: Request.getRouteParameter('id'),
+                    requireBy: _this.request.getRouteParameter('id'),
                     options: {}
                 };
 
-                Controller.doesRequiredElementExists('Role', requireOptions, BundleManager, function (role) {
-                    Request.define('role', role);
+                _this.controller.doesRequiredElementExists('Role', requireOptions, _this.bundleManager, function (role) {
+                    _this.request.define('role', role);
                     resolve();
                 });
             });
         }
-    };
-}
 
-module.exports = MiddlewaresController;
+        /*
+         * Getters and setters
+         */
+
+    }, {
+        key: 'roleFactory',
+        get: function get() {
+            return this._roleFactory;
+        }
+    }, {
+        key: 'bundleManager',
+        get: function get() {
+            return this._bundleManager;
+        }
+    }, {
+        key: 'container',
+        get: function get() {
+            return this._container;
+        }
+    }, {
+        key: 'http',
+        get: function get() {
+            return this._http;
+        }
+    }, {
+        key: 'controller',
+        get: function get() {
+            return this._controller;
+        }
+    }, {
+        key: 'request',
+        get: function get() {
+            return this._request;
+        }
+    }]);
+
+    return MiddlewaresController;
+}();
+
+exports.default = MiddlewaresController;

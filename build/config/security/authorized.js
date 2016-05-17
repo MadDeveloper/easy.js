@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = authorized;
-function authorized(http, request, jwt, secret, router) {
+function authorized(response, request, jwt, secret, router) {
     /*
      * Define authorization control middleware
      */
@@ -22,7 +22,7 @@ function authorized(http, request, jwt, secret, router) {
                     if ('development' == process.env.NODE_ENV) {
                         next();
                     } else {
-                        http.unauthorized();
+                        response.unauthorized();
                     }
                 }
             });
@@ -31,7 +31,7 @@ function authorized(http, request, jwt, secret, router) {
             if ('development' == process.env.NODE_ENV) {
                 next();
             } else {
-                http.unauthorized();
+                response.unauthorized();
             }
         }
     });

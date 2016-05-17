@@ -1,27 +1,23 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.default = middlewares;
-function middlewares(skeletonFactory, params) {
-  /*
-   * Global dependencies
-   */
-  var bundleManager = skeletonFactory.bundleManager;
-  var router = bundleManager.router;
+function middlewares(skeletonFactory) {
+    /*
+     * Dependencies
+     */
+    var skeletonMiddlewaresController = skeletonFactory.getController('Middlewares');
+    var bundleManager = skeletonFactory.bundleManager;
+    var router = bundleManager.router;
 
-  /*
-   * Skeleton bundle dependencies
-   */
-  var skeletonMiddlewaresController = bundleManager.getFactory('Skeleton').getController('Middlewares');
-
-  /*
-   * Middlewares
-   */
-  router.use('/skeletons/:id', function (req, res, next) {
-    skeletonMiddlewaresController.skeletonExists().then(function () {
-      next();
+    /*
+     * Middlewares
+     */
+    router.use('/skeletons/:id', function (req, res, next) {
+        skeletonMiddlewaresController.skeletonExists().then(function () {
+            next();
+        });
     });
-  });
 }

@@ -10,6 +10,10 @@ var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
 
+var _Container = require('./Container');
+
+var _Container2 = _interopRequireDefault(_Container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19,8 +23,8 @@ var Kernel = function () {
         _classCallCheck(this, Kernel);
 
         this._appName = '';
-        this._componentsLoaded = {};
-        this.path = {
+        this._container = null;
+        this._path = {
             root: '',
             bundles: '',
             services: '',
@@ -40,31 +44,19 @@ var Kernel = function () {
 
             this.appName = config.app.name;
 
+            this.loadContainer();
+
             return this;
         }
     }, {
-        key: 'load',
-        value: function load(component) {
-            if ("undefined" === typeof this.componentsLoaded[component]) {
-                var componentPath = __dirname + '/' + component + '.js';
-
-                if (_fs2.default.statSync(componentPath).isFile()) {
-                    this.storeComponent(component, componentPath);
-                }
-            }
-
-            return this.componentsLoaded[component];
+        key: 'loadContainer',
+        value: function loadContainer() {
+            this.container = new _Container2.default(this);
         }
     }, {
-        key: 'storeComponent',
-        value: function storeComponent(component, path) {
-            this.componentsLoaded[component] = require(path);
-            return this;
-        }
-    }, {
-        key: 'getContainer',
-        value: function getContainer() {
-            return this.load('Container');
+        key: 'initContainer',
+        value: function initContainer() {
+            this.container.loadComponents();
         }
     }, {
         key: 'getEnv',
@@ -96,9 +88,13 @@ var Kernel = function () {
             return this;
         }
     }, {
-        key: 'componentsLoaded',
+        key: 'container',
         get: function get() {
-            return this._componentsLoaded;
+            return this._container;
+        },
+        set: function set(container) {
+            this._container = container;
+            return this;
         }
     }, {
         key: 'path',

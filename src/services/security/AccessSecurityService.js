@@ -1,15 +1,14 @@
-import _ from 'lodash'
+import _        from 'lodash'
+import Service  from './../../vendor/easy/core/Service'
 
 /*
  * You can edit as you want following roles.
  * Becareful: You must start your roles' id at 3
  * Roles' id are mapped with ids into database
- * example:
- *
- * var roleModerator = 3
  */
-export default class Access {
-    constructor() {
+export default class AccessSecurityService extends Service {
+    constructor( container ) {
+        super( container )
         /*
          * BECAREFUL WHEN EDITING OR DELETING THE FOLLOWING VARIABLES
          */
@@ -19,6 +18,8 @@ export default class Access {
         this._focus         = this._any
         this._restrictions  = {}
     }
+
+    load() {}
 
     isAdmin() {
         return focus === roleAdmin
