@@ -31,7 +31,7 @@ export default class RoleRepository {
     /*
      * Getters and setters
      */
-    get skeletonFactory() {
-        return this._skeletonFactory
+    get roleFactory() {
+        return this._roleFactory
     }
 }

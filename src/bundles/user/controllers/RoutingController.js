@@ -1,22 +1,18 @@
-import _ from 'lodash'
+import _            from 'lodash'
+import Controller   from './../../../vendor/easy/core/Controller'
 
-export default class RoutingController {
+export default class RoutingController extends Controller {
     constructor( userFactory ) {
+        super( userFactory.container )
+
         this._userFactory       = userFactory
-        this._bundleManager     = this._userFactory.bundleManager
-        this._router            = this._bundleManager.router
-        this._database          = this._bundleManager.database
-        this._container         = this._bundleManager.container
-        this._http              = this._container.getComponent( 'Http' )
-        this._controller        = this._container.getComponent( 'Controller' )
-        this._request           = this._container.getComponent( 'Request' )
         this._userRepository    = this._userFactory.getRepository()
         this._roleFactory       = this._bundleManager.getFactory( 'Role' )
         this._roleRepository    = this._roleFactory.getRepository()
     }
 
     isRequestWellParameterized() {
-        return this.controller.verifyParams([
+        return this.verifyParams([
             { property: 'username', typeExpected: 'string' },
             { property: 'email', typeExpected: 'string' },
             { property: 'password', typeExpected: 'string' },
@@ -28,11 +24,11 @@ export default class RoutingController {
         this.userRepository.readAll( this.request.find( 'role' ) )
         .then( users => {
 
-            this.http.ok( users.toJSON() )
+            this.response.ok( users.toJSON() )
 
         })
         .catch( error => {
-            this.http.internalServerError( error )
+            this.response.internalServerError( error )
         })
     }
 
@@ -46,22 +42,22 @@ export default class RoutingController {
                 this.userRepository.save( UserFactory.getNewModel(), this.request.getBody(), { transacting: t } )
                 .then( user => {
                     t.commit()
-                    this.http.created( user.toJSON() )
+                    this.response.created( user.toJSON() )
                 })
                 .catch( error => {
                     t.rollback()
-                    this.http.internalServerError( error )
+                    this.response.internalServerError( error )
                 })
 
             })
 
         } else {
-            this.http.badRequest()
+            this.response.badRequest()
         }
     }
 
     getUser() {
-        this.http.ok( this.request.find( 'user' ).toJSON() )
+        this.response.ok( this.request.find( 'user' ).toJSON() )
     }
 
     updateUser() {
@@ -77,18 +73,18 @@ export default class RoutingController {
                 .then( user => {
 
                     t.commit()
-                    this.http.ok( user.toJSON() )
+                    this.response.ok( user.toJSON() )
 
                 })
                 .catch( error => {
                     t.rollback()
-                    this.http.internalServerError( error )
+                    this.response.internalServerError( error )
                 })
 
             })
 
         } else {
-            this.http.badRequest()
+            this.response.badRequest()
         }
     }
 
@@ -103,12 +99,12 @@ export default class RoutingController {
             .then( () => {
 
                 t.commit()
-                this.http.noContent()
+                this.response.noContent()
 
             })
             .catch( error => {
                 t.rollback()
-                this.http.internalServerError( error )
+                this.response.internalServerError( error )
             })
 
         })
@@ -119,34 +115,6 @@ export default class RoutingController {
      */
     get userFactory() {
         return this._userFactory
-    }
-
-    get bundleManager() {
-        return this._bundleManager
-    }
-
-    get router() {
-        return this._router
-    }
-
-    get database() {
-        return this._database
-    }
-
-    get container() {
-        return this._container
-    }
-
-    get http() {
-        return this._http
-    }
-
-    get controller() {
-        return this._controller
-    }
-
-    get request() {
-        return this._request
     }
 
     get userRepository() {

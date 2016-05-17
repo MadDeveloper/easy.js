@@ -42,28 +42,33 @@ var BundleManager = function () {
             var factoryPath = this.getBundlesDirectory() + '/' + bundle + '/' + bundle.capitalizeFirstLetter() + 'Factory.js';
 
             if (_fs2.default.statSync(factoryPath).isFile()) {
-                return new (require(factoryPath))(this);
+                var factoryBundle = require(factoryPath).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+                return new factoryBundle(this);
             }
         }
     }, {
         key: 'getRouting',
-        value: function getRouting(bundle, params) {
+        value: function getRouting(bundle) {
             var routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js';
 
             if (_fs2.default.statSync(routingPath).isFile()) {
-                return require(routingPath)(this.getFactory(bundle));
+                var routingBundle = require(routingPath).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+                return routingBundle(this.getFactory(bundle));
             }
         }
     }, {
         key: 'getBundlesDefinitionRouting',
-        value: function getBundlesDefinitionRouting(params) {
+        value: function getBundlesDefinitionRouting() {
             var routingPath = '';
 
             for (var i in this.bundlesDefinition) {
-                routingPath = this.getBundlesDirectory() + '/' + bundles[i] + '/config/routing.js';
+                var bundle = this.bundlesDefinition[i];
+
+                routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js';
 
                 if (_fs2.default.statSync(routingPath).isFile()) {
-                    require(routingPath)(this.getFactory(bundle), params);
+                    var routingBundle = require(routingPath).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+                    routingBundle(this.getFactory(bundle));
                 }
             }
         }

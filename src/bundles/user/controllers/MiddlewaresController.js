@@ -1,11 +1,8 @@
-export default class MiddlewaresController {
+import Controller from './../../../vendor/easy/core/Controller'
+
+export default class MiddlewaresController extends Controller {
     constructor( userFactory ) {
-        this._userFactory   = userFactory
-        this._bundleManager = this._userFactory.bundleManager
-        this._container     = this._bundleManager.container
-        this._http          = this._container.getComponent( 'Http' )
-        this._controller    = this._container.getComponent( 'Controller' )
-        this._request       = this._container.getComponent( 'Request' )
+        super( userFactory.container )
     }
 
     userExists() {
@@ -15,7 +12,7 @@ export default class MiddlewaresController {
                 options: {}
             }
 
-            this.controller.doesRequiredElementExists( 'User', requireOptions, this.bundleManager, user => {
+            this.doesRequiredElementExists( 'User', requireOptions, user => {
                 this.request.define( 'user', user )
                 resolve()
             })
@@ -25,27 +22,4 @@ export default class MiddlewaresController {
     /*
      * Getters and setters
      */
-    get userFactory() {
-        return this._userFactory
-    }
-
-    get bundleManager() {
-        return this._bundleManager
-    }
-
-    get container() {
-        return this._container
-    }
-
-    get http() {
-        return this._http
-    }
-
-    get controller() {
-        return this._controller
-    }
-
-    get request() {
-        return this._request
-    }
 }

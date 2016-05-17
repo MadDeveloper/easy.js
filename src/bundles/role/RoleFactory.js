@@ -1,9 +1,7 @@
 export default class RoleFactory {
-    constructor( bundleManager, params ) {
+    constructor( bundleManager ) {
+        this._currentBundle = 'role'
         this._bundleManager = bundleManager
-        this._params = params
-        this._currentBundle = 'Role'
-        this._database = this._bundleManager.database
     }
 
     getRepository( repository ) {
@@ -11,7 +9,8 @@ export default class RoleFactory {
             repository = this.currentBundle
         }
 
-        return require( __dirname + '/../entity/' + repository + 'Repository' )( this )
+        const repositoryClass = require( __dirname + '/entity/' + repository.capitalizeFirstLetter() + 'Repository' ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        return new repositoryClass( this )
     }
 
     getForgedEntity( paramsForForging ) {
@@ -23,7 +22,8 @@ export default class RoleFactory {
             model = this.currentBundle
         }
 
-        return new ( require( __dirname + '/../entity/' + model ) )( this )
+        const modelClass = require( __dirname + '/entity/' + model.capitalizeFirstLetter() ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        return new modelClass( this )
     }
 
     getNewModel() {
@@ -41,11 +41,13 @@ export default class RoleFactory {
             controller = 'Routing'
         }
 
-        return new ( require( __dirname + '/../controllers/' + controller + 'Controller' ) )( this )
+        const controllerClass = require( __dirname + '/controllers/' + controller.capitalizeFirstLetter() + 'Controller' ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        return new controllerClass( this )
     }
 
-    getConfig( config, params ) {
-        return require( __dirname + '/../config/' + config )( this, params )
+    getConfig( config ) {
+        const configClass = require( __dirname + '/config/' + config ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        return configClass( this )
     }
 
     getRootController() {
@@ -59,20 +61,15 @@ export default class RoleFactory {
         return this._bundleManager
     }
 
-    get params() {
-        return this._params
-    }
-
-    set params( params ) {
-        this._params = params
-        return this
-    }
-
     get currentBundle() {
         return this._currentBundle
     }
 
+    get container() {
+        return this.bundleManager.container
+    }
+
     get database() {
-        return this._database
+        return this.bundleManager.database
     }
 }

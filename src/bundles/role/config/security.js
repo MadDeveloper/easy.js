@@ -1,4 +1,4 @@
-export default function security( roleFactory, params ) {
+export default function security( roleFactory ) {
     /*
      * Dependencies
      */

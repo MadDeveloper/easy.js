@@ -25,5 +25,5 @@ function database(defaultConnector, clearCache) {
         delete require.cache[require.resolve(connectorPath)];
     }
 
-    return require(connectorPath);
-};
+    return require(connectorPath).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+}

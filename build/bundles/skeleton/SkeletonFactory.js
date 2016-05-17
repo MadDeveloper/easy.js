@@ -12,12 +12,8 @@ var SkeletonFactory = function () {
     function SkeletonFactory(bundleManager) {
         _classCallCheck(this, SkeletonFactory);
 
-        this._currentBundle = 'Skeleton';
+        this._currentBundle = 'skeleton';
         this._bundleManager = bundleManager;
-
-        /* alias */
-        this._container = this._bundleManager.container;
-        this._database = this._bundleManager.database;
     }
 
     _createClass(SkeletonFactory, [{
@@ -27,7 +23,8 @@ var SkeletonFactory = function () {
                 repository = this.currentBundle;
             }
 
-            return require(__dirname + '/../entity/' + repository + 'Repository')(this);
+            var repositoryClass = require(__dirname + '/entity/' + repository.capitalizeFirstLetter() + 'Repository').default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return new repositoryClass(this);
         }
     }, {
         key: 'getForgedEntity',
@@ -41,7 +38,8 @@ var SkeletonFactory = function () {
                 model = this.currentBundle;
             }
 
-            return new (require(__dirname + '/../entity/' + model))(this);
+            var modelClass = require(__dirname + '/entity/' + model.capitalizeFirstLetter()).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return new modelClass(this);
         }
     }, {
         key: 'getNewModel',
@@ -62,12 +60,14 @@ var SkeletonFactory = function () {
                 controller = 'Routing';
             }
 
-            return new (require(__dirname + '/../controllers/' + controller + 'Controller'))(this);
+            var controllerClass = require(__dirname + '/controllers/' + controller.capitalizeFirstLetter() + 'Controller').default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return new controllerClass(this);
         }
     }, {
         key: 'getConfig',
         value: function getConfig(config) {
-            return require(__dirname + '/../config/' + config)(this);
+            var configClass = require(__dirname + '/config/' + config).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return configClass(this);
         }
 
         /*
@@ -85,14 +85,14 @@ var SkeletonFactory = function () {
             return this._currentBundle;
         }
     }, {
-        key: 'database',
-        get: function get() {
-            return this._database;
-        }
-    }, {
         key: 'container',
         get: function get() {
-            return this._container;
+            return this.bundleManager.container;
+        }
+    }, {
+        key: 'database',
+        get: function get() {
+            return this.bundleManager.database;
         }
     }]);
 

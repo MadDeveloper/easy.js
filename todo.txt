@@ -7,3 +7,6 @@
 - faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
 
 - refactorer les repository avec une class dans core
+
+
+- refactorer bin et tests

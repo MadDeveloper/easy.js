@@ -1,3 +1,5 @@
+import authentication from './security/authentication'
+
 export default function routing( bundleManager ) {
     /*
      * Middlewares
@@ -14,7 +16,7 @@ export default function routing( bundleManager ) {
         /*
          * Security
          */
-        require( __dirname + '/security/authentication' )( bundleManager )
+        authentication( bundleManager )
         bundleManager.container.getService( 'security.default' )
 
     /*

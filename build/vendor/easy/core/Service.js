@@ -13,7 +13,7 @@ var Service = function () {
         _classCallCheck(this, Service);
 
         this._container = container;
-        this._http = this._container.getComponent('Http');
+        this._http = container.getComponent('Http');
         this._request = this._container.getComponent('Request');
         this._response = this._container.getComponent('Response');
         this._bundleManager = this._container.getComponent('BundleManager');

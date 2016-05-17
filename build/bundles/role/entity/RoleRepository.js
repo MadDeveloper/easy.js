@@ -49,9 +49,9 @@ var RoleRepository = function () {
          */
 
     }, {
-        key: "skeletonFactory",
+        key: "roleFactory",
         get: function get() {
-            return this._skeletonFactory;
+            return this._roleFactory;
         }
     }]);
 

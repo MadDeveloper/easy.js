@@ -23,26 +23,31 @@ export default class BundleManager {
         const factoryPath = this.getBundlesDirectory() + '/' + bundle + '/' + bundle.capitalizeFirstLetter() + 'Factory.js'
 
         if ( fs.statSync( factoryPath ).isFile() ) {
-            return new ( require( factoryPath ) )( this )
+            const factoryBundle = require( factoryPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return new factoryBundle( this )
         }
     }
 
-    getRouting( bundle, params ) {
+    getRouting( bundle ) {
         const routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js'
 
         if ( fs.statSync( routingPath ).isFile() ) {
-            return require( routingPath )( this.getFactory( bundle ) )
+            const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return routingBundle( this.getFactory( bundle ) )
         }
     }
 
-    getBundlesDefinitionRouting( params ) {
+    getBundlesDefinitionRouting() {
         let routingPath = ''
 
         for ( var i in this.bundlesDefinition ) {
-            routingPath = this.getBundlesDirectory() + '/' + bundles[ i ] + '/config/routing.js'
+            const bundle = this.bundlesDefinition[ i ]
+
+            routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js'
 
             if ( fs.statSync( routingPath ).isFile() ) {
-                require( routingPath )( this.getFactory( bundle ), params )
+                const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+                routingBundle( this.getFactory( bundle ) )
             }
         }
     }

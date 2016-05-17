@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = security;
-function security(roleFactory, params) {
+function security(roleFactory) {
     /*
      * Dependencies
      */

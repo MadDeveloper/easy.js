@@ -40,14 +40,14 @@ var Container = function () {
 
         this._componentsMapping = {
             'bundlemanager': this._kernel.path.easy + '/core/BundleManager',
-            'controller': this._kernel.path.easy + '/core/Controller',
             'logger': this._kernel.path.easy + '/core/Logger',
             'message': this._kernel.path.easy + '/core/Message',
             'polyfills': this._kernel.path.easy + '/core/Polyfills',
-            'connector': this._kernel.path.easy + '/core/database/Connector',
-            'http': this._kernel.path.easy + '/core/http/Http',
-            'request': this._kernel.path.easy + '/core/http/Request',
-            'response': this._kernel.path.easy + '/core/http/Response'
+            'library': this._kernel.path.easy + '/core/Library',
+            'connector': this._kernel.path.easy + '/database/Connector',
+            'http': this._kernel.path.easy + '/http/Http',
+            'request': this._kernel.path.easy + '/http/Request',
+            'response': this._kernel.path.easy + '/http/Response'
         };
 
         this._servicesMapping = _config2.default;
@@ -65,7 +65,8 @@ var Container = function () {
                     var pathComponent = this.componentsMapping[name] + '.js';
 
                     if (_fs2.default.statSync(pathComponent).isFile()) {
-                        this.componentsLoaded[name] = new (require(pathComponent))(this);
+                        var component = require(pathComponent).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+                        this.componentsLoaded[name] = new component(this);
                     }
                 }
             }
@@ -122,7 +123,8 @@ var Container = function () {
     }, {
         key: 'storeService',
         value: function storeService(name, pathService) {
-            this.shared[name] = new (require(pathService))(this);
+            var serviceClass = require(pathService).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            this.shared[name] = new serviceClass(this);
         }
     }, {
         key: 'resetService',
@@ -136,16 +138,20 @@ var Container = function () {
 
             if (this.isServiceMapped(name)) {
 
+                if (this.isServicesLoaded(name)) {
+                    return this.shared[name];
+                }
+
                 var serviceFile = this.servicesDirectoryPath + '/' + this.servicesMapping[name] + '.js';
 
                 try {
                     var statsServiceFile = _fs2.default.lstatSync(serviceFile);
 
-                    if (statsServiceNameDirectory.isFile()) {
+                    if (statsServiceFile.isFile()) {
 
                         this.storeService(name, serviceFile);
 
-                        return this.shared[service];
+                        return this.shared[name];
                     } else {
                         throw new Error();
                     }

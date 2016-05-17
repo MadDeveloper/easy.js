@@ -18,14 +18,14 @@ export default class Container {
 
         this._componentsMapping = {
             'bundlemanager': this._kernel.path.easy + '/core/BundleManager',
-            'controller': this._kernel.path.easy + '/core/Controller',
             'logger': this._kernel.path.easy + '/core/Logger',
             'message': this._kernel.path.easy + '/core/Message',
             'polyfills': this._kernel.path.easy + '/core/Polyfills',
-            'connector': this._kernel.path.easy + '/core/database/Connector',
-            'http': this._kernel.path.easy + '/core/http/Http',
-            'request': this._kernel.path.easy + '/core/http/Request',
-            'response': this._kernel.path.easy + '/core/http/Response'
+            'library': this._kernel.path.easy + '/core/Library',
+            'connector': this._kernel.path.easy + '/database/Connector',
+            'http': this._kernel.path.easy + '/http/Http',
+            'request': this._kernel.path.easy + '/http/Request',
+            'response': this._kernel.path.easy + '/http/Response'
         }
 
         this._servicesMapping = servicesMapping
@@ -41,7 +41,8 @@ export default class Container {
                 const pathComponent = this.componentsMapping[ name ] + '.js'
 
                 if ( fs.statSync( pathComponent ).isFile() ) {
-                    this.componentsLoaded[ name ] = new ( require( pathComponent ) )( this )
+                    const component = require( pathComponent ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+                    this.componentsLoaded[ name ] = new component( this )
                 }
             }
         }
@@ -90,7 +91,8 @@ export default class Container {
     }
 
     storeService( name, pathService ) {
-        this.shared[ name ] = new ( require( pathService ) )( this )
+        const serviceClass  = require( pathService ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        this.shared[ name ] = new serviceClass( this )
     }
 
     resetService( name ) {
@@ -102,16 +104,20 @@ export default class Container {
 
         if ( this.isServiceMapped( name ) ) {
 
+            if ( this.isServicesLoaded( name ) ) {
+                return this.shared[ name ]
+            }
+
             const serviceFile = this.servicesDirectoryPath + '/' + this.servicesMapping[ name ]+ '.js'
 
             try {
                 const statsServiceFile = fs.lstatSync( serviceFile )
 
-                if ( statsServiceNameDirectory.isFile() ) {
+                if ( statsServiceFile.isFile() ) {
 
                     this.storeService( name, serviceFile )
 
-                    return this.shared[ service ]
+                    return this.shared[ name ]
 
                 } else {
                     throw new Error()

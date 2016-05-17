@@ -1,6 +1,6 @@
 import Http from './Http'
 
-export default class Request extends http {
+export default class Request extends Http {
     constructor( container ) {
         super( container )
 

@@ -4,6 +4,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = routing;
+
+var _authentication = require('./security/authentication');
+
+var _authentication2 = _interopRequireDefault(_authentication);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function routing(bundleManager) {
     /*
      * Middlewares
@@ -20,7 +27,7 @@ function routing(bundleManager) {
     /*
      * Security
      */
-    require(__dirname + '/security/authentication')(bundleManager);
+    (0, _authentication2.default)(bundleManager);
     bundleManager.container.getService('security.default');
 
     /*

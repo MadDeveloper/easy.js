@@ -9,13 +9,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var RoleFactory = function () {
-    function RoleFactory(bundleManager, params) {
+    function RoleFactory(bundleManager) {
         _classCallCheck(this, RoleFactory);
 
+        this._currentBundle = 'role';
         this._bundleManager = bundleManager;
-        this._params = params;
-        this._currentBundle = 'Role';
-        this._database = this._bundleManager.database;
     }
 
     _createClass(RoleFactory, [{
@@ -25,7 +23,8 @@ var RoleFactory = function () {
                 repository = this.currentBundle;
             }
 
-            return require(__dirname + '/../entity/' + repository + 'Repository')(this);
+            var repositoryClass = require(__dirname + '/entity/' + repository.capitalizeFirstLetter() + 'Repository').default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return new repositoryClass(this);
         }
     }, {
         key: 'getForgedEntity',
@@ -39,7 +38,8 @@ var RoleFactory = function () {
                 model = this.currentBundle;
             }
 
-            return new (require(__dirname + '/../entity/' + model))(this);
+            var modelClass = require(__dirname + '/entity/' + model.capitalizeFirstLetter()).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return new modelClass(this);
         }
     }, {
         key: 'getNewModel',
@@ -60,12 +60,14 @@ var RoleFactory = function () {
                 controller = 'Routing';
             }
 
-            return new (require(__dirname + '/../controllers/' + controller + 'Controller'))(this);
+            var controllerClass = require(__dirname + '/controllers/' + controller.capitalizeFirstLetter() + 'Controller').default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return new controllerClass(this);
         }
     }, {
         key: 'getConfig',
-        value: function getConfig(config, params) {
-            return require(__dirname + '/../config/' + config)(this, params);
+        value: function getConfig(config) {
+            var configClass = require(__dirname + '/config/' + config).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            return configClass(this);
         }
     }, {
         key: 'getRootController',
@@ -83,23 +85,19 @@ var RoleFactory = function () {
             return this._bundleManager;
         }
     }, {
-        key: 'params',
-        get: function get() {
-            return this._params;
-        },
-        set: function set(params) {
-            this._params = params;
-            return this;
-        }
-    }, {
         key: 'currentBundle',
         get: function get() {
             return this._currentBundle;
         }
     }, {
+        key: 'container',
+        get: function get() {
+            return this.bundleManager.container;
+        }
+    }, {
         key: 'database',
         get: function get() {
-            return this._database;
+            return this.bundleManager.database;
         }
     }]);
 

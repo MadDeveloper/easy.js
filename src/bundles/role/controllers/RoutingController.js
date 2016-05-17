@@ -1,18 +1,15 @@
-export default class RoutingController {
+import Controller from './../../../vendor/easy/core/Controller'
+
+export default class RoutingController extends Controller {
     constructor( roleFactory ) {
+        super( roleFactory.container )
+
         this._roleFactory       = roleFactory
-        this._bundleManager     = this._roleFactory.bundleManager
-        this._router            = this._bundleManager.router
-        this._database          = this._bundleManager.database
-        this._container         = this._bundleManager.container
-        this._http              = this._container.getComponent( 'Http' )
-        this._controller        = this._container.getComponent( 'Controller' )
-        this._request           = this._container.getComponent( 'Request' )
         this._roleRepository    = this._roleFactory.getRepository()
     }
 
     isRequestWellParameterized() {
-        return this.controller.verifyParams([
+        return this.verifyParams([
             { property: 'name', typeExpected: 'string' },
             { property: 'slug', typeExpected: 'string' }
         ], this.request.getBody() )
@@ -22,11 +19,11 @@ export default class RoutingController {
         this.roleRepository.readAll()
         .then( roles => {
 
-            this.http.ok( roles.toJSON() )
+            this.response.ok( roles.toJSON() )
 
         })
         .catch( error => {
-            this.http.internalServerError( error )
+            this.response.internalServerError( error )
         })
     }
 
@@ -39,23 +36,23 @@ export default class RoutingController {
                 .then( role => {
 
                     t.commit()
-                    this.http.created( role.toJSON() )
+                    this.response.created( role.toJSON() )
 
                 })
                 .catch( error => {
                     t.rollback()
-                    this.http.internalServerError( error )
+                    this.response.internalServerError( error )
                 })
 
             })
 
         } else {
-            this.http.badRequest()
+            this.response.badRequest()
         }
     }
 
     getRole() {
-        this.http.ok( this.request.find( 'role' ).toJSON() )
+        this.response.ok( this.request.find( 'role' ).toJSON() )
     }
 
     updateRole() {
@@ -67,18 +64,18 @@ export default class RoutingController {
                 .then( role => {
 
                     t.commit()
-                    this.http.ok( role.toJSON() )
+                    this.response.ok( role.toJSON() )
 
                 })
                 .catch( error => {
                     t.rollback()
-                    this.http.internalServerError( error )
+                    this.response.internalServerError( error )
                 })
 
             })
 
         } else {
-            this.http.badRequest()
+            this.response.badRequest()
         }
     }
 
@@ -89,14 +86,25 @@ export default class RoutingController {
             .then( () => {
 
                 t.commit()
-                this.http.noContent()
+                this.response.noContent()
 
             })
             .catch( error => {
                 t.rollback()
-                this.http.internalServerError( error )
+                this.response.internalServerError( error )
             })
 
         })
+    }
+
+    /*
+     * Getters and setters
+     */
+    get roleFactory() {
+        return this._roleFactory
+    }
+
+    get roleRepository() {
+        return this._roleRepository
     }
 }

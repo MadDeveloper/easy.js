@@ -17,7 +17,7 @@ export default class Connector {
             connector = this.defaultConnector
         }
 
-        this.connection = require( this.databasePath )( connector )
+        this.connection = ( require( this.databasePath ) ).default( connector ) /* .default is needed to patch babel exports.default build, require doesn't work, import do */
         return this.connection
     }
 
