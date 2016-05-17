@@ -41,6 +41,7 @@ var Kernel = function () {
             this.path.services = this.path.root + '/services';
             this.path.config = this.path.root + '/config';
             this.path.vendor = this.path.root + '/vendor';
+            this.path.easy = this.path.vendor + '/easy';
 
             this.appName = config.app.name;
 
@@ -52,6 +53,7 @@ var Kernel = function () {
         key: 'loadContainer',
         value: function loadContainer() {
             this.container = new _Container2.default(this);
+            this.initContainer();
         }
     }, {
         key: 'initContainer',

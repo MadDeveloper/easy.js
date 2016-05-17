@@ -3,30 +3,29 @@ import path             from 'path'
 import servicesMapping  from './../../../config/services/config'
 
 export default class Container {
-    contructor( kernel ) {
+    constructor( kernel ) {
         this._kernel    = kernel
-        this._message   = this.getComponent( 'Message' )
 
         /*
          * Dependencies shared
          */
-        this.componentsLoaded   = {}
-        this.shared             = {}
+        this._componentsLoaded   = {}
+        this._shared             = {}
 
         this._servicesDirectoryExists           = false
         this._checkExistanceOfServicesDirectory = true
         this._servicesDirectoryPath             = this._kernel.path.services
 
         this._componentsMapping = {
-            'bundlemanager': './BundleManager',
-            'controller': './Controller',
-            'logger': './Logger',
-            'message': './Message',
-            'polyfills': './Polyfills',
-            'connector': './../database/Connector',
-            'http': './../http/Http',
-            'request': './../http/Request',
-            'response': './../http/Response'
+            'bundlemanager': this._kernel.path.easy + '/core/BundleManager',
+            'controller': this._kernel.path.easy + '/core/Controller',
+            'logger': this._kernel.path.easy + '/core/Logger',
+            'message': this._kernel.path.easy + '/core/Message',
+            'polyfills': this._kernel.path.easy + '/core/Polyfills',
+            'connector': this._kernel.path.easy + '/core/database/Connector',
+            'http': this._kernel.path.easy + '/core/http/Http',
+            'request': this._kernel.path.easy + '/core/http/Request',
+            'response': this._kernel.path.easy + '/core/http/Response'
         }
 
         this._servicesMapping = servicesMapping
@@ -39,10 +38,10 @@ export default class Container {
     loadComponent( name ) {
         if ( "undefined" === typeof this.componentsLoaded[ name ] ) {
             if ( this.componentsMapping.hasOwnProperty( name ) ) {
-                const path = this.componentsMapping[ name ]
+                const pathComponent = this.componentsMapping[ name ] + '.js'
 
-                if ( fs.statSync( path ).isFile() ) {
-                    this.componentsLoaded[ name ] = new ( require( path ) )( this )
+                if ( fs.statSync( pathComponent ).isFile() ) {
+                    this.componentsLoaded[ name ] = new ( require( pathComponent ) )( this )
                 }
             }
         }
@@ -90,8 +89,8 @@ export default class Container {
         return this.shared.hasOwnProperty( name )
     }
 
-    storeService( name, path ) {
-        this.shared[ name ] = new ( require( path ) )( this )
+    storeService( name, pathService ) {
+        this.shared[ name ] = new ( require( pathService ) )( this )
     }
 
     resetService( name ) {
@@ -103,7 +102,7 @@ export default class Container {
 
         if ( this.isServiceMapped( name ) ) {
 
-            const serviceFile = this.servicesDirectoryPath + '/' + this.servicesMapping[ name ]
+            const serviceFile = this.servicesDirectoryPath + '/' + this.servicesMapping[ name ]+ '.js'
 
             try {
                 const statsServiceFile = fs.lstatSync( serviceFile )
@@ -118,7 +117,7 @@ export default class Container {
                     throw new Error()
                 }
             } catch ( error ) {
-                this.message.error({
+                this.getComponent( 'Message' ).error({
                     title: "Impossible to call service",
                     message: "Service " + name + " not found, path: " + path.resolve( serviceFile ) + "\n" + error,
                     type: 'error',
@@ -138,7 +137,7 @@ export default class Container {
             if ( statsServiceDirectory.isDirectory() ) {
                 this.servicesDirectoryExists = true
             } else {
-                this.message.error({
+                this.getComponent( 'Message' ).error({
                     title: "Service directory not found",
                     message: "Service directory path resolved: " + this.servicesDirectoryPath,
                     type: 'error',
@@ -184,13 +183,17 @@ export default class Container {
         return this._servicesDirectoryPath
     }
 
-    set servicesDirectoryPath( path ) {
-        this._servicesDirectoryPath = path
+    set servicesDirectoryPath( directoryPath ) {
+        this._servicesDirectoryPath = directoryPath
         return this
     }
 
     get componentsLoaded() {
         return this._componentsLoaded
+    }
+
+    get shared() {
+        return this._shared
     }
 
     get componentsMapping() {

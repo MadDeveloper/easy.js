@@ -12,7 +12,7 @@ import _                    from 'lodash'
 import path                 from 'path'
 import minimist             from 'minimist'
 
-import Kernel               from './vendor/easy/Kernel'
+import Kernel               from './vendor/easy/core/kernel'
 import bundlesDefinition    from './config/bundlesDefinition'
 import routing              from './config/routing'
 
@@ -57,7 +57,7 @@ export default class Application {
         /*
          * Define bundle easy vendor
          */
-        const bundleManager     = container.getComponent( 'BundleManager' )( container )
+        const bundleManager     = container.getComponent( 'BundleManager' )
         bundleManager.database  = databaseConnection
         bundleManager.router    = express.Router()
 

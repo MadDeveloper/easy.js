@@ -21,6 +21,7 @@ export default class Kernel {
         this.path.services  = this.path.root + '/services'
         this.path.config    = this.path.root + '/config'
         this.path.vendor    = this.path.root + '/vendor'
+        this.path.easy      = this.path.vendor + '/easy'
 
         this.appName = config.app.name
 
@@ -31,6 +32,7 @@ export default class Kernel {
 
     loadContainer() {
         this.container = new Container( this )
+        this.initContainer()
     }
 
     initContainer() {

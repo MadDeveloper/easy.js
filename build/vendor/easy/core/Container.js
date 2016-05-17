@@ -10,9 +10,9 @@ var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _path2 = require('path');
+var _path = require('path');
 
-var _path3 = _interopRequireDefault(_path2);
+var _path2 = _interopRequireDefault(_path);
 
 var _config = require('./../../../config/services/config');
 
@@ -23,54 +23,49 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Container = function () {
-    function Container() {
+    function Container(kernel) {
         _classCallCheck(this, Container);
-    }
 
-    _createClass(Container, [{
-        key: 'contructor',
-        value: function contructor(kernel) {
-            this._kernel = kernel;
-            this._message = this.getComponent('Message');
-
-            /*
-             * Dependencies shared
-             */
-            this.componentsLoaded = {};
-            this.shared = {};
-
-            this._servicesDirectoryExists = false;
-            this._checkExistanceOfServicesDirectory = true;
-            this._servicesDirectoryPath = this._kernel.path.services;
-
-            this._componentsMapping = {
-                'bundlemanager': './BundleManager',
-                'controller': './Controller',
-                'logger': './Logger',
-                'message': './Message',
-                'polyfills': './Polyfills',
-                'connector': './../database/Connector',
-                'http': './../http/Http',
-                'request': './../http/Request',
-                'response': './../http/Response'
-            };
-
-            this._servicesMapping = _config2.default;
-        }
+        this._kernel = kernel;
 
         /*
-         * Components
+         * Dependencies shared
          */
+        this._componentsLoaded = {};
+        this._shared = {};
 
-    }, {
+        this._servicesDirectoryExists = false;
+        this._checkExistanceOfServicesDirectory = true;
+        this._servicesDirectoryPath = this._kernel.path.services;
+
+        this._componentsMapping = {
+            'bundlemanager': this._kernel.path.easy + '/core/BundleManager',
+            'controller': this._kernel.path.easy + '/core/Controller',
+            'logger': this._kernel.path.easy + '/core/Logger',
+            'message': this._kernel.path.easy + '/core/Message',
+            'polyfills': this._kernel.path.easy + '/core/Polyfills',
+            'connector': this._kernel.path.easy + '/core/database/Connector',
+            'http': this._kernel.path.easy + '/core/http/Http',
+            'request': this._kernel.path.easy + '/core/http/Request',
+            'response': this._kernel.path.easy + '/core/http/Response'
+        };
+
+        this._servicesMapping = _config2.default;
+    }
+
+    /*
+     * Components
+     */
+
+    _createClass(Container, [{
         key: 'loadComponent',
         value: function loadComponent(name) {
             if ("undefined" === typeof this.componentsLoaded[name]) {
                 if (this.componentsMapping.hasOwnProperty(name)) {
-                    var _path = this.componentsMapping[name];
+                    var pathComponent = this.componentsMapping[name] + '.js';
 
-                    if (_fs2.default.statSync(_path).isFile()) {
-                        this.componentsLoaded[name] = new (require(_path))(this);
+                    if (_fs2.default.statSync(pathComponent).isFile()) {
+                        this.componentsLoaded[name] = new (require(pathComponent))(this);
                     }
                 }
             }
@@ -126,8 +121,8 @@ var Container = function () {
         }
     }, {
         key: 'storeService',
-        value: function storeService(name, path) {
-            this.shared[name] = new (require(path))(this);
+        value: function storeService(name, pathService) {
+            this.shared[name] = new (require(pathService))(this);
         }
     }, {
         key: 'resetService',
@@ -141,7 +136,7 @@ var Container = function () {
 
             if (this.isServiceMapped(name)) {
 
-                var serviceFile = this.servicesDirectoryPath + '/' + this.servicesMapping[name];
+                var serviceFile = this.servicesDirectoryPath + '/' + this.servicesMapping[name] + '.js';
 
                 try {
                     var statsServiceFile = _fs2.default.lstatSync(serviceFile);
@@ -155,9 +150,9 @@ var Container = function () {
                         throw new Error();
                     }
                 } catch (error) {
-                    this.message.error({
+                    this.getComponent('Message').error({
                         title: "Impossible to call service",
-                        message: "Service " + name + " not found, path: " + _path3.default.resolve(serviceFile) + "\n" + error,
+                        message: "Service " + name + " not found, path: " + _path2.default.resolve(serviceFile) + "\n" + error,
                         type: 'error',
                         exit: 0
                     });
@@ -175,7 +170,7 @@ var Container = function () {
                 if (statsServiceDirectory.isDirectory()) {
                     this.servicesDirectoryExists = true;
                 } else {
-                    this.message.error({
+                    this.getComponent('Message').error({
                         title: "Service directory not found",
                         message: "Service directory path resolved: " + this.servicesDirectoryPath,
                         type: 'error',
@@ -224,14 +219,19 @@ var Container = function () {
         get: function get() {
             return this._servicesDirectoryPath;
         },
-        set: function set(path) {
-            this._servicesDirectoryPath = path;
+        set: function set(directoryPath) {
+            this._servicesDirectoryPath = directoryPath;
             return this;
         }
     }, {
         key: 'componentsLoaded',
         get: function get() {
             return this._componentsLoaded;
+        }
+    }, {
+        key: 'shared',
+        get: function get() {
+            return this._shared;
         }
     }, {
         key: 'componentsMapping',

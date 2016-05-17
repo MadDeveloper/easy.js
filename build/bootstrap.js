@@ -46,9 +46,9 @@ var _minimist = require('minimist');
 
 var _minimist2 = _interopRequireDefault(_minimist);
 
-var _Kernel = require('./vendor/easy/Kernel');
+var _kernel = require('./vendor/easy/core/kernel');
 
-var _Kernel2 = _interopRequireDefault(_Kernel);
+var _kernel2 = _interopRequireDefault(_kernel);
 
 var _bundlesDefinition = require('./config/bundlesDefinition');
 
@@ -95,7 +95,7 @@ function Application(config, cliMode) {
   /*
    * Easy.js dependencies
    */
-  var kernel = new _Kernel2.default().init(__dirname, config);
+  var kernel = new _kernel2.default().init(__dirname, config);
   var container = kernel.container;
   var message = container.getComponent('Message');
   var database = container.getComponent('Connector');
@@ -108,7 +108,7 @@ function Application(config, cliMode) {
   /*
    * Define bundle easy vendor
    */
-  var bundleManager = container.getComponent('BundleManager')(container);
+  var bundleManager = container.getComponent('BundleManager');
   bundleManager.database = databaseConnection;
   bundleManager.router = _express2.default.Router();
 
