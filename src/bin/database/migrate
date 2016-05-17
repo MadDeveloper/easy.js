@@ -1,0 +1,154 @@
+#!/usr/bin/env node
+
+var cliMode         = true;
+var config          = require( __dirname + '/../../build/config/config' );
+var app             = require( __dirname + '/../../build/bootstrap.js' )( config, cliMode );
+var schemaBuilder   = app.bundleManager.container.getService( 'database/schema' );
+
+var fs = require( 'fs' );
+var database = require( global.app.root + '/config/database/database' )();
+var Schema = require( global.app.root + '/config/database/schema' );
+var sequence = require( 'when/sequence' );
+var _ = require( 'lodash' );
+
+var Message 			= require( global.app.root + '/vendor/easy/core/Message' )();
+var titleError			= "Error when updating database";
+var consequenceError	= "Migration aborted.";
+
+/*
+ * Functions
+ */
+function raiseError( err ) {
+	Message.error({
+		title: titleError,
+		message: err,
+		consequence: consequenceError,
+		exit: 0
+	});
+}
+
+
+function dropTable( tableName ) {
+    return schemaBuilder.dropTable( tableName );
+}
+
+function createTable(tableName) {
+	console.log( "Updating table : " + tableName );
+	return schemaBuilder.createTable( tableName, Schema[ tableName ] );
+}
+
+function dropTables() {
+    var tables = [];
+    var tableNames = _.keys(Schema);
+    // we need to reverse tables schema, to delete in first table which contains fk and not the parents, otherwise error will occur because of fk.
+    tableNames.reverse();
+    tables = _.map(tableNames, function (tableName) {
+      return function () {
+        return dropTable( tableName );
+      };
+    });
+    return sequence(tables);
+}
+
+function createTables () {
+  var tables = [];
+  var tableNames = _.keys(Schema);
+  tables = _.map(tableNames, function (tableName) {
+    return function () {
+      return createTable(tableName);
+    };
+  });
+  return sequence(tables);
+}
+
+function migrate() {
+	dropTables()
+	.then( function() {
+
+		var standalone = true;
+		if ( false === process.argv.standalone ) {
+			standalone = false;
+		}
+
+		if ( standalone ) {
+			createTables()
+			.then( function() {
+				Message.success( "Schema updated.", true );
+			})
+			.catch( function ( error ) {
+				raiseError( error );
+			});
+		} else {
+			var callback = process.argv.callback || function() {};
+			createTables()
+			.then( function() {
+				Message.success( "Schema updated." );
+				callback();
+			})
+			.catch( function ( error ) {
+				raiseError( error );
+				callback();
+			});
+		}
+
+	})
+	.catch( function ( error ) {
+		raiseError( error );
+	});
+}
+
+
+function updateDatabaseNameInConfig() {
+	var databaseConfigFilePath = global.app.root + '/config/database/connector/knex.js';
+	fs.readFile( databaseConfigFilePath, { encoding: 'utf8' }, function( error, data ) {
+		if ( error ) {
+			errorUpdatingDatabaseConfigProperty( error );
+		} else {
+	   		var dataUpdated = data.replace( /database\s*:\s*\w+/, 'database : params.connection.database' );
+			fs.writeFile( databaseConfigFilePath, dataUpdated, 'utf8', function ( error ) {
+				if ( error ) {
+					errorUpdatingDatabaseConfigProperty( error );
+				} else {
+					/*
+					 * Configuration succefully edited
+					 * we reconnect database to new schema
+					 */
+					delete require.cache[ require.resolve( global.app.root + '/config/database/database' ) ];
+
+					var clearCache = true;
+					schemaBuilder = app.BundleManager.getContainer().getService( 'database.schema', clearCache );
+
+					/*
+					 * Continue migration
+					 */
+					migrate();
+				}
+		  	});
+		}
+	});
+
+	function errorUpdatingDatabaseConfigProperty( error ) {
+		Message.error({
+			title: 'Error when trying to edit the database connection property into ' + global.app.root + '/config/config.js path',
+			message: error,
+			consequence: 'Migration aborted.',
+			exit: 0
+		});
+	}
+}
+
+
+/*
+ * Code executed first
+ */
+schemaBuilder.createSchema( config.database.connection.database )
+.then( function( schema ) {
+	/*
+	 * Database created for first time, we set the database config property into ~/config/config.js -> database.connection.database
+	 */
+ 	Message.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' );
+	updateDatabaseNameInConfig();
+})
+.catch( function( error ) {
+	migrate();
+});

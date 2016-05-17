@@ -1,0 +1,9 @@
+[Tue, 17 May 2016 13:44:25 GMT] -- ::1 -- GET /roles 500 -- Error: Pool was destroyed
+[Tue, 17 May 2016 13:45:00 GMT] -- ::1 -- GET /roles 500 -- Error: Pool is destroyed
+[Tue, 17 May 2016 13:45:01 GMT] -- ::1 -- GET /roles 500 -- Error: Pool is destroyed
+[Tue, 17 May 2016 13:45:01 GMT] -- ::1 -- GET /roles 500 -- Error: Pool is destroyed
+[Tue, 17 May 2016 13:45:13 GMT] -- ::1 -- GET /roles 500 -- Error: Pool was destroyed
+[Tue, 17 May 2016 14:31:24 GMT] -- ::1 -- GET /roles 500 -- Error: select `roles`.* from `roles` - ER_NO_DB_ERROR: No database selected
+[Tue, 17 May 2016 14:31:58 GMT] -- ::1 -- GET /roles 500 -- Error: select `roles`.* from `roles` - ER_NO_DB_ERROR: No database selected
+[Tue, 17 May 2016 14:31:59 GMT] -- ::1 -- GET /roles 500 -- Error: select `roles`.* from `roles` - ER_NO_DB_ERROR: No database selected
+[Tue, 17 May 2016 14:32:00 GMT] -- ::1 -- GET /roles 500 -- Error: select `roles`.* from `roles` - ER_NO_DB_ERROR: No database selected

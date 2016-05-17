@@ -1,0 +1,490 @@
+#!/usr/bin/env node
+import fs           from 'fs'
+import walk         from 'walk'
+import path         from 'path'
+import readlineSync from 'readline-sync'
+import _            from 'lodash'
+import minimist     from 'minimist'
+import config       from './../../build/config/config'
+import App          from './../../build/bootstrap.js'
+
+let argv    = minimist( process.argv.slice( 2 ) )
+let cliMode = true
+
+const app                   = new App( config, cliMode )
+const bundleManager         = app.bundleManager
+const container             = bundleManager.container
+const message               = container.getComponent( 'Message' )
+const schemaBuilder         = container.getService( 'database.schema' )
+const StringService         = container.getService( 'string' )
+const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
+
+if ( nameBundleFromArgv.length > 0 ) {
+
+    let nameBundle          = nameBundleFromArgv.toLowerCase().trim()
+    let bundlesPath         = global.app.root + "/src/bundles"
+    let nameBundleLowerCase = nameBundle.decapitalizeFirstLetter()
+    let skeletonBundlePath  = bundlesPath + "/skeleton"
+    let bundleCreatingPath  = bundlesPath + "/" + nameBundle
+
+    const positiveAnswers = [ 'y', 'ye', 'yes' ]
+    const negativeAnswers = [ 'n', 'no' ]
+
+    /*
+     * Check if bundle isn't defined yet
+     */
+    fs.lstat( bundlesPath + "/" + nameBundle, ( err, stats ) => {
+        if ( !err && stats.isDirectory() ) {
+            message.error({
+                title: "Impossible to create bundle",
+                message: nameBundle + " bundle already exists.",
+                consequence: "Creation aborted.",
+                exit: 0
+            })
+        } else {
+            checkIfSkeletonIsDefined()
+        }
+    })
+
+    function checkIfSkeletonIsDefined() {
+        /*
+         * Check if Skeleton bundle is defined
+         */
+        fs.lstat( skeletonBundlePath, ( err, stats ) => {
+            if ( err || !stats.isDirectory() ) {
+                message.error({
+                    title: "Impossible to create bundle",
+                    message: "Skeleton bundle isn't defined.",
+                    consequence: "Creation aborted.",
+                    exit: 0
+                })
+            } else {
+                askForTable()
+            }
+        })
+    }
+
+    function askForTable() {
+        var createAssociatedTable = readlineSync.question( 'Do you want create an associated table into database? (y/n) ' ).trim().toLowerCase()
+
+        if ( _.indexOf( positiveAnswers, createAssociatedTable ) !== -1 ) {
+            /*
+             * Table associated requested
+             */
+            checkExistanceOfSchemaFile( () => {
+                askForTableName()
+            })
+        } else if ( _.indexOf( negativeAnswers, createAssociatedTable ) !== -1 ) {
+            /*
+             * No table associated requested
+             */
+            createBundleDirectory()
+        } else {
+            askForTable()
+        }
+    }
+
+    let tableName = ''
+    function askForTableName() {
+        console.log( '\n' )
+
+        const defaultTableName  = stringTransform.asSnakeCase( nameBundleLowerCase ) + 's'
+        const answerTableName   = stringTransform.asSnakeCase( readlineSync.question( 'Table name (default: ' + defaultTableName + '): ' ) )
+
+        tableName = ( answerTableName.length > 0 ) ? answerTableName : defaultTableName
+
+        askForProperties()
+    }
+
+    let properties              = {}
+    const availablesColumnType  = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal', 'boolean', 'date', 'datetime', 'time', 'timestamp' ]
+    const specialColumnType     = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal' ]
+
+    function askForProperties() {
+        console.log( '\n' )
+        /*
+         * We ask for properties
+         */
+        const columnName        = stringTransform.asSnakeCase( readlineSync.question( 'Column name (let empty if the table is complete): ' ) )
+        const propertiesLength  = Object.keys( properties ).length
+
+        if ( columnName.length === 0 && propertiesLength === 0 ) {
+            askForTable()
+        } else if ( columnName.length === 0 && propertiesLength > 0 ) {
+            createTable()
+        } else {
+            const columnType = stringTransform.cleanAccents( readlineSync.question( 'Column type: (availables: ' + availablesColumnType.join( ', ' ) + '): ' ).toLowerCase().trim() )
+
+            if ( _.indexOf( availablesColumnType, columnType ) !== -1 ) {
+                /*
+                 * Everything is ok, we push new column
+                 */
+                properties[ columnName ] = {}
+                properties[ columnName ].type = columnType
+
+                /*
+                 * Special property ? Ask for more details
+                 */
+                if ( _.indexOf( specialColumnType, columnType ) !== -1 ) {
+                    askDetailsForSpecialColumnType( columnType, columnName )
+                }
+
+                askForProperties()
+            } else {
+                message.error({
+                    title: "Column type not valid",
+                    message: "Column type can be: " + availablesColumnType.join( ', ' )
+                })
+                askForProperties()
+            }
+        }
+    }
+
+    function askDetailsForSpecialColumnType( type, columnName ) {
+        let property = properties[ columnName ]
+
+        switch ( type ) {
+
+            case 'increments':
+                const anwserDefineAsPrimary = readlineSync.question( 'Define as primary? (y/n) ' ).trim().toLowerCase()
+
+                if ( _.indexOf( positiveAnswers, anwserDefineAsPrimary ) !== -1 ) {
+                    /*
+                     * Define as primary
+                     */
+                    property.primary = true
+                } else if ( _.indexOf( negativeAnswers, anwserDefineAsPrimary ) === -1 ) {
+                    /*
+                     * Not recognized answer
+                     */
+                    askDetailsForSpecialColumnType( type, columnName )
+                }
+
+                askForUniqueColumn( columnName )
+                property.nullable = false
+                break
+
+            case 'integer':
+            case 'bigInteger':
+                const answerIsAReference = readlineSync.question( 'Define as reference (foreign key)? (y/n) ' ).trim().toLowerCase()
+
+                if ( _.indexOf( positiveAnswers, answerIsAReference ) !== -1 ) {
+                    /*
+                     * Define as reference
+                     */
+                    property.unsigned = true
+
+                    const answerReference = readlineSync.question( 'Table.ColumnId as reference (exemple: roles.id): ' ).trim().toLowerCase()
+
+                    if ( answerReference.indexOf( '.' ) !== -1 && answerReference.match( /^\w+\.\w+$/ ) ) {
+                        property.references = answerReference
+
+                        const validsOnEventAction   = [ 'restrict', 'cascade', 'set null', 'no action' ]
+                        let defaultOnEventAction    = 'restrict'
+
+                        /*
+                         * OnDelete
+                         */
+                        const answerOnDelete = readlineSync.question( 'On delete action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase()
+
+                        if ( _.indexOf( validsOnEventAction, answerOnDelete ) !== -1 ) {
+                            property.onDelete = answerOnDelete
+                        } else {
+                            property.onDelete = defaultOnEventAction
+                        }
+
+                        /*
+                         * OnUpdate
+                         */
+                        const answerOnUpdate = readlineSync.question( 'On update action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase()
+
+                        if ( _.indexOf( validsOnEventAction, answerOnUpdate ) !== -1 ) {
+                            property.onUpdate = answerOnUpdate
+                        } else {
+                            property.onUpdate = defaultOnEventAction
+                        }
+                    } else {
+                        /*
+                         * Wrong reference
+                         */
+                        delete property.unsigned
+                        message.error({
+                            title: "Wrong reference",
+                            message: "Reference -> " + answerReference + " is not a valid reference."
+                        })
+                        askDetailsForSpecialColumnType( type, columnName )
+                    }
+                }
+
+                askForUniqueColumn( columnName )
+                askForNullableColumn( columnName )
+                break
+
+            case 'text':
+                const validsTextType  = [ 'text', 'mediumtext', 'longtext' ]
+                const defaultTextType = 'text'
+                const anwserTypeOfText = readlineSync.question( 'Which kind of text? ( ' + validsTextType.join( ', ' ) + ', default: ' + defaultTextType + ') ' ).trim().toLowerCase()
+
+                if ( _.indexOf( validsTextType, anwserTypeOfText ) !== -1 ) {
+                    property.fieldtype = anwserTypeOfText
+                } else {
+                    property.fieldtype = defaultTextType
+                }
+
+                askForNullableColumn( columnName )
+                break
+
+            case 'string':
+                const minLength = 1, maxLength = 255
+                const answerMaxLength = readlineSync.question( 'Max length (' + minLength + '-' + maxLength + ', default: ' + maxLength + '): ' ).trim()
+
+                if ( !isNaN( answerMaxLength ) && answerMaxLength >= minLength && answerMaxLength <= maxLength ) {
+                    /*
+                     * Ok
+                     */
+                    property.maxlength = parseInt( answerMaxLength )
+                } else if ( !isNaN( answerMaxLength ) ) {
+                    /*
+                     * Not in range, default value applicated
+                     */
+                    property.maxlength = maxLength
+                } else {
+                    /*
+                     * Wrong answer, we ask again
+                     */
+                    askDetailsForSpecialColumnType( type, columnName )
+                }
+
+                askForUniqueColumn( columnName )
+                askForNullableColumn( columnName )
+                break
+
+            case 'float':
+            case 'decimal':
+                const defaultPrecision = 8
+                const answerPrecision = readlineSync.question( 'Precision (integer, default: ' + defaultPrecision + '): ' ).trim()
+
+                if ( answerPrecision.length === 0 || isNaN( answerPrecision ) || !isFinite( answerPrecision ) ) {
+                    property.precision = defaultPrecision
+                } else {
+                    property.precision = parseInt( answerPrecision )
+                }
+
+                if ( 'decimal' === type ) {
+                    /*
+                     * Ask for scale
+                     */
+                    const defaultScale = 2
+                    const answerScale = readlineSync.question( 'Scale (integer, default: ' + defaultScale + ')' ).trim()
+
+                    if ( answerScale.length === 0 || isNaN( answerScale ) || !isFinite( answerScale ) ) {
+                        property.scale = defaultScale
+                    } else {
+                        property.scale = parseInt( answerScale )
+                    }
+                }
+
+                askForNullableColumn( columnName )
+                break
+        }
+    }
+
+    function askForNullableColumn( columnName ) {
+        var answerNullable = readlineSync.question( 'Define as nullable? (y/n) ' ).trim().toLowerCase()
+        if ( _.indexOf( positiveAnswers, answerNullable ) !== -1 ) {
+            /*
+             * Define as nullable
+             */
+            properties[ columnName ].nullable = true
+        } else if ( _.indexOf( negativeAnswers, answerNullable ) !== -1 ) {
+            /*
+             * Not nullable
+             */
+            properties[ columnName ].nullable = false
+        } else {
+            /*
+             * Wrong answer
+             */
+            askForNullableColumn( columnName )
+        }
+    }
+
+    function askForUniqueColumn( columnName ) {
+        const answerAsUnique = readlineSync.question( 'Define as unique? (y/n) ' ).trim().toLowerCase()
+
+        if ( _.indexOf( positiveAnswers, answerAsUnique ) !== -1 ) {
+            /*
+             * Define as unique
+             */
+            properties[ columnName ].unique = true
+        } else if ( _.indexOf( negativeAnswers, answerAsUnique ) !== -1 ) {
+            /*
+             * Not unique
+             */
+            properties[ columnName ].unique = false
+        } else {
+            /*
+             * Wrong answer
+             */
+            askForUniqueColumn( columnName )
+        }
+    }
+
+    function createTable() {
+        schemaBuilder.createTable( tableName, properties )
+        .then( () => {
+            updateSchema()
+        })
+        .catch( function( error ) {
+            message.error({
+                title: "Error when creating table",
+                message: error,
+                consequence: "Bundle creation aborted.",
+                exit: 0
+            })
+        })
+    }
+
+    function updateSchema() {
+        /*
+         * We stringify properties and insert it into ~/config/database/schema.js
+         */
+        checkExistanceOfSchemaFile( function() {
+            const pathSchema = global.app.root + '/config/database/schema.js'
+
+            fs.readFile( pathSchema, { encoding: 'utf8' }, ( error, data ) => {
+                if ( !error ) {
+                    const stringToWrite = 'export default {\n\t' + tableName + ': ' + JSON.stringify( properties ) + ',\n\n'
+                    const dataUpdated = data.replace( /export(\s*)default(\s)\{/i, stringToWrite )
+
+                    fs.writeFile( pathSchema, dataUpdated, 'utf8', error => {
+                        if ( !error ) {
+                            createBundleDirectory()
+                        } else {
+                            errorEditingSchema( error )
+                        }
+                    })
+                } else {
+                    errorEditingSchema( error )
+                }
+            })
+        })
+
+        function errorEditingSchema( error ) {
+            message.error({
+                title: "Impossible to update schema",
+                message: "Error when editing schema.js file: " + error,
+                consequence: "Bundle creation aborted.",
+                exit: 0
+            })
+        }
+    }
+
+    function checkExistanceOfSchemaFile( cb ) {
+        const pathSchema = global.app.root + '/config/database/schema.js'
+
+        fs.lstat( pathSchema, ( error, stat ) => {
+            if ( !error & stat.isFile() ) {
+                cb()
+            } else {
+                message.error({
+                    title: "Impossible to update schema",
+                    message: "schema.js not found at: " + pathSchema,
+                    consequence: "Bundle creation aborted.",
+                    exit: 0
+                })
+            }
+        })
+    }
+
+    function createBundleDirectory() {
+        /*
+         * Check if new bundle directory is correctly created
+         */
+        fs.mkdir( bundleCreatingPath, 0775, err => {
+            if ( err ) {
+                message.error({
+                    title: "Impossible to create bundle",
+                    message: "Error when trying create bundle directory.",
+                    consequence: "Creation aborted.",
+                    exit: 0
+                })
+            } else {
+                launchWalker()
+            }
+        })
+    }
+
+    function launchWalker() {
+        let walker = walk.walk( skeletonBundlePath )
+
+        walker.on( "names", ( root, nodeNamesArray ) => {
+            nodeNamesArray.sort( ( a, b ) => {
+                if ( a > b ) return 1
+                if ( a < b ) return -1
+                return 0
+            })
+        })
+
+        walker.on( "directories", ( root, dirStatsArray, next ) => {
+            // dirStatsArray is an array of `stat` objects with the additional attributes
+            // * type
+            // * error
+            // * name
+            let newDirName = ''
+            for ( let i in dirStatsArray ) {
+              newDirName = dirStatsArray[ i ].name.replace( /Skeleton/gi, nameBundle )
+              fs.mkdir( bundleCreatingPath + '/' + newDirName, err => {
+                  if ( err ) {
+                      message.error({
+                          title: "Impossible to create bundle",
+                          message: "Error when trying create bundle sub-directory <" + newDirName + ">.",
+                          consequence: "Creation aborted.",
+                          exit: 0
+                      })
+                  }
+              })
+            }
+
+            next()
+        })
+
+        walker.on( "file", ( root, fileStats, next ) => {
+            const skeletonFilePath = path.join( root, fileStats.name )
+            const newBundleFilePath = skeletonFilePath.replace( /Skeleton/g, nameBundle)
+
+            try {
+                let data = fs.readFileSync( skeletonFilePath, 'utf8' )
+                /*
+                 * We write tableName specified above
+                 */
+                if ( fileStats.name.toLowerCase().indexOf( 'skeleton.js' ) !== -1 ) {
+                    data = data.replace( /tableName(\s*):(\s*)('|")\w*('|")/i, 'tableName$1:$2$3' + tableName + '$4' )
+                }
+
+                fs.writeFileSync( newBundleFilePath, data.replace( /Skeleton/g, nameBundle ).replace( /skeleton/g, nameBundleLowerCase ), { encoding: 'utf8', mode: 0775 } )
+                next()
+            } catch( error ) {
+                message.error({
+                    title: "Impossible to create bundle",
+                    message: "Error: " + JSON.stringify( error ),
+                    consequence: "Creation aborted.",
+                    exit: 0
+                })
+            }
+        })
+
+        walker.on( "errors", ( root, nodeStatsArray, next ) => {
+            next()
+        })
+
+        walker.on( "end", () => {
+            message.success( "\nBundle " + nameBundle + " created.", true )
+        })
+
+    }
+
+} else {
+    message.info( "\nCommand: \n[node] createBundle nameOfBundle\n" )
+    process.exit()
+}
