@@ -5,13 +5,14 @@ import path         from 'path'
 import readlineSync from 'readline-sync'
 import _            from 'lodash'
 import minimist     from 'minimist'
-import config       from './../../build/config/config'
-import App          from './../../build/bootstrap.js'
+import config       from './../../config/config'
+import App          from './../../bootstrap.js'
 
 let argv    = minimist( process.argv.slice( 2 ) )
 let cliMode = true
 
 const app                   = new App( config, cliMode )
+const kernel                = app.kernel
 const bundleManager         = app.bundleManager
 const container             = bundleManager.container
 const message               = container.getComponent( 'Message' )
@@ -21,14 +22,21 @@ const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {
 
-    let nameBundle          = nameBundleFromArgv.toLowerCase().trim()
-    let bundlesPath         = global.app.root + "/src/bundles"
-    let nameBundleLowerCase = nameBundle.decapitalizeFirstLetter()
-    let skeletonBundlePath  = bundlesPath + "/skeleton"
-    let bundleCreatingPath  = bundlesPath + "/" + nameBundle
+    const positiveAnswers       = [ 'y', 'ye', 'yes' ]
+    const negativeAnswers       = [ 'n', 'no' ]
+    const bundlesPath           = __dirname + '/../../../src/bundles'
+    const skeletonBundlePath    = bundlesPath + "/skeleton"
 
-    const positiveAnswers = [ 'y', 'ye', 'yes' ]
-    const negativeAnswers = [ 'n', 'no' ]
+    let nameBundle          = nameBundleFromArgv.trim()
+    let nameBundleLowerCase = nameBundle.toLowerCase()
+    let bundleCreatingPath  = bundlesPath + "/" + nameBundle.toLowerCase()
+
+    let tableName   = ''
+    let properties  = {}
+
+    const availablesColumnType  = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal', 'boolean', 'date', 'datetime', 'time', 'timestamp' ]
+    const specialColumnType     = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal' ]
+    const pathDatabaseSchema    = kernel.path.config + '/database/schema.js'
 
     /*
      * Check if bundle isn't defined yet
@@ -65,7 +73,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForTable() {
-        var createAssociatedTable = readlineSync.question( 'Do you want create an associated table into database? (y/n) ' ).trim().toLowerCase()
+        const createAssociatedTable = readlineSync.question( 'Do you want create an associated table into database? (y/n) ' ).trim().toLowerCase()
 
         if ( _.indexOf( positiveAnswers, createAssociatedTable ) !== -1 ) {
             /*
@@ -84,7 +92,6 @@ if ( nameBundleFromArgv.length > 0 ) {
         }
     }
 
-    let tableName = ''
     function askForTableName() {
         console.log( '\n' )
 
@@ -95,10 +102,6 @@ if ( nameBundleFromArgv.length > 0 ) {
 
         askForProperties()
     }
-
-    let properties              = {}
-    const availablesColumnType  = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal', 'boolean', 'date', 'datetime', 'time', 'timestamp' ]
-    const specialColumnType     = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal' ]
 
     function askForProperties() {
         console.log( '\n' )
@@ -290,7 +293,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForNullableColumn( columnName ) {
-        var answerNullable = readlineSync.question( 'Define as nullable? (y/n) ' ).trim().toLowerCase()
+        const answerNullable = readlineSync.question( 'Define as nullable? (y/n) ' ).trim().toLowerCase()
         if ( _.indexOf( positiveAnswers, answerNullable ) !== -1 ) {
             /*
              * Define as nullable
@@ -335,7 +338,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         .then( () => {
             updateSchema()
         })
-        .catch( function( error ) {
+        .catch( error => {
             message.error({
                 title: "Error when creating table",
                 message: error,
@@ -349,15 +352,13 @@ if ( nameBundleFromArgv.length > 0 ) {
         /*
          * We stringify properties and insert it into ~/config/database/schema.js
          */
-        checkExistanceOfSchemaFile( function() {
-            const pathSchema = global.app.root + '/config/database/schema.js'
-
-            fs.readFile( pathSchema, { encoding: 'utf8' }, ( error, data ) => {
+        checkExistanceOfSchemaFile( () => {
+            fs.readFile( pathDatabaseSchema, { encoding: 'utf8' }, ( error, data ) => {
                 if ( !error ) {
                     const stringToWrite = 'export default {\n\t' + tableName + ': ' + JSON.stringify( properties ) + ',\n\n'
                     const dataUpdated = data.replace( /export(\s*)default(\s)\{/i, stringToWrite )
 
-                    fs.writeFile( pathSchema, dataUpdated, 'utf8', error => {
+                    fs.writeFile( pathDatabaseSchema, dataUpdated, 'utf8', error => {
                         if ( !error ) {
                             createBundleDirectory()
                         } else {
@@ -381,15 +382,13 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function checkExistanceOfSchemaFile( cb ) {
-        const pathSchema = global.app.root + '/config/database/schema.js'
-
-        fs.lstat( pathSchema, ( error, stat ) => {
+        fs.lstat( pathDatabaseSchema, ( error, stat ) => {
             if ( !error & stat.isFile() ) {
                 cb()
             } else {
                 message.error({
                     title: "Impossible to update schema",
-                    message: "schema.js not found at: " + pathSchema,
+                    message: "schema.js not found at: " + pathDatabaseSchema,
                     consequence: "Bundle creation aborted.",
                     exit: 0
                 })
@@ -401,7 +400,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         /*
          * Check if new bundle directory is correctly created
          */
-        fs.mkdir( bundleCreatingPath, 0775, err => {
+        fs.mkdir( bundleCreatingPath, err => {
             if ( err ) {
                 message.error({
                     title: "Impossible to create bundle",
@@ -410,6 +409,10 @@ if ( nameBundleFromArgv.length > 0 ) {
                     exit: 0
                 })
             } else {
+                if ( process.geteuid && process.getgid ) { /* doesn't work on Windows, Android (only unix systems) */
+                    fs.chownSync( bundleCreatingPath, process.geteuid(), process.getgid() )
+                }
+
                 launchWalker()
             }
         })
@@ -432,18 +435,24 @@ if ( nameBundleFromArgv.length > 0 ) {
             // * error
             // * name
             let newDirName = ''
+
             for ( let i in dirStatsArray ) {
-              newDirName = dirStatsArray[ i ].name.replace( /Skeleton/gi, nameBundle )
-              fs.mkdir( bundleCreatingPath + '/' + newDirName, err => {
-                  if ( err ) {
-                      message.error({
-                          title: "Impossible to create bundle",
-                          message: "Error when trying create bundle sub-directory <" + newDirName + ">.",
-                          consequence: "Creation aborted.",
-                          exit: 0
-                      })
-                  }
-              })
+                newDirName = dirStatsArray[ i ].name.replace( /Skeleton/gi, nameBundle )
+
+                fs.mkdir( bundleCreatingPath + '/' + newDirName, err => {
+                    if ( err ) {
+                        message.error({
+                            title: "Impossible to create bundle",
+                            message: "Error when trying create bundle sub-directory <" + newDirName + ">.",
+                            consequence: "Creation aborted.",
+                            exit: 0
+                        })
+                    } else {
+                        if ( process.geteuid && process.getgid ) { /* doesn't work on Windows, Android (only unix systems) */
+                            fs.chownSync( bundleCreatingPath + '/' + newDirName, process.geteuid(), process.getgid() )
+                        }
+                    }
+                })
             }
 
             next()
@@ -451,10 +460,11 @@ if ( nameBundleFromArgv.length > 0 ) {
 
         walker.on( "file", ( root, fileStats, next ) => {
             const skeletonFilePath = path.join( root, fileStats.name )
-            const newBundleFilePath = skeletonFilePath.replace( /Skeleton/g, nameBundle)
+            const newBundleFilePath = skeletonFilePath.replace( /Skeleton/g, nameBundle ).replace( /skeleton/g, nameBundleLowerCase )
 
             try {
                 let data = fs.readFileSync( skeletonFilePath, 'utf8' )
+
                 /*
                  * We write tableName specified above
                  */
@@ -462,7 +472,12 @@ if ( nameBundleFromArgv.length > 0 ) {
                     data = data.replace( /tableName(\s*):(\s*)('|")\w*('|")/i, 'tableName$1:$2$3' + tableName + '$4' )
                 }
 
-                fs.writeFileSync( newBundleFilePath, data.replace( /Skeleton/g, nameBundle ).replace( /skeleton/g, nameBundleLowerCase ), { encoding: 'utf8', mode: 0775 } )
+                fs.writeFileSync( newBundleFilePath, data.replace( /Skeleton/g, nameBundle ).replace( /skeleton/g, nameBundleLowerCase ), { encoding: 'utf8' } )
+
+                if ( process.geteuid && process.getgid ) { /* doesn't work on Windows, Android (only unix systems) */
+                    fs.chownSync( newBundleFilePath, process.geteuid(), process.getgid() )
+                }
+
                 next()
             } catch( error ) {
                 message.error({

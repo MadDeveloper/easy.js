@@ -6,7 +6,9 @@
   "repository": "https://jsergent-prepapp@bitbucket.org/prepapp/easy.js.git",
   "scripts": {
     "clean-build": "rm -rf build/*",
-    "build": "node_modules/.bin/babel -w src/ -d build/",
+    "make-build": "mkdir -p build/bin/database && mkdir -p build/bin/bundles",
+    "build": "npm run build-bin && node_modules/.bin/babel -w src/ -d build/",
+    "build-bin": "npm run make-build && node_modules/.bin/babel src/bin/bundles/new -o build/bin/bundles/new && node_modules/.bin/babel src/bin/bundles/tests -o build/bin/bundles/tests && node_modules/.bin/babel src/bin/database/import -o build/bin/database/import && node_modules/.bin/babel src/bin/database/migrate -o build/bin/database/migrate && node_modules/.bin/babel src/bin/database/startup -o build/bin/database/startup",
     "build-maps": "node_modules/.bin/babel -w src/ -d build/ -s",
     "test": "npm run bundle-tests",
     "bundle-tests": "node build/bin/bundles/tests",
