@@ -1,4 +1,4 @@
-import _            from 'lodash'
+import { indexOf }  from 'lodash'
 import Controller   from './../../../vendor/easy/core/Controller'
 
 export default class RoutingController extends Controller {
@@ -97,7 +97,7 @@ export default class RoutingController extends Controller {
                         ops.forEach( patch => {
                             switch ( patch.op ) {
                                 case 'replace':
-                                    if ( _.indexOf( validPaths, patch.path ) >= 0 ) {
+                                    if ( indexOf( validPaths, patch.path ) >= 0 ) {
                                         this.skeletonRepository.patch( this.request.find( 'skeleton' ), patch, { transacting: t, patch: true } )
                                         .then( skeleton => {
                                             if ( ++currentPatch >= opsLength ) {

@@ -1,4 +1,4 @@
-import _        from 'lodash'
+import { indexOf }        from 'lodash'
 import Service  from './../../vendor/easy/core/Service'
 
 /*
@@ -62,23 +62,23 @@ export default class AccessSecurityService extends Service {
         /*
          * An admin as all privileges
          */
-        if ( _.indexOf( params.mustBe, this.admin ) === -1 ) {
+        if ( indexOf( params.mustBe, this.admin ) === -1 ) {
             params.mustBe.push( this.admin )
         }
 
-        if ( _.indexOf( params.canRead, this.admin ) === -1 ) {
+        if ( indexOf( params.canRead, this.admin ) === -1 ) {
             params.canRead.push( this.admin )
         }
 
-        if ( _.indexOf( params.canCreate, this.admin ) === -1 ) {
+        if ( indexOf( params.canCreate, this.admin ) === -1 ) {
             params.canCreate.push( this.admin )
         }
 
-        if ( _.indexOf( params.canUpdate, this.admin ) === -1 ) {
+        if ( indexOf( params.canUpdate, this.admin ) === -1 ) {
             params.canUpdate.push( this.admin )
         }
 
-        if ( _.indexOf( params.canDelete, this.admin ) === -1 ) {
+        if ( indexOf( params.canDelete, this.admin ) === -1 ) {
             params.canDelete.push( this.admin )
         }
 
@@ -91,7 +91,7 @@ export default class AccessSecurityService extends Service {
         let isAuthorizedToReach = false
 
         const method      = httpMethod.toLowerCase()
-        const authorized  = _.indexOf( this.restrictions.mustBe, this.focus ) !== -1 || _.indexOf( this.restrictions.mustBe, this.any ) !== -1
+        const authorized  = indexOf( this.restrictions.mustBe, this.focus ) !== -1 || indexOf( this.restrictions.mustBe, this.any ) !== -1
 
         if ( authorized ) {
 
@@ -100,21 +100,21 @@ export default class AccessSecurityService extends Service {
             const methodWhenUpdating  = [ 'put', 'patch' ]
             const methodWhenDeleting  = [ 'delete' ]
 
-            if ( _.indexOf( methodWhenReading, method ) !== -1 ) {
+            if ( indexOf( methodWhenReading, method ) !== -1 ) {
 
-                isAuthorizedToReach = _.indexOf( this.restrictions.canRead, focus ) !== -1 || _.indexOf( this.restrictions.canRead, this.any ) !== -1
+                isAuthorizedToReach = indexOf( this.restrictions.canRead, focus ) !== -1 || indexOf( this.restrictions.canRead, this.any ) !== -1
 
-            } else if ( _.indexOf( methodWhenCreating, method ) !== -1 ) {
+            } else if ( indexOf( methodWhenCreating, method ) !== -1 ) {
 
-                isAuthorizedToReach = _.indexOf( this.restrictions.canCreate, focus ) !== -1 || _.indexOf( this.restrictions.canCreate, this.any ) !== -1
+                isAuthorizedToReach = indexOf( this.restrictions.canCreate, focus ) !== -1 || indexOf( this.restrictions.canCreate, this.any ) !== -1
 
-            } else if ( _.indexOf( methodWhenUpdating, method ) !== -1 ) {
+            } else if ( indexOf( methodWhenUpdating, method ) !== -1 ) {
 
-                isAuthorizedToReach = _.indexOf( this.restrictions.canUpdate, focus ) !== -1 || _.indexOf( this.restrictions.canUpdate, this.any ) !== -1
+                isAuthorizedToReach = indexOf( this.restrictions.canUpdate, focus ) !== -1 || indexOf( this.restrictions.canUpdate, this.any ) !== -1
 
-            } else if ( _.indexOf( methodWhenDeleting, method ) !== -1 ) {
+            } else if ( indexOf( methodWhenDeleting, method ) !== -1 ) {
 
-                isAuthorizedToReach = _.indexOf( this.restrictions.canDelete, focus ) !== -1 || _.indexOf( this.restrictions.canDelete, this.any ) !== -1
+                isAuthorizedToReach = indexOf( this.restrictions.canDelete, focus ) !== -1 || indexOf( this.restrictions.canDelete, this.any ) !== -1
 
             }
 

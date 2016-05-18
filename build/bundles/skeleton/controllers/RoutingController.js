@@ -8,8 +8,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _lodash = require('lodash');
 
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _Controller2 = require('./../../../vendor/easy/core/Controller');
 
 var _Controller3 = _interopRequireDefault(_Controller2);
@@ -124,7 +122,7 @@ var RoutingController = function (_Controller) {
                                 ops.forEach(function (patch) {
                                     switch (patch.op) {
                                         case 'replace':
-                                            if (_lodash2.default.indexOf(validPaths, patch.path) >= 0) {
+                                            if ((0, _lodash.indexOf)(validPaths, patch.path) >= 0) {
                                                 _this5.skeletonRepository.patch(_this5.request.find('skeleton'), patch, { transacting: t, patch: true }).then(function (skeleton) {
                                                     if (++currentPatch >= opsLength) {
                                                         // It's ok

@@ -1,139 +1,139 @@
 #!/usr/bin/env node
+import fs           	from 'fs'
+import { keys, map }	from 'lodash'
+import minimist     	from 'minimist'
+import sequence 		from 'when/sequence'
+import config       	from './../../config/config'
+import App          	from './../../bootstrap.js'
 
-var cliMode         = true;
-var config          = require( __dirname + '/../../build/config/config' );
-var app             = require( __dirname + '/../../build/bootstrap.js' )( config, cliMode );
-var schemaBuilder   = app.bundleManager.container.getService( 'database/schema' );
+let argv    = minimist( process.argv.slice( 2 ) )
+let cliMode = true
 
-var fs = require( 'fs' );
-var database = require( global.app.root + '/config/database/database' )();
-var Schema = require( global.app.root + '/config/database/schema' );
-var sequence = require( 'when/sequence' );
-var _ = require( 'lodash' );
+const app                   = new App( config, cliMode )
+const kernel                = app.kernel
+const bundleManager         = app.bundleManager
+const container             = bundleManager.container
+const message               = container.getComponent( 'Message' )
+let schemaDatabaseService = container.getService( 'database.schema' )
 
-var Message 			= require( global.app.root + '/vendor/easy/core/Message' )();
-var titleError			= "Error when updating database";
-var consequenceError	= "Migration aborted.";
+const titleError		= "Error when updating database"
+const consequenceError	= "Migration aborted."
 
 /*
  * Functions
  */
 function raiseError( err ) {
-	Message.error({
+	message.error({
 		title: titleError,
 		message: err,
 		consequence: consequenceError,
 		exit: 0
-	});
-}
-
-
-function dropTable( tableName ) {
-    return schemaBuilder.dropTable( tableName );
-}
-
-function createTable(tableName) {
-	console.log( "Updating table : " + tableName );
-	return schemaBuilder.createTable( tableName, Schema[ tableName ] );
+	})
 }
 
 function dropTables() {
-    var tables = [];
-    var tableNames = _.keys(Schema);
+    let tables = []
+    let tableNames = keys( Schema )
+
     // we need to reverse tables schema, to delete in first table which contains fk and not the parents, otherwise error will occur because of fk.
-    tableNames.reverse();
-    tables = _.map(tableNames, function (tableName) {
+    tableNames.reverse()
+    tables = map( tableNames, tableName => {
       return function () {
-        return dropTable( tableName );
-      };
-    });
-    return sequence(tables);
+        return schemaDatabaseService.dropTable( tableName )
+      }
+    })
+
+    return sequence( tables )
 }
 
 function createTables () {
-  var tables = [];
-  var tableNames = _.keys(Schema);
-  tables = _.map(tableNames, function (tableName) {
-    return function () {
-      return createTable(tableName);
-    };
-  });
-  return sequence(tables);
+  let tables = []
+  const tableNames = keys( Schema )
+
+  tables = map( tableNames, tableName => {
+    return () => {
+      return schemaDatabaseService.createTable( tableName, schema[ tableName ] )
+    }
+  })
+
+  return sequence( tables )
 }
 
 function migrate() {
 	dropTables()
-	.then( function() {
+	.then( () => {
+		let standalone = true
 
-		var standalone = true;
 		if ( false === process.argv.standalone ) {
-			standalone = false;
+			standalone = false
 		}
 
 		if ( standalone ) {
 			createTables()
-			.then( function() {
-				Message.success( "Schema updated.", true );
+			.then( () => {
+				message.success( "Schema updated.", true )
 			})
-			.catch( function ( error ) {
-				raiseError( error );
-			});
+			.catch( error => {
+				raiseError( error )
+			})
 		} else {
-			var callback = process.argv.callback || function() {};
-			createTables()
-			.then( function() {
-				Message.success( "Schema updated." );
-				callback();
-			})
-			.catch( function ( error ) {
-				raiseError( error );
-				callback();
-			});
-		}
+			const callback = process.argv.callback || function() {}
 
+			createTables()
+			.then( () => {
+				message.success( "Schema updated." )
+				callback()
+			})
+			.catch( error => {
+				raiseError( error )
+				callback()
+			})
+		}
 	})
-	.catch( function ( error ) {
-		raiseError( error );
-	});
+	.catch( error => {
+		raiseError( error )
+	})
 }
 
 
 function updateDatabaseNameInConfig() {
-	var databaseConfigFilePath = global.app.root + '/config/database/connector/knex.js';
-	fs.readFile( databaseConfigFilePath, { encoding: 'utf8' }, function( error, data ) {
+	const databaseConfigFilePath = __dirname + '/../../../config/database/connector/knex.js'
+
+	fs.readFile( databaseConfigFilePath, { encoding: 'utf8' }, ( error, data ) => {
 		if ( error ) {
-			errorUpdatingDatabaseConfigProperty( error );
+			errorUpdatingDatabaseConfigProperty( error )
 		} else {
-	   		var dataUpdated = data.replace( /database\s*:\s*\w+/, 'database : params.connection.database' );
-			fs.writeFile( databaseConfigFilePath, dataUpdated, 'utf8', function ( error ) {
+	   		const dataUpdated = data.replace( /database\s*:\s*\w+/, 'database : params.connection.database' )
+
+			fs.writeFile( databaseConfigFilePath, dataUpdated, 'utf8', error => {
 				if ( error ) {
-					errorUpdatingDatabaseConfigProperty( error );
+					errorUpdatingDatabaseConfigProperty( error )
 				} else {
 					/*
 					 * Configuration succefully edited
 					 * we reconnect database to new schema
 					 */
-					delete require.cache[ require.resolve( global.app.root + '/config/database/database' ) ];
+					delete require.cache[ require.resolve( __dirname + '/../../../config/database/database' ) ]
 
-					var clearCache = true;
-					schemaBuilder = app.BundleManager.getContainer().getService( 'database.schema', clearCache );
+					const clearCache = true
+					schemaDatabaseService = container.getService( 'database.schema', clearCache )
 
 					/*
 					 * Continue migration
 					 */
-					migrate();
+					migrate()
 				}
-		  	});
+		  	})
 		}
-	});
+	})
 
 	function errorUpdatingDatabaseConfigProperty( error ) {
-		Message.error({
-			title: 'Error when trying to edit the database connection property into ' + global.app.root + '/config/config.js path',
+		message.error({
+			title: 'Error when trying to edit the database connection property into ~/src/config/config.js path',
 			message: error,
 			consequence: 'Migration aborted.',
 			exit: 0
-		});
+		})
 	}
 }
 
@@ -141,14 +141,14 @@ function updateDatabaseNameInConfig() {
 /*
  * Code executed first
  */
-schemaBuilder.createSchema( config.database.connection.database )
-.then( function( schema ) {
+schemaDatabaseService.createSchema( config.database.connection.database )
+.then( schema => {
 	/*
-	 * Database created for first time, we set the database config property into ~/config/config.js -> database.connection.database
+	 * Database created for first time, we set the database config property into ~/src/config/config.js -> database.connection.database
 	 */
- 	Message.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' );
-	updateDatabaseNameInConfig();
+ 	message.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' )
+	updateDatabaseNameInConfig()
 })
-.catch( function( error ) {
-	migrate();
-});
+.catch( error => {
+	migrate()
+})

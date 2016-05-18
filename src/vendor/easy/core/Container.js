@@ -4,13 +4,14 @@ import servicesMapping  from './../../../config/services/config'
 
 export default class Container {
     constructor( kernel ) {
-        this._kernel    = kernel
+        this._kernel = kernel
 
         /*
          * Dependencies shared
          */
-        this._componentsLoaded   = {}
-        this._shared             = {}
+        this._componentsLoaded  = {}
+        this._librariesLoaded   = {}
+        this._shared            = {}
 
         this._servicesDirectoryExists           = false
         this._checkExistanceOfServicesDirectory = true
@@ -21,11 +22,14 @@ export default class Container {
             'logger': this._kernel.path.easy + '/core/Logger',
             'message': this._kernel.path.easy + '/core/Message',
             'polyfills': this._kernel.path.easy + '/core/Polyfills',
-            'library': this._kernel.path.easy + '/core/Library',
             'connector': this._kernel.path.easy + '/database/Connector',
             'http': this._kernel.path.easy + '/http/Http',
             'request': this._kernel.path.easy + '/http/Request',
             'response': this._kernel.path.easy + '/http/Response'
+        }
+
+        this._librariesMapping = {
+            'string': this._kernel.path.easy + '/lib/String'
         }
 
         this._servicesMapping = servicesMapping
@@ -156,6 +160,36 @@ export default class Container {
     }
 
     /*
+     * Libraries
+     */
+    isLibraryMapped( name ) {
+        return this.librariesMapping.hasOwnProperty( name )
+    }
+
+    isLibraryLoaded( name ) {
+        return this.librariesLoaded.hasOwnProperty( name )
+    }
+
+    getLibrary( name ) {
+        name = name.toLowerCase()
+
+        if ( this.isLibraryMapped( name ) ) {
+            if ( this.isLibraryLoaded( name ) ) {
+                return this.librariesLoaded[ name ]
+            }
+
+            const pathLibrary   = this.librariesMapping[ name ] + '.js'
+            const Library       = require( pathLibrary ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+
+            this.librariesLoaded[ name ] = new Library()
+
+            return this.librariesLoaded[ name ]
+        } else {
+            return undefined
+        }
+    }
+
+    /*
      * Getters and setters
      */
 
@@ -198,12 +232,20 @@ export default class Container {
         return this._componentsLoaded
     }
 
+    get librariesLoaded() {
+        return this._librariesLoaded
+    }
+
     get shared() {
         return this._shared
     }
 
     get componentsMapping() {
         return this._componentsMapping
+    }
+
+    get librariesMapping() {
+        return this._librariesMapping
     }
 
     get servicesMapping() {

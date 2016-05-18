@@ -34,7 +34,7 @@ var Logger = function () {
         _classCallCheck(this, Logger);
 
         this._message = container.getComponent('Message');
-        this._library = container.getComponent('Library');
+        this._string = container.getLibrary('String');
     }
 
     /**
@@ -69,7 +69,7 @@ var Logger = function () {
             _fs2.default.open(__dirname + '/../../../../logs/serverErrors.log', 'a+', function (error, fd) {
                 if (!error) {
 
-                    _fs2.default.write(fd, _this.library.strtr(message, context), null, 'utf8');
+                    _fs2.default.write(fd, _this.string.strtr(message, context), null, 'utf8');
                 } else {
                     _this.message.error({
                         title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
@@ -98,7 +98,7 @@ var Logger = function () {
             _fs2.default.open(__dirname + '/../../../../logs/serverErrors.log', 'a+', function (error, fd) {
                 if (!error) {
 
-                    _fs2.default.write(fd, _this2.library.strtr(message, context), null, 'utf8');
+                    _fs2.default.write(fd, _this2.string.strtr(message, context), null, 'utf8');
                 } else {
                     _this2.message.error({
                         title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
@@ -198,9 +198,9 @@ var Logger = function () {
             return this._message;
         }
     }, {
-        key: 'library',
+        key: 'string',
         get: function get() {
-            return this._library;
+            return this._string;
         }
     }]);
 

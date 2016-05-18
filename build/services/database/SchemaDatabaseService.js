@@ -8,8 +8,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _lodash = require('lodash');
 
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _Service2 = require('./../../vendor/easy/core/Service');
 
 var _Service3 = _interopRequireDefault(_Service2);
@@ -73,9 +71,9 @@ var SchemaDatabaseService = function (_Service) {
         value: function createTable(tableName, tableSchema) {
             return database.schema.createTable(tableName, function (table) {
                 var column = void 0;
-                var columnKeys = _lodash2.default.keys(tableSchema);
+                var columnKeys = (0, _lodash.keys)(tableSchema);
 
-                _lodash2.default.each(columnKeys, function (key) {
+                (0, _lodash.each)(columnKeys, function (key) {
                     if (tableSchema[key].type === 'text' && tableSchema[key].hasOwnProperty('fieldtype')) {
                         column = table[tableSchema[key].type](key, tableSchema[key].fieldtype);
                     } else if (tableSchema[key].type === 'string' && tableSchema[key].hasOwnProperty('maxlength')) {

@@ -2,8 +2,8 @@
 import fs           from 'fs'
 import walk         from 'walk'
 import path         from 'path'
-import readlineSync from 'readline-sync'
-import _            from 'lodash'
+import { question } from 'readline-sync'
+import { indexOf }  from 'lodash'
 import minimist     from 'minimist'
 import config       from './../../config/config'
 import App          from './../../bootstrap.js'
@@ -16,8 +16,8 @@ const kernel                = app.kernel
 const bundleManager         = app.bundleManager
 const container             = bundleManager.container
 const message               = container.getComponent( 'Message' )
-const schemaBuilder         = container.getService( 'database.schema' )
-const StringService         = container.getService( 'string' )
+const schemaDatabaseService = container.getService( 'database.schema' )
+const stringService         = container.getService( 'string' )
 const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {
@@ -73,16 +73,16 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForTable() {
-        const createAssociatedTable = readlineSync.question( 'Do you want create an associated table into database? (y/n) ' ).trim().toLowerCase()
+        const createAssociatedTable = question( 'Do you want create an associated table into database? (y/n) ' ).trim().toLowerCase()
 
-        if ( _.indexOf( positiveAnswers, createAssociatedTable ) !== -1 ) {
+        if ( indexOf( positiveAnswers, createAssociatedTable ) !== -1 ) {
             /*
              * Table associated requested
              */
             checkExistanceOfSchemaFile( () => {
                 askForTableName()
             })
-        } else if ( _.indexOf( negativeAnswers, createAssociatedTable ) !== -1 ) {
+        } else if ( indexOf( negativeAnswers, createAssociatedTable ) !== -1 ) {
             /*
              * No table associated requested
              */
@@ -95,8 +95,8 @@ if ( nameBundleFromArgv.length > 0 ) {
     function askForTableName() {
         console.log( '\n' )
 
-        const defaultTableName  = stringTransform.asSnakeCase( nameBundleLowerCase ) + 's'
-        const answerTableName   = stringTransform.asSnakeCase( readlineSync.question( 'Table name (default: ' + defaultTableName + '): ' ) )
+        const defaultTableName  = stringService.asSnakeCase( nameBundleLowerCase ) + 's'
+        const answerTableName   = stringService.asSnakeCase( question( 'Table name (default: ' + defaultTableName + '): ' ) )
 
         tableName = ( answerTableName.length > 0 ) ? answerTableName : defaultTableName
 
@@ -108,7 +108,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         /*
          * We ask for properties
          */
-        const columnName        = stringTransform.asSnakeCase( readlineSync.question( 'Column name (let empty if the table is complete): ' ) )
+        const columnName        = stringService.asSnakeCase( question( 'Column name (let empty if the table is complete): ' ) )
         const propertiesLength  = Object.keys( properties ).length
 
         if ( columnName.length === 0 && propertiesLength === 0 ) {
@@ -116,9 +116,9 @@ if ( nameBundleFromArgv.length > 0 ) {
         } else if ( columnName.length === 0 && propertiesLength > 0 ) {
             createTable()
         } else {
-            const columnType = stringTransform.cleanAccents( readlineSync.question( 'Column type: (availables: ' + availablesColumnType.join( ', ' ) + '): ' ).toLowerCase().trim() )
+            const columnType = stringService.cleanAccents( question( 'Column type: (availables: ' + availablesColumnType.join( ', ' ) + '): ' ).toLowerCase().trim() )
 
-            if ( _.indexOf( availablesColumnType, columnType ) !== -1 ) {
+            if ( indexOf( availablesColumnType, columnType ) !== -1 ) {
                 /*
                  * Everything is ok, we push new column
                  */
@@ -128,7 +128,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                 /*
                  * Special property ? Ask for more details
                  */
-                if ( _.indexOf( specialColumnType, columnType ) !== -1 ) {
+                if ( indexOf( specialColumnType, columnType ) !== -1 ) {
                     askDetailsForSpecialColumnType( columnType, columnName )
                 }
 
@@ -149,14 +149,14 @@ if ( nameBundleFromArgv.length > 0 ) {
         switch ( type ) {
 
             case 'increments':
-                const anwserDefineAsPrimary = readlineSync.question( 'Define as primary? (y/n) ' ).trim().toLowerCase()
+                const anwserDefineAsPrimary = question( 'Define as primary? (y/n) ' ).trim().toLowerCase()
 
-                if ( _.indexOf( positiveAnswers, anwserDefineAsPrimary ) !== -1 ) {
+                if ( indexOf( positiveAnswers, anwserDefineAsPrimary ) !== -1 ) {
                     /*
                      * Define as primary
                      */
                     property.primary = true
-                } else if ( _.indexOf( negativeAnswers, anwserDefineAsPrimary ) === -1 ) {
+                } else if ( indexOf( negativeAnswers, anwserDefineAsPrimary ) === -1 ) {
                     /*
                      * Not recognized answer
                      */
@@ -169,15 +169,15 @@ if ( nameBundleFromArgv.length > 0 ) {
 
             case 'integer':
             case 'bigInteger':
-                const answerIsAReference = readlineSync.question( 'Define as reference (foreign key)? (y/n) ' ).trim().toLowerCase()
+                const answerIsAReference = question( 'Define as reference (foreign key)? (y/n) ' ).trim().toLowerCase()
 
-                if ( _.indexOf( positiveAnswers, answerIsAReference ) !== -1 ) {
+                if ( indexOf( positiveAnswers, answerIsAReference ) !== -1 ) {
                     /*
                      * Define as reference
                      */
                     property.unsigned = true
 
-                    const answerReference = readlineSync.question( 'Table.ColumnId as reference (exemple: roles.id): ' ).trim().toLowerCase()
+                    const answerReference = question( 'Table.ColumnId as reference (exemple: roles.id): ' ).trim().toLowerCase()
 
                     if ( answerReference.indexOf( '.' ) !== -1 && answerReference.match( /^\w+\.\w+$/ ) ) {
                         property.references = answerReference
@@ -188,9 +188,9 @@ if ( nameBundleFromArgv.length > 0 ) {
                         /*
                          * OnDelete
                          */
-                        const answerOnDelete = readlineSync.question( 'On delete action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase()
+                        const answerOnDelete = question( 'On delete action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase()
 
-                        if ( _.indexOf( validsOnEventAction, answerOnDelete ) !== -1 ) {
+                        if ( indexOf( validsOnEventAction, answerOnDelete ) !== -1 ) {
                             property.onDelete = answerOnDelete
                         } else {
                             property.onDelete = defaultOnEventAction
@@ -199,9 +199,9 @@ if ( nameBundleFromArgv.length > 0 ) {
                         /*
                          * OnUpdate
                          */
-                        const answerOnUpdate = readlineSync.question( 'On update action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase()
+                        const answerOnUpdate = question( 'On update action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase()
 
-                        if ( _.indexOf( validsOnEventAction, answerOnUpdate ) !== -1 ) {
+                        if ( indexOf( validsOnEventAction, answerOnUpdate ) !== -1 ) {
                             property.onUpdate = answerOnUpdate
                         } else {
                             property.onUpdate = defaultOnEventAction
@@ -226,9 +226,9 @@ if ( nameBundleFromArgv.length > 0 ) {
             case 'text':
                 const validsTextType  = [ 'text', 'mediumtext', 'longtext' ]
                 const defaultTextType = 'text'
-                const anwserTypeOfText = readlineSync.question( 'Which kind of text? ( ' + validsTextType.join( ', ' ) + ', default: ' + defaultTextType + ') ' ).trim().toLowerCase()
+                const anwserTypeOfText = question( 'Which kind of text? ( ' + validsTextType.join( ', ' ) + ', default: ' + defaultTextType + ') ' ).trim().toLowerCase()
 
-                if ( _.indexOf( validsTextType, anwserTypeOfText ) !== -1 ) {
+                if ( indexOf( validsTextType, anwserTypeOfText ) !== -1 ) {
                     property.fieldtype = anwserTypeOfText
                 } else {
                     property.fieldtype = defaultTextType
@@ -239,7 +239,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
             case 'string':
                 const minLength = 1, maxLength = 255
-                const answerMaxLength = readlineSync.question( 'Max length (' + minLength + '-' + maxLength + ', default: ' + maxLength + '): ' ).trim()
+                const answerMaxLength = question( 'Max length (' + minLength + '-' + maxLength + ', default: ' + maxLength + '): ' ).trim()
 
                 if ( !isNaN( answerMaxLength ) && answerMaxLength >= minLength && answerMaxLength <= maxLength ) {
                     /*
@@ -265,7 +265,7 @@ if ( nameBundleFromArgv.length > 0 ) {
             case 'float':
             case 'decimal':
                 const defaultPrecision = 8
-                const answerPrecision = readlineSync.question( 'Precision (integer, default: ' + defaultPrecision + '): ' ).trim()
+                const answerPrecision = question( 'Precision (integer, default: ' + defaultPrecision + '): ' ).trim()
 
                 if ( answerPrecision.length === 0 || isNaN( answerPrecision ) || !isFinite( answerPrecision ) ) {
                     property.precision = defaultPrecision
@@ -278,7 +278,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                      * Ask for scale
                      */
                     const defaultScale = 2
-                    const answerScale = readlineSync.question( 'Scale (integer, default: ' + defaultScale + ')' ).trim()
+                    const answerScale = question( 'Scale (integer, default: ' + defaultScale + ')' ).trim()
 
                     if ( answerScale.length === 0 || isNaN( answerScale ) || !isFinite( answerScale ) ) {
                         property.scale = defaultScale
@@ -293,13 +293,13 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForNullableColumn( columnName ) {
-        const answerNullable = readlineSync.question( 'Define as nullable? (y/n) ' ).trim().toLowerCase()
-        if ( _.indexOf( positiveAnswers, answerNullable ) !== -1 ) {
+        const answerNullable = question( 'Define as nullable? (y/n) ' ).trim().toLowerCase()
+        if ( indexOf( positiveAnswers, answerNullable ) !== -1 ) {
             /*
              * Define as nullable
              */
             properties[ columnName ].nullable = true
-        } else if ( _.indexOf( negativeAnswers, answerNullable ) !== -1 ) {
+        } else if ( indexOf( negativeAnswers, answerNullable ) !== -1 ) {
             /*
              * Not nullable
              */
@@ -313,14 +313,14 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForUniqueColumn( columnName ) {
-        const answerAsUnique = readlineSync.question( 'Define as unique? (y/n) ' ).trim().toLowerCase()
+        const answerAsUnique = question( 'Define as unique? (y/n) ' ).trim().toLowerCase()
 
-        if ( _.indexOf( positiveAnswers, answerAsUnique ) !== -1 ) {
+        if ( indexOf( positiveAnswers, answerAsUnique ) !== -1 ) {
             /*
              * Define as unique
              */
             properties[ columnName ].unique = true
-        } else if ( _.indexOf( negativeAnswers, answerAsUnique ) !== -1 ) {
+        } else if ( indexOf( negativeAnswers, answerAsUnique ) !== -1 ) {
             /*
              * Not unique
              */
@@ -334,7 +334,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function createTable() {
-        schemaBuilder.createTable( tableName, properties )
+        schemaDatabaseService.createTable( tableName, properties )
         .then( () => {
             updateSchema()
         })

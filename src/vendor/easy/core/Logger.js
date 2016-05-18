@@ -18,7 +18,7 @@ import fs from 'fs'
 export default class Logger {
     constructor( container ) {
         this._message   = container.getComponent( 'Message' )
-        this._library   = container.getComponent( 'Library' )
+        this._string    = container.getLibrary( 'String' )
     }
 
     /**
@@ -46,7 +46,7 @@ export default class Logger {
         fs.open( __dirname + '/../../../../logs/serverErrors.log', 'a+', ( error, fd ) => {
             if ( !error ) {
 
-                fs.write( fd, this.library.strtr( message, context ), null, 'utf8' )
+                fs.write( fd, this.string.strtr( message, context ), null, 'utf8' )
 
             } else {
                 this.message.error({
@@ -71,7 +71,7 @@ export default class Logger {
         fs.open( __dirname + '/../../../../logs/serverErrors.log', 'a+', ( error, fd )  => {
             if ( !error ) {
 
-                fs.write( fd, this.library.strtr( message, context ), null, 'utf8' )
+                fs.write( fd, this.string.strtr( message, context ), null, 'utf8' )
 
             } else {
                 this.message.error({
@@ -163,7 +163,7 @@ export default class Logger {
         return this._message
     }
 
-    get library() {
-        return this._library
+    get string() {
+        return this._string
     }
 }

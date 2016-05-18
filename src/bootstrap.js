@@ -8,7 +8,7 @@ import helmet               from 'helmet'
 import cors                 from 'cors'
 import compression          from 'compression'
 import numeral              from 'numeral'
-import _                    from 'lodash'
+import { indexOf }          from 'lodash'
 import path                 from 'path'
 import minimist             from 'minimist'
 import Kernel               from './vendor/easy/core/kernel'
@@ -104,7 +104,7 @@ export default class Application {
                 const enableMethods = [ 'patch' ]
                 let data    = ''
 
-                if ( _.indexOf( enableMethods, method ) < 0 ) {
+                if ( indexOf( enableMethods, method ) < 0 ) {
                     return next()
                 }
 

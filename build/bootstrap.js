@@ -36,8 +36,6 @@ var _numeral2 = _interopRequireDefault(_numeral);
 
 var _lodash = require('lodash');
 
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
@@ -157,7 +155,7 @@ function Application(config, cliMode) {
         var enableMethods = ['patch'];
         var data = '';
 
-        if (_lodash2.default.indexOf(enableMethods, method) < 0) {
+        if ((0, _lodash.indexOf)(enableMethods, method) < 0) {
           return next();
         }
 

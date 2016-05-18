@@ -1,5 +1,9 @@
 ?- bundleManager dans les bundles ne doit pas être récupéré via la factory, il faut utiliser le container !
 
+- résoudre problème création db avec la connexion knex (config.database)
+
+- change service string as library
+
 - remplacer callback par promise
 
 - refactorer les repository avec une class dans core

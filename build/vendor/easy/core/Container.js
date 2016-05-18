@@ -32,6 +32,7 @@ var Container = function () {
          * Dependencies shared
          */
         this._componentsLoaded = {};
+        this._librariesLoaded = {};
         this._shared = {};
 
         this._servicesDirectoryExists = false;
@@ -43,11 +44,14 @@ var Container = function () {
             'logger': this._kernel.path.easy + '/core/Logger',
             'message': this._kernel.path.easy + '/core/Message',
             'polyfills': this._kernel.path.easy + '/core/Polyfills',
-            'library': this._kernel.path.easy + '/core/Library',
             'connector': this._kernel.path.easy + '/database/Connector',
             'http': this._kernel.path.easy + '/http/Http',
             'request': this._kernel.path.easy + '/http/Request',
             'response': this._kernel.path.easy + '/http/Response'
+        };
+
+        this._librariesMapping = {
+            'string': this._kernel.path.easy + '/lib/String'
         };
 
         this._servicesMapping = _config2.default;
@@ -189,6 +193,41 @@ var Container = function () {
         }
 
         /*
+         * Libraries
+         */
+
+    }, {
+        key: 'isLibraryMapped',
+        value: function isLibraryMapped(name) {
+            return this.librariesMapping.hasOwnProperty(name);
+        }
+    }, {
+        key: 'isLibraryLoaded',
+        value: function isLibraryLoaded(name) {
+            return this.librariesLoaded.hasOwnProperty(name);
+        }
+    }, {
+        key: 'getLibrary',
+        value: function getLibrary(name) {
+            name = name.toLowerCase();
+
+            if (this.isLibraryMapped(name)) {
+                if (this.isLibraryLoaded(name)) {
+                    return this.librariesLoaded[name];
+                }
+
+                var pathLibrary = this.librariesMapping[name] + '.js';
+                var Library = require(pathLibrary).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+
+                this.librariesLoaded[name] = new Library();
+
+                return this.librariesLoaded[name];
+            } else {
+                return undefined;
+            }
+        }
+
+        /*
          * Getters and setters
          */
 
@@ -235,6 +274,11 @@ var Container = function () {
             return this._componentsLoaded;
         }
     }, {
+        key: 'librariesLoaded',
+        get: function get() {
+            return this._librariesLoaded;
+        }
+    }, {
         key: 'shared',
         get: function get() {
             return this._shared;
@@ -243,6 +287,11 @@ var Container = function () {
         key: 'componentsMapping',
         get: function get() {
             return this._componentsMapping;
+        }
+    }, {
+        key: 'librariesMapping',
+        get: function get() {
+            return this._librariesMapping;
         }
     }, {
         key: 'servicesMapping',

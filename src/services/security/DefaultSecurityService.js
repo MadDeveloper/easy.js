@@ -1,4 +1,3 @@
-import _        from 'lodash'
 import Service  from './../../vendor/easy/core/Service'
 
 export default class DefaultSecurityService extends Service {

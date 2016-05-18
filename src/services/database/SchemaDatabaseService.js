@@ -1,5 +1,5 @@
-import _        from 'lodash'
-import Service  from './../../vendor/easy/core/Service'
+import { keys, each }   from 'lodash'
+import Service          from './../../vendor/easy/core/Service'
 
 export default class SchemaDatabaseService extends Service {
     constructor( container ) {
@@ -39,9 +39,9 @@ export default class SchemaDatabaseService extends Service {
     createTable( tableName, tableSchema ) {
         return database.schema.createTable( tableName, table => {
             let column
-            let columnKeys = _.keys( tableSchema )
+            let columnKeys = keys( tableSchema )
 
-            _.each( columnKeys, key => {
+            each( columnKeys, key => {
               if (tableSchema[ key ].type === 'text' && tableSchema[ key ].hasOwnProperty('fieldtype')) {
                 column = table[tableSchema[ key ].type](key, tableSchema[ key ].fieldtype)
               }

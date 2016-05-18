@@ -15,11 +15,7 @@ var _path2 = _interopRequireDefault(_path);
 
 var _readlineSync = require('readline-sync');
 
-var _readlineSync2 = _interopRequireDefault(_readlineSync);
-
 var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
 
 var _minimist = require('minimist');
 
@@ -43,8 +39,8 @@ var kernel = app.kernel;
 var bundleManager = app.bundleManager;
 var container = bundleManager.container;
 var message = container.getComponent('Message');
-var schemaBuilder = container.getService('database.schema');
-var StringService = container.getService('string');
+var schemaDatabaseService = container.getService('database.schema');
+var stringService = container.getService('string');
 var nameBundleFromArgv = argv._[0] || argv.name || argv.n || "";
 
 if (nameBundleFromArgv.length > 0) {
@@ -68,16 +64,16 @@ if (nameBundleFromArgv.length > 0) {
         };
 
         var askForTable = function askForTable() {
-            var createAssociatedTable = _readlineSync2.default.question('Do you want create an associated table into database? (y/n) ').trim().toLowerCase();
+            var createAssociatedTable = (0, _readlineSync.question)('Do you want create an associated table into database? (y/n) ').trim().toLowerCase();
 
-            if (_lodash2.default.indexOf(positiveAnswers, createAssociatedTable) !== -1) {
+            if ((0, _lodash.indexOf)(positiveAnswers, createAssociatedTable) !== -1) {
                 /*
                  * Table associated requested
                  */
                 checkExistanceOfSchemaFile(function () {
                     askForTableName();
                 });
-            } else if (_lodash2.default.indexOf(negativeAnswers, createAssociatedTable) !== -1) {
+            } else if ((0, _lodash.indexOf)(negativeAnswers, createAssociatedTable) !== -1) {
                 /*
                  * No table associated requested
                  */
@@ -90,8 +86,8 @@ if (nameBundleFromArgv.length > 0) {
         var askForTableName = function askForTableName() {
             console.log('\n');
 
-            var defaultTableName = stringTransform.asSnakeCase(nameBundleLowerCase) + 's';
-            var answerTableName = stringTransform.asSnakeCase(_readlineSync2.default.question('Table name (default: ' + defaultTableName + '): '));
+            var defaultTableName = stringService.asSnakeCase(nameBundleLowerCase) + 's';
+            var answerTableName = stringService.asSnakeCase((0, _readlineSync.question)('Table name (default: ' + defaultTableName + '): '));
 
             tableName = answerTableName.length > 0 ? answerTableName : defaultTableName;
 
@@ -103,7 +99,7 @@ if (nameBundleFromArgv.length > 0) {
             /*
              * We ask for properties
              */
-            var columnName = stringTransform.asSnakeCase(_readlineSync2.default.question('Column name (let empty if the table is complete): '));
+            var columnName = stringService.asSnakeCase((0, _readlineSync.question)('Column name (let empty if the table is complete): '));
             var propertiesLength = Object.keys(properties).length;
 
             if (columnName.length === 0 && propertiesLength === 0) {
@@ -111,9 +107,9 @@ if (nameBundleFromArgv.length > 0) {
             } else if (columnName.length === 0 && propertiesLength > 0) {
                 createTable();
             } else {
-                var columnType = stringTransform.cleanAccents(_readlineSync2.default.question('Column type: (availables: ' + availablesColumnType.join(', ') + '): ').toLowerCase().trim());
+                var columnType = stringService.cleanAccents((0, _readlineSync.question)('Column type: (availables: ' + availablesColumnType.join(', ') + '): ').toLowerCase().trim());
 
-                if (_lodash2.default.indexOf(availablesColumnType, columnType) !== -1) {
+                if ((0, _lodash.indexOf)(availablesColumnType, columnType) !== -1) {
                     /*
                      * Everything is ok, we push new column
                      */
@@ -123,7 +119,7 @@ if (nameBundleFromArgv.length > 0) {
                     /*
                      * Special property ? Ask for more details
                      */
-                    if (_lodash2.default.indexOf(specialColumnType, columnType) !== -1) {
+                    if ((0, _lodash.indexOf)(specialColumnType, columnType) !== -1) {
                         askDetailsForSpecialColumnType(columnType, columnName);
                     }
 
@@ -144,14 +140,14 @@ if (nameBundleFromArgv.length > 0) {
             switch (type) {
 
                 case 'increments':
-                    var anwserDefineAsPrimary = _readlineSync2.default.question('Define as primary? (y/n) ').trim().toLowerCase();
+                    var anwserDefineAsPrimary = (0, _readlineSync.question)('Define as primary? (y/n) ').trim().toLowerCase();
 
-                    if (_lodash2.default.indexOf(positiveAnswers, anwserDefineAsPrimary) !== -1) {
+                    if ((0, _lodash.indexOf)(positiveAnswers, anwserDefineAsPrimary) !== -1) {
                         /*
                          * Define as primary
                          */
                         property.primary = true;
-                    } else if (_lodash2.default.indexOf(negativeAnswers, anwserDefineAsPrimary) === -1) {
+                    } else if ((0, _lodash.indexOf)(negativeAnswers, anwserDefineAsPrimary) === -1) {
                         /*
                          * Not recognized answer
                          */
@@ -164,15 +160,15 @@ if (nameBundleFromArgv.length > 0) {
 
                 case 'integer':
                 case 'bigInteger':
-                    var answerIsAReference = _readlineSync2.default.question('Define as reference (foreign key)? (y/n) ').trim().toLowerCase();
+                    var answerIsAReference = (0, _readlineSync.question)('Define as reference (foreign key)? (y/n) ').trim().toLowerCase();
 
-                    if (_lodash2.default.indexOf(positiveAnswers, answerIsAReference) !== -1) {
+                    if ((0, _lodash.indexOf)(positiveAnswers, answerIsAReference) !== -1) {
                         /*
                          * Define as reference
                          */
                         property.unsigned = true;
 
-                        var answerReference = _readlineSync2.default.question('Table.ColumnId as reference (exemple: roles.id): ').trim().toLowerCase();
+                        var answerReference = (0, _readlineSync.question)('Table.ColumnId as reference (exemple: roles.id): ').trim().toLowerCase();
 
                         if (answerReference.indexOf('.') !== -1 && answerReference.match(/^\w+\.\w+$/)) {
                             property.references = answerReference;
@@ -183,9 +179,9 @@ if (nameBundleFromArgv.length > 0) {
                             /*
                              * OnDelete
                              */
-                            var answerOnDelete = _readlineSync2.default.question('On delete action: (' + validsOnEventAction.join(', ') + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase();
+                            var answerOnDelete = (0, _readlineSync.question)('On delete action: (' + validsOnEventAction.join(', ') + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase();
 
-                            if (_lodash2.default.indexOf(validsOnEventAction, answerOnDelete) !== -1) {
+                            if ((0, _lodash.indexOf)(validsOnEventAction, answerOnDelete) !== -1) {
                                 property.onDelete = answerOnDelete;
                             } else {
                                 property.onDelete = defaultOnEventAction;
@@ -194,9 +190,9 @@ if (nameBundleFromArgv.length > 0) {
                             /*
                              * OnUpdate
                              */
-                            var answerOnUpdate = _readlineSync2.default.question('On update action: (' + validsOnEventAction.join(', ') + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase();
+                            var answerOnUpdate = (0, _readlineSync.question)('On update action: (' + validsOnEventAction.join(', ') + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase();
 
-                            if (_lodash2.default.indexOf(validsOnEventAction, answerOnUpdate) !== -1) {
+                            if ((0, _lodash.indexOf)(validsOnEventAction, answerOnUpdate) !== -1) {
                                 property.onUpdate = answerOnUpdate;
                             } else {
                                 property.onUpdate = defaultOnEventAction;
@@ -221,9 +217,9 @@ if (nameBundleFromArgv.length > 0) {
                 case 'text':
                     var validsTextType = ['text', 'mediumtext', 'longtext'];
                     var defaultTextType = 'text';
-                    var anwserTypeOfText = _readlineSync2.default.question('Which kind of text? ( ' + validsTextType.join(', ') + ', default: ' + defaultTextType + ') ').trim().toLowerCase();
+                    var anwserTypeOfText = (0, _readlineSync.question)('Which kind of text? ( ' + validsTextType.join(', ') + ', default: ' + defaultTextType + ') ').trim().toLowerCase();
 
-                    if (_lodash2.default.indexOf(validsTextType, anwserTypeOfText) !== -1) {
+                    if ((0, _lodash.indexOf)(validsTextType, anwserTypeOfText) !== -1) {
                         property.fieldtype = anwserTypeOfText;
                     } else {
                         property.fieldtype = defaultTextType;
@@ -235,7 +231,7 @@ if (nameBundleFromArgv.length > 0) {
                 case 'string':
                     var minLength = 1,
                         maxLength = 255;
-                    var answerMaxLength = _readlineSync2.default.question('Max length (' + minLength + '-' + maxLength + ', default: ' + maxLength + '): ').trim();
+                    var answerMaxLength = (0, _readlineSync.question)('Max length (' + minLength + '-' + maxLength + ', default: ' + maxLength + '): ').trim();
 
                     if (!isNaN(answerMaxLength) && answerMaxLength >= minLength && answerMaxLength <= maxLength) {
                         /*
@@ -261,7 +257,7 @@ if (nameBundleFromArgv.length > 0) {
                 case 'float':
                 case 'decimal':
                     var defaultPrecision = 8;
-                    var answerPrecision = _readlineSync2.default.question('Precision (integer, default: ' + defaultPrecision + '): ').trim();
+                    var answerPrecision = (0, _readlineSync.question)('Precision (integer, default: ' + defaultPrecision + '): ').trim();
 
                     if (answerPrecision.length === 0 || isNaN(answerPrecision) || !isFinite(answerPrecision)) {
                         property.precision = defaultPrecision;
@@ -274,7 +270,7 @@ if (nameBundleFromArgv.length > 0) {
                          * Ask for scale
                          */
                         var defaultScale = 2;
-                        var answerScale = _readlineSync2.default.question('Scale (integer, default: ' + defaultScale + ')').trim();
+                        var answerScale = (0, _readlineSync.question)('Scale (integer, default: ' + defaultScale + ')').trim();
 
                         if (answerScale.length === 0 || isNaN(answerScale) || !isFinite(answerScale)) {
                             property.scale = defaultScale;
@@ -289,13 +285,13 @@ if (nameBundleFromArgv.length > 0) {
         };
 
         var askForNullableColumn = function askForNullableColumn(columnName) {
-            var answerNullable = _readlineSync2.default.question('Define as nullable? (y/n) ').trim().toLowerCase();
-            if (_lodash2.default.indexOf(positiveAnswers, answerNullable) !== -1) {
+            var answerNullable = (0, _readlineSync.question)('Define as nullable? (y/n) ').trim().toLowerCase();
+            if ((0, _lodash.indexOf)(positiveAnswers, answerNullable) !== -1) {
                 /*
                  * Define as nullable
                  */
                 properties[columnName].nullable = true;
-            } else if (_lodash2.default.indexOf(negativeAnswers, answerNullable) !== -1) {
+            } else if ((0, _lodash.indexOf)(negativeAnswers, answerNullable) !== -1) {
                 /*
                  * Not nullable
                  */
@@ -309,14 +305,14 @@ if (nameBundleFromArgv.length > 0) {
         };
 
         var askForUniqueColumn = function askForUniqueColumn(columnName) {
-            var answerAsUnique = _readlineSync2.default.question('Define as unique? (y/n) ').trim().toLowerCase();
+            var answerAsUnique = (0, _readlineSync.question)('Define as unique? (y/n) ').trim().toLowerCase();
 
-            if (_lodash2.default.indexOf(positiveAnswers, answerAsUnique) !== -1) {
+            if ((0, _lodash.indexOf)(positiveAnswers, answerAsUnique) !== -1) {
                 /*
                  * Define as unique
                  */
                 properties[columnName].unique = true;
-            } else if (_lodash2.default.indexOf(negativeAnswers, answerAsUnique) !== -1) {
+            } else if ((0, _lodash.indexOf)(negativeAnswers, answerAsUnique) !== -1) {
                 /*
                  * Not unique
                  */
@@ -330,7 +326,7 @@ if (nameBundleFromArgv.length > 0) {
         };
 
         var createTable = function createTable() {
-            schemaBuilder.createTable(tableName, properties).then(function () {
+            schemaDatabaseService.createTable(tableName, properties).then(function () {
                 updateSchema();
             }).catch(function (error) {
                 message.error({

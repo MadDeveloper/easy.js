@@ -8,8 +8,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _lodash = require('lodash');
 
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _Service2 = require('./../../vendor/easy/core/Service');
 
 var _Service3 = _interopRequireDefault(_Service2);
@@ -98,23 +96,23 @@ var AccessSecurityService = function (_Service) {
             /*
              * An admin as all privileges
              */
-            if (_lodash2.default.indexOf(params.mustBe, this.admin) === -1) {
+            if ((0, _lodash.indexOf)(params.mustBe, this.admin) === -1) {
                 params.mustBe.push(this.admin);
             }
 
-            if (_lodash2.default.indexOf(params.canRead, this.admin) === -1) {
+            if ((0, _lodash.indexOf)(params.canRead, this.admin) === -1) {
                 params.canRead.push(this.admin);
             }
 
-            if (_lodash2.default.indexOf(params.canCreate, this.admin) === -1) {
+            if ((0, _lodash.indexOf)(params.canCreate, this.admin) === -1) {
                 params.canCreate.push(this.admin);
             }
 
-            if (_lodash2.default.indexOf(params.canUpdate, this.admin) === -1) {
+            if ((0, _lodash.indexOf)(params.canUpdate, this.admin) === -1) {
                 params.canUpdate.push(this.admin);
             }
 
-            if (_lodash2.default.indexOf(params.canDelete, this.admin) === -1) {
+            if ((0, _lodash.indexOf)(params.canDelete, this.admin) === -1) {
                 params.canDelete.push(this.admin);
             }
 
@@ -128,7 +126,7 @@ var AccessSecurityService = function (_Service) {
             var isAuthorizedToReach = false;
 
             var method = httpMethod.toLowerCase();
-            var authorized = _lodash2.default.indexOf(this.restrictions.mustBe, this.focus) !== -1 || _lodash2.default.indexOf(this.restrictions.mustBe, this.any) !== -1;
+            var authorized = (0, _lodash.indexOf)(this.restrictions.mustBe, this.focus) !== -1 || (0, _lodash.indexOf)(this.restrictions.mustBe, this.any) !== -1;
 
             if (authorized) {
 
@@ -137,18 +135,18 @@ var AccessSecurityService = function (_Service) {
                 var methodWhenUpdating = ['put', 'patch'];
                 var methodWhenDeleting = ['delete'];
 
-                if (_lodash2.default.indexOf(methodWhenReading, method) !== -1) {
+                if ((0, _lodash.indexOf)(methodWhenReading, method) !== -1) {
 
-                    isAuthorizedToReach = _lodash2.default.indexOf(this.restrictions.canRead, focus) !== -1 || _lodash2.default.indexOf(this.restrictions.canRead, this.any) !== -1;
-                } else if (_lodash2.default.indexOf(methodWhenCreating, method) !== -1) {
+                    isAuthorizedToReach = (0, _lodash.indexOf)(this.restrictions.canRead, focus) !== -1 || (0, _lodash.indexOf)(this.restrictions.canRead, this.any) !== -1;
+                } else if ((0, _lodash.indexOf)(methodWhenCreating, method) !== -1) {
 
-                    isAuthorizedToReach = _lodash2.default.indexOf(this.restrictions.canCreate, focus) !== -1 || _lodash2.default.indexOf(this.restrictions.canCreate, this.any) !== -1;
-                } else if (_lodash2.default.indexOf(methodWhenUpdating, method) !== -1) {
+                    isAuthorizedToReach = (0, _lodash.indexOf)(this.restrictions.canCreate, focus) !== -1 || (0, _lodash.indexOf)(this.restrictions.canCreate, this.any) !== -1;
+                } else if ((0, _lodash.indexOf)(methodWhenUpdating, method) !== -1) {
 
-                    isAuthorizedToReach = _lodash2.default.indexOf(this.restrictions.canUpdate, focus) !== -1 || _lodash2.default.indexOf(this.restrictions.canUpdate, this.any) !== -1;
-                } else if (_lodash2.default.indexOf(methodWhenDeleting, method) !== -1) {
+                    isAuthorizedToReach = (0, _lodash.indexOf)(this.restrictions.canUpdate, focus) !== -1 || (0, _lodash.indexOf)(this.restrictions.canUpdate, this.any) !== -1;
+                } else if ((0, _lodash.indexOf)(methodWhenDeleting, method) !== -1) {
 
-                    isAuthorizedToReach = _lodash2.default.indexOf(this.restrictions.canDelete, focus) !== -1 || _lodash2.default.indexOf(this.restrictions.canDelete, this.any) !== -1;
+                    isAuthorizedToReach = (0, _lodash.indexOf)(this.restrictions.canDelete, focus) !== -1 || (0, _lodash.indexOf)(this.restrictions.canDelete, this.any) !== -1;
                 }
             }
 
