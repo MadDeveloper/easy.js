@@ -1,7 +1,6 @@
 export default class Service {
     constructor( container ) {
         this._container     = container
-        this._http          = container.getComponent( 'Http' )
         this._request       = this._container.getComponent( 'Request' )
         this._response      = this._container.getComponent( 'Response' )
         this._bundleManager = this._container.getComponent( 'BundleManager' )
@@ -18,10 +17,6 @@ export default class Service {
      */
     get container() {
         return this._container
-    }
-
-    get http() {
-        return this._http
     }
 
     get request() {

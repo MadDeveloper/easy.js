@@ -8,23 +8,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Service = function () {
-    function Service(container) {
-        _classCallCheck(this, Service);
+var Tests = function () {
+    function Tests(container) {
+        _classCallCheck(this, Tests);
 
         this._container = container;
+        this._bundleManager = this._container.getComponent('BundleManager');
+        this._database = this._bundleManager.database;
+        this._controller = this._container.getComponent('Controller');
         this._request = this._container.getComponent('Request');
         this._response = this._container.getComponent('Response');
-        this._bundleManager = this._container.getComponent('BundleManager');
-        this._router = this._bundleManager.router;
-        this._database = this._bundleManager.database;
 
-        this.load();
+        this.run();
     }
 
-    _createClass(Service, [{
-        key: 'load',
-        value: function load() {}
+    _createClass(Tests, [{
+        key: 'run',
+        value: function run() {}
 
         /*
          * Getters and setters
@@ -36,6 +36,21 @@ var Service = function () {
             return this._container;
         }
     }, {
+        key: 'bundleManager',
+        get: function get() {
+            return this._bundleManager;
+        }
+    }, {
+        key: 'database',
+        get: function get() {
+            return this._database;
+        }
+    }, {
+        key: 'controller',
+        get: function get() {
+            return this._controller;
+        }
+    }, {
         key: 'request',
         get: function get() {
             return this._request;
@@ -45,24 +60,9 @@ var Service = function () {
         get: function get() {
             return this._response;
         }
-    }, {
-        key: 'bundleManager',
-        get: function get() {
-            return this._bundleManager;
-        }
-    }, {
-        key: 'router',
-        get: function get() {
-            return this._router;
-        }
-    }, {
-        key: 'database',
-        get: function get() {
-            return this._database;
-        }
     }]);
 
-    return Service;
+    return Tests;
 }();
 
-exports.default = Service;
+exports.default = Tests;

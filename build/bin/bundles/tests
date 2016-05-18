@@ -1,43 +1,80 @@
 #!/usr/bin/env node
 'use strict';
 
-var cliMode = true;
-var config = require(__dirname + '/../../build/config/config');
-var components = require(__dirname + '/../../build/bootstrap')(config, cliMode);
-var Message = components.kernel.load('Message')();
-var fs = require('fs');
-var walk = require('walk');
-var Mocha = require('mocha');
-var path = require('path');
+var _fs = require('fs');
 
-/*
- * Expose as global BundleManager
- */
-global.bundleManager = components.bundleManager;
+var _fs2 = _interopRequireDefault(_fs);
+
+var _walk = require('walk');
+
+var _walk2 = _interopRequireDefault(_walk);
+
+var _mocha = require('mocha');
+
+var _mocha2 = _interopRequireDefault(_mocha);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _readlineSync = require('readline-sync');
+
+var _readlineSync2 = _interopRequireDefault(_readlineSync);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _minimist = require('minimist');
+
+var _minimist2 = _interopRequireDefault(_minimist);
+
+var _config = require('./../../config/config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _bootstrap = require('./../../bootstrap.js');
+
+var _bootstrap2 = _interopRequireDefault(_bootstrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var argv = (0, _minimist2.default)(process.argv.slice(2));
+var cliMode = true;
+
+var app = new _bootstrap2.default(_config2.default, cliMode);
+var kernel = app.kernel;
+var bundleManager = app.bundleManager;
+var container = bundleManager.container;
+var message = container.getComponent('Message');
 
 /*
  * Instantiate a Mocha instance
  */
-var mocha = new Mocha();
+var mocha = new _mocha2.default();
 
-var bundlesDirectory = __dirname + '/../../build/bundles';
+var bundlesDirectory = kernel.path.bundles;
+
+global.container = container;
 
 /*
  * Add each .js file to the mocha instance
  */
-fs.readdirSync(BundlesDirectory).forEach(function (bundle) {
-    var testsDir = BundlesDirectory + '/' + bundle + '/Tests';
+_fs2.default.readdirSync(bundlesDirectory).forEach(function (bundle) {
+    var testsDir = bundlesDirectory + '/' + bundle + '/tests';
+
     try {
-        if (fs.lstatSync(testsDir).isDirectory()) {
-            var files = fs.readdirSync(testsDir);
+        if (_fs2.default.lstatSync(testsDir).isDirectory()) {
+            var files = _fs2.default.readdirSync(testsDir);
+
             if (files && files.length > 0) {
                 files.forEach(function (file) {
-                    mocha.addFile(path.join(testsDir, file));
+                    mocha.addFile(_path2.default.join(testsDir, file));
                 });
             }
         }
     } catch (e) {
-        Message.warn('No unit tests found for ' + bundle + ' bundle.');
+        message.warn('No unit tests found for ' + bundle + ' bundle.');
     }
 });
 
@@ -46,7 +83,7 @@ fs.readdirSync(BundlesDirectory).forEach(function (bundle) {
  */
 mocha.run(function (failures) {
     if (failures) {
-        Message.warn(failures + ' failures occurs during tests.');
+        message.warn(failures + ' failures occurs during tests.');
     }
     process.exit();
 });

@@ -10,3 +10,5 @@
 
 
 - refactorer bin et tests
+
+- fixer les droits pour le dossier build, et le projet de manière générale

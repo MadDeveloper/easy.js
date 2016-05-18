@@ -1,54 +1,65 @@
 #!/usr/bin/env node
+import fs           from 'fs'
+import walk         from 'walk'
+import Mocha        from 'mocha'
+import path         from 'path'
+import readlineSync from 'readline-sync'
+import _            from 'lodash'
+import minimist     from 'minimist'
+import config       from './../../config/config'
+import App          from './../../bootstrap.js'
 
-var cliMode     = true;
-var config      = require( __dirname + '/../../build/config/config' );
-var components  = require( __dirname + '/../../build/bootstrap' )( config, cliMode );
-var Message     = components.kernel.load( 'Message' )();
-var fs          = require( 'fs' );
-var walk        = require( 'walk' );
-var Mocha       = require( 'mocha' );
-var path        = require( 'path' );
+let argv    = minimist( process.argv.slice( 2 ) )
+let cliMode = true
 
-/*
- * Expose as global BundleManager
- */
-global.bundleManager = components.bundleManager;
+const app                   = new App( config, cliMode )
+const kernel                = app.kernel
+const bundleManager         = app.bundleManager
+const container             = bundleManager.container
+const message               = container.getComponent( 'Message' )
 
 /*
  * Instantiate a Mocha instance
  */
-var mocha = new Mocha();
+const mocha = new Mocha()
 
-var bundlesDirectory = __dirname + '/../../build/bundles';
+const bundlesDirectory = kernel.path.bundles
+
+/*
+ * Expose container into global scope for unit tests classes, because file are called by mocha and not ourselves
+ */
+global.container = container
 
 /*
  * Add each .js file to the mocha instance
  */
-fs.readdirSync( BundlesDirectory )
-    .forEach( function( bundle ) {
-        var testsDir = BundlesDirectory + '/' + bundle + '/Tests';
+fs.readdirSync( bundlesDirectory )
+    .forEach( bundle => {
+        const testsDir = bundlesDirectory + '/' + bundle + '/tests'
+
         try {
             if ( fs.lstatSync( testsDir ).isDirectory() ) {
-                var files = fs.readdirSync( testsDir );
+                const files = fs.readdirSync( testsDir )
+
                 if ( files && files.length > 0 ) {
-                    files.forEach( function( file ) {
+                    files.forEach( file => {
                         mocha.addFile(
                             path.join( testsDir, file )
-                        );
-                    });
+                        )
+                    })
                 }
             }
         } catch( e ) {
-            Message.warn( 'No unit tests found for ' + bundle + ' bundle.' );
+            message.warn( 'No unit tests found for ' + bundle + ' bundle.' )
         }
-    });
+    })
 
 /*
  * Run the tests
  */
-mocha.run( function( failures ) {
+mocha.run( failures => {
     if ( failures ) {
-        Message.warn( failures  + ' failures occurs during tests.' );
+        message.warn( failures  + ' failures occurs during tests.' )
     }
-    process.exit();
-});
+    process.exit()
+})

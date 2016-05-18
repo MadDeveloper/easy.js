@@ -4,7 +4,6 @@ export default class Controller {
         this._bundleManager = this._container.getComponent( 'BundleManager' )
         this._router        = this._container.router
         this._database      = this._container.database
-        this._http          = this._container.getComponent( 'Http' )
         this._request       = this._container.getComponent( 'Request' )
         this._response      = this._container.getComponent( 'Response' )
     }
@@ -105,10 +104,6 @@ export default class Controller {
 
     get database() {
         return this._database
-    }
-
-    get http() {
-        return this._http
     }
 
     get request() {

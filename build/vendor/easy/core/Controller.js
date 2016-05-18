@@ -18,7 +18,6 @@ var Controller = function () {
         this._bundleManager = this._container.getComponent('BundleManager');
         this._router = this._container.router;
         this._database = this._container.database;
-        this._http = this._container.getComponent('Http');
         this._request = this._container.getComponent('Request');
         this._response = this._container.getComponent('Response');
     }
@@ -131,11 +130,6 @@ var Controller = function () {
         key: 'database',
         get: function get() {
             return this._database;
-        }
-    }, {
-        key: 'http',
-        get: function get() {
-            return this._http;
         }
     }, {
         key: 'request',
