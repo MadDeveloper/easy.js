@@ -24,9 +24,9 @@ var Request = function (_Http) {
     function Request(container) {
         _classCallCheck(this, Request);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Request).call(this, container));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Request).call(this));
 
-        _this._appName = _this._container.kernel.appName;
+        _this._appName = container.kernel.appName;
         _this._scope = null;
         return _this;
     }

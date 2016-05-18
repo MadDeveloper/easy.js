@@ -4,7 +4,7 @@ export default class SecurityController extends Controller {
     constructor( roleFactory ) {
         super( roleFactory.container )
 
-        this._access = this._container.getService( 'security.access' )
+        this._access = this.container.getService( 'security.access' )
     }
 
     authorize() {

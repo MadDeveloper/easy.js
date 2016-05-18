@@ -12,12 +12,11 @@ var Tests = function () {
     function Tests(container) {
         _classCallCheck(this, Tests);
 
-        this._container = container;
-        this._bundleManager = this._container.getComponent('BundleManager');
+        this._controller = container.getComponent('Controller');
+        this._request = container.getComponent('Request');
+        this._response = container.getComponent('Response');
+        this._bundleManager = container.getComponent('BundleManager');
         this._database = this._bundleManager.database;
-        this._controller = this._container.getComponent('Controller');
-        this._request = this._container.getComponent('Request');
-        this._response = this._container.getComponent('Response');
 
         this.run();
     }
@@ -33,7 +32,7 @@ var Tests = function () {
     }, {
         key: 'container',
         get: function get() {
-            return this._container;
+            return this._bundleManager.container;
         }
     }, {
         key: 'bundleManager',

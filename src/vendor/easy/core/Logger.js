@@ -17,9 +17,8 @@ import fs from 'fs'
 
 export default class Logger {
     constructor( container ) {
-        this._container = container
-        this._message   = this._container.getComponent( 'Message' )
-        this._library   = this._container.getComponent( 'Library' )
+        this._message   = container.getComponent( 'Message' )
+        this._library   = container.getComponent( 'Library' )
     }
 
     /**
@@ -160,10 +159,6 @@ export default class Logger {
     /*
      * Getters and setters
      */
-    get container() {
-        return this._container
-    }
-
     get message() {
         return this._message
     }

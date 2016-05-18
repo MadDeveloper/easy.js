@@ -18,8 +18,6 @@ var Polyfills = function () {
     function Polyfills(container) {
         _classCallCheck(this, Polyfills);
 
-        this._container = container;
-
         this.stringPolyfills();
     }
 
@@ -49,11 +47,6 @@ var Polyfills = function () {
                     return this.charAt(0).toLowerCase() + this.slice(1);
                 };
             }
-        }
-    }, {
-        key: "container",
-        get: function get() {
-            return this._container;
         }
     }]);
 

@@ -24,11 +24,11 @@ var Response = function (_Http) {
     function Response(container) {
         _classCallCheck(this, Response);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Response).call(this, container));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Response).call(this));
 
         _this._scope = null;
-        _this._logger = _this._container.getComponent('Logger');
-        _this._request = _this._container.getComponent('Request');
+        _this._logger = container.getComponent('Logger');
+        _this._request = container.getComponent('Request');
         return _this;
     }
 

@@ -1,5 +1,5 @@
-import _ from 'lodash'
-import Controller from './../../../vendor/easy/core/Controller'
+import _            from 'lodash'
+import Controller   from './../../../vendor/easy/core/Controller'
 
 export default class RoutingController extends Controller {
     constructor( skeletonFactory ) {

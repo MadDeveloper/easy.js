@@ -2,11 +2,11 @@ import Http from './Http'
 
 export default class Response extends Http {
     constructor( container ) {
-        super( container )
+        super()
 
         this._scope     = null
-        this._logger    = this._container.getComponent( 'Logger' )
-        this._request   = this._container.getComponent( 'Request' )
+        this._logger    = container.getComponent( 'Logger' )
+        this._request   = container.getComponent( 'Request' )
     }
 
     formatParams( params, setDefault ) {

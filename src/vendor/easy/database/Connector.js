@@ -3,9 +3,8 @@ import path from 'path'
 
 export default class Connector {
     constructor( container ) {
-        this._container         = container
-        this._kernel            = this._container.kernel
-        this._message           = this._container.getComponent( 'Message' )
+        this._kernel            = container.kernel
+        this._message           = container.getComponent( 'Message' )
         this._defaultConnector  = 'bookshelf'
         this._databasePath      = this._kernel.path.config + '/database/database'
         this._connection        = null
@@ -24,10 +23,6 @@ export default class Connector {
     /*
      * Getters and setters
      */
-    get container() {
-        return this._container
-    }
-
     get connection() {
         return this._connection
     }

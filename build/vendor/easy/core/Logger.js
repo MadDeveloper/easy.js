@@ -33,9 +33,8 @@ var Logger = function () {
     function Logger(container) {
         _classCallCheck(this, Logger);
 
-        this._container = container;
-        this._message = this._container.getComponent('Message');
-        this._library = this._container.getComponent('Library');
+        this._message = container.getComponent('Message');
+        this._library = container.getComponent('Library');
     }
 
     /**
@@ -193,11 +192,6 @@ var Logger = function () {
          * Getters and setters
          */
 
-    }, {
-        key: 'container',
-        get: function get() {
-            return this._container;
-        }
     }, {
         key: 'message',
         get: function get() {

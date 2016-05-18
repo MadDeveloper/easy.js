@@ -1,14 +1,10 @@
-- bundleManager dans les bundles ne doit pas être récupéré via la factory, il faut utiliser le container !
-
-- faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
+?- bundleManager dans les bundles ne doit pas être récupéré via la factory, il faut utiliser le container !
 
 - remplacer callback par promise
 
-- faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
-
 - refactorer les repository avec une class dans core
 
-
-- refactorer bin et tests
-
 - fixer les droits pour le dossier build, et le projet de manière générale
+
+?- faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
+?- faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)

@@ -6,8 +6,6 @@
 
 export default class Polyfills {
     constructor( container ) {
-        this._container = container
-
         this.stringPolyfills()
     }
 
@@ -35,9 +33,5 @@ export default class Polyfills {
                 return this.charAt( 0 ).toLowerCase() + this.slice( 1 )
             }
         }
-    }
-
-    get container() {
-        return this._container
     }
 }

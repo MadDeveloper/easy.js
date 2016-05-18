@@ -12,10 +12,9 @@ var Service = function () {
     function Service(container) {
         _classCallCheck(this, Service);
 
-        this._container = container;
-        this._request = this._container.getComponent('Request');
-        this._response = this._container.getComponent('Response');
-        this._bundleManager = this._container.getComponent('BundleManager');
+        this._request = container.getComponent('Request');
+        this._response = container.getComponent('Response');
+        this._bundleManager = container.getComponent('BundleManager');
         this._router = this._bundleManager.router;
         this._database = this._bundleManager.database;
 
@@ -33,7 +32,7 @@ var Service = function () {
     }, {
         key: 'container',
         get: function get() {
-            return this._container;
+            return this._bundleManager.container;
         }
     }, {
         key: 'request',

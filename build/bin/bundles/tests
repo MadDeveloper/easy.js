@@ -55,6 +55,9 @@ var mocha = new _mocha2.default();
 
 var bundlesDirectory = kernel.path.bundles;
 
+/*
+ * Expose container into global scope for unit tests classes, because file are called by mocha and not ourselves
+ */
 global.container = container;
 
 /*

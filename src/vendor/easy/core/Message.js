@@ -2,7 +2,6 @@ import colors from 'colors'
 
 export default class Message {
     constructor( container ) {
-        this._container     = container
         this._leftSpaces    = '  '
     }
 
@@ -55,9 +54,5 @@ export default class Message {
     set leftSpaces( leftSpaces ) {
         this._leftSpaces = leftSpaces
         return this
-    }
-
-    get container() {
-        return this._container
     }
 }

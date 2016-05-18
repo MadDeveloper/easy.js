@@ -14,12 +14,11 @@ var Controller = function () {
     function Controller(container) {
         _classCallCheck(this, Controller);
 
-        this._container = container;
-        this._bundleManager = this._container.getComponent('BundleManager');
-        this._router = this._container.router;
-        this._database = this._container.database;
-        this._request = this._container.getComponent('Request');
-        this._response = this._container.getComponent('Response');
+        this._bundleManager = container.getComponent('BundleManager');
+        this._router = container.router;
+        this._database = container.database;
+        this._request = container.getComponent('Request');
+        this._response = container.getComponent('Response');
     }
 
     _createClass(Controller, [{
@@ -112,11 +111,6 @@ var Controller = function () {
          */
 
     }, {
-        key: 'container',
-        get: function get() {
-            return this._container;
-        }
-    }, {
         key: 'bundleManager',
         get: function get() {
             return this._bundleManager;
@@ -140,6 +134,11 @@ var Controller = function () {
         key: 'response',
         get: function get() {
             return this._response;
+        }
+    }, {
+        key: 'container',
+        get: function get() {
+            return this.bundleManager.container;
         }
     }]);
 

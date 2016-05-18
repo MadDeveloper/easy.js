@@ -26,7 +26,7 @@ var SecurityController = function (_Controller) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SecurityController).call(this, skeletonFactory.container));
 
-        _this._access = _this._container.getService('security.access');
+        _this._access = _this.container.getService('security.access');
         return _this;
     }
 

@@ -18,7 +18,6 @@ var Message = function () {
     function Message(container) {
         _classCallCheck(this, Message);
 
-        this._container = container;
         this._leftSpaces = '  ';
     }
 
@@ -77,11 +76,6 @@ var Message = function () {
         set: function set(leftSpaces) {
             this._leftSpaces = leftSpaces;
             return this;
-        }
-    }, {
-        key: 'container',
-        get: function get() {
-            return this._container;
         }
     }]);
 

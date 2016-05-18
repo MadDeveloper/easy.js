@@ -1,9 +1,8 @@
 import fs from 'fs'
 
 export default class Http {
-    constructor( container ) {
-        this._container = container
-        this._status    = {
+    constructor() {
+        this._status = {
             // Response to a successful GET, PUT, PATCH or DELETE. Can also be used for a POST that doesn't result in a creation
             ok: 200,
             // Response to a POST that results in a creation. Should be combined with a Location header pointing to the location of the new resource
@@ -38,10 +37,6 @@ export default class Http {
     /*
      * Getters and setters
      */
-    get container() {
-        return this._container
-    }
-
     get status() {
         return this._status
     }

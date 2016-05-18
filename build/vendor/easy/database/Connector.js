@@ -22,9 +22,8 @@ var Connector = function () {
     function Connector(container) {
         _classCallCheck(this, Connector);
 
-        this._container = container;
-        this._kernel = this._container.kernel;
-        this._message = this._container.getComponent('Message');
+        this._kernel = container.kernel;
+        this._message = container.getComponent('Message');
         this._defaultConnector = 'bookshelf';
         this._databasePath = this._kernel.path.config + '/database/database';
         this._connection = null;
@@ -46,11 +45,6 @@ var Connector = function () {
          * Getters and setters
          */
 
-    }, {
-        key: 'container',
-        get: function get() {
-            return this._container;
-        }
     }, {
         key: 'connection',
         get: function get() {

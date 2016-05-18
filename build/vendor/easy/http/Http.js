@@ -15,10 +15,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Http = function () {
-    function Http(container) {
+    function Http() {
         _classCallCheck(this, Http);
 
-        this._container = container;
         this._status = {
             // Response to a successful GET, PUT, PATCH or DELETE. Can also be used for a POST that doesn't result in a creation
             ok: 200,
@@ -57,11 +56,6 @@ var Http = function () {
 
 
     _createClass(Http, [{
-        key: 'container',
-        get: function get() {
-            return this._container;
-        }
-    }, {
         key: 'status',
         get: function get() {
             return this._status;

@@ -1,11 +1,10 @@
 export default class Controller {
     constructor( container ) {
-        this._container     = container
-        this._bundleManager = this._container.getComponent( 'BundleManager' )
-        this._router        = this._container.router
-        this._database      = this._container.database
-        this._request       = this._container.getComponent( 'Request' )
-        this._response      = this._container.getComponent( 'Response' )
+        this._bundleManager = container.getComponent( 'BundleManager' )
+        this._router        = container.router
+        this._database      = container.database
+        this._request       = container.getComponent( 'Request' )
+        this._response      = container.getComponent( 'Response' )
     }
 
     verifyParams( required, params ) {
@@ -90,10 +89,6 @@ export default class Controller {
     /*
      * Getters and setters
      */
-    get container() {
-        return this._container
-    }
-
     get bundleManager() {
         return this._bundleManager
     }
@@ -112,5 +107,9 @@ export default class Controller {
 
     get response() {
         return this._response
+    }
+
+    get container() {
+        return this.bundleManager.container
     }
 }
