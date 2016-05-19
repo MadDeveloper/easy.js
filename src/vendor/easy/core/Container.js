@@ -1,6 +1,7 @@
-import fs               from 'fs'
-import path             from 'path'
-import servicesMapping  from './../../../config/services/config'
+import fs                   from 'fs'
+import path                 from 'path'
+import servicesMapping      from './../../../config/services/config'
+import userLibrariesMapping from './../../../config/lib/config'
 
 export default class Container {
     constructor( kernel ) {
@@ -9,13 +10,18 @@ export default class Container {
         /*
          * Dependencies shared
          */
-        this._componentsLoaded  = {}
-        this._librariesLoaded   = {}
-        this._shared            = {}
+        this._componentsLoaded      = {}
+        this._librariesLoaded       = {}
+        this._userLibrariesLoaded   = {}
+        this._shared                = {}
 
         this._servicesDirectoryExists           = false
         this._checkExistanceOfServicesDirectory = true
         this._servicesDirectoryPath             = this._kernel.path.services
+
+        this._userLibrariesDirectoryExists           = false
+        this._checkExistanceOfUserLibrariesDirectory = true
+        this._userLibrariesDirectoryPath             = this._kernel.path.lib
 
         this._componentsMapping = {
             'bundlemanager': this._kernel.path.easy + '/core/BundleManager',
@@ -33,12 +39,13 @@ export default class Container {
         }
 
         this._servicesMapping = servicesMapping
+
+        this._userLibrariesMapping = userLibrariesMapping
     }
 
     /*
      * Components
      */
-
     loadComponent( name ) {
         if ( "undefined" === typeof this.componentsLoaded[ name ] ) {
             if ( this.componentsMapping.hasOwnProperty( name ) ) {
@@ -85,7 +92,6 @@ export default class Container {
     /*
      * Services
      */
-
     isServiceMapped( name ) {
         return this.servicesMapping.hasOwnProperty( name )
     }
@@ -141,15 +147,15 @@ export default class Container {
     }
 
     servicesCheckDirectory() {
-        if ( false !== this.checkExistanceOfServicesDirectory && false === this.servicesDirectoryExists ) {
+        if ( false !== this._checkExistanceOfServicesDirectory && false === this._servicesDirectoryExists ) {
             const statsServiceDirectory = fs.lstatSync( this.servicesDirectoryPath )
 
             if ( statsServiceDirectory.isDirectory() ) {
-                this.servicesDirectoryExists = true
+                this._servicesDirectoryExists = true
             } else {
                 this.getComponent( 'Message' ).error({
                     title: "Service directory not found",
-                    message: "Service directory path resolved: " + this.servicesDirectoryPath,
+                    message: "Directory path resolved: " + this.servicesDirectoryPath,
                     type: 'error',
                     exit: 0
                 })
@@ -190,54 +196,111 @@ export default class Container {
     }
 
     /*
+     * User libraries
+     */
+    isUserLibraryMapped( name ) {
+        return this.userLibrariesMapping.hasOwnProperty( name )
+    }
+
+    isUserLibraryLoaded( name ) {
+        return this.userLibrariesLoaded.hasOwnProperty( name )
+    }
+
+    storeUserLibrary( name, pathLibrary ) {
+        const libraryClass  = require( pathLibrary ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        this.userLibrariesLoaded[ name ] = new libraryClass( this )
+    }
+
+    resetLibrary( name ) {
+        delete this.userLibrariesLoaded[ name ]
+    }
+
+    getUserLibrary( name, clearCache ) {
+        this.servicesCheckDirectory()
+
+        if ( this.isUserLibraryMapped( name ) ) {
+
+            if ( this.isUserLibraryLoaded( name ) ) {
+                return this.userLibrariesLoaded[ name ]
+            }
+
+            const userLibraryFile = this.userLibrariesDirectoryPath + '/' + this.userLibrariesMapping[ name ]+ '.js'
+
+            try {
+                const statsUserLibraryFile = fs.lstatSync( userLibraryFile )
+
+                if ( statsUserLibraryFile.isFile() ) {
+
+                    this.storeUserLibrary( name, userLibraryFile )
+
+                    return this.userLibrariesLoaded[ name ]
+
+                } else {
+                    throw new Error()
+                }
+            } catch ( error ) {
+                this.getComponent( 'Message' ).error({
+                    title: "Impossible to call user library",
+                    message: "Library " + name + " not found, path: " + path.resolve( userLibraryFile ) + "\n" + error,
+                    type: 'error',
+                    exit: 0
+                })
+            }
+
+        } else {
+            return undefined
+        }
+    }
+
+    userLibrariesCheckDirectory() {
+        if ( false !== this._checkExistanceOfUserLibrariesDirectory && false === this._userLibrariesDirectoryExists ) {
+            const statsUserLibrariesDirectory = fs.lstatSync( this.userLibrariesDirectoryPath )
+
+            if ( statsUserLibrariesDirectory.isDirectory() ) {
+                this._userLibrariesDirectoryExists = true
+            } else {
+                this.getComponent( 'Message' ).error({
+                    title: "User's libraries directory not found",
+                    message: "Directory path resolved: " + this.userLibrariesDirectoryPath,
+                    type: 'error',
+                    exit: 0
+                })
+            }
+        }
+
+        return true
+    }
+
+
+    /*
      * Getters and setters
      */
-
     get kernel() {
         return this._kernel
-    }
-
-    get message() {
-        return this._message
-    }
-
-    get servicesDirectoryExists() {
-        return this._servicesDirectoryExists
-    }
-
-    set servicesDirectoryExists( exists ) {
-        this._servicesDirectoryExists = exists
-        return this
-    }
-
-    get checkExistanceOfServicesDirectory() {
-        return this._checkExistanceOfServicesDirectory
-    }
-
-    set checkExistanceOfServicesDirectory( check ) {
-        this._checkExistanceOfServicesDirectory = check
-        return this
     }
 
     get servicesDirectoryPath() {
         return this._servicesDirectoryPath
     }
 
-    set servicesDirectoryPath( directoryPath ) {
-        this._servicesDirectoryPath = directoryPath
-        return this
+    get userLibrariesDirectoryPath() {
+        return this._userLibrariesDirectoryPath
     }
 
     get componentsLoaded() {
         return this._componentsLoaded
     }
 
+    get shared() {
+        return this._shared
+    }
+
     get librariesLoaded() {
         return this._librariesLoaded
     }
 
-    get shared() {
-        return this._shared
+    get userLibrariesLoaded() {
+        return this._userLibrariesLoaded
     }
 
     get componentsMapping() {
@@ -250,5 +313,9 @@ export default class Container {
 
     get servicesMapping() {
         return this._servicesMapping
+    }
+
+    get userLibrariesMapping() {
+        return this._userLibrariesMapping
     }
 }

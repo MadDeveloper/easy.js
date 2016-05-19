@@ -26,9 +26,11 @@ var Kernel = function () {
         this._container = null;
         this._path = {
             root: '',
+            bin: '',
             bundles: '',
-            services: '',
             config: '',
+            lib: '',
+            services: '',
             vendor: ''
         };
     }
@@ -37,27 +39,24 @@ var Kernel = function () {
         key: 'init',
         value: function init(root, config) {
             this.path.root = root;
+            this.path.bin = this.path.root + '/bin';
             this.path.bundles = this.path.root + '/bundles';
-            this.path.services = this.path.root + '/services';
             this.path.config = this.path.root + '/config';
+            this.path.lib = this.path.root + '/lib';
+            this.path.services = this.path.root + '/services';
             this.path.vendor = this.path.root + '/vendor';
             this.path.easy = this.path.vendor + '/easy';
 
             this.appName = config.app.name;
 
-            this.loadContainer();
+            this.initContainer();
 
             return this;
         }
     }, {
-        key: 'loadContainer',
-        value: function loadContainer() {
-            this.container = new _Container2.default(this);
-            this.initContainer();
-        }
-    }, {
         key: 'initContainer',
         value: function initContainer() {
+            this._container = new _Container2.default(this);
             this.container.loadComponents();
         }
     }, {
@@ -93,10 +92,6 @@ var Kernel = function () {
         key: 'container',
         get: function get() {
             return this._container;
-        },
-        set: function set(container) {
-            this._container = container;
-            return this;
         }
     }, {
         key: 'path',

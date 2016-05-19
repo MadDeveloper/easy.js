@@ -1,5 +1,3 @@
-import fs from 'fs'
-
 export default class Http {
     constructor() {
         this._status = {

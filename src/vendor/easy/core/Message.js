@@ -23,7 +23,7 @@ export default class Message {
         } else {
             this.error({
                 title: "Invalid arguments",
-                message: "Missing arguments to " + colors.underline.yellow( "Message.error()" ) + " function."
+                message: "Missing arguments to error from Message class"
             })
         }
     }

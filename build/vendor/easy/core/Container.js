@@ -18,6 +18,10 @@ var _config = require('./../../../config/services/config');
 
 var _config2 = _interopRequireDefault(_config);
 
+var _config3 = require('./../../../config/lib/config');
+
+var _config4 = _interopRequireDefault(_config3);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -33,11 +37,16 @@ var Container = function () {
          */
         this._componentsLoaded = {};
         this._librariesLoaded = {};
+        this._userLibrariesLoaded = {};
         this._shared = {};
 
         this._servicesDirectoryExists = false;
         this._checkExistanceOfServicesDirectory = true;
         this._servicesDirectoryPath = this._kernel.path.services;
+
+        this._userLibrariesDirectoryExists = false;
+        this._checkExistanceOfUserLibrariesDirectory = true;
+        this._userLibrariesDirectoryPath = this._kernel.path.lib;
 
         this._componentsMapping = {
             'bundlemanager': this._kernel.path.easy + '/core/BundleManager',
@@ -55,11 +64,14 @@ var Container = function () {
         };
 
         this._servicesMapping = _config2.default;
+
+        this._userLibrariesMapping = _config4.default;
     }
 
     /*
      * Components
      */
+
 
     _createClass(Container, [{
         key: 'loadComponent',
@@ -174,15 +186,15 @@ var Container = function () {
     }, {
         key: 'servicesCheckDirectory',
         value: function servicesCheckDirectory() {
-            if (false !== this.checkExistanceOfServicesDirectory && false === this.servicesDirectoryExists) {
+            if (false !== this._checkExistanceOfServicesDirectory && false === this._servicesDirectoryExists) {
                 var statsServiceDirectory = _fs2.default.lstatSync(this.servicesDirectoryPath);
 
                 if (statsServiceDirectory.isDirectory()) {
-                    this.servicesDirectoryExists = true;
+                    this._servicesDirectoryExists = true;
                 } else {
                     this.getComponent('Message').error({
                         title: "Service directory not found",
-                        message: "Service directory path resolved: " + this.servicesDirectoryPath,
+                        message: "Directory path resolved: " + this.servicesDirectoryPath,
                         type: 'error',
                         exit: 0
                     });
@@ -228,6 +240,88 @@ var Container = function () {
         }
 
         /*
+         * User libraries
+         */
+
+    }, {
+        key: 'isUserLibraryMapped',
+        value: function isUserLibraryMapped(name) {
+            return this.userLibrariesMapping.hasOwnProperty(name);
+        }
+    }, {
+        key: 'isUserLibraryLoaded',
+        value: function isUserLibraryLoaded(name) {
+            return this.userLibrariesLoaded.hasOwnProperty(name);
+        }
+    }, {
+        key: 'storeUserLibrary',
+        value: function storeUserLibrary(name, pathLibrary) {
+            var libraryClass = require(pathLibrary).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            this.userLibrariesLoaded[name] = new libraryClass(this);
+        }
+    }, {
+        key: 'resetLibrary',
+        value: function resetLibrary(name) {
+            delete this.userLibrariesLoaded[name];
+        }
+    }, {
+        key: 'getUserLibrary',
+        value: function getUserLibrary(name, clearCache) {
+            this.servicesCheckDirectory();
+
+            if (this.isUserLibraryMapped(name)) {
+
+                if (this.isUserLibraryLoaded(name)) {
+                    return this.userLibrariesLoaded[name];
+                }
+
+                var userLibraryFile = this.userLibrariesDirectoryPath + '/' + this.userLibrariesMapping[name] + '.js';
+
+                try {
+                    var statsUserLibraryFile = _fs2.default.lstatSync(userLibraryFile);
+
+                    if (statsUserLibraryFile.isFile()) {
+
+                        this.storeUserLibrary(name, userLibraryFile);
+
+                        return this.userLibrariesLoaded[name];
+                    } else {
+                        throw new Error();
+                    }
+                } catch (error) {
+                    this.getComponent('Message').error({
+                        title: "Impossible to call user library",
+                        message: "Library " + name + " not found, path: " + _path2.default.resolve(userLibraryFile) + "\n" + error,
+                        type: 'error',
+                        exit: 0
+                    });
+                }
+            } else {
+                return undefined;
+            }
+        }
+    }, {
+        key: 'userLibrariesCheckDirectory',
+        value: function userLibrariesCheckDirectory() {
+            if (false !== this._checkExistanceOfUserLibrariesDirectory && false === this._userLibrariesDirectoryExists) {
+                var statsUserLibrariesDirectory = _fs2.default.lstatSync(this.userLibrariesDirectoryPath);
+
+                if (statsUserLibrariesDirectory.isDirectory()) {
+                    this._userLibrariesDirectoryExists = true;
+                } else {
+                    this.getComponent('Message').error({
+                        title: "User's libraries directory not found",
+                        message: "Directory path resolved: " + this.userLibrariesDirectoryPath,
+                        type: 'error',
+                        exit: 0
+                    });
+                }
+            }
+
+            return true;
+        }
+
+        /*
          * Getters and setters
          */
 
@@ -237,36 +331,14 @@ var Container = function () {
             return this._kernel;
         }
     }, {
-        key: 'message',
-        get: function get() {
-            return this._message;
-        }
-    }, {
-        key: 'servicesDirectoryExists',
-        get: function get() {
-            return this._servicesDirectoryExists;
-        },
-        set: function set(exists) {
-            this._servicesDirectoryExists = exists;
-            return this;
-        }
-    }, {
-        key: 'checkExistanceOfServicesDirectory',
-        get: function get() {
-            return this._checkExistanceOfServicesDirectory;
-        },
-        set: function set(check) {
-            this._checkExistanceOfServicesDirectory = check;
-            return this;
-        }
-    }, {
         key: 'servicesDirectoryPath',
         get: function get() {
             return this._servicesDirectoryPath;
-        },
-        set: function set(directoryPath) {
-            this._servicesDirectoryPath = directoryPath;
-            return this;
+        }
+    }, {
+        key: 'userLibrariesDirectoryPath',
+        get: function get() {
+            return this._userLibrariesDirectoryPath;
         }
     }, {
         key: 'componentsLoaded',
@@ -274,14 +346,19 @@ var Container = function () {
             return this._componentsLoaded;
         }
     }, {
+        key: 'shared',
+        get: function get() {
+            return this._shared;
+        }
+    }, {
         key: 'librariesLoaded',
         get: function get() {
             return this._librariesLoaded;
         }
     }, {
-        key: 'shared',
+        key: 'userLibrariesLoaded',
         get: function get() {
-            return this._shared;
+            return this._userLibrariesLoaded;
         }
     }, {
         key: 'componentsMapping',
@@ -297,6 +374,11 @@ var Container = function () {
         key: 'servicesMapping',
         get: function get() {
             return this._servicesMapping;
+        }
+    }, {
+        key: 'userLibrariesMapping',
+        get: function get() {
+            return this._userLibrariesMapping;
         }
     }]);
 

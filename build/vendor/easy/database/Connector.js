@@ -22,10 +22,8 @@ var Connector = function () {
     function Connector(container) {
         _classCallCheck(this, Connector);
 
-        this._kernel = container.kernel;
-        this._message = container.getComponent('Message');
         this._defaultConnector = 'bookshelf';
-        this._databasePath = this._kernel.path.config + '/database/database';
+        this._databasePath = container.kernel.path.config + '/database/database';
         this._connection = null;
     }
 
@@ -63,16 +61,6 @@ var Connector = function () {
         key: 'databasePath',
         get: function get() {
             return this._databasePath;
-        }
-    }, {
-        key: 'kernel',
-        get: function get() {
-            return this._kernel;
-        }
-    }, {
-        key: 'message',
-        get: function get() {
-            return this._message;
         }
     }]);
 

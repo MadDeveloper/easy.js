@@ -40,7 +40,7 @@ var Message = function () {
             } else {
                 this.error({
                     title: "Invalid arguments",
-                    message: "Missing arguments to " + _colors2.default.underline.yellow("Message.error()") + " function."
+                    message: "Missing arguments to error from Message class"
                 });
             }
         }

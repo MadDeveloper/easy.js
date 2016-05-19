@@ -7,35 +7,34 @@ export default class Kernel {
         this._container = null
         this._path      = {
             root: '',
+            bin: '',
             bundles: '',
-            services: '',
             config: '',
+            lib: '',
+            services: '',
             vendor: ''
         }
-
     }
 
     init( root, config ) {
         this.path.root      = root
+        this.path.bin       = this.path.root + '/bin'
         this.path.bundles   = this.path.root + '/bundles'
-        this.path.services  = this.path.root + '/services'
         this.path.config    = this.path.root + '/config'
+        this.path.lib       = this.path.root + '/lib'
+        this.path.services  = this.path.root + '/services'
         this.path.vendor    = this.path.root + '/vendor'
         this.path.easy      = this.path.vendor + '/easy'
 
         this.appName = config.app.name
 
-        this.loadContainer()
+        this.initContainer()
 
         return this
     }
 
-    loadContainer() {
-        this.container = new Container( this )
-        this.initContainer()
-    }
-
     initContainer() {
+        this._container = new Container( this )
         this.container.loadComponents()
     }
 
@@ -65,11 +64,6 @@ export default class Kernel {
 
     get container() {
         return this._container
-    }
-
-    set container( container ) {
-        this._container = container
-        return this
     }
 
     get path() {

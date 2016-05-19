@@ -75,7 +75,7 @@ var BundleManager = function () {
     }, {
         key: 'getBundlesDirectory',
         value: function getBundlesDirectory() {
-            return this.kernel.path.bundles;
+            return this._kernel.path.bundles;
         }
 
         /*
@@ -86,11 +86,6 @@ var BundleManager = function () {
         key: 'appName',
         get: function get() {
             return this.kernel.appName;
-        }
-    }, {
-        key: 'kernel',
-        get: function get() {
-            return this._kernel;
         }
     }, {
         key: 'router',

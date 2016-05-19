@@ -53,7 +53,7 @@ export default class BundleManager {
     }
 
     getBundlesDirectory() {
-        return this.kernel.path.bundles
+        return this._kernel.path.bundles
     }
 
     /*
@@ -61,10 +61,6 @@ export default class BundleManager {
      */
     get appName() {
         return this.kernel.appName
-    }
-
-    get kernel() {
-        return this._kernel
     }
 
     get router() {
