@@ -34,7 +34,7 @@ function authentication(bundleManager) {
     /*
      * User classes
      */
-    var userFactory = bundleManager.getFactory('User');
+    var userFactory = bundleManager.getFactory('user');
     var userRepository = userFactory.getRepository();
 
     /*

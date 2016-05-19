@@ -28,7 +28,7 @@ export default class Container {
             'logger': this._kernel.path.easy + '/core/Logger',
             'message': this._kernel.path.easy + '/core/Message',
             'polyfills': this._kernel.path.easy + '/core/Polyfills',
-            'connector': this._kernel.path.easy + '/database/Connector',
+            'database': this._kernel.path.easy + '/database/Connector',
             'http': this._kernel.path.easy + '/http/Http',
             'request': this._kernel.path.easy + '/http/Request',
             'response': this._kernel.path.easy + '/http/Response'
@@ -64,6 +64,26 @@ export default class Container {
             if ( this.componentsMapping.hasOwnProperty( componentName ) ) {
                 this.loadComponent( componentName )
             }
+        }
+    }
+
+    reloadComponent( name ) {
+        name = name.toLowerCase()
+
+        if ( this.isComponentMapped( name ) && this.isComponentLoaded( name ) ) {
+            delete this.componentsLoaded[ name ]
+            this.loadComponent( name )
+
+            return this.componentsLoaded[ name ]
+        }
+    }
+
+    changeComponent( name, newComponent ) {
+        name = name.toLowerCase()
+
+        if ( this.isComponentMapped( name ) && this.isComponentLoaded( name ) ) {
+            this.componentsLoaded[ name ] = newComponent
+            return this.componentsLoaded[ name ]
         }
     }
 
@@ -105,8 +125,11 @@ export default class Container {
         this.shared[ name ] = new serviceClass( this )
     }
 
-    resetService( name ) {
-        delete this.shared[ name ]
+    reloadService( name ) {
+        if ( this.isServiceMapped( name ) && this.isServicesLoaded( name ) ) {
+            delete this.shared[ name ]
+            this.getService( name )
+        }
     }
 
     getService( name, clearCache ) {
@@ -176,6 +199,13 @@ export default class Container {
         return this.librariesLoaded.hasOwnProperty( name )
     }
 
+    reloadLibrary( name ) {
+        if ( this.isLibraryMapped( name ) && this.isLibraryLoaded( name ) ) {
+            delete this.librariesLoaded[ name ]
+            this.getLibrary( name )
+        }
+    }
+
     getLibrary( name ) {
         name = name.toLowerCase()
 
@@ -211,8 +241,11 @@ export default class Container {
         this.userLibrariesLoaded[ name ] = new libraryClass( this )
     }
 
-    resetLibrary( name ) {
-        delete this.userLibrariesLoaded[ name ]
+    reloadUserLibrary( name ) {
+        if ( this.isUserLibraryMapped( name ) && this.isUserLibraryLoaded( name ) ) {
+            delete this.userLibrariesLoaded[ name ]
+            this.getUserLibrary( name )
+        }
     }
 
     getUserLibrary( name, clearCache ) {

@@ -58,7 +58,7 @@ export default class RoutingController extends Controller {
     updateRole() {
         if ( this.isRequestWellParameterized() ) {
 
-            this.database.transaction( function( t ) {
+            this.database.transaction( t => {
 
                 this.roleRepository.save( this.request.find( 'role' ), this.request.getBody(), { transacting: t } )
                 .then( role => {

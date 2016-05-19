@@ -17,7 +17,7 @@ export default function authentication( bundleManager ) {
     /*
      * User classes
      */
-    const userFactory     = bundleManager.getFactory( 'User' )
+    const userFactory     = bundleManager.getFactory( 'user' )
     const userRepository  = userFactory.getRepository()
 
     /*

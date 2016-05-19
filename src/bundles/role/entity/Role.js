@@ -4,12 +4,13 @@
 export default class Role {
     constructor( roleFactory ) {
         const bundleManager = roleFactory.bundleManager
+        const database      = bundleManager.container.getComponent( 'Database' ).connection
 
-        return roleFactory.database.Model.extend({
+        return database.Model.extend({
             tableName: 'roles',
 
             users() {
-                return this.hasMany( bundleManager.getFactory( 'User' ).getModel() )
+                return this.hasMany( bundleManager.getFactory( 'user' ).getModel() )
             }
         })
     }

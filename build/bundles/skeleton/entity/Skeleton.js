@@ -14,8 +14,9 @@ var Skeleton = function Skeleton(skeletonFactory) {
     _classCallCheck(this, Skeleton);
 
     var bundleManager = skeletonFactory.bundleManager;
+    var database = bundleManager.container.getComponent('Database').connection;
 
-    return skeletonFactory.database.Model.extend({
+    return database.Model.extend({
         tableName: 'skeletons'
     });
 };

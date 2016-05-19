@@ -40,7 +40,7 @@ var UserTests = function (_Tests) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UserTests).call(this, container));
 
-    _this._userFactory = _this._bundleManager.getFactory('User');
+    _this._userFactory = _this._bundleManager.getFactory('user');
     _this._userRoutingController = _this._userFactory.getController();
     _this._userRepository = _this._userFactory.getRepository();
     _this._user = _this._userFactory.getModel();

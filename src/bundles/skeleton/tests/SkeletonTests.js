@@ -15,7 +15,7 @@ class SkeletonTests extends Tests {
         /*
          * Local dependencies
          */
-        this._skeletonFactory           = this._bundleManager.getFactory( 'Skeleton' )
+        this._skeletonFactory           = this._bundleManager.getFactory( 'skeleton' )
         this._skeletonRoutingController = this._skeletonFactory.getController()
         this._skeletonRepository        = this._skeletonFactory.getRepository()
         this._skeleton                  = this._skeletonFactory.getModel()

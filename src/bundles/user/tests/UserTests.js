@@ -15,7 +15,7 @@ class UserTests extends Tests {
         /*
          * Local dependencies
          */
-        this._userFactory           = this._bundleManager.getFactory( 'User' )
+        this._userFactory           = this._bundleManager.getFactory( 'user' )
         this._userRoutingController = this._userFactory.getController()
         this._userRepository        = this._userFactory.getRepository()
         this._user                  = this._userFactory.getModel()

@@ -40,7 +40,7 @@ var RoleTests = function (_Tests) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RoleTests).call(this, container));
 
-    _this._roleFactory = _this._bundleManager.getFactory('Role');
+    _this._roleFactory = _this._bundleManager.getFactory('role');
     _this._roleRoutingController = _this._roleFactory.getController();
     _this._roleRepository = _this._roleFactory.getRepository();
     _this._role = _this._roleFactory.getModel();

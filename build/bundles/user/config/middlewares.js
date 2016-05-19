@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = middlewares;
-function middlewares(userFactory, params) {
+function middlewares(userFactory) {
     /*
      * Dependencies
      */

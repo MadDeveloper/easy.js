@@ -96,18 +96,22 @@ function Application(config, cliMode) {
   var kernel = new _kernel2.default().init(__dirname, config);
   var container = kernel.container;
   var message = container.getComponent('Message');
-  var database = container.getComponent('Connector');
+  var database = container.getComponent('Database');
 
   /*
-   * Define database connector (default: ~/config/database/orm)
+   * Define database connector (default: ~/config/database/connector/bookshelf)
    */
-  var databaseConnection = database.connect();
+  database.connect();
+
+  /*
+   * Change database into container
+   */
+  container.changeComponent('Database', database);
 
   /*
    * Define bundle easy vendor
    */
   var bundleManager = container.getComponent('BundleManager');
-  bundleManager.database = databaseConnection;
   bundleManager.router = _express2.default.Router();
 
   /*

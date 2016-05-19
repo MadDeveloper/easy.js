@@ -1,4 +1,4 @@
-export default function routing( userFactory, params ) {
+export default function routing( userFactory ) {
     /*
      * Dependencies
      */

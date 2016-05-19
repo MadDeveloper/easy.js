@@ -14,12 +14,13 @@ var User = function User(userFactory) {
     _classCallCheck(this, User);
 
     var bundleManager = userFactory.bundleManager;
+    var database = bundleManager.container.getComponent('Database').connection;
 
-    return userFactory.database.Model.extend({
+    return database.Model.extend({
         tableName: 'users',
 
         role: function role() {
-            return this.belongsTo(bundleManager.getFactory('Role').getModel());
+            return this.belongsTo(bundleManager.getFactory('role').getModel());
         }
     });
 };

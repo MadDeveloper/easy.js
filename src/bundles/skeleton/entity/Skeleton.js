@@ -4,8 +4,9 @@
 export default class Skeleton {
     constructor( skeletonFactory ) {
         const bundleManager = skeletonFactory.bundleManager
+        const database      = bundleManager.container.getComponent( 'Database' ).connection
 
-        return skeletonFactory.database.Model.extend({
+        return database.Model.extend({
             tableName: 'skeletons'
         })
     }

@@ -1,4 +1,4 @@
-export default function middlewares( userFactory, params ) {
+export default function middlewares( userFactory ) {
     /*
      * Dependencies
      */

@@ -53,7 +53,7 @@ var Container = function () {
             'logger': this._kernel.path.easy + '/core/Logger',
             'message': this._kernel.path.easy + '/core/Message',
             'polyfills': this._kernel.path.easy + '/core/Polyfills',
-            'connector': this._kernel.path.easy + '/database/Connector',
+            'database': this._kernel.path.easy + '/database/Connector',
             'http': this._kernel.path.easy + '/http/Http',
             'request': this._kernel.path.easy + '/http/Request',
             'response': this._kernel.path.easy + '/http/Response'
@@ -94,6 +94,28 @@ var Container = function () {
                 if (this.componentsMapping.hasOwnProperty(componentName)) {
                     this.loadComponent(componentName);
                 }
+            }
+        }
+    }, {
+        key: 'reloadComponent',
+        value: function reloadComponent(name) {
+            name = name.toLowerCase();
+
+            if (this.isComponentMapped(name) && this.isComponentLoaded(name)) {
+                delete this.componentsLoaded[name];
+                this.loadComponent(name);
+
+                return this.componentsLoaded[name];
+            }
+        }
+    }, {
+        key: 'changeComponent',
+        value: function changeComponent(name, newComponent) {
+            name = name.toLowerCase();
+
+            if (this.isComponentMapped(name) && this.isComponentLoaded(name)) {
+                this.componentsLoaded[name] = newComponent;
+                return this.componentsLoaded[name];
             }
         }
     }, {
@@ -143,9 +165,12 @@ var Container = function () {
             this.shared[name] = new serviceClass(this);
         }
     }, {
-        key: 'resetService',
-        value: function resetService(name) {
-            delete this.shared[name];
+        key: 'reloadService',
+        value: function reloadService(name) {
+            if (this.isServiceMapped(name) && this.isServicesLoaded(name)) {
+                delete this.shared[name];
+                this.getService(name);
+            }
         }
     }, {
         key: 'getService',
@@ -219,6 +244,14 @@ var Container = function () {
             return this.librariesLoaded.hasOwnProperty(name);
         }
     }, {
+        key: 'reloadLibrary',
+        value: function reloadLibrary(name) {
+            if (this.isLibraryMapped(name) && this.isLibraryLoaded(name)) {
+                delete this.librariesLoaded[name];
+                this.getLibrary(name);
+            }
+        }
+    }, {
         key: 'getLibrary',
         value: function getLibrary(name) {
             name = name.toLowerCase();
@@ -260,9 +293,12 @@ var Container = function () {
             this.userLibrariesLoaded[name] = new libraryClass(this);
         }
     }, {
-        key: 'resetLibrary',
-        value: function resetLibrary(name) {
-            delete this.userLibrariesLoaded[name];
+        key: 'reloadUserLibrary',
+        value: function reloadUserLibrary(name) {
+            if (this.isUserLibraryMapped(name) && this.isUserLibraryLoaded(name)) {
+                delete this.userLibrariesLoaded[name];
+                this.getUserLibrary(name);
+            }
         }
     }, {
         key: 'getUserLibrary',

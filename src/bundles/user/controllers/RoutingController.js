@@ -7,7 +7,7 @@ export default class RoutingController extends Controller {
 
         this._userFactory       = userFactory
         this._userRepository    = this._userFactory.getRepository()
-        this._roleFactory       = this._bundleManager.getFactory( 'Role' )
+        this._roleFactory       = this._bundleManager.getFactory( 'role' )
         this._roleRepository    = this._roleFactory.getRepository()
     }
 

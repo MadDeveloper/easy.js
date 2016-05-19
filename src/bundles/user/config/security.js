@@ -1,4 +1,4 @@
-export default function security( userFactory, params ) {
+export default function security( userFactory ) {
     /*
      * Dependencies
      */

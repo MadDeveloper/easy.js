@@ -40,7 +40,7 @@ var SkeletonTests = function (_Tests) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SkeletonTests).call(this, container));
 
-    _this._skeletonFactory = _this._bundleManager.getFactory('Skeleton');
+    _this._skeletonFactory = _this._bundleManager.getFactory('skeleton');
     _this._skeletonRoutingController = _this._skeletonFactory.getController();
     _this._skeletonRepository = _this._skeletonFactory.getRepository();
     _this._skeleton = _this._skeletonFactory.getModel();

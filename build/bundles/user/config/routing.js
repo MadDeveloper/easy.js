@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = routing;
-function routing(userFactory, params) {
+function routing(userFactory) {
     /*
      * Dependencies
      */

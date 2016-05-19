@@ -9,8 +9,5 @@ export default {
 
     /* security */
     'security.access': 'security/AccessSecurityService',
-    'security.default': 'security/DefaultSecurityService',
-
-    /* string */
-    'string': 'string/StringService'
+    'security.default': 'security/DefaultSecurityService'
 }

@@ -78,12 +78,13 @@ var RoutingController = function (_Controller) {
     }, {
         key: 'updateRole',
         value: function updateRole() {
+            var _this4 = this;
+
             if (this.isRequestWellParameterized()) {
 
                 this.database.transaction(function (t) {
-                    var _this4 = this;
 
-                    this.roleRepository.save(this.request.find('role'), this.request.getBody(), { transacting: t }).then(function (role) {
+                    _this4.roleRepository.save(_this4.request.find('role'), _this4.request.getBody(), { transacting: t }).then(function (role) {
 
                         t.commit();
                         _this4.response.ok(role.toJSON());

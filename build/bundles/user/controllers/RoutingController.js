@@ -32,7 +32,7 @@ var RoutingController = function (_Controller) {
 
         _this._userFactory = userFactory;
         _this._userRepository = _this._userFactory.getRepository();
-        _this._roleFactory = _this._bundleManager.getFactory('Role');
+        _this._roleFactory = _this._bundleManager.getFactory('role');
         _this._roleRepository = _this._roleFactory.getRepository();
         return _this;
     }

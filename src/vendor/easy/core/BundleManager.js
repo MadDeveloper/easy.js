@@ -4,7 +4,7 @@ export default class BundleManager {
     constructor( container ) {
         this._container         = container
         this._kernel            = this._container.kernel
-        this._database          = null
+        this._database          = this._container.getComponent( 'Database' ).connection
         this._router            = null
         this._bundlesDefinition = []
     }
@@ -42,13 +42,7 @@ export default class BundleManager {
 
         for ( var i in this.bundlesDefinition ) {
             const bundle = this.bundlesDefinition[ i ]
-
-            routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js'
-
-            if ( fs.statSync( routingPath ).isFile() ) {
-                const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
-                routingBundle( this.getFactory( bundle ) )
-            }
+            this.getRouting( bundle )
         }
     }
 
@@ -73,10 +67,6 @@ export default class BundleManager {
 
     get database() {
         return this._database
-    }
-
-    set database( database ) {
-        this._database = database
     }
 
     get bundlesDefinition() {

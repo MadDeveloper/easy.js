@@ -20,7 +20,7 @@ var BundleManager = function () {
 
         this._container = container;
         this._kernel = this._container.kernel;
-        this._database = null;
+        this._database = this._container.getComponent('Database').connection;
         this._router = null;
         this._bundlesDefinition = [];
     }
@@ -63,13 +63,7 @@ var BundleManager = function () {
 
             for (var i in this.bundlesDefinition) {
                 var bundle = this.bundlesDefinition[i];
-
-                routingPath = this.getBundlesDirectory() + '/' + bundle + '/config/routing.js';
-
-                if (_fs2.default.statSync(routingPath).isFile()) {
-                    var routingBundle = require(routingPath).default; /* .default is needed to patch babel exports.default build, require doesn't work, import do */
-                    routingBundle(this.getFactory(bundle));
-                }
+                this.getRouting(bundle);
             }
         }
     }, {
@@ -99,9 +93,6 @@ var BundleManager = function () {
         key: 'database',
         get: function get() {
             return this._database;
-        },
-        set: function set(database) {
-            this._database = database;
         }
     }, {
         key: 'bundlesDefinition',

@@ -46,18 +46,22 @@ export default class Application {
         const kernel    = new Kernel().init( __dirname, config )
         const container = kernel.container
         const message   = container.getComponent( 'Message' )
-        const database  = container.getComponent( 'Connector' )
+        const database  = container.getComponent( 'Database' )
 
         /*
-         * Define database connector (default: ~/config/database/orm)
+         * Define database connector (default: ~/config/database/connector/bookshelf)
          */
-        const databaseConnection = database.connect()
+        database.connect()
+
+        /*
+         * Change database into container
+         */
+        container.changeComponent( 'Database', database )
 
         /*
          * Define bundle easy vendor
          */
         const bundleManager     = container.getComponent( 'BundleManager' )
-        bundleManager.database  = databaseConnection
         bundleManager.router    = express.Router()
 
         /*

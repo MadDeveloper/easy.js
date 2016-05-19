@@ -1,8 +1,4 @@
-?- bundleManager dans les bundles ne doit pas être récupéré via la factory, il faut utiliser le container !
-
 - résoudre problème création db avec la connexion knex (config.database)
-
-- change service string as library
 
 - remplacer callback par promise
 
@@ -10,5 +6,5 @@
 
 - fixer les droits pour le dossier build, et le projet de manière générale
 
-?- faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
-?- faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
+- faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
+- faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
