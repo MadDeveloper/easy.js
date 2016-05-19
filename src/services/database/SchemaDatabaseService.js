@@ -4,40 +4,42 @@ import Service          from './../../vendor/easy/core/Service'
 export default class SchemaDatabaseService extends Service {
     constructor( container ) {
         super( container )
+
+        this._knex = this.database.knex
     }
 
     load() {}
 
     createSchema( schemaName ) {
-        return this.database.raw( 'CREATE DATABASE ' + schemaName + '' )
+        return this.knex.raw( 'CREATE DATABASE ' + schemaName + '' )
     }
 
     schemaExists( schemaName ) {
         try {
-            return this.database.schema.withSchema( schemaName )
+            return this.knex.schema.withSchema( schemaName )
         } catch( error ) {
             return false
         }
     }
 
     dropTable( tableName ) {
-        return this.database.schema.dropTableIfExists( tableName )
+        return this.knex.schema.dropTableIfExists( tableName )
     }
 
     tableExists( tableName ) {
-        return this.database.schema.hasTable( tableName )
+        return this.knex.schema.hasTable( tableName )
     }
 
     truncateTable( tableName ) {
-        return this.database.raw( 'truncate table ' + tableName )
+        return this.knex.raw( 'truncate table ' + tableName )
     }
 
     clearTable( tableName ) {
-        return this.database( tableName ).del()
+        return this.knex( tableName ).del()
     }
 
     createTable( tableName, tableSchema ) {
-        return database.schema.createTable( tableName, table => {
+        return this.knex.schema.createTable( tableName, table => {
             let column
             let columnKeys = keys( tableSchema )
 
@@ -93,5 +95,12 @@ export default class SchemaDatabaseService extends Service {
               }
             })
         })
+    }
+
+    /*
+     * Getters and setters
+     */
+    get knex() {
+        return this._knex
     }
 }

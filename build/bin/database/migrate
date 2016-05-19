@@ -19,6 +19,10 @@ var _config = require('./../../config/config');
 
 var _config2 = _interopRequireDefault(_config);
 
+var _schema = require('./../../config/database/schema');
+
+var _schema2 = _interopRequireDefault(_schema);
+
 var _bootstrap = require('./../../bootstrap.js');
 
 var _bootstrap2 = _interopRequireDefault(_bootstrap);
@@ -52,7 +56,7 @@ function raiseError(err) {
 
 function dropTables() {
 	var tables = [];
-	var tableNames = (0, _lodash.keys)(Schema);
+	var tableNames = (0, _lodash.keys)(_schema2.default);
 
 	// we need to reverse tables schema, to delete in first table which contains fk and not the parents, otherwise error will occur because of fk.
 	tableNames.reverse();
@@ -67,11 +71,11 @@ function dropTables() {
 
 function createTables() {
 	var tables = [];
-	var tableNames = (0, _lodash.keys)(Schema);
+	var tableNames = (0, _lodash.keys)(_schema2.default);
 
 	tables = (0, _lodash.map)(tableNames, function (tableName) {
 		return function () {
-			return schemaDatabaseService.createTable(tableName, schema[tableName]);
+			return schemaDatabaseService.createTable(tableName, _schema2.default[tableName]);
 		};
 	});
 
@@ -153,13 +157,22 @@ function updateDatabaseNameInConfig() {
 
 /*
  * Code executed first
+ * Code permits create database, and we have to change connection string into knex conf file
+ * Not finalized
  */
-schemaDatabaseService.createSchema(_config2.default.database.connection.database).then(function (schema) {
-	/*
-  * Database created for first time, we set the database config property into ~/src/config/config.js -> database.connection.database
-  */
-	message.success('Database ' + _config2.default.database.connection.database + ' created. Think to check database encoding.');
-	updateDatabaseNameInConfig();
-}).catch(function (error) {
-	migrate();
-});
+// schemaDatabaseService.createSchema( config.database.connection.database )
+// .then( schema => {
+// 	/*
+// 	 * Database created for first time, we set the database config property into ~/src/config/config.js -> database.connection.database
+// 	 */
+//  	/*
+// 	 *
+// 	 * message.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' )
+// 	 * updateDatabaseNameInConfig()
+// 	 */
+// })
+// .catch( error => {
+// 	migrate()
+// })
+
+migrate();

@@ -26,7 +26,10 @@ var SchemaDatabaseService = function (_Service) {
     function SchemaDatabaseService(container) {
         _classCallCheck(this, SchemaDatabaseService);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(SchemaDatabaseService).call(this, container));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SchemaDatabaseService).call(this, container));
+
+        _this._knex = _this.database.knex;
+        return _this;
     }
 
     _createClass(SchemaDatabaseService, [{
@@ -35,13 +38,13 @@ var SchemaDatabaseService = function (_Service) {
     }, {
         key: 'createSchema',
         value: function createSchema(schemaName) {
-            return this.database.raw('CREATE DATABASE ' + schemaName + '');
+            return this.knex.raw('CREATE DATABASE ' + schemaName + '');
         }
     }, {
         key: 'schemaExists',
         value: function schemaExists(schemaName) {
             try {
-                return this.database.schema.withSchema(schemaName);
+                return this.knex.schema.withSchema(schemaName);
             } catch (error) {
                 return false;
             }
@@ -49,27 +52,27 @@ var SchemaDatabaseService = function (_Service) {
     }, {
         key: 'dropTable',
         value: function dropTable(tableName) {
-            return this.database.schema.dropTableIfExists(tableName);
+            return this.knex.schema.dropTableIfExists(tableName);
         }
     }, {
         key: 'tableExists',
         value: function tableExists(tableName) {
-            return this.database.schema.hasTable(tableName);
+            return this.knex.schema.hasTable(tableName);
         }
     }, {
         key: 'truncateTable',
         value: function truncateTable(tableName) {
-            return this.database.raw('truncate table ' + tableName);
+            return this.knex.raw('truncate table ' + tableName);
         }
     }, {
         key: 'clearTable',
         value: function clearTable(tableName) {
-            return this.database(tableName).del();
+            return this.knex(tableName).del();
         }
     }, {
         key: 'createTable',
         value: function createTable(tableName, tableSchema) {
-            return database.schema.createTable(tableName, function (table) {
+            return this.knex.schema.createTable(tableName, function (table) {
                 var column = void 0;
                 var columnKeys = (0, _lodash.keys)(tableSchema);
 
@@ -121,6 +124,16 @@ var SchemaDatabaseService = function (_Service) {
                     }
                 });
             });
+        }
+
+        /*
+         * Getters and setters
+         */
+
+    }, {
+        key: 'knex',
+        get: function get() {
+            return this._knex;
         }
     }]);
 

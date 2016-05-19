@@ -40,7 +40,7 @@ var bundleManager = app.bundleManager;
 var container = bundleManager.container;
 var message = container.getComponent('Message');
 var schemaDatabaseService = container.getService('database.schema');
-var stringService = container.getService('string');
+var stringLibrary = container.getLibrary('string');
 var nameBundleFromArgv = argv._[0] || argv.name || argv.n || "";
 
 if (nameBundleFromArgv.length > 0) {
@@ -86,8 +86,8 @@ if (nameBundleFromArgv.length > 0) {
         var askForTableName = function askForTableName() {
             console.log('\n');
 
-            var defaultTableName = stringService.asSnakeCase(nameBundleLowerCase) + 's';
-            var answerTableName = stringService.asSnakeCase((0, _readlineSync.question)('Table name (default: ' + defaultTableName + '): '));
+            var defaultTableName = stringLibrary.asSnakeCase(nameBundleLowerCase) + 's';
+            var answerTableName = stringLibrary.asSnakeCase((0, _readlineSync.question)('Table name (default: ' + defaultTableName + '): '));
 
             tableName = answerTableName.length > 0 ? answerTableName : defaultTableName;
 
@@ -99,7 +99,7 @@ if (nameBundleFromArgv.length > 0) {
             /*
              * We ask for properties
              */
-            var columnName = stringService.asSnakeCase((0, _readlineSync.question)('Column name (let empty if the table is complete): '));
+            var columnName = stringLibrary.asSnakeCase((0, _readlineSync.question)('Column name (let empty if the table is complete): '));
             var propertiesLength = Object.keys(properties).length;
 
             if (columnName.length === 0 && propertiesLength === 0) {
@@ -107,7 +107,7 @@ if (nameBundleFromArgv.length > 0) {
             } else if (columnName.length === 0 && propertiesLength > 0) {
                 createTable();
             } else {
-                var columnType = stringService.cleanAccents((0, _readlineSync.question)('Column type: (availables: ' + availablesColumnType.join(', ') + '): ').toLowerCase().trim());
+                var columnType = stringLibrary.cleanAccents((0, _readlineSync.question)('Column type: (availables: ' + availablesColumnType.join(', ') + '): ').toLowerCase().trim());
 
                 if ((0, _lodash.indexOf)(availablesColumnType, columnType) !== -1) {
                     /*

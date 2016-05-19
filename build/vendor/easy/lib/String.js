@@ -16,6 +16,24 @@ var String = function () {
   }
 
   _createClass(String, [{
+    key: 'asSnakeCase',
+    value: function asSnakeCase(originalName) {
+      var formatedName = originalName;
+
+      formatedName = formatedName.trim();
+      formatedName = this.cleanAccents(formatedName);
+      formatedName = formatedName.replace(/[-!#$€£¤§<>%&~=+'"°%`.,:/@\(\)\\\{\[\]\}]/gi, '');
+      formatedName = formatedName.replace(/ /g, '_');
+      formatedName = formatedName.toLowerCase();
+
+      return formatedName;
+    }
+  }, {
+    key: 'cleanAccents',
+    value: function cleanAccents(string) {
+      return string.replace(/[^\w ]/gi, '');
+    }
+  }, {
     key: 'strtr',
     value: function strtr(str, fromObj, to) {
       var fr = '',

@@ -17,7 +17,7 @@ const bundleManager         = app.bundleManager
 const container             = bundleManager.container
 const message               = container.getComponent( 'Message' )
 const schemaDatabaseService = container.getService( 'database.schema' )
-const stringService         = container.getService( 'string' )
+const stringLibrary         = container.getLibrary( 'string' )
 const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {
@@ -95,8 +95,8 @@ if ( nameBundleFromArgv.length > 0 ) {
     function askForTableName() {
         console.log( '\n' )
 
-        const defaultTableName  = stringService.asSnakeCase( nameBundleLowerCase ) + 's'
-        const answerTableName   = stringService.asSnakeCase( question( 'Table name (default: ' + defaultTableName + '): ' ) )
+        const defaultTableName  = stringLibrary.asSnakeCase( nameBundleLowerCase ) + 's'
+        const answerTableName   = stringLibrary.asSnakeCase( question( 'Table name (default: ' + defaultTableName + '): ' ) )
 
         tableName = ( answerTableName.length > 0 ) ? answerTableName : defaultTableName
 
@@ -108,7 +108,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         /*
          * We ask for properties
          */
-        const columnName        = stringService.asSnakeCase( question( 'Column name (let empty if the table is complete): ' ) )
+        const columnName        = stringLibrary.asSnakeCase( question( 'Column name (let empty if the table is complete): ' ) )
         const propertiesLength  = Object.keys( properties ).length
 
         if ( columnName.length === 0 && propertiesLength === 0 ) {
@@ -116,7 +116,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         } else if ( columnName.length === 0 && propertiesLength > 0 ) {
             createTable()
         } else {
-            const columnType = stringService.cleanAccents( question( 'Column type: (availables: ' + availablesColumnType.join( ', ' ) + '): ' ).toLowerCase().trim() )
+            const columnType = stringLibrary.cleanAccents( question( 'Column type: (availables: ' + availablesColumnType.join( ', ' ) + '): ' ).toLowerCase().trim() )
 
             if ( indexOf( availablesColumnType, columnType ) !== -1 ) {
                 /*

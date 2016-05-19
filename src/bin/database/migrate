@@ -4,6 +4,7 @@ import { keys, map }	from 'lodash'
 import minimist     	from 'minimist'
 import sequence 		from 'when/sequence'
 import config       	from './../../config/config'
+import schema			from './../../config/database/schema'
 import App          	from './../../bootstrap.js'
 
 let argv    = minimist( process.argv.slice( 2 ) )
@@ -14,7 +15,7 @@ const kernel                = app.kernel
 const bundleManager         = app.bundleManager
 const container             = bundleManager.container
 const message               = container.getComponent( 'Message' )
-let schemaDatabaseService = container.getService( 'database.schema' )
+let schemaDatabaseService 	= container.getService( 'database.schema' )
 
 const titleError		= "Error when updating database"
 const consequenceError	= "Migration aborted."
@@ -33,7 +34,7 @@ function raiseError( err ) {
 
 function dropTables() {
     let tables = []
-    let tableNames = keys( Schema )
+    let tableNames = keys( schema )
 
     // we need to reverse tables schema, to delete in first table which contains fk and not the parents, otherwise error will occur because of fk.
     tableNames.reverse()
@@ -48,7 +49,7 @@ function dropTables() {
 
 function createTables () {
   let tables = []
-  const tableNames = keys( Schema )
+  const tableNames = keys( schema )
 
   tables = map( tableNames, tableName => {
     return () => {
@@ -140,15 +141,22 @@ function updateDatabaseNameInConfig() {
 
 /*
  * Code executed first
+ * Code permits create database, and we have to change connection string into knex conf file
+ * Not finalized
  */
-schemaDatabaseService.createSchema( config.database.connection.database )
-.then( schema => {
-	/*
-	 * Database created for first time, we set the database config property into ~/src/config/config.js -> database.connection.database
-	 */
- 	message.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' )
-	updateDatabaseNameInConfig()
-})
-.catch( error => {
-	migrate()
-})
+// schemaDatabaseService.createSchema( config.database.connection.database )
+// .then( schema => {
+// 	/*
+// 	 * Database created for first time, we set the database config property into ~/src/config/config.js -> database.connection.database
+// 	 */
+//  	/*
+// 	 *
+// 	 * message.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' )
+// 	 * updateDatabaseNameInConfig()
+// 	 */
+// })
+// .catch( error => {
+// 	migrate()
+// })
+
+migrate()

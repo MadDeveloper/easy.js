@@ -1,28 +1,49 @@
 #!/usr/bin/env node
 'use strict';
 
-var cliMode = true;
-var config = require(__dirname + '/../../build/config/config');
-var app = require(__dirname + '/../../build/bootstrap.js')(config, cliMode);
-var schemaBuilder = app.bundleManager.container.getService('database/schema');
-var argv = require('minimist')(process.argv.slice(2));
-var _ = require('lodash');
-var sequence = require('when/sequence');
+var _execsql = require('execsql');
 
-var execsql = require('execsql');
-var config = require(global.app.root + '/config/config');
-var schema = require(global.app.root + '/config/database/schema');
+var _execsql2 = _interopRequireDefault(_execsql);
+
+var _lodash = require('lodash');
+
+var _minimist = require('minimist');
+
+var _minimist2 = _interopRequireDefault(_minimist);
+
+var _config = require('./../../config/config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _schema = require('./../../config/database/schema');
+
+var _schema2 = _interopRequireDefault(_schema);
+
+var _bootstrap = require('./../../bootstrap.js');
+
+var _bootstrap2 = _interopRequireDefault(_bootstrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var argv = (0, _minimist2.default)(process.argv.slice(2));
+var cliMode = true;
+
+var app = new _bootstrap2.default(_config2.default, cliMode);
+var bundleManager = app.bundleManager;
+var container = bundleManager.container;
+var message = container.getComponent('Message');
+var schemaDatabaseService = container.getService('database.schema');
+
 var dbConfig = {
-	host: config.database.connection.host,
-	user: config.database.connection.user,
-	password: config.database.connection.password
+	host: _config2.default.database.connection.host,
+	user: _config2.default.database.connection.user,
+	password: _config2.default.database.connection.password
 };
 
-var Message = require(global.app.root + '/vendor/easy/core/Message')();
 var titleError = "Error when initializing roles and users";
 var consequenceError = "Initialization aborted.";
 
-if (_.indexOf('lite', argv._) !== -1 || argv.lite) {
+if ((0, _lodash.indexOf)('lite', argv._) !== -1 || argv.lite) {
 	/*
   * Standalone mode, we first truncate users and then roles table, and init roles and users again
   */
@@ -42,7 +63,7 @@ if (_.indexOf('lite', argv._) !== -1 || argv.lite) {
 }
 
 function raiseError(err) {
-	Message.error({
+	message.error({
 		title: titleError,
 		message: err,
 		consequence: consequenceError,
@@ -52,8 +73,8 @@ function raiseError(err) {
 
 function truncateRolesAndUsersTables() {
 	return new Promise(function (resolve, reject) {
-		var usersTableName = _.has(schema, 'users') ? 'users' : _.has(schema, 'user') ? 'user' : false;
-		var rolesTableName = _.has(schema, 'roles') ? 'roles' : _.has(schema, 'role') ? 'role' : false;
+		var usersTableName = (0, _lodash.has)(_schema2.default, 'users') ? 'users' : (0, _lodash.has)(_schema2.default, 'user') ? 'user' : false;
+		var rolesTableName = (0, _lodash.has)(_schema2.default, 'roles') ? 'roles' : (0, _lodash.has)(_schema2.default, 'role') ? 'role' : false;
 
 		if (false === usersTableName) {
 			raiseError('Users table not found into schema.js, possibilities tried: users, user');
@@ -66,24 +87,17 @@ function truncateRolesAndUsersTables() {
 			roles: rolesTableName
 		};
 
-		var promiseTruncateUsersTable = schemaBuilder.truncateTable(tables.users);
-		var promiseClearRolesTable = schemaBuilder.clearTable(tables.roles);
+		var promiseTruncateUsersTable = schemaDatabaseService.truncateTable(tables.users);
+		var promiseClearRolesTable = schemaDatabaseService.clearTable(tables.roles);
 
-		promiseTruncateUsersTable.then(function () {
-			promiseClearRolesTable.then(function () {
-				resolve();
-			}).catch(function (error) {
-				reject(error);
-			});
-		}).catch(function (error) {
+		promiseTruncateUsersTable.then(promiseClearRolesTable).catch(function (error) {
 			reject(error);
 		});
 	});
 }
 
 function startup() {
-
-	var rolesTable = schema.roles;
+	var rolesTable = _schema2.default.roles;
 	var rolesToAppend = {
 		admin: {
 			id: 1,
@@ -98,7 +112,7 @@ function startup() {
 		}
 	};
 
-	var usersTable = schema.users;
+	var usersTable = _schema2.default.users;
 	var usersToAppend = {
 		admin: {
 			id: 1,
@@ -117,7 +131,7 @@ function startup() {
 		}
 	};
 
-	var sqlUse = 'use ' + config.database.connection.database + ';';
+	var sqlUse = 'use ' + _config2.default.database.connection.database + ';';
 
 	/*
   * Roles part
@@ -139,6 +153,7 @@ function startup() {
 
 	var rolesLength = Object.keys(rolesToAppend).length;
 	var currentRole = 1;
+
 	Object.keys(rolesToAppend).forEach(function (role) {
 		var rolePropertiesLength = Object.keys(rolesToAppend[role]).length;
 		var currentRoleProperty = 1;
@@ -180,6 +195,7 @@ function startup() {
 
 	var usersLength = Object.keys(usersToAppend).length;
 	var currentUser = 1;
+
 	Object.keys(usersToAppend).forEach(function (user) {
 		var userPropertiesLength = Object.keys(usersToAppend[user]).length;
 		var currentUserProperty = 1;
@@ -201,7 +217,7 @@ function startup() {
 		}
 	});
 
-	execsql.config(dbConfig).exec(sqlUse, function (err, results) {
+	_execsql2.default.config(dbConfig).exec(sqlUse, function (err, results) {
 		if (err) {
 			raiseError(err);
 		}
@@ -213,7 +229,7 @@ function startup() {
 		if (err) {
 			raiseError(err);
 		} else {
-			Message.success("Database initialized.", true);
+			message.success("Database initialized.", true);
 		}
 		process.exit();
 	});
