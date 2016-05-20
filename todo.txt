@@ -6,3 +6,7 @@
 
 - faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
 - faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
+
+- certainement retirer chai car il y a unit.js
+
+- renommer tests en test ?

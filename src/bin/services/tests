@@ -23,7 +23,7 @@ const message               = container.getComponent( 'Message' )
  */
 const mocha = new Mocha()
 
-const bundlesDirectory = kernel.path.bundles
+const servicesTestsDirectory = kernel.path.services + '/tests'
 
 /*
  * Expose container into global scope for unit tests classes, because file are called by mocha and not ourselves
@@ -33,27 +33,15 @@ global.container = container
 /*
  * Add each .js file to the mocha instance
  */
-fs.readdirSync( bundlesDirectory )
-    .forEach( bundle => {
-        const testsDir = bundlesDirectory + '/' + bundle + '/tests'
+const specFiles = fs.readdirSync( servicesTestsDirectory )
 
-        try {
-            if ( fs.lstatSync( testsDir ).isDirectory() ) {
-                const specFiles = fs.readdirSync( testsDir )
-
-                if ( specFiles && specFiles.length > 0 ) {
-                    specFiles.forEach( specFile => {
-                        mocha.addFile(
-                            path.join( testsDir, specFile )
-                        )
-                    })
-                }
-            }
-        } catch( e ) {
-            message.warn( 'No unit tests found for ' + bundle + ' bundle.' )
-        }
+if ( specFiles && specFiles.length > 0 ) {
+    specFiles.forEach( specFile => {
+        mocha.addFile(
+            path.join( servicesTestsDirectory, specFile )
+        )
     })
-
+}
 /*
  * Run the tests
  */
