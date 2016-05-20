@@ -12,7 +12,8 @@ export default class MiddlewaresController extends Controller {
                 options: {}
             }
 
-            this.controller.doesRequiredElementExists( 'Skeleton', requireOptions, this.bundleManager, skeleton => {
+            this.doesRequiredElementExists( 'skeleton', requireOptions, this.bundleManager )
+            .then( skeleton => {
                 this.request.define( 'skeleton', skeleton )
                 resolve()
             })

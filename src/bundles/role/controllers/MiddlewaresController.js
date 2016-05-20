@@ -12,7 +12,8 @@ export default class MiddlewaresController extends Controller {
                 options: {}
             }
 
-            this.doesRequiredElementExists( 'Role', requireOptions, this.bundleManager, role => {
+            this.doesRequiredElementExists( 'role', requireOptions, this.bundleManager )
+            .then( role => {
                 this.request.define( 'role', role )
                 resolve()
             })

@@ -26,7 +26,7 @@ var UserRepository = function () {
         key: 'read',
         value: function read(byParam, options) {
             var user = this.userFactory.getModel();
-            var forgeParam = this.userFactory.getRootController().isNumber(byParam) ? { id: byParam } : undefined !== byParam.id ? { id: byParam.id } : { email: byParam.email };
+            var forgeParam = typeof byParam === "number" || typeof byParam === 'string' && byParam.isNumber() ? { id: byParam } : undefined !== byParam.id ? { id: byParam.id } : { email: byParam.email };
 
             return user.forge(forgeParam).fetch(options);
         }

@@ -57,43 +57,45 @@ if (argv._['http'] || argv.http || false === _config2.default.credentials.found)
     protocol = _config2.default.server.protocol.https;
 }
 
-var portInUse = function portInUse(port, callback) {
-    var serverTest = _net2.default.createServer(function (socket) {
-        socket.write('Echo server\r\n');
-        socket.pipe(socket);
-    });
+var portInUse = function portInUse(port) {
+    return new Promise(function (resolve, reject) {
+        var serverTest = _net2.default.createServer(function (socket) {
+            socket.write('Echo server\r\n');
+            socket.pipe(socket);
+        });
 
-    serverTest.listen(port, '127.0.0.1');
-    serverTest.on('error', function (error) {
-        callback(true);
-    });
-    serverTest.on('listening', function (e) {
-        serverTest.close();
-        callback(false);
+        serverTest.listen(port, '127.0.0.1');
+
+        serverTest.on('error', function (error) {
+            reject();
+        });
+
+        serverTest.on('listening', function (e) {
+            serverTest.close();
+            resolve();
+        });
     });
 };
 
-portInUse(port, function (used) {
-    if (!used) {
-        /*
-         * Everything is ok, starting server
-         */
-        server.listen(port, function () {
-            // Todo: write it with easy/Message
-            console.log("\n");
-            console.log("-----------------------------");
-            console.log("    Server listening...");
-            console.log("-----------------------------");
-            console.log("    " + protocol + '://' + _config2.default.server.domain + ':' + port);
-            console.log("-----------------------------");
-            console.log("    Mode:   " + app.get('env'));
-            console.log("-----------------------------");
-        });
-    } else {
-        /*
-         * Port ${port} is used
-         */
-        console.log("\nPort " + port + " is already used or you have no rights to launch server (try as root), impossible to start server.");
-        process.exit();
-    }
+portInUse(port).then(function () {
+    /*
+     * Everything is ok, starting server
+     */
+    server.listen(port, function () {
+        // Todo: write it with easy/Message
+        console.log("\n");
+        console.log("-----------------------------");
+        console.log("    Server listening...");
+        console.log("-----------------------------");
+        console.log("    " + protocol + '://' + _config2.default.server.domain + ':' + port);
+        console.log("-----------------------------");
+        console.log("    Mode:   " + app.get('env'));
+        console.log("-----------------------------");
+    });
+}).catch(function () {
+    /*
+     * Port ${port} is used
+     */
+    console.log("\nPort " + port + " is already used or you have no rights to launch server (try as root), impossible to start server.");
+    process.exit();
 });

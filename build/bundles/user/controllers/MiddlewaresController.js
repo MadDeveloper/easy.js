@@ -38,7 +38,7 @@ var MiddlewaresController = function (_Controller) {
                     options: {}
                 };
 
-                _this2.doesRequiredElementExists('User', requireOptions, function (user) {
+                _this2.doesRequiredElementExists('user', requireOptions).then(function (user) {
                     _this2.request.define('user', user);
                     resolve();
                 });

@@ -82,33 +82,18 @@ function createTables() {
 	return (0, _sequence2.default)(tables);
 }
 
-function migrate() {
+function migrate(standalone) {
 	dropTables().then(function () {
-		var standalone = true;
-
-		if (false === process.argv.standalone) {
-			standalone = false;
-		}
-
-		if (standalone) {
+		return new Promise(function (resolve, reject) {
 			createTables().then(function () {
-				message.success("Schema updated.", true);
+				var exitAfterSuccess = standalone;
+				message.success("Schema updated.", exitAfterSuccess);
+				resolve();
 			}).catch(function (error) {
 				raiseError(error);
+				reject(error);
 			});
-		} else {
-			(function () {
-				var callback = process.argv.callback || function () {};
-
-				createTables().then(function () {
-					message.success("Schema updated.");
-					callback();
-				}).catch(function (error) {
-					raiseError(error);
-					callback();
-				});
-			})();
-		}
+		});
 	}).catch(function (error) {
 		raiseError(error);
 	});
@@ -175,4 +160,18 @@ function updateDatabaseNameInConfig() {
 // 	migrate()
 // })
 
-migrate();
+(function () {
+	'use strict';
+
+	var standalone = true;
+
+	if (false === process.argv.standalone) {
+		standalone = false;
+	}
+
+	if (standalone) {
+		migrate();
+	} else {
+		return migrate();
+	}
+})();

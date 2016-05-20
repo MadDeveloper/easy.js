@@ -38,7 +38,7 @@ var MiddlewaresController = function (_Controller) {
                     options: {}
                 };
 
-                _this2.doesRequiredElementExists('Role', requireOptions, _this2.bundleManager, function (role) {
+                _this2.doesRequiredElementExists('role', requireOptions, _this2.bundleManager).then(function (role) {
                     _this2.request.define('role', role);
                     resolve();
                 });

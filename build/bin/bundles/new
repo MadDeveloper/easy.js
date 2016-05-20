@@ -70,7 +70,7 @@ if (nameBundleFromArgv.length > 0) {
                 /*
                  * Table associated requested
                  */
-                checkExistanceOfSchemaFile(function () {
+                checkExistanceOfSchemaFile().then(function () {
                     askForTableName();
                 });
             } else if ((0, _lodash.indexOf)(negativeAnswers, createAssociatedTable) !== -1) {
@@ -342,7 +342,7 @@ if (nameBundleFromArgv.length > 0) {
             /*
              * We stringify properties and insert it into ~/config/database/schema.js
              */
-            checkExistanceOfSchemaFile(function () {
+            checkExistanceOfSchemaFile().then(function () {
                 _fs2.default.readFile(pathDatabaseSchema, { encoding: 'utf8' }, function (error, data) {
                     if (!error) {
                         var stringToWrite = 'export default {\n\t' + tableName + ': ' + JSON.stringify(properties) + ',\n\n';
@@ -371,18 +371,20 @@ if (nameBundleFromArgv.length > 0) {
             }
         };
 
-        var checkExistanceOfSchemaFile = function checkExistanceOfSchemaFile(cb) {
-            _fs2.default.lstat(pathDatabaseSchema, function (error, stat) {
-                if (!error & stat.isFile()) {
-                    cb();
-                } else {
-                    message.error({
-                        title: "Impossible to update schema",
-                        message: "schema.js not found at: " + pathDatabaseSchema,
-                        consequence: "Bundle creation aborted.",
-                        exit: 0
-                    });
-                }
+        var checkExistanceOfSchemaFile = function checkExistanceOfSchemaFile() {
+            return new Promise(function (resolve, reject) {
+                _fs2.default.lstat(pathDatabaseSchema, function (error, stat) {
+                    if (!error & stat.isFile()) {
+                        resolve();
+                    } else {
+                        message.error({
+                            title: "Impossible to update schema",
+                            message: "schema.js not found at: " + pathDatabaseSchema,
+                            consequence: "Bundle creation aborted.",
+                            exit: 0
+                        });
+                    }
+                });
             });
         };
 

@@ -5,13 +5,13 @@ export default class UserRepository {
 
     readAll( role ) {
         let user = this.userFactory.getModel()
-        
+
         return user.where({ role_id: role.get( 'id' ) }).fetchAll()
     }
 
     read( byParam, options ) {
         let user = this.userFactory.getModel()
-        const forgeParam = ( this.userFactory.getRootController().isNumber( byParam ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } )
+        const forgeParam = ( typeof byParam === "number" || ( typeof byParam === 'string' && byParam.isNumber() ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } )
 
         return user.forge( forgeParam ).fetch( options )
     }

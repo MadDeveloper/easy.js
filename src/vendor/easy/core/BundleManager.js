@@ -4,7 +4,6 @@ export default class BundleManager {
     constructor( container ) {
         this._container         = container
         this._kernel            = this._container.kernel
-        this._database          = this._container.getComponent( 'Database' ).connection
         this._router            = null
         this._bundlesDefinition = []
     }
@@ -66,7 +65,7 @@ export default class BundleManager {
     }
 
     get database() {
-        return this._database
+        return this._container.getComponent( 'Database' ).connection
     }
 
     get bundlesDefinition() {

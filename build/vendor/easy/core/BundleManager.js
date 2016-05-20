@@ -20,7 +20,6 @@ var BundleManager = function () {
 
         this._container = container;
         this._kernel = this._container.kernel;
-        this._database = this._container.getComponent('Database').connection;
         this._router = null;
         this._bundlesDefinition = [];
     }
@@ -92,7 +91,7 @@ var BundleManager = function () {
     }, {
         key: 'database',
         get: function get() {
-            return this._database;
+            return this._container.getComponent('Database').connection;
         }
     }, {
         key: 'bundlesDefinition',

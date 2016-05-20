@@ -1,12 +1,13 @@
 /*
  * Skeleton model
  */
-export default class Skeleton {
-    constructor( skeletonFactory ) {
-        const bundleManager = skeletonFactory.bundleManager
-        const database      = bundleManager.container.getComponent( 'Database' ).connection
+import Entity from './../../../vendor/easy/core/Entity'
 
-        return database.Model.extend({
+export default class Skeleton extends Entity {
+    constructor( skeletonFactory ) {
+        super( skeletonFactory )
+
+        return this.database.Model.extend({
             tableName: 'skeletons'
         })
     }

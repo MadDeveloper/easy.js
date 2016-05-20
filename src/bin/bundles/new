@@ -79,7 +79,8 @@ if ( nameBundleFromArgv.length > 0 ) {
             /*
              * Table associated requested
              */
-            checkExistanceOfSchemaFile( () => {
+            checkExistanceOfSchemaFile()
+            .then( () => {
                 askForTableName()
             })
         } else if ( indexOf( negativeAnswers, createAssociatedTable ) !== -1 ) {
@@ -352,7 +353,8 @@ if ( nameBundleFromArgv.length > 0 ) {
         /*
          * We stringify properties and insert it into ~/config/database/schema.js
          */
-        checkExistanceOfSchemaFile( () => {
+        checkExistanceOfSchemaFile()
+        .then( () => {
             fs.readFile( pathDatabaseSchema, { encoding: 'utf8' }, ( error, data ) => {
                 if ( !error ) {
                     const stringToWrite = 'export default {\n\t' + tableName + ': ' + JSON.stringify( properties ) + ',\n\n'
@@ -381,18 +383,20 @@ if ( nameBundleFromArgv.length > 0 ) {
         }
     }
 
-    function checkExistanceOfSchemaFile( cb ) {
-        fs.lstat( pathDatabaseSchema, ( error, stat ) => {
-            if ( !error & stat.isFile() ) {
-                cb()
-            } else {
-                message.error({
-                    title: "Impossible to update schema",
-                    message: "schema.js not found at: " + pathDatabaseSchema,
-                    consequence: "Bundle creation aborted.",
-                    exit: 0
-                })
-            }
+    function checkExistanceOfSchemaFile() {
+        return new Promise( (resolve, reject) => {
+            fs.lstat( pathDatabaseSchema, ( error, stat ) => {
+                if ( !error & stat.isFile() ) {
+                    resolve()
+                } else {
+                    message.error({
+                        title: "Impossible to update schema",
+                        message: "schema.js not found at: " + pathDatabaseSchema,
+                        consequence: "Bundle creation aborted.",
+                        exit: 0
+                    })
+                }
+            })
         })
     }
 

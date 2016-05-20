@@ -60,36 +60,21 @@ function createTables () {
   return sequence( tables )
 }
 
-function migrate() {
+function migrate( standalone ) {
 	dropTables()
 	.then( () => {
-		let standalone = true
-
-		if ( false === process.argv.standalone ) {
-			standalone = false
-		}
-
-		if ( standalone ) {
+		return new Promise( (resolve, reject) => {
 			createTables()
 			.then( () => {
-				message.success( "Schema updated.", true )
+				const exitAfterSuccess = standalone
+				message.success( "Schema updated.", exitAfterSuccess )
+				resolve()
 			})
 			.catch( error => {
 				raiseError( error )
+				reject( error )
 			})
-		} else {
-			const callback = process.argv.callback || function() {}
-
-			createTables()
-			.then( () => {
-				message.success( "Schema updated." )
-				callback()
-			})
-			.catch( error => {
-				raiseError( error )
-				callback()
-			})
-		}
+		})
 	})
 	.catch( error => {
 		raiseError( error )
@@ -159,4 +144,18 @@ function updateDatabaseNameInConfig() {
 // 	migrate()
 // })
 
-migrate()
+(function() {
+	'use strict'
+
+	let standalone = true
+
+	if ( false === process.argv.standalone ) {
+		standalone = false
+	}
+
+	if ( standalone ) {
+		migrate()
+	} else {
+		return migrate()
+	}
+}())

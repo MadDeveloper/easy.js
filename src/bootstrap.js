@@ -54,15 +54,15 @@ export default class Application {
         database.connect()
 
         /*
-         * Change database into container
-         */
-        container.changeComponent( 'Database', database )
-
-        /*
          * Define bundle easy vendor
          */
         const bundleManager     = container.getComponent( 'BundleManager' )
         bundleManager.router    = express.Router()
+
+        /*
+         * Change BundleManager into container
+         */
+        //container.changeComponent( 'BundleManager', bundleManager )
 
         /*
          * Defines Polyfills

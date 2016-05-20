@@ -1,10 +1,10 @@
 export default class Controller {
     constructor( container ) {
-        this._bundleManager = container.getComponent( 'BundleManager' )
-        this._router        = container.router
-        this._database      = container.database
+        this._database      = container.getComponent( 'Database')
         this._request       = container.getComponent( 'Request' )
         this._response      = container.getComponent( 'Response' )
+        this._bundleManager = container.getComponent( 'BundleManager' )
+        this._router        = this._bundleManager.router
     }
 
     verifyParams( required, params ) {
@@ -48,33 +48,35 @@ export default class Controller {
         return this.request.scope.rawBody.length > 0
     }
 
-    doesRequiredElementExists( element, options, callback ) {
-        let requireBy = null
-        let optionsFetch = null
+    doesRequiredElementExists( element, options ) {
+        return new Promise( (resolve, reject) => {
+            let requireBy = null
+            let optionsFetch = null
 
-        if ( options instanceof Object && !( options instanceof Array ) ) {
-            requireBy = options.requireBy
-            optionsFetch = options.options
-        } else {
-            requireBy = options
-        }
-
-        const elementRepository = this.bundleManager.getFactory( element.capitalizeFirstLetter() ).getRepository()
-
-        elementRepository.read( requireBy, optionsFetch )
-        .then( element => {
-
-            if ( element ) {
-
-                callback( element )
-
+            if ( options instanceof Object && !( options instanceof Array ) ) {
+                requireBy = options.requireBy
+                optionsFetch = options.options
             } else {
-                this.response.notFound()
+                requireBy = options
             }
 
-        })
-        .catch( error => {
-            this.response.internalServerError( error )
+            const elementRepository = this.bundleManager.getFactory( element ).getRepository()
+
+            elementRepository.read( requireBy, optionsFetch )
+            .then( element => {
+
+                if ( element ) {
+
+                    resolve( element )
+
+                } else {
+                    this.response.notFound()
+                }
+
+            })
+            .catch( error => {
+                this.response.internalServerError( error )
+            })
         })
     }
 

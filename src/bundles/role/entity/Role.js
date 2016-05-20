@@ -1,16 +1,19 @@
 /*
  * Role model
  */
-export default class Role {
-    constructor( roleFactory ) {
-        const bundleManager = roleFactory.bundleManager
-        const database      = bundleManager.container.getComponent( 'Database' ).connection
+import Entity from './../../../vendor/easy/core/Entity'
 
-        return database.Model.extend({
+export default class Role extends Entity {
+    constructor( roleFactory ) {
+        super( roleFactory )
+
+        const self = this
+
+        return this.database.Model.extend({
             tableName: 'roles',
 
             users() {
-                return this.hasMany( bundleManager.getFactory( 'user' ).getModel() )
+                return this.hasMany( self.bundleManager.getFactory( 'user' ).getModel() )
             }
         })
     }

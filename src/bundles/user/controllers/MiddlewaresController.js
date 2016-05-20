@@ -12,7 +12,8 @@ export default class MiddlewaresController extends Controller {
                 options: {}
             }
 
-            this.doesRequiredElementExists( 'User', requireOptions, user => {
+            this.doesRequiredElementExists( 'user', requireOptions )
+            .then( user => {
                 this.request.define( 'user', user )
                 resolve()
             })

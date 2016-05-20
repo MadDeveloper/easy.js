@@ -34,43 +34,47 @@ if ( argv._[ 'http' ] || argv.http || false === config.credentials.found ) {
     protocol    = config.server.protocol.https
 }
 
-let portInUse = ( port, callback ) => {
-    const serverTest = net.createServer( socket => {
-       socket.write( 'Echo server\r\n' )
-	   socket.pipe( socket )
-    })
+let portInUse = ( port ) => {
+    return new Promise( (resolve, reject) => {
+        const serverTest = net.createServer( socket => {
+           socket.write( 'Echo server\r\n' )
+    	   socket.pipe( socket )
+        })
 
-    serverTest.listen( port, '127.0.0.1' )
+        serverTest.listen( port, '127.0.0.1' )
+
         serverTest.on( 'error', error => {
-        callback( true )
-    })
-    serverTest.on( 'listening', e => {
-        serverTest.close()
-        callback( false )
+            reject()
+        })
+
+        serverTest.on( 'listening', e => {
+            serverTest.close()
+            resolve()
+        })
     })
 }
 
-portInUse( port, used => {
-    if ( !used ) {
-        /*
-         * Everything is ok, starting server
-         */
-        server.listen( port, () => {
-            // Todo: write it with easy/Message
-            console.log( "\n" )
-            console.log( "-----------------------------" )
-            console.log( "    Server listening..." )
-            console.log( "-----------------------------" )
-            console.log( "    " + protocol + '://' + config.server.domain + ':' + port )
-            console.log( "-----------------------------" )
-            console.log( "    Mode:   " + app.get( 'env' ) )
-            console.log( "-----------------------------" )
-        })
-    } else {
-        /*
-         * Port ${port} is used
-         */
-        console.log( "\nPort " + port + " is already used or you have no rights to launch server (try as root), impossible to start server." )
-        process.exit()
-    }
+portInUse( port )
+.then( () => {
+    /*
+     * Everything is ok, starting server
+     */
+    server.listen( port, () => {
+        // Todo: write it with easy/Message
+        console.log( "\n" )
+        console.log( "-----------------------------" )
+        console.log( "    Server listening..." )
+        console.log( "-----------------------------" )
+        console.log( "    " + protocol + '://' + config.server.domain + ':' + port )
+        console.log( "-----------------------------" )
+        console.log( "    Mode:   " + app.get( 'env' ) )
+        console.log( "-----------------------------" )
+    })
+})
+.catch( () => {
+    /*
+     * Port ${port} is used
+     */
+    console.log( "\nPort " + port + " is already used or you have no rights to launch server (try as root), impossible to start server." )
+    process.exit()
 })

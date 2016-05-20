@@ -14,11 +14,11 @@ var Controller = function () {
     function Controller(container) {
         _classCallCheck(this, Controller);
 
-        this._bundleManager = container.getComponent('BundleManager');
-        this._router = container.router;
-        this._database = container.database;
+        this._database = container.getComponent('Database');
         this._request = container.getComponent('Request');
         this._response = container.getComponent('Response');
+        this._bundleManager = container.getComponent('BundleManager');
+        this._router = this._bundleManager.router;
     }
 
     _createClass(Controller, [{
@@ -68,31 +68,33 @@ var Controller = function () {
         }
     }, {
         key: 'doesRequiredElementExists',
-        value: function doesRequiredElementExists(element, options, callback) {
+        value: function doesRequiredElementExists(element, options) {
             var _this = this;
 
-            var requireBy = null;
-            var optionsFetch = null;
+            return new Promise(function (resolve, reject) {
+                var requireBy = null;
+                var optionsFetch = null;
 
-            if (options instanceof Object && !(options instanceof Array)) {
-                requireBy = options.requireBy;
-                optionsFetch = options.options;
-            } else {
-                requireBy = options;
-            }
-
-            var elementRepository = this.bundleManager.getFactory(element.capitalizeFirstLetter()).getRepository();
-
-            elementRepository.read(requireBy, optionsFetch).then(function (element) {
-
-                if (element) {
-
-                    callback(element);
+                if (options instanceof Object && !(options instanceof Array)) {
+                    requireBy = options.requireBy;
+                    optionsFetch = options.options;
                 } else {
-                    _this.response.notFound();
+                    requireBy = options;
                 }
-            }).catch(function (error) {
-                _this.response.internalServerError(error);
+
+                var elementRepository = _this.bundleManager.getFactory(element).getRepository();
+
+                elementRepository.read(requireBy, optionsFetch).then(function (element) {
+
+                    if (element) {
+
+                        resolve(element);
+                    } else {
+                        _this.response.notFound();
+                    }
+                }).catch(function (error) {
+                    _this.response.internalServerError(error);
+                });
             });
         }
     }, {

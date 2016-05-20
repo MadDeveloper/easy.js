@@ -104,15 +104,15 @@ function Application(config, cliMode) {
   database.connect();
 
   /*
-   * Change database into container
-   */
-  container.changeComponent('Database', database);
-
-  /*
    * Define bundle easy vendor
    */
   var bundleManager = container.getComponent('BundleManager');
   bundleManager.router = _express2.default.Router();
+
+  /*
+   * Change BundleManager into container
+   */
+  //container.changeComponent( 'BundleManager', bundleManager )
 
   /*
    * Defines Polyfills

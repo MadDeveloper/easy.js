@@ -1,7 +1,5 @@
 - résoudre problème création db avec la connexion knex (config.database)
 
-- remplacer callback par promise
-
 - refactorer les repository avec une class dans core
 
 - fixer les droits pour le dossier build, et le projet de manière générale

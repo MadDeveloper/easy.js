@@ -38,7 +38,7 @@ var MiddlewaresController = function (_Controller) {
                     options: {}
                 };
 
-                _this2.controller.doesRequiredElementExists('Skeleton', requireOptions, _this2.bundleManager, function (skeleton) {
+                _this2.doesRequiredElementExists('skeleton', requireOptions, _this2.bundleManager).then(function (skeleton) {
                     _this2.request.define('skeleton', skeleton);
                     resolve();
                 });

@@ -55,11 +55,15 @@ if ((0, _lodash.indexOf)('lite', argv._) !== -1 || argv.lite) {
 } else {
 	/*
   * Normal mode, we call migrate before init roles and users
-  * Indicate to migrate we are waiting him to call callback passed with argv
+  * Indicate to migrate we are waiting him to return promise with standalone sets as false
   */
 	process.argv.standalone = false;
-	process.argv.callback = startup;
-	require('./migrate');
+
+	var migrate = require('./migrate');
+
+	migrate.then(function () {
+		startup();
+	});
 }
 
 function raiseError(err) {

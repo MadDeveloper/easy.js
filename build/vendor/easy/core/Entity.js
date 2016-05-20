@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8,54 +8,32 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Tests = function () {
-    function Tests(container) {
-        _classCallCheck(this, Tests);
+var Entity = function () {
+    function Entity(bundleFactory) {
+        _classCallCheck(this, Entity);
 
-        this._request = container.getComponent('Request');
-        this._response = container.getComponent('Response');
-        this._bundleManager = container.getComponent('BundleManager');
-        this._database = container.getComponent('Database').connection;
-
-        this.run();
+        this._bundleManager = bundleFactory.bundleManager;
+        this._database = this._bundleManager.database;
     }
 
-    _createClass(Tests, [{
-        key: 'run',
-        value: function run() {}
+    /*
+     * Getters and setters
+     */
 
-        /*
-         * Getters and setters
-         */
 
-    }, {
-        key: 'container',
-        get: function get() {
-            return this._bundleManager.container;
-        }
-    }, {
-        key: 'request',
-        get: function get() {
-            return this._request;
-        }
-    }, {
-        key: 'response',
-        get: function get() {
-            return this._response;
-        }
-    }, {
-        key: 'bundleManager',
+    _createClass(Entity, [{
+        key: "bundleManager",
         get: function get() {
             return this._bundleManager;
         }
     }, {
-        key: 'database',
+        key: "database",
         get: function get() {
             return this._database;
         }
     }]);
 
-    return Tests;
+    return Entity;
 }();
 
-exports.default = Tests;
+exports.default = Entity;
