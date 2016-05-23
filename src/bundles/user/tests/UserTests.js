@@ -2,11 +2,7 @@
  * Units tests
  */
 import test     from 'unit.js'
-import chai     from 'chai'
 import Tests    from './../../../vendor/easy/core/Tests'
-
-const assert    = chai.assert
-const expect    = chai.expect
 
 class UserTests extends Tests {
     constructor( container ) {

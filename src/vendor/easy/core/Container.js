@@ -136,6 +136,9 @@ export default class Container {
         this.servicesCheckDirectory()
 
         if ( this.isServiceMapped( name ) ) {
+            if ( clearCache ) {
+                this.reloadService( name )
+            }
 
             if ( this.isServicesLoaded( name ) ) {
                 return this.shared[ name ]
@@ -163,7 +166,6 @@ export default class Container {
                     exit: 0
                 })
             }
-
         } else {
             return undefined
         }
@@ -252,6 +254,10 @@ export default class Container {
         this.servicesCheckDirectory()
 
         if ( this.isUserLibraryMapped( name ) ) {
+
+            if ( clearCache ) {
+                this.reloadUserLibrary( name )
+            }
 
             if ( this.isUserLibraryLoaded( name ) ) {
                 return this.userLibrariesLoaded[ name ]

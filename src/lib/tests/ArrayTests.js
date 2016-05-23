@@ -2,11 +2,7 @@
  * Units tests
  */
 import test     from 'unit.js'
-import chai     from 'chai'
 import Tests    from './../../vendor/easy/core/Tests'
-
-const assert    = chai.assert
-const expect    = chai.expect
 
 class ArrayTests extends Tests {
     constructor( container ) {
@@ -18,10 +14,9 @@ class ArrayTests extends Tests {
      */
     run() {
         describe( 'Array.js library tests', () => {
-          it( 'treeView tests', () => {
+            it( 'treeView tests', () => {
 
-
-          })
+            })
         })
     }
 }

@@ -9,7 +9,7 @@ export default class SkeletonRepository {
     }
 
     read( id, options ) {
-        return this.skeletonFactory.getModel().forge({ id: id }).fetch( options )
+        return this.skeletonFactory.getModel().forge({ id }).fetch( options )
     }
 
     save( skeleton, params, options ) {
