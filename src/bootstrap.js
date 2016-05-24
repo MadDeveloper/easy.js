@@ -1,6 +1,7 @@
 /*
  * Modules Dependencies
  */
+import fs                   from 'fs'
 import express              from 'express'
 import bodyParser           from 'body-parser'
 import morgan               from 'morgan'
@@ -39,10 +40,12 @@ const app = express()
 /*
  * Easy.js dependencies
  */
-const kernel    = new Kernel().init( __dirname, config )
-const container = kernel.container
-const message   = container.getComponent( 'Message' )
-const database  = container.getComponent( 'Database' )
+const kernel        = new Kernel().init( __dirname, config )
+const container     = kernel.container
+const message       = container.getComponent( 'Message' )
+const database      = container.getComponent( 'Database' )
+const router        = container.getComponent( 'Router' )
+const bundleManager = container.getComponent( 'BundleManager' )
 
 /*
  * Define database connector (default: ~/config/database/connector/bookshelf)
@@ -50,10 +53,9 @@ const database  = container.getComponent( 'Database' )
 database.connect()
 
 /*
- * Define bundle easy vendor
+ * Init router
  */
-const bundleManager     = container.getComponent( 'BundleManager' )
-bundleManager.router    = express.Router()
+router.scope = express.Router()
 
 /*
  * Defines Polyfills
@@ -89,7 +91,7 @@ app.use( bodyParser.urlencoded({ extended: true }) ) // support encoded bodies
 /*
  * Permit to retrieve rawBody into PATCH method
  */
-app.use(( req, res, next ) => {
+app.use( ( req, res, next ) => {
     const method  = req.method.toLowerCase()
     const enableMethods = [ 'patch' ]
     let data    = ''
@@ -114,8 +116,8 @@ app.use(( req, res, next ) => {
  * Displays everything that happens on the server
  * when dev mode is used
  */
-if ( process.env.NODE_ENV === 'development' ) {
-    app.use( morgan( 'dev' ) )
+if ( true /*process.env.NODE_ENV === 'development'*/ ) {
+    app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( __dirname + '/../logs/std.log', { flags: 'a' } ) } ) )
 }
 
 /*
@@ -150,7 +152,7 @@ app.use(( req, res, next ) => {
  */
 if ( argv.memory ) {
     app.use(( req, res, next ) => {
-        let memory = process.memoryUsage()
+        const memory = process.memoryUsage()
 
         message.info( "---- Memory usage ----" )
         message.info( "RSS:        " + numeral( memory.rss ).format( 'bytes' ) )
@@ -165,7 +167,7 @@ if ( argv.memory ) {
 /*
  * Registration router routes
  */
-app.use( '/', bundleManager.router )
+app.use( '/', router.scope )
 
 /*
  * Returns the application elements configured

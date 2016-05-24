@@ -28,6 +28,7 @@ export default class Container {
             'logger': this._kernel.path.vendor.easy + '/core/Logger',
             'message': this._kernel.path.vendor.easy + '/core/Message',
             'polyfills': this._kernel.path.vendor.easy + '/core/Polyfills',
+            'router': this._kernel.path.vendor.easy + '/core/Router',
             'database': this._kernel.path.vendor.easy + '/database/Connector',
             'http': this._kernel.path.vendor.easy + '/http/Http',
             'request': this._kernel.path.vendor.easy + '/http/Request',

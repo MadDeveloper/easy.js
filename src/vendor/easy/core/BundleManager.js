@@ -4,7 +4,6 @@ export default class BundleManager {
     constructor( container ) {
         this._container         = container
         this._kernel            = this._container.kernel
-        this._router            = null
         this._bundlesDefinition = []
     }
 
@@ -56,16 +55,16 @@ export default class BundleManager {
         return this.kernel.appName
     }
 
-    get router() {
-        return this._router
+    get routerComponent() {
+        return this.container.getComponent( 'Router' )
     }
 
-    set router( router ) {
-        this._router = router
+    get router() {
+        return this.routerComponent.scope
     }
 
     get database() {
-        return this._container.getComponent( 'Database' ).connection
+        return this.container.getComponent( 'Database' ).connection
     }
 
     get bundlesDefinition() {

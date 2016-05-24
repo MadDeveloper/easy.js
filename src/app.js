@@ -60,7 +60,6 @@ portInUse( port )
      */
     server.listen( port, () => {
         // Todo: write it with easy/Message
-        console.log( "\n" )
         console.log( "-----------------------------" )
         console.log( "    Server listening..." )
         console.log( "-----------------------------" )
