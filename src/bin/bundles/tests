@@ -1,29 +1,20 @@
 #!/usr/bin/env node
-import fs           from 'fs'
-import walk         from 'walk'
-import Mocha        from 'mocha'
-import path         from 'path'
-import readlineSync from 'readline-sync'
-import _            from 'lodash'
-import minimist     from 'minimist'
-import config       from './../../config/config'
-import App          from './../../bootstrap.js'
+import fs                           from 'fs'
+import Mocha                        from 'mocha'
+import path                         from 'path'
+import minimist                     from 'minimist'
+import { kernel, bundleManager }    from './../../bootstrap.js'
 
-let argv    = minimist( process.argv.slice( 2 ) )
-let cliMode = true
+let argv = minimist( process.argv.slice( 2 ) )
 
-const app                   = new App( config, cliMode )
-const kernel                = app.kernel
-const bundleManager         = app.bundleManager
-const container             = bundleManager.container
-const message               = container.getComponent( 'Message' )
+const container         = bundleManager.container
+const message           = container.getComponent( 'Message' )
+const bundlesDirectory  = kernel.path.bundles
 
 /*
  * Instantiate a Mocha instance
  */
 const mocha = new Mocha()
-
-const bundlesDirectory = kernel.path.bundles
 
 /*
  * Expose container into global scope for unit tests classes, because file are called by mocha and not ourselves

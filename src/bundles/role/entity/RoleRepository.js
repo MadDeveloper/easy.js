@@ -20,10 +20,6 @@ export default class RoleRepository {
         }, options )
     }
 
-    patch( params, options ) {
-
-    }
-
     delete( role, options ) {
         return role.destroy( options )
     }

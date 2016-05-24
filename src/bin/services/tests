@@ -1,29 +1,21 @@
 #!/usr/bin/env node
-import fs           from 'fs'
-import walk         from 'walk'
-import Mocha        from 'mocha'
-import path         from 'path'
-import readlineSync from 'readline-sync'
-import _            from 'lodash'
-import minimist     from 'minimist'
-import config       from './../../config/config'
-import App          from './../../bootstrap.js'
+import fs                           from 'fs'
+import walk                         from 'walk'
+import Mocha                        from 'mocha'
+import path                         from 'path'
+import minimist                     from 'minimist'
+import { kernel, bundleManager }    from './../../bootstrap.js'
 
-let argv    = minimist( process.argv.slice( 2 ) )
-let cliMode = true
+let argv = minimist( process.argv.slice( 2 ) )
 
-const app                   = new App( config, cliMode )
-const kernel                = app.kernel
-const bundleManager         = app.bundleManager
-const container             = bundleManager.container
-const message               = container.getComponent( 'Message' )
+const container                 = bundleManager.container
+const message                   = container.getComponent( 'Message' )
+const servicesTestsDirectory    = kernel.path.test.services
 
 /*
  * Instantiate a Mocha instance
  */
 const mocha = new Mocha()
-
-const servicesTestsDirectory = kernel.path.services + '/tests'
 
 /*
  * Expose container into global scope for unit tests classes, because file are called by mocha and not ourselves
@@ -33,21 +25,40 @@ global.container = container
 /*
  * Add each .js file to the mocha instance
  */
-const specFiles = fs.readdirSync( servicesTestsDirectory )
+let walker = walk.walk( servicesTestsDirectory )
 
-if ( specFiles && specFiles.length > 0 ) {
-    specFiles.forEach( specFile => {
-        mocha.addFile(
-            path.join( servicesTestsDirectory, specFile )
-        )
+walker.on( "names", ( root, nodeNamesArray ) => {
+    nodeNamesArray.sort( ( a, b ) => {
+        if ( a > b ) return 1
+        if ( a < b ) return -1
+        return 0
     })
-}
-/*
- * Run the tests
- */
-mocha.run( failures => {
-    if ( failures ) {
-        message.warn( failures  + ' failures occurs during tests.' )
-    }
-    process.exit()
+})
+
+walker.on( "directories", ( root, dirStatsArray, next ) => {
+    next()
+})
+
+ walker.on( "file", ( root, fileStats, next ) => {
+    mocha.addFile(
+        path.join( root, fileStats.name )
+    )
+
+    next()
+})
+
+walker.on( "errors", ( root, nodeStatsArray, next ) => {
+    next()
+})
+
+walker.on( "end", () => {
+    /*
+     * Run the tests
+     */
+    mocha.run( failures => {
+        if ( failures ) {
+            message.warn( failures  + ' failures occurs during tests.' )
+        }
+        process.exit()
+    })
 })

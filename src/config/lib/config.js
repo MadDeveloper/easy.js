@@ -5,5 +5,5 @@ export default {
      */
 
     /* default user library for example */
-    'array': 'Array'
+    'debug.array': 'debug/array'
 }

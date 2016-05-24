@@ -1,16 +1,12 @@
 #!/usr/bin/env node
-import execsql          from 'execsql'
-import { indexOf, has }	from 'lodash'
-import minimist     	from 'minimist'
-import config       	from './../../config/config'
-import schema			from './../../config/database/schema'
-import App          	from './../../bootstrap.js'
+import execsql          			from 'execsql'
+import minimist     				from 'minimist'
+import schema						from './../../config/database/schema'
+import { indexOf, has }				from 'lodash'
+import { bundleManager, config }	from './../../bootstrap.js'
 
-let argv    = minimist( process.argv.slice( 2 ) )
-let cliMode = true
+let argv = minimist( process.argv.slice( 2 ) )
 
-const app                   = new App( config, cliMode )
-const bundleManager         = app.bundleManager
 const container             = bundleManager.container
 const message               = container.getComponent( 'Message' )
 let schemaDatabaseService 	= container.getService( 'database.schema' )

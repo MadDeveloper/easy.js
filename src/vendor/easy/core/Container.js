@@ -24,18 +24,18 @@ export default class Container {
         this._userLibrariesDirectoryPath             = this._kernel.path.lib
 
         this._componentsMapping = {
-            'bundlemanager': this._kernel.path.easy + '/core/BundleManager',
-            'logger': this._kernel.path.easy + '/core/Logger',
-            'message': this._kernel.path.easy + '/core/Message',
-            'polyfills': this._kernel.path.easy + '/core/Polyfills',
-            'database': this._kernel.path.easy + '/database/Connector',
-            'http': this._kernel.path.easy + '/http/Http',
-            'request': this._kernel.path.easy + '/http/Request',
-            'response': this._kernel.path.easy + '/http/Response'
+            'bundlemanager': this._kernel.path.vendor.easy + '/core/BundleManager',
+            'logger': this._kernel.path.vendor.easy + '/core/Logger',
+            'message': this._kernel.path.vendor.easy + '/core/Message',
+            'polyfills': this._kernel.path.vendor.easy + '/core/Polyfills',
+            'database': this._kernel.path.vendor.easy + '/database/Connector',
+            'http': this._kernel.path.vendor.easy + '/http/Http',
+            'request': this._kernel.path.vendor.easy + '/http/Request',
+            'response': this._kernel.path.vendor.easy + '/http/Response'
         }
 
         this._librariesMapping = {
-            'string': this._kernel.path.easy + '/lib/String'
+            'string': this._kernel.path.vendor.easy + '/lib/string'
         }
 
         this._servicesMapping = servicesMapping
@@ -217,9 +217,9 @@ export default class Container {
             }
 
             const pathLibrary   = this.librariesMapping[ name ] + '.js'
-            const Library       = require( pathLibrary ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const library       = require( pathLibrary )
 
-            this.librariesLoaded[ name ] = new Library()
+            this.librariesLoaded[ name ] = library
 
             return this.librariesLoaded[ name ]
         } else {
@@ -239,8 +239,8 @@ export default class Container {
     }
 
     storeUserLibrary( name, pathLibrary ) {
-        const libraryClass  = require( pathLibrary ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
-        this.userLibrariesLoaded[ name ] = new libraryClass( this )
+        const library = require( pathLibrary )
+        this.userLibrariesLoaded[ name ] = library
     }
 
     reloadUserLibrary( name ) {
@@ -263,7 +263,7 @@ export default class Container {
                 return this.userLibrariesLoaded[ name ]
             }
 
-            const userLibraryFile = this.userLibrariesDirectoryPath + '/' + this.userLibrariesMapping[ name ]+ '.js'
+            const userLibraryFile = this.userLibrariesDirectoryPath + '/' + this.userLibrariesMapping[ name ] + '.js'
 
             try {
                 const statsUserLibraryFile = fs.lstatSync( userLibraryFile )

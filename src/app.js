@@ -5,18 +5,17 @@
 /*
  * App requirements
  */
-import config   from './config/config'
-import https    from 'https'
-import http     from 'http'
-import net      from 'net'
-import minimist from 'minimist'
-import App      from './bootstrap'
+import https            from 'https'
+import http             from 'http'
+import net              from 'net'
+import minimist         from 'minimist'
+import { app, config }  from './bootstrap'
 
 const argv      = minimist( process.argv.slice( 2 ) )
+
 let server      = null
 let port        = 0
 let protocol    = ''
-let app         = new App( config )
 
 if ( argv._[ 'http' ] || argv.http || false === config.credentials.found ) {
     /*

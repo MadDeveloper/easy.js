@@ -1,8 +1,16 @@
 /*
- * Units tests
+ * Unit tests
  */
 import test     from 'unit.js'
 import Tests    from './../../../vendor/easy/core/Tests'
+
+/*
+ * Alternative style
+ *
+ * const assert    = test.assert
+ * const must      = test.must
+ * const should    = test.should
+ */
 
 class UserTests extends Tests {
     constructor( container ) {

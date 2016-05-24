@@ -1,23 +1,19 @@
 #!/usr/bin/env node
-import fs           from 'fs'
-import walk         from 'walk'
-import path         from 'path'
-import { question } from 'readline-sync'
-import { indexOf }  from 'lodash'
-import minimist     from 'minimist'
-import config       from './../../config/config'
-import App          from './../../bootstrap.js'
+import fs                           from 'fs'
+import walk                         from 'walk'
+import path                         from 'path'
+import minimist                     from 'minimist'
+import { question }                 from 'readline-sync'
+import { indexOf }                  from 'lodash'
+import { kernel, bundleManager }    from './../../bootstrap.js'
 
 let argv    = minimist( process.argv.slice( 2 ) )
-let cliMode = true
 
-const app                   = new App( config, cliMode )
-const kernel                = app.kernel
-const bundleManager         = app.bundleManager
 const container             = bundleManager.container
 const message               = container.getComponent( 'Message' )
 const schemaDatabaseService = container.getService( 'database.schema' )
 const stringLibrary         = container.getLibrary( 'string' )
+
 const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {
