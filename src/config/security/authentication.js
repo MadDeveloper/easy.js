@@ -29,7 +29,7 @@ export default function authentication( bundleManager ) {
      * Defining routes with authorization required
      */
     router.route( '/authentication' )
-        .post(( req, res ) => {
+        .post( () => {
             const requestValidity = controller.verifyParams(
                 [
                     { property: 'email', typeExpected: 'string' },

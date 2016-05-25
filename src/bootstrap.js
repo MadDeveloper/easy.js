@@ -10,7 +10,6 @@ import cors                 from 'cors'
 import compression          from 'compression'
 import numeral              from 'numeral'
 import { indexOf }          from 'lodash'
-import path                 from 'path'
 import minimist             from 'minimist'
 import Kernel               from './vendor/easy/core/kernel'
 import config               from './config/config'
@@ -42,7 +41,7 @@ const app = express()
  */
 const kernel        = new Kernel().init( __dirname, config )
 const container     = kernel.container
-const message       = container.getComponent( 'Message' )
+const message       = container.getComponent( 'Console' )
 const database      = container.getComponent( 'Database' )
 const router        = container.getComponent( 'Router' )
 const bundleManager = container.getComponent( 'BundleManager' )
@@ -56,11 +55,6 @@ database.connect()
  * Init router
  */
 router.scope = express.Router()
-
-/*
- * Defines Polyfills
- */
-const polyfills = container.getComponent( 'Polyfills' )
 
 /*
  * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
@@ -116,9 +110,9 @@ app.use( ( req, res, next ) => {
  * Displays everything that happens on the server
  * when dev mode is used
  */
-if ( true /*process.env.NODE_ENV === 'development'*/ ) {
+//if ( process.env.NODE_ENV === 'development' ) {
     app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( __dirname + '/../logs/std.log', { flags: 'a' } ) } ) )
-}
+//}
 
 /*
  * Register bundles for routing

@@ -1,5 +1,5 @@
 export default class Router {
-    constructor( container ) {
+    constructor() {
         this._scope = null
     }
 

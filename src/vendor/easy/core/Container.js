@@ -26,7 +26,7 @@ export default class Container {
         this._componentsMapping = {
             'bundlemanager': this._kernel.path.vendor.easy + '/core/BundleManager',
             'logger': this._kernel.path.vendor.easy + '/core/Logger',
-            'message': this._kernel.path.vendor.easy + '/core/Message',
+            'message': this._kernel.path.vendor.easy + '/core/Console',
             'polyfills': this._kernel.path.vendor.easy + '/core/Polyfills',
             'router': this._kernel.path.vendor.easy + '/core/Router',
             'database': this._kernel.path.vendor.easy + '/database/Connector',
@@ -160,7 +160,7 @@ export default class Container {
                     throw new Error()
                 }
             } catch ( error ) {
-                this.getComponent( 'Message' ).error({
+                this.getComponent( 'Console' ).error({
                     title: "Impossible to call service",
                     message: "Service " + name + " not found, path: " + path.resolve( serviceFile ) + "\n" + error,
                     type: 'error',
@@ -179,7 +179,7 @@ export default class Container {
             if ( statsServiceDirectory.isDirectory() ) {
                 this._servicesDirectoryExists = true
             } else {
-                this.getComponent( 'Message' ).error({
+                this.getComponent( 'Console' ).error({
                     title: "Service directory not found",
                     message: "Directory path resolved: " + this.servicesDirectoryPath,
                     type: 'error',
@@ -279,7 +279,7 @@ export default class Container {
                     throw new Error()
                 }
             } catch ( error ) {
-                this.getComponent( 'Message' ).error({
+                this.getComponent( 'Console' ).error({
                     title: "Impossible to call user library",
                     message: "Library " + name + " not found, path: " + path.resolve( userLibraryFile ) + "\n" + error,
                     type: 'error',
@@ -299,7 +299,7 @@ export default class Container {
             if ( statsUserLibrariesDirectory.isDirectory() ) {
                 this._userLibrariesDirectoryExists = true
             } else {
-                this.getComponent( 'Message' ).error({
+                this.getComponent( 'Console' ).error({
                     title: "User's libraries directory not found",
                     message: "Directory path resolved: " + this.userLibrariesDirectoryPath,
                     type: 'error',

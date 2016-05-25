@@ -17,23 +17,23 @@ export default function routing( skeletonFactory ) {
     */
     router.route( '/skeletons' )
         .get( () => {
-        	skeletonRoutingController.getSkeletons()
+            skeletonRoutingController.getSkeletons()
         })
         .post( () => {
-        	skeletonRoutingController.createSkeleton()
+            skeletonRoutingController.createSkeleton()
         })
 
     router.route( '/skeletons/:id' )
         .get( () => {
-        	skeletonRoutingController.getSkeleton()
+            skeletonRoutingController.getSkeleton()
         })
         .put( () => {
-        	skeletonRoutingController.updateSkeleton()
+            skeletonRoutingController.updateSkeleton()
         })
         .patch( () => {
-        	skeletonRoutingController.patchSkeleton()
+            skeletonRoutingController.patchSkeleton()
         })
         .delete( () => {
-        	skeletonRoutingController.deleteSkeleton()
+            skeletonRoutingController.deleteSkeleton()
         })
 }

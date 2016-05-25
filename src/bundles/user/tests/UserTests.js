@@ -1,3 +1,5 @@
+/* global describe it */
+
 /*
  * Unit tests
  */

@@ -17,23 +17,23 @@ export default function routing( userFactory ) {
     */
     router.route( '/roles/:idRole/users' )
         .get( () => {
-        	userRoutingController.getUsers()
+            userRoutingController.getUsers()
         })
         .post( () => {
-        	userRoutingController.createUser()
+            userRoutingController.createUser()
         })
 
     router.route( '/roles/:idRole/users/:idUser' )
         .get( () => {
-        	userRoutingController.getUser()
+            userRoutingController.getUser()
         })
         .put( () => {
-        	userRoutingController.updateUser()
+            userRoutingController.updateUser()
         })
         .patch( () => {
-        	userRoutingController.patchUser()
+            userRoutingController.patchUser()
         })
         .delete( () => {
-        	userRoutingController.deleteUser()
+            userRoutingController.deleteUser()
         })
 }

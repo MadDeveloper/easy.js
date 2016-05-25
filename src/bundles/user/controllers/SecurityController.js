@@ -12,7 +12,7 @@ export default class SecurityController extends Controller {
             if ( this.isProdEnv() ) {
                 const token = this.request.getBodyParameter( 'token' )
 
-                thi.access.restrict({
+                this.access.restrict({
                     mustBe: [ this.access.any ],
                     canCreate: [ this.access.admin ],
                     canRead: [],

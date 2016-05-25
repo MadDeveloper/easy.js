@@ -92,11 +92,6 @@ export default class Response extends Http {
         res.status( this.status.badRequest ).json( this.formatParams( params ) )
     }
 
-    unauthorized( params ) {
-        const res = this.scope
-        res.status( this.status.unauthorized ).json( this.formatParams( params ) )
-    }
-
     forbidden( params ) {
         const res = this.scope
         res.status( this.status.forbidden ).json( this.formatParams( params ) )

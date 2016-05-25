@@ -5,7 +5,7 @@
  */
 
 export default class Polyfills {
-    constructor( container ) {
+    constructor() {
         this.stringPolyfills()
     }
 

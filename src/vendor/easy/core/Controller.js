@@ -49,7 +49,7 @@ export default class Controller {
     }
 
     doesRequiredElementExists( element, options ) {
-        return new Promise( (resolve, reject) => {
+        return new Promise( ( resolve, reject ) => {
             let requireBy = null
             let optionsFetch = null
 
@@ -71,11 +71,13 @@ export default class Controller {
 
                 } else {
                     this.response.notFound()
+                    reject( "Element not found" )
                 }
 
             })
             .catch( error => {
                 this.response.internalServerError( error )
+                reject( error )
             })
         })
     }

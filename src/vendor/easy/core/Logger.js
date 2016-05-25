@@ -18,7 +18,7 @@ import path from 'path'
 
 export default class Logger {
     constructor( container ) {
-        this._message           = container.getComponent( 'Message' )
+        this._message           = container.getComponent( 'Console' )
         this._string            = container.getLibrary( 'String' )
         this._logDirectoryPath  = __dirname + '/../../../../logs'
     }
@@ -52,7 +52,7 @@ export default class Logger {
         .catch( error => {
             this.message.error({
                 title: `Impossible to open/create serverErrors.log at: ${this.logDirectoryPath}/serverErrors.log`,
-                message: "",
+                message: error,
                 type: 'error'
             })
         })
@@ -151,7 +151,7 @@ export default class Logger {
      */
     openLogFile( name ) {
         return new Promise( ( resolve, reject ) => {
-            fs.open( `${this.logDirectoryPath}/${name}.log`, 'a+', ( error, fd ) => {
+            fs.open( path.resolve( `${this.logDirectoryPath}/${name}.log` ), 'a+', ( error, fd ) => {
                 ( error ) ? reject( error ) : resolve( fd )
             })
         })

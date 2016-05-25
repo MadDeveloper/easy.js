@@ -17,6 +17,9 @@ export default class MiddlewaresController extends Controller {
                 this.request.define( 'role', role )
                 resolve()
             })
+            .catch( error => {
+                reject( error )
+            })
         })
     }
 

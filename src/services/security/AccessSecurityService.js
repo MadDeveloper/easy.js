@@ -22,15 +22,15 @@ export default class AccessSecurityService extends Service {
     load() {}
 
     isAdmin() {
-        return focus === roleAdmin
+        return this.focus === this.roleAdmin
     }
 
     isUser() {
-        return focus === roleUser
+        return this.focus === this.roleUser
     }
 
     isAny() {
-        return focus === roleAny
+        return this.focus === this.roleAny
     }
 
     focusOn( role ) {
@@ -102,19 +102,19 @@ export default class AccessSecurityService extends Service {
 
             if ( indexOf( methodWhenReading, method ) !== -1 ) {
 
-                isAuthorizedToReach = indexOf( this.restrictions.canRead, focus ) !== -1 || indexOf( this.restrictions.canRead, this.any ) !== -1
+                isAuthorizedToReach = indexOf( this.restrictions.canRead, this.focus ) !== -1 || indexOf( this.restrictions.canRead, this.any ) !== -1
 
             } else if ( indexOf( methodWhenCreating, method ) !== -1 ) {
 
-                isAuthorizedToReach = indexOf( this.restrictions.canCreate, focus ) !== -1 || indexOf( this.restrictions.canCreate, this.any ) !== -1
+                isAuthorizedToReach = indexOf( this.restrictions.canCreate, this.focus ) !== -1 || indexOf( this.restrictions.canCreate, this.any ) !== -1
 
             } else if ( indexOf( methodWhenUpdating, method ) !== -1 ) {
 
-                isAuthorizedToReach = indexOf( this.restrictions.canUpdate, focus ) !== -1 || indexOf( this.restrictions.canUpdate, this.any ) !== -1
+                isAuthorizedToReach = indexOf( this.restrictions.canUpdate, this.focus ) !== -1 || indexOf( this.restrictions.canUpdate, this.any ) !== -1
 
             } else if ( indexOf( methodWhenDeleting, method ) !== -1 ) {
 
-                isAuthorizedToReach = indexOf( this.restrictions.canDelete, focus ) !== -1 || indexOf( this.restrictions.canDelete, this.any ) !== -1
+                isAuthorizedToReach = indexOf( this.restrictions.canDelete, this.focus ) !== -1 || indexOf( this.restrictions.canDelete, this.any ) !== -1
 
             }
 

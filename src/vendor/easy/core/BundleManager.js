@@ -36,8 +36,6 @@ export default class BundleManager {
     }
 
     getBundlesDefinitionRouting() {
-        let routingPath = ''
-
         for ( var i in this.bundlesDefinition ) {
             const bundle = this.bundlesDefinition[ i ]
             this.getRouting( bundle )

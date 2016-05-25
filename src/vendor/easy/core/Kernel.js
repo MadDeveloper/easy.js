@@ -1,4 +1,3 @@
-import fs           from 'fs'
 import Container    from './Container'
 
 export default class Kernel {

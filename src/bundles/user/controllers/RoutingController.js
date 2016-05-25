@@ -1,4 +1,3 @@
-import _            from 'lodash'
 import Controller   from './../../../vendor/easy/core/Controller'
 
 export default class RoutingController extends Controller {
@@ -39,7 +38,7 @@ export default class RoutingController extends Controller {
 
                 this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'idRole' ) )
 
-                this.userRepository.save( UserFactory.getNewModel(), this.request.getBody(), { transacting: t } )
+                this.userRepository.save( this.userFactory.getNewModel(), this.request.getBody(), { transacting: t } )
                 .then( user => {
                     t.commit()
                     this.response.created( user.toJSON() )

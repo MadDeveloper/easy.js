@@ -17,6 +17,9 @@ export default class MiddlewaresController extends Controller {
                 this.request.define( 'skeleton', skeleton )
                 resolve()
             })
+            .catch( error => {
+                reject( error )
+            })
         })
     }
 

@@ -1,6 +1,3 @@
-import fs   from 'fs'
-import path from 'path'
-
 export default class Connector {
     constructor( container ) {
         this._defaultConnector  = 'bookshelf'

@@ -51,16 +51,16 @@ export default class SchemaDatabaseService extends Service {
                 column = table[tableSchema[ key ].type](key, tableSchema[ key ].maxlength)
               }
               else if ( ( tableSchema[ key ].type === 'float' || tableSchema[ key ].type === 'decimal' ) ) {
-                var defaultPrecision = 8
-                var precision = ( tableSchema[ key ].hasOwnProperty('precision') ) ? tableSchema[ key ].precision : defaultPrecision
+                const defaultPrecision  = 8
+                const precision         = ( tableSchema[ key ].hasOwnProperty('precision') ) ? tableSchema[ key ].precision : defaultPrecision
 
                 if ( 'decimal' === tableSchema[ key ].type ) {
-                    const defaultScale = 2
-                    const scale = ( tableSchema[ key ].hasOwnProperty( 'scale' ) ) ? tableSchema[ key ].scale : defaultScale
+                    const defaultScale  = 2
+                    const scale         = ( tableSchema[ key ].hasOwnProperty( 'scale' ) ) ? tableSchema[ key ].scale : defaultScale
 
-                    table[ tableSchema[ key ].type ]( key, tableSchema[ key ].precision, tableSchema[ key ].scale )
+                    table[ tableSchema[ key ].type ]( key, precision, scale )
                 } else {
-                    table[ tableSchema[ key ].type ]( key, tableSchema[ key ].precision )
+                    table[ tableSchema[ key ].type ]( key, precision )
                 }
               }
               else {

@@ -36,17 +36,17 @@ if ( argv._[ 'http' ] || argv.http || false === config.credentials.found ) {
 let portInUse = ( port ) => {
     return new Promise( (resolve, reject) => {
         const serverTest = net.createServer( socket => {
-           socket.write( 'Echo server\r\n' )
-    	   socket.pipe( socket )
+            socket.write( 'Echo server\r\n' )
+            socket.pipe( socket )
         })
 
         serverTest.listen( port, '127.0.0.1' )
 
         serverTest.on( 'error', error => {
-            reject()
+            reject( error )
         })
 
-        serverTest.on( 'listening', e => {
+        serverTest.on( 'listening', () => {
             serverTest.close()
             resolve()
         })
@@ -59,7 +59,7 @@ portInUse( port )
      * Everything is ok, starting server
      */
     server.listen( port, () => {
-        // Todo: write it with easy/Message
+        // Todo: write it with easy/Console
         console.log( "-----------------------------" )
         console.log( "    Server listening..." )
         console.log( "-----------------------------" )

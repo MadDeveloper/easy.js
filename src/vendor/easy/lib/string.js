@@ -20,7 +20,6 @@ export function strtr( str, fromObj, to ) {
     j = 0,
     lenStr = 0,
     lenFrom = 0,
-    tmpStrictForIn = false,
     fromTypeStr = '',
     toTypeStr = '',
     istr = ''

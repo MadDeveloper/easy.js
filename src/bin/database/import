@@ -11,7 +11,7 @@ const dbConfig = {
 }
 
 const container     = bundleManager.container
-const message       = container.getComponent( 'Message' )
+const message       = container.getComponent( 'Console' )
 
 const titleError		= "Error when importing database"
 const consequenceError	= "Importation aborted."

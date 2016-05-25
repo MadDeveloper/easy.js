@@ -17,20 +17,20 @@ export default function routing( roleFactory ) {
      */
     router.route( '/roles' )
         .get( () => {
-        	roleRoutingController.getRoles()
+            roleRoutingController.getRoles()
         })
         .post( () => {
-        	roleRoutingController.createRole()
+            roleRoutingController.createRole()
         })
 
     router.route( '/roles/:id' )
         .get( () => {
-        	roleRoutingController.getRole()
+            roleRoutingController.getRole()
         })
         .put( () => {
-        	roleRoutingController.updateRole()
+            roleRoutingController.updateRole()
         })
         .delete( () => {
-        	roleRoutingController.deleteRole()
+            roleRoutingController.deleteRole()
         })
 }

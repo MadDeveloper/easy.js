@@ -1,8 +1,8 @@
 import colors from 'colors'
 
-export default class Message {
-    constructor( container ) {
-        this._leftSpaces    = '  '
+export default class Console {
+    constructor() {
+        this._leftSpaces = '  '
     }
 
     error( params ) {
@@ -23,7 +23,7 @@ export default class Message {
         } else {
             this.error({
                 title: "Invalid arguments",
-                message: "Missing arguments to error from Message class"
+                message: "Missing arguments to error from Console class"
             })
         }
     }
@@ -42,6 +42,10 @@ export default class Message {
         if ( exit ) {
             process.exit()
         }
+    }
+
+    log( ...args ) {
+        console.log( args )
     }
 
     /*
