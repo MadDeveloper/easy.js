@@ -57,7 +57,7 @@ walker.on( "end", () => {
      */
     mocha.run( failures => {
         if ( failures ) {
-            cli.warn( failures  + ' failures occurs during tests.' )
+            cli.warn( `${failures} failures occurs during tests.` )
         }
         process.exit()
     })

@@ -72,9 +72,9 @@ export default class Response extends Http {
     }
 
     internalServerError( params ) {
-        const req = this.request.scope
-        const res = this.scope
-        const alertLog = '[{currentDate}] -- {remoteHostIp} -- {method} {originalUrl} {statusCode} -- ' + params + '\n'
+        const req       = this.request.scope
+        const res       = this.scope
+        const alertLog  = `[{currentDate}] -- {remoteHostIp} -- {method} {originalUrl} {statusCode} -- ${params}\n`
 
         this.logger.alert( alertLog, {
             '{currentDate}': new Date().toUTCString(),

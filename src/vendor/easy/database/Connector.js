@@ -1,17 +1,13 @@
 export default class Connector {
     constructor( container ) {
         this._defaultConnector  = 'bookshelf'
-        this._databasePath      = container.kernel.path.config + '/database/database'
+        this._databasePath      = `${container.kernel.path.config}/database/database`
         this._connection        = null
     }
 
-    connect( connector ) {
-        if ( !connector ) {
-            // use default connector
-            connector = this.defaultConnector
-        }
-
+    connect( connector = this.defaultConnector ) {
         this.connection = ( require( this.databasePath ) ).default( connector ) /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        
         return this.connection
     }
 

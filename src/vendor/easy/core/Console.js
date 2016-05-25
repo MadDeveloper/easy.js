@@ -11,8 +11,8 @@ export default class Console {
             const consequence = ( params.consequence ) ? params.consequence : ""
 
             console.log( '\n' )
-            console.log( this.leftSpaces + colors.bgRed( colors.white( "Error: " + params.title ) ) )
-            console.log( this.leftSpaces + colors.bgRed( colors.white( "    -> " + params.message ) ) )
+            console.log( this.leftSpaces + colors.bgRed( colors.white( `Error: ${params.title}` ) ) )
+            console.log( this.leftSpaces + colors.bgRed( colors.white( `    ->  ${params.message}` ) ) )
             console.log( this.leftSpaces + colors.bgRed( colors.white( consequence ) ) )
             console.log( '\n' )
 
@@ -28,24 +28,20 @@ export default class Console {
         }
     }
 
-    warn( message ) {
-        console.log( this.leftSpaces + colors.bgYellow( colors.black( 'WARN: ' + message ) ) )
+    warn( message = "" ) {
+        console.log( this.leftSpaces + colors.bgYellow( colors.black( `WARN: ${message}` ) ) )
     }
 
-    info( message ) {
+    info( message = "" ) {
         console.log( this.leftSpaces + colors.cyan( message ) )
     }
 
-    success( message, exit ) {
+    success( message = "", exit ) {
         console.log( this.leftSpaces + colors.green( message ) )
 
         if ( exit ) {
             process.exit()
         }
-    }
-
-    log( ...args ) {
-        console.log( args )
     }
 
     /*

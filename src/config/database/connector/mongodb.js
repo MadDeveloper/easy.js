@@ -6,4 +6,4 @@ import config   from './../../config'
 
 const params = config.database
 
-export default mongoose.connect( 'mongodb://' + params.connection.host + '/' + params.connection.database )
+export default mongoose.connect( `mongodb://${params.connection.host}/${params.connection.database}` )

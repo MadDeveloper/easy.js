@@ -78,7 +78,7 @@ function migrate( standalone ) {
 
 
 function updateDatabaseNameInConfig() {
-	const databaseConfigFilePath = __dirname + '/../../../config/database/connector/knex.js'
+	const databaseConfigFilePath = `${__dirname}/../../../config/database/connector/knex.js`
 
 	fs.readFile( databaseConfigFilePath, { encoding: 'utf8' }, ( error, data ) => {
 		if ( error ) {
@@ -94,7 +94,7 @@ function updateDatabaseNameInConfig() {
 					 * Configuration succefully edited
 					 * we reconnect database to new schema
 					 */
-					delete require.cache[ require.resolve( __dirname + '/../../../config/database/database' ) ]
+					delete require.cache[ require.resolve( `${__dirname}/../../../config/database/database` ) ]
 
 					const clearCache = true
 					schemaDatabaseService = container.getService( 'database.schema', clearCache )

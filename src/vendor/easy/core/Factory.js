@@ -4,12 +4,9 @@ export default class Factory {
         this._bundleManager = bundleManager
     }
 
-    getRepository( repository ) {
-        if ( !repository ) {
-            repository = this.currentBundle
-        }
+    getRepository( repository = this.currentBundle ) {
+        const repositoryClass = require( `${this.getBundlePath()}/entity/${repository.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
-        const repositoryClass = require( this.getBundlePath() + '/entity/' + repository.capitalizeFirstLetter() + 'Repository' ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
         return new repositoryClass( this )
     }
 
@@ -17,12 +14,9 @@ export default class Factory {
         return this.getModel()( paramsForForging )
     }
 
-    getModel( model ) {
-        if ( !model ) {
-            model = this.currentBundle
-        }
+    getModel( model = this.currentBundle ) {
+        const modelClass = require( `${this.getBundlePath()}/entity/${model.capitalizeFirstLetter()}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
-        const modelClass = require( this.getBundlePath() + '/entity/' + model.capitalizeFirstLetter() ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
         return new modelClass( this )
     }
 
@@ -36,26 +30,20 @@ export default class Factory {
         })
     }
 
-    getController( controller ) {
-        if ( typeof controller === "undefined" ) {
-            controller = 'Routing'
-        }
+    getController( controller = 'Routing' ) {
+        const controllerClass = require( `${this.getBundlePath()}/controllers/${controller.capitalizeFirstLetter()}Controller` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
-        const controllerClass = require( this.getBundlePath() + '/controllers/' + controller.capitalizeFirstLetter() + 'Controller' ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
         return new controllerClass( this )
     }
 
-    getRootController() {
-        return this.container.getComponent( 'Controller' )
-    }
-
     getConfig( config ) {
-        const configClass = require( this.getBundlePath() + '/config/' + config ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        const configClass = require( `${this.getBundlePath()}/config/${config}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+
         return configClass( this )
     }
 
     getBundlePath() {
-        return this.container.kernel.path.bundles + '/' + this.currentBundle
+        return `${this.container.kernel.path.bundles}/${this.currentBundle}`
     }
 
     /*

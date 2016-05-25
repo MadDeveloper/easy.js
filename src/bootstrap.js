@@ -148,9 +148,9 @@ if ( argv.memory ) {
         const memory = process.memoryUsage()
 
         cli.info( "---- Memory usage ----" )
-        cli.info( "RSS:        " + numeral( memory.rss ).format( 'bytes' ) )
-        cli.info( "Heap total: " + numeral( memory.heapTotal ).format( 'bytes' ) )
-        cli.info( "Heap used:  " + numeral( memory.heapUsed ).format( 'bytes' ) )
+        cli.info( `RSS:        ${numeral( memory.rss ).format( 'bytes' )}` )
+        cli.info( `Heap total: ${numeral( memory.heapTotal ).format( 'bytes' )}` )
+        cli.info( `Heap used:  ${numeral( memory.heapUsed ).format( 'bytes' )}` )
         cli.info( "----------------------" )
 
         next()

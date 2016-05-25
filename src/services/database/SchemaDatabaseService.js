@@ -11,7 +11,7 @@ export default class SchemaDatabaseService extends Service {
     load() {}
 
     createSchema( schemaName ) {
-        return this.knex.raw( 'CREATE DATABASE ' + schemaName + '' )
+        return this.knex.raw( `CREATE DATABASE ${schemaName}` )
     }
 
     schemaExists( schemaName ) {
@@ -31,7 +31,7 @@ export default class SchemaDatabaseService extends Service {
     }
 
     truncateTable( tableName ) {
-        return this.knex.raw( 'truncate table ' + tableName )
+        return this.knex.raw( `truncate table ${tableName}` )
     }
 
     clearTable( tableName ) {

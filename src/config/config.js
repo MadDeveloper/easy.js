@@ -4,9 +4,9 @@ function getCredentials() {
     let credentials = { key: null, cert: null, found: false }
 
     try {
-        credentials.key = fs.readFileSync( __dirname + '/keys/myapp-privkey.pem' )
-        credentials.cert = fs.readFileSync( __dirname + '/keys/myapp-cert.pem' )
-        credentials.found = true
+        credentials.key     = fs.readFileSync( `${__dirname}/keys/myapp-privkey.pem` )
+        credentials.cert    = fs.readFileSync( `${__dirname}/keys/myapp-cert.pem` )
+        credentials.found   = true
     } finally {
         return credentials
     }

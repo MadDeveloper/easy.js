@@ -24,20 +24,20 @@ export default class Container {
         this._userLibrariesDirectoryPath             = this._kernel.path.lib
 
         this._componentsMapping = {
-            'bundlemanager': this._kernel.path.vendor.easy + '/core/BundleManager',
-            'console': this._kernel.path.vendor.easy + '/core/Console',
-            'polyfills': this._kernel.path.vendor.easy + '/core/Polyfills',
-            'router': this._kernel.path.vendor.easy + '/core/Router',
-            'database': this._kernel.path.vendor.easy + '/database/Connector',
-            'http': this._kernel.path.vendor.easy + '/http/Http',
-            'request': this._kernel.path.vendor.easy + '/http/Request',
-            'response': this._kernel.path.vendor.easy + '/http/Response',
-            'logger': this._kernel.path.vendor.easy + '/log/Logger',
-            'logfilemanager': this._kernel.path.vendor.easy + '/log/LogFileManager'
+            'bundlemanager': `${this._kernel.path.vendor.easy}/core/BundleManager`,
+            'console': `${this._kernel.path.vendor.easy}/core/Console`,
+            'polyfills': `${this._kernel.path.vendor.easy}/core/Polyfills`,
+            'router': `${this._kernel.path.vendor.easy}/core/Router`,
+            'database': `${this._kernel.path.vendor.easy}/database/Connector`,
+            'http': `${this._kernel.path.vendor.easy}/http/Http`,
+            'request': `${this._kernel.path.vendor.easy}/http/Request`,
+            'response': `${this._kernel.path.vendor.easy}/http/Response`,
+            'logger': `${this._kernel.path.vendor.easy}/log/Logger`,
+            'logfilemanager': `${this._kernel.path.vendor.easy}/log/LogFileManager`
         }
 
         this._librariesMapping = {
-            'string': this._kernel.path.vendor.easy + '/lib/string'
+            'string': `${this._kernel.path.vendor.easy}/lib/string`
         }
 
         this._servicesMapping = servicesMapping
@@ -51,7 +51,7 @@ export default class Container {
     loadComponent( name ) {
         if ( "undefined" === typeof this.componentsLoaded[ name ] ) {
             if ( this.componentsMapping.hasOwnProperty( name ) ) {
-                const pathComponent = this.componentsMapping[ name ] + '.js'
+                const pathComponent = `${this.componentsMapping[ name ]}.js`
 
                 if ( fs.statSync( pathComponent ).isFile() ) {
                     const component = require( pathComponent ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
@@ -85,7 +85,7 @@ export default class Container {
 
         if ( this.isComponentMapped( name ) && this.isComponentLoaded( name ) ) {
             this.componentsLoaded[ name ] = newComponent
-            
+
             return this.componentsLoaded[ name ]
         }
     }
@@ -147,7 +147,7 @@ export default class Container {
                 return this.shared[ name ]
             }
 
-            const serviceFile = this.servicesDirectoryPath + '/' + this.servicesMapping[ name ]+ '.js'
+            const serviceFile = `${this.servicesDirectoryPath}/${this.servicesMapping[ name ]}.js`
 
             try {
                 const statsServiceFile = fs.lstatSync( serviceFile )
@@ -164,7 +164,7 @@ export default class Container {
             } catch ( error ) {
                 this.getComponent( 'Console' ).error({
                     title: "Impossible to call service",
-                    message: "Service " + name + " not found, path: " + path.resolve( serviceFile ) + "\n" + error,
+                    message: `Service ${name} not found, path: ${path.resolve( serviceFile )}\n${error}`,
                     type: 'error',
                     exit: 0
                 })
@@ -183,7 +183,7 @@ export default class Container {
             } else {
                 this.getComponent( 'Console' ).error({
                     title: "Service directory not found",
-                    message: "Directory path resolved: " + this.servicesDirectoryPath,
+                    message: `Directory path resolved: ${this.servicesDirectoryPath}`,
                     type: 'error',
                     exit: 0
                 })
@@ -219,7 +219,7 @@ export default class Container {
                 return this.librariesLoaded[ name ]
             }
 
-            const pathLibrary   = this.librariesMapping[ name ] + '.js'
+            const pathLibrary   = `${this.librariesMapping[ name ]}.js`
             const library       = require( pathLibrary )
 
             this.librariesLoaded[ name ] = library
@@ -266,7 +266,7 @@ export default class Container {
                 return this.userLibrariesLoaded[ name ]
             }
 
-            const userLibraryFile = this.userLibrariesDirectoryPath + '/' + this.userLibrariesMapping[ name ] + '.js'
+            const userLibraryFile = `${this.userLibrariesDirectoryPath}/${this.userLibrariesMapping[ name ]}.js`
 
             try {
                 const statsUserLibraryFile = fs.lstatSync( userLibraryFile )
@@ -283,7 +283,7 @@ export default class Container {
             } catch ( error ) {
                 this.getComponent( 'Console' ).error({
                     title: "Impossible to call user library",
-                    message: "Library " + name + " not found, path: " + path.resolve( userLibraryFile ) + "\n" + error,
+                    message: `Library ${name} not found, path: ${path.resolve( userLibraryFile )}\n${error}`,
                     type: 'error',
                     exit: 0
                 })
@@ -303,7 +303,7 @@ export default class Container {
             } else {
                 this.getComponent( 'Console' ).error({
                     title: "User's libraries directory not found",
-                    message: "Directory path resolved: " + this.userLibrariesDirectoryPath,
+                    message: `Directory path resolved: ${this.userLibrariesDirectoryPath}`,
                     type: 'error',
                     exit: 0
                 })

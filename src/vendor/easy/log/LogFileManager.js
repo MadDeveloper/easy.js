@@ -3,7 +3,7 @@ import path from 'path'
 
 export default class LogFileManager {
     constructor( container ) {
-        this._logDirectoryPath  = __dirname + '/../../../../logs'
+        this._logDirectoryPath  = `${__dirname}/../../../../logs`
     }
 
     /**
