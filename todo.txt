@@ -1,17 +1,8 @@
 - migrer test bundles dans ~/test/bundles
 
-- créer une classe pour gérer le fs (créer/supprimer les fichiers logs, etc.)
-
-- transformer message en cli
-
-- finir la classe Logger
-
-- revoir la partie authentication, transformer en classe peut-être car ils utilisent controller, ou bien importer la classe et l'instancier
-
-
-
-
 --- LATER ---
 
 - faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
 - faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
+
+- jsdoc for each easy class

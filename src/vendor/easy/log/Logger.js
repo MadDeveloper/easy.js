@@ -13,25 +13,23 @@
  * See https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md
  * for the full specification.
  */
-import fs   from 'fs'
-import path from 'path'
-
 export default class Logger {
     constructor( container ) {
-        this._message           = container.getComponent( 'Console' )
+        this._logFileManager    = container.getComponent( 'LogFileManager' )
+        this._cli               = container.getComponent( 'Console' )
         this._string            = container.getLibrary( 'String' )
-        this._logDirectoryPath  = __dirname + '/../../../../logs'
     }
 
     /**
      * System is unusable.
+     * Use fatals.log
      *
      * @param message
      * @param context
      * @return null
      */
     emergency( message, context ) {
-
+        this.write( 'fatals', message, context )
     }
 
     /**
@@ -39,52 +37,46 @@ export default class Logger {
      *
      * Example: Entire website down, database unavailable, etc. This should
      * trigger the SMS alerts and wake you up.
+     * Use fatals.log
      *
      * @param message
      * @param context
      * @return null
      */
     alert( message, context ) {
-        this.openLogFile( 'serverErrors' )
-        .then( fd => {
-            fs.write( fd, this.string.strtr( message, context ), null, 'utf8' )
-        })
-        .catch( error => {
-            this.message.error({
-                title: `Impossible to open/create serverErrors.log at: ${this.logDirectoryPath}/serverErrors.log`,
-                message: error,
-                type: 'error'
-            })
-        })
+        this.write( 'fatals', message, context )
     }
 
     /**
      * Critical conditions.
      *
      * Example: Application component unavailable, unexpected exception.
+     * Use errors.log
      *
      * @param message
      * @param context
      * @return null
      */
     critical( message, context ) {
-        this.alert( message, context )
+        this.write( 'errors', message, context )
     }
 
     /**
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
+     * Use errors.log
      *
      * @param message
      * @param context
      * @return null
      */
     error( message, context ) {
-
+        this.write( 'errors', message, context )
     }
 
     /**
      * Exceptional occurrences that are not errors.
+     * Use warn.log
      *
      * Example: Use of deprecated APIs, poor use of an API, undesirable things
      * that are not necessarily wrong.
@@ -94,22 +86,24 @@ export default class Logger {
      * @return null
      */
     warning( message, context) {
-
+        this.write( 'warn', message, context )
     }
 
     /**
      * Normal but significant events.
+     * Use events.log
      *
      * @param message
      * @param context
      * @return null
      */
     notice( message, context) {
-
+        this.write( 'events', message, context )
     }
 
     /**
      * Interesting events.
+     * Use events.log
      *
      * Example: User logs in, SQL logs.
      *
@@ -118,41 +112,52 @@ export default class Logger {
      * @return null
      */
     info( message, context ) {
-
+        this.write( 'events', message, context )
     }
 
     /**
      * Detailed debug information.
+     * Use debugs.log
      *
      * @param message
      * @param context
      * @return null
      */
     debug( message, context ) {
-
+        this.write( 'debugs', message, context )
     }
 
     /**
      * Logs with an arbitrary level.
+     * Use std.log
      *
-     * @param mixed level
      * @param message
      * @param context
+     * @param level
      * @return null
      */
-    log( level, message, context ) {
-
+    log( message, context, level = 0 ) {
+        this.write( 'std', message, context, level )
     }
 
     /**
-     * Open log file
+     * General log method
      *
-     * @param string name
+     * @param message
+     * @param context
+     * @param level
+     * @return null
      */
-    openLogFile( name ) {
-        return new Promise( ( resolve, reject ) => {
-            fs.open( path.resolve( `${this.logDirectoryPath}/${name}.log` ), 'a+', ( error, fd ) => {
-                ( error ) ? reject( error ) : resolve( fd )
+    write( file, message, context, level = null ) {
+        this.logFileManager.openLogFile( file )
+        .then( fd => {
+            fs.write( fd, this.string.strtr( message, context ), null, 'utf8' )
+        })
+        .catch( error => {
+            this.cli.error({
+                title: `Impossible to open/create ${file}.log at: ${this.logDirectoryPath}/${file}.log`,
+                message: error,
+                type: 'error'
             })
         })
     }
@@ -160,15 +165,15 @@ export default class Logger {
     /*
      * Getters and setters
      */
-    get message() {
-        return this._message
+    get logFileManager() {
+        return this._logFileManager
+    }
+
+    get cli() {
+        return this._cli
     }
 
     get string() {
         return this._string
-    }
-
-    get logDirectoryPath() {
-        return this._logDirectoryPath
     }
 }

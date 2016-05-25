@@ -25,14 +25,15 @@ export default class Container {
 
         this._componentsMapping = {
             'bundlemanager': this._kernel.path.vendor.easy + '/core/BundleManager',
-            'logger': this._kernel.path.vendor.easy + '/core/Logger',
-            'message': this._kernel.path.vendor.easy + '/core/Console',
+            'console': this._kernel.path.vendor.easy + '/core/Console',
             'polyfills': this._kernel.path.vendor.easy + '/core/Polyfills',
             'router': this._kernel.path.vendor.easy + '/core/Router',
             'database': this._kernel.path.vendor.easy + '/database/Connector',
             'http': this._kernel.path.vendor.easy + '/http/Http',
             'request': this._kernel.path.vendor.easy + '/http/Request',
-            'response': this._kernel.path.vendor.easy + '/http/Response'
+            'response': this._kernel.path.vendor.easy + '/http/Response',
+            'logger': this._kernel.path.vendor.easy + '/log/Logger',
+            'logfilemanager': this._kernel.path.vendor.easy + '/log/LogFileManager'
         }
 
         this._librariesMapping = {
@@ -84,6 +85,7 @@ export default class Container {
 
         if ( this.isComponentMapped( name ) && this.isComponentLoaded( name ) ) {
             this.componentsLoaded[ name ] = newComponent
+            
             return this.componentsLoaded[ name ]
         }
     }

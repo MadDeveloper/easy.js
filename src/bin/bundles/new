@@ -10,7 +10,7 @@ import { kernel, bundleManager }    from './../../bootstrap.js'
 let argv    = minimist( process.argv.slice( 2 ) )
 
 const container             = bundleManager.container
-const message               = container.getComponent( 'Console' )
+const cli               = container.getComponent( 'Console' )
 const schemaDatabaseService = container.getService( 'database.schema' )
 const stringLibrary         = container.getLibrary( 'string' )
 
@@ -39,7 +39,7 @@ if ( nameBundleFromArgv.length > 0 ) {
      */
     fs.lstat( bundlesPath + "/" + nameBundle, ( err, stats ) => {
         if ( !err && stats.isDirectory() ) {
-            message.error({
+            cli.error({
                 title: "Impossible to create bundle",
                 message: nameBundle + " bundle already exists.",
                 consequence: "Creation aborted.",
@@ -56,7 +56,7 @@ if ( nameBundleFromArgv.length > 0 ) {
          */
         fs.lstat( skeletonBundlePath, ( err, stats ) => {
             if ( err || !stats.isDirectory() ) {
-                message.error({
+                cli.error({
                     title: "Impossible to create bundle",
                     message: "Skeleton bundle isn't defined.",
                     consequence: "Creation aborted.",
@@ -131,7 +131,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
                 askForProperties()
             } else {
-                message.error({
+                cli.error({
                     title: "Column type not valid",
                     message: "Column type can be: " + availablesColumnType.join( ', ' )
                 })
@@ -208,7 +208,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                          * Wrong reference
                          */
                         delete property.unsigned
-                        message.error({
+                        cli.error({
                             title: "Wrong reference",
                             message: "Reference -> " + answerReference + " is not a valid reference."
                         })
@@ -336,7 +336,7 @@ if ( nameBundleFromArgv.length > 0 ) {
             updateSchema()
         })
         .catch( error => {
-            message.error({
+            cli.error({
                 title: "Error when creating table",
                 message: error,
                 consequence: "Bundle creation aborted.",
@@ -370,7 +370,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         })
 
         function errorEditingSchema( error ) {
-            message.error({
+            cli.error({
                 title: "Impossible to update schema",
                 message: "Error when editing schema.js file: " + error,
                 consequence: "Bundle creation aborted.",
@@ -385,7 +385,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                 if ( !error & stat.isFile() ) {
                     resolve()
                 } else {
-                    message.error({
+                    cli.error({
                         title: "Impossible to update schema",
                         message: "schema.js not found at: " + pathDatabaseSchema,
                         consequence: "Bundle creation aborted.",
@@ -402,7 +402,7 @@ if ( nameBundleFromArgv.length > 0 ) {
          */
         fs.mkdir( bundleCreatingPath, err => {
             if ( err ) {
-                message.error({
+                cli.error({
                     title: "Impossible to create bundle",
                     message: "Error when trying create bundle directory.",
                     consequence: "Creation aborted.",
@@ -441,7 +441,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
                 fs.mkdir( bundleCreatingPath + '/' + newDirName, err => {
                     if ( err ) {
-                        message.error({
+                        cli.error({
                             title: "Impossible to create bundle",
                             message: "Error when trying create bundle sub-directory <" + newDirName + ">.",
                             consequence: "Creation aborted.",
@@ -480,7 +480,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
                 next()
             } catch( error ) {
-                message.error({
+                cli.error({
                     title: "Impossible to create bundle",
                     message: "Error: " + JSON.stringify( error ),
                     consequence: "Creation aborted.",
@@ -494,12 +494,12 @@ if ( nameBundleFromArgv.length > 0 ) {
         })
 
         walker.on( "end", () => {
-            message.success( "\nBundle " + nameBundle + " created.", true )
+            cli.success( "\nBundle " + nameBundle + " created.", true )
         })
 
     }
 
 } else {
-    message.info( "\nCommand: \n[node] createBundle nameOfBundle\n" )
+    cli.info( "\nCommand: \n[node] createBundle nameOfBundle\n" )
     process.exit()
 }

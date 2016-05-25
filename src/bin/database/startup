@@ -8,7 +8,7 @@ import { bundleManager, config }	from './../../bootstrap.js'
 let argv = minimist( process.argv.slice( 2 ) )
 
 const container             = bundleManager.container
-const message               = container.getComponent( 'Console' )
+const cli               = container.getComponent( 'Console' )
 let schemaDatabaseService 	= container.getService( 'database.schema' )
 
 const dbConfig = {
@@ -47,7 +47,7 @@ if ( indexOf( 'lite', argv._ ) !== -1 || argv.lite ) {
 }
 
 function raiseError( err ) {
-	message.error({
+	cli.error({
 		title: titleError,
 		message: err,
 		consequence: consequenceError,
@@ -219,7 +219,7 @@ function startup() {
 	        if ( err ) {
 				raiseError( err )
 	        } else {
-				message.success( "Database initialized.", true )
+				cli.success( "Database initialized.", true )
 	        }
 	        process.exit()
 		})

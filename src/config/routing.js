@@ -1,23 +1,23 @@
 import authentication from './security/authentication'
 
-export default function routing( bundleManager ) {
+export default function routing( container, bundleManager, router ) {
     /*
      * Middlewares
      */
         /*
          * Use Request ans Response class as a middleware to manage respectively request and response scope vars
          */
-        bundleManager.router.use(( req, res, next ) => {
-            bundleManager.container.getComponent( 'Request' ).scope = req
-            bundleManager.container.getComponent( 'Response' ).scope = res
+        router.use( ( req, res, next ) => {
+            container.getComponent( 'Request' ).scope = req
+            container.getComponent( 'Response' ).scope = res
             next()
         })
 
         /*
          * Security
          */
-        authentication( bundleManager )
-        bundleManager.container.getService( 'security.default' )
+        authentication( container, bundleManager, router )
+        container.getService( 'security.default' )
 
     /*
     * bundles routes definitions
@@ -27,9 +27,9 @@ export default function routing( bundleManager ) {
     /*
      * Final middleware: No route found
      */
-    bundleManager.router.use(( req, res ) => {
+    router.use( ( req, res ) => {
         if ( !res.headersSent ) { // if you want strict mode, comment this condition
-            bundleManager.container.getComponent( 'Response' ).notFound()
+            container.getComponent( 'Response' ).notFound()
         }
     })
 }

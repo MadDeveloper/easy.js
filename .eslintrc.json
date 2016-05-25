@@ -47,7 +47,6 @@
             "error",
             "last"
         ],
-        "complexity": ["error", { "max": 20 }],
         "computed-property-spacing": "off",
         "consistent-return": "off",
         "consistent-this": "off",

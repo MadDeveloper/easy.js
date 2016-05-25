@@ -9,7 +9,7 @@ import { kernel, bundleManager, config }	from './../../bootstrap.js'
 let argv = minimist( process.argv.slice( 2 ) )
 
 const container             = bundleManager.container
-const message               = container.getComponent( 'Console' )
+const cli               = container.getComponent( 'Console' )
 let schemaDatabaseService 	= container.getService( 'database.schema' )
 
 const titleError		= "Error when updating database"
@@ -19,7 +19,7 @@ const consequenceError	= "Migration aborted."
  * Functions
  */
 function raiseError( err ) {
-	message.error({
+	cli.error({
 		title: titleError,
 		message: err,
 		consequence: consequenceError,
@@ -62,7 +62,7 @@ function migrate( standalone ) {
 			createTables()
 			.then( () => {
 				const exitAfterSuccess = standalone
-				message.success( "Schema updated.", exitAfterSuccess )
+				cli.success( "Schema updated.", exitAfterSuccess )
 				resolve()
 			})
 			.catch( error => {
@@ -109,7 +109,7 @@ function updateDatabaseNameInConfig() {
 	})
 
 	function errorUpdatingDatabaseConfigProperty( error ) {
-		message.error({
+		cli.error({
 			title: 'Error when trying to edit the database connection property into ~/src/config/config.js path',
 			message: error,
 			consequence: 'Migration aborted.',
@@ -131,7 +131,7 @@ function updateDatabaseNameInConfig() {
 // 	 */
 //  	/*
 // 	 *
-// 	 * message.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' )
+// 	 * cli.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' )
 // 	 * updateDatabaseNameInConfig()
 // 	 */
 // })

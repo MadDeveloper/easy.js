@@ -11,7 +11,7 @@ const dbConfig = {
 }
 
 const container     = bundleManager.container
-const message       = container.getComponent( 'Console' )
+const cli       = container.getComponent( 'Console' )
 
 const titleError		= "Error when importing database"
 const consequenceError	= "Importation aborted."
@@ -20,7 +20,7 @@ const sql       = 'use ' + config.database.connection.database + ''
 const sqlFile	= kernel.path.config + '/database/' + config.database.connection.database + '.sql'
 
 function raiseError( err ) {
-	message.error({
+	cli.error({
 		title: titleError,
 		message: err,
 		consequence: consequenceError,
@@ -38,7 +38,7 @@ execsql.config( dbConfig )
     if ( err ) {
         raiseError( err )
     } else {
-		message.success( "Database imported.", true )
+		cli.success( "Database imported.", true )
     }
     process.exit()
 })

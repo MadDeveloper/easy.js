@@ -3,7 +3,7 @@ export default class Service {
         this._request       = container.getComponent( 'Request' )
         this._response      = container.getComponent( 'Response' )
         this._bundleManager = container.getComponent( 'BundleManager' )
-        this._database      = container.getComponent( 'Database')
+        this._database      = container.getComponent( 'Database' )
         this._router        = this._bundleManager.router
 
         this.load()

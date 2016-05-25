@@ -9,7 +9,7 @@ import { kernel, bundleManager }    from './../../bootstrap.js'
 let argv = minimist( process.argv.slice( 2 ) )
 
 const container                 = bundleManager.container
-const message                   = container.getComponent( 'Console' )
+const cli                   = container.getComponent( 'Console' )
 const servicesTestsDirectory    = kernel.path.test.services
 
 /*
@@ -57,7 +57,7 @@ walker.on( "end", () => {
      */
     mocha.run( failures => {
         if ( failures ) {
-            message.warn( failures  + ' failures occurs during tests.' )
+            cli.warn( failures  + ' failures occurs during tests.' )
         }
         process.exit()
     })

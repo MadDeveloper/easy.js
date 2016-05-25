@@ -8,7 +8,7 @@ import { kernel, bundleManager }    from './../../bootstrap.js'
 let argv = minimist( process.argv.slice( 2 ) )
 
 const container         = bundleManager.container
-const message           = container.getComponent( 'Console' )
+const cli           = container.getComponent( 'Console' )
 const bundlesDirectory  = kernel.path.bundles
 /*
  * Instantiate a Mocha instance
@@ -41,7 +41,7 @@ fs.readdir( bundlesDirectory, ( err, files ) => {
                     }
                 }
             } catch( e ) {
-                message.warn( 'No unit tests found for ' + bundle + ' bundle.' )
+                cli.warn( 'No unit tests found for ' + bundle + ' bundle.' )
             }
         })
 
@@ -50,7 +50,7 @@ fs.readdir( bundlesDirectory, ( err, files ) => {
          */
         mocha.run( failures => {
             if ( failures ) {
-                message.warn( failures  + ' failures occurs during tests.' )
+                cli.warn( failures  + ' failures occurs during tests.' )
             }
             process.exit()
         })

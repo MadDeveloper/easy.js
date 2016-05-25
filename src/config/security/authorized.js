@@ -1,8 +1,10 @@
-export default function authorized( response, request, jwt, secret, router ) {
+import jwt from 'jsonwebtoken'
+
+export default function authorized( response, request, secret, router ) {
     /*
      * Define authorization control middleware
      */
-    router.use(( req, res, next ) => {
+    router.use( ( req, res, next ) => {
         const token = request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.scope.headers[ 'x-access-token' ]
 
         if ( token ) {

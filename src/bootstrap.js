@@ -41,7 +41,7 @@ const app = express()
  */
 const kernel        = new Kernel().init( __dirname, config )
 const container     = kernel.container
-const message       = container.getComponent( 'Console' )
+const cli       = container.getComponent( 'Console' )
 const database      = container.getComponent( 'Database' )
 const router        = container.getComponent( 'Router' )
 const bundleManager = container.getComponent( 'BundleManager' )
@@ -122,7 +122,7 @@ bundlesDefinition( bundleManager )
 /*
  * Loads all the API routes
  */
-routing( bundleManager )
+routing( container, bundleManager, router.scope )
 
 /*
  * Auto call to gc
@@ -133,7 +133,7 @@ app.use(( req, res, next ) => {
     if ( global.gc ) {
         global.gc()
     } else if ( false === warnDisplayed ) {
-        message.warn( "You should launch node server with npm start command in order to enable gc." )
+        cli.warn( "You should launch node server with npm start command in order to enable gc." )
         console.log( '\n' )
         warnDisplayed = true
     }
@@ -148,11 +148,11 @@ if ( argv.memory ) {
     app.use(( req, res, next ) => {
         const memory = process.memoryUsage()
 
-        message.info( "---- Memory usage ----" )
-        message.info( "RSS:        " + numeral( memory.rss ).format( 'bytes' ) )
-        message.info( "Heap total: " + numeral( memory.heapTotal ).format( 'bytes' ) )
-        message.info( "Heap used:  " + numeral( memory.heapUsed ).format( 'bytes' ) )
-        message.info( "----------------------" )
+        cli.info( "---- Memory usage ----" )
+        cli.info( "RSS:        " + numeral( memory.rss ).format( 'bytes' ) )
+        cli.info( "Heap total: " + numeral( memory.heapTotal ).format( 'bytes' ) )
+        cli.info( "Heap used:  " + numeral( memory.heapUsed ).format( 'bytes' ) )
+        cli.info( "----------------------" )
 
         next()
     })

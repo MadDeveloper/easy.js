@@ -1,29 +1,25 @@
 import jwt          from 'jsonwebtoken'
 import config       from './../config'
 import authorized   from './authorized'
+import Controller   from './../../vendor/easy/core/Controller'
 
-export default function authentication( bundleManager ) {
+export default function authentication( container, bundleManager, router ) {
     /*
-     * retrieve Router
+     * Special case, use easy Controller to use specifics methods
      */
-    const router = bundleManager.router
+    const controller = new Controller( container )
 
     /*
      * Provide Http helpers
      */
-    const request   = bundleManager.container.getComponent( 'Request' )
-    const response  = bundleManager.container.getComponent( 'Response' )
+    const request   = container.getComponent( 'Request' )
+    const response  = container.getComponent( 'Response' )
 
     /*
      * User classes
      */
     const userFactory     = bundleManager.getFactory( 'user' )
     const userRepository  = userFactory.getRepository()
-
-    /*
-     * Vendor dependencies
-     */
-    const controller = bundleManager.container.getComponent( 'Controller' )
 
     /*
      * Defining routes with authorization required
@@ -67,5 +63,5 @@ export default function authentication( bundleManager ) {
     /*
      * Check token validity
      */
-    authorized( response, request, jwt, config.jwt.secret, router )
+    authorized( response, request, config.jwt.secret, router )
 }
