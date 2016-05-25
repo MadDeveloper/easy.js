@@ -10,7 +10,6 @@ let argv = minimist( process.argv.slice( 2 ) )
 const container         = bundleManager.container
 const message           = container.getComponent( 'Message' )
 const bundlesDirectory  = kernel.path.bundles
-
 /*
  * Instantiate a Mocha instance
  */
@@ -24,33 +23,36 @@ global.container = container
 /*
  * Add each .js file to the mocha instance
  */
-fs.readdirSync( bundlesDirectory )
-    .forEach( bundle => {
-        const testsDir = bundlesDirectory + '/' + bundle + '/tests'
+fs.readdir( bundlesDirectory, ( err, files ) => {
+    if ( !err && files.length > 0 ) {
+        files.forEach( bundle => {
+            const testsDir = bundlesDirectory + '/' + bundle + '/tests'
 
-        try {
-            if ( fs.lstatSync( testsDir ).isDirectory() ) {
-                const specFiles = fs.readdirSync( testsDir )
+            try {
+                if ( fs.lstatSync( testsDir ).isDirectory() ) {
+                    const specFiles = fs.readdirSync( testsDir )
 
-                if ( specFiles && specFiles.length > 0 ) {
-                    specFiles.forEach( specFile => {
-                        mocha.addFile(
-                            path.join( testsDir, specFile )
-                        )
-                    })
+                    if ( specFiles && specFiles.length > 0 ) {
+                        specFiles.forEach( specFile => {
+                            mocha.addFile(
+                                path.join( testsDir, specFile )
+                            )
+                        })
+                    }
                 }
+            } catch( e ) {
+                message.warn( 'No unit tests found for ' + bundle + ' bundle.' )
             }
-        } catch( e ) {
-            message.warn( 'No unit tests found for ' + bundle + ' bundle.' )
-        }
-    })
+        })
 
-/*
- * Run the tests
- */
-mocha.run( failures => {
-    if ( failures ) {
-        message.warn( failures  + ' failures occurs during tests.' )
+        /*
+         * Run the tests
+         */
+        mocha.run( failures => {
+            if ( failures ) {
+                message.warn( failures  + ' failures occurs during tests.' )
+            }
+            process.exit()
+        })
     }
-    process.exit()
 })

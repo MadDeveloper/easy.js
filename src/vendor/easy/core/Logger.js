@@ -13,12 +13,14 @@
  * See https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md
  * for the full specification.
  */
-import fs from 'fs'
+import fs   from 'fs'
+import path from 'path'
 
 export default class Logger {
     constructor( container ) {
-        this._message   = container.getComponent( 'Message' )
-        this._string    = container.getLibrary( 'String' )
+        this._message           = container.getComponent( 'Message' )
+        this._string            = container.getLibrary( 'String' )
+        this._logDirectoryPath  = __dirname + '/../../../../logs'
     }
 
     /**
@@ -43,18 +45,16 @@ export default class Logger {
      * @return null
      */
     alert( message, context ) {
-        fs.open( __dirname + '/../../../../logs/serverErrors.log', 'a+', ( error, fd ) => {
-            if ( !error ) {
-
-                fs.write( fd, this.string.strtr( message, context ), null, 'utf8' )
-
-            } else {
-                this.message.error({
-                    title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
-                    message: "",
-                    type: 'error'
-                })
-            }
+        this.openLogFile( 'serverErrors' )
+        .then( fd => {
+            fs.write( fd, this.string.strtr( message, context ), null, 'utf8' )
+        })
+        .catch( error => {
+            this.message.error({
+                title: `Impossible to open/create serverErrors.log at: ${this.logDirectoryPath}/serverErrors.log`,
+                message: "",
+                type: 'error'
+            })
         })
     }
 
@@ -68,19 +68,7 @@ export default class Logger {
      * @return null
      */
     critical( message, context ) {
-        fs.open( __dirname + '/../../../../logs/serverErrors.log', 'a+', ( error, fd )  => {
-            if ( !error ) {
-
-                fs.write( fd, this.string.strtr( message, context ), null, 'utf8' )
-
-            } else {
-                this.message.error({
-                    title: "serverErrors.log file not found at: ~/logs/serverErrors.log",
-                    message: "",
-                    type: 'error'
-                })
-            }
-        })
+        this.alert( message, context )
     }
 
     /**
@@ -156,6 +144,19 @@ export default class Logger {
 
     }
 
+    /**
+     * Open log file
+     *
+     * @param string name
+     */
+    openLogFile( name ) {
+        return new Promise( ( resolve, reject ) => {
+            fs.open( `${this.logDirectoryPath}/${name}.log`, 'a+', ( error, fd ) => {
+                ( error ) ? reject( error ) : resolve( fd )
+            })
+        })
+    }
+
     /*
      * Getters and setters
      */
@@ -165,5 +166,9 @@ export default class Logger {
 
     get string() {
         return this._string
+    }
+
+    get logDirectoryPath() {
+        return this._logDirectoryPath
     }
 }

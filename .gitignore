@@ -1,6 +1,19 @@
+# installed with npm install
 node_modules/
+
 npm-debug.log
+
+# JetBrains IDE directory
 .idea/
+
+# git directory
 .git/
+
+# mac user
 .DS_Store
+
+# built with npm command
 build/
+
+# log files
+*.log

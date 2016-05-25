@@ -8,13 +8,13 @@
     "build": "npm run build-bin && node_modules/.bin/babel -w src/ -d build/",
     "build-bin": "npm run make-build && node_modules/.bin/babel src/bin/bundles/new -o build/bin/bundles/new && node_modules/.bin/babel src/bin/bundles/tests -o build/bin/bundles/tests && node_modules/.bin/babel src/bin/database/import -o build/bin/database/import && node_modules/.bin/babel src/bin/database/migrate -o build/bin/database/migrate && node_modules/.bin/babel src/bin/database/startup -o build/bin/database/startup && node_modules/.bin/babel src/bin/lib/tests -o build/bin/lib/tests && node_modules/.bin/babel src/bin/services/tests -o build/bin/services/tests",
     "build-maps": "node_modules/.bin/babel -w src/ -d build/ -s",
-    "clean-build": "rm -rf build/*",
+    "clean-build": "rm -rf build/* && npm run make-build",
     "db-migrate": "node build/bin/database/migrate",
     "db-import": "node build/bin/database/import",
     "db-startup": "node build/bin/database/startup",
     "db-startup-lite": "node build/bin/database/startup --lite",
     "debug": "node --expose-gc debug build/app.js",
-    "make-build": "mkdir -p build/bin/database && mkdir -p build/bin/bundles && mkdir -p build/bin/lib && mkdir -p build/bin/services",
+    "make-build": "mkdir -p build/bin/database && mkdir -p build/bin/bundles && mkdir -p build/bin/lib && mkdir -p build/bin/services && chmod -R 755 build",
     "new-bundle": "node build/bin/bundles/new",
     "start": "node --expose-gc build/app.js",
     "start-demon": "nodemon --expose-gc build/app.js",
@@ -24,7 +24,9 @@
     "test": "npm run test-bundles && npm run test-lib && npm run test-services",
     "test-bundles": "node build/bin/bundles/tests",
     "test-lib": "node build/bin/lib/tests",
-    "test-services": "node build/bin/services/tests"
+    "test-services": "node build/bin/services/tests",
+
+    "push": "git add --all && git commit -m \"Refactoring\" && git push"
   },
   "keywords": [
     "node",

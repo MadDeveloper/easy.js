@@ -1,10 +1,12 @@
-- fixer les droits pour le dossier build, et le projet de manière générale
-
-- changer readdirSync en readdir, sinon s'il n'y a pas de test le binaire crash
-
 - migrer test bundles dans ~/test/bundles
 
-- fournir des commandes pour jscs ou eslint
+- fournir des commandes pour eslint
 
 - faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
 - faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
+
+- créer une classe pour gérer le fs (créer/supprimer les fichiers logs, etc.)
+
+- transformer Message en Console
+
+- finir la classe Logger
