@@ -1,4 +1,6 @@
-- migrer test bundles dans ~/test/bundles
+- change all concatenations into string templates
+
+- appliquer le logger aux endroits utiles
 
 --- LATER ---
 

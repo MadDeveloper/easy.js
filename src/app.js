@@ -11,7 +11,7 @@ import net              from 'net'
 import minimist         from 'minimist'
 import { app, config }  from './bootstrap'
 
-const argv      = minimist( process.argv.slice( 2 ) )
+const argv = minimist( process.argv.slice( 2 ) )
 
 let server      = null
 let port        = 0
@@ -63,9 +63,9 @@ portInUse( port )
         console.log( "-----------------------------" )
         console.log( "    Server listening..." )
         console.log( "-----------------------------" )
-        console.log( "    " + protocol + '://' + config.server.domain + ':' + port )
+        console.log( `    ${protocol}://${config.server.domain}:${port}` )
         console.log( "-----------------------------" )
-        console.log( "    Mode:   " + app.get( 'env' ) )
+        console.log( `    Mode:   ${app.get( 'env' )}` )
         console.log( "-----------------------------" )
     })
 })
@@ -73,6 +73,6 @@ portInUse( port )
     /*
      * Port ${port} is used
      */
-    console.log( "\nPort " + port + " is already used or you have no rights to launch server (try as root), impossible to start server." )
+    console.log( `\nPort ${port} is already used or you have no rights to launch server (try as root), impossible to start server.` )
     process.exit()
 })

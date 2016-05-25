@@ -9,7 +9,7 @@ import { kernel, bundleManager }    from './../../bootstrap.js'
 let argv = minimist( process.argv.slice( 2 ) )
 
 const container                 = bundleManager.container
-const cli                   = container.getComponent( 'Console' )
+const cli                       = container.getComponent( 'Console' )
 const servicesTestsDirectory    = kernel.path.test.services
 
 /*

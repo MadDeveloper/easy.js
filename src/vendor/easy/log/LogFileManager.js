@@ -19,6 +19,15 @@ export default class LogFileManager {
         })
     }
 
+    /**
+     * Synchronous version of openLogFile
+     *
+     * @param name
+     */
+    openLogFileSync( name ) {
+        return fs.openSync( path.resolve( `${this.logDirectoryPath}/${name}.log` ), 'a+' )
+    }
+
     /*
      * Getters and setters
      */

@@ -39,12 +39,13 @@ const app = express()
 /*
  * Easy.js dependencies
  */
-const kernel        = new Kernel().init( __dirname, config )
-const container     = kernel.container
-const cli       = container.getComponent( 'Console' )
-const database      = container.getComponent( 'Database' )
-const router        = container.getComponent( 'Router' )
-const bundleManager = container.getComponent( 'BundleManager' )
+const kernel            = new Kernel().init( __dirname, config )
+const container         = kernel.container
+const cli               = container.getComponent( 'Console' )
+const database          = container.getComponent( 'Database' )
+const router            = container.getComponent( 'Router' )
+const bundleManager     = container.getComponent( 'BundleManager' )
+const logFileManager    = container.getComponent( 'LogFileManager' )
 
 /*
  * Define database connector (default: ~/config/database/connector/bookshelf)
@@ -86,9 +87,10 @@ app.use( bodyParser.urlencoded({ extended: true }) ) // support encoded bodies
  * Permit to retrieve rawBody into PATCH method
  */
 app.use( ( req, res, next ) => {
-    const method  = req.method.toLowerCase()
+    const method        = req.method.toLowerCase()
     const enableMethods = [ 'patch' ]
-    let data    = ''
+
+    let data = ''
 
     if ( indexOf( enableMethods, method ) < 0 ) {
         return next()
@@ -108,11 +110,9 @@ app.use( ( req, res, next ) => {
 
 /*
  * Displays everything that happens on the server
- * when dev mode is used
  */
-//if ( process.env.NODE_ENV === 'development' ) {
-    app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( __dirname + '/../logs/std.log', { flags: 'a' } ) } ) )
-//}
+logFileManager.openLogFileSync( 'traffic' )
+app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${__dirname}/../logs/traffic.log`, { flags: 'a' } ) } ) )
 
 /*
  * Register bundles for routing
@@ -129,12 +129,11 @@ routing( container, bundleManager, router.scope )
  */
 let warnDisplayed = false
 
-app.use(( req, res, next ) => {
+app.use( ( req, res, next ) => {
     if ( global.gc ) {
         global.gc()
     } else if ( false === warnDisplayed ) {
-        cli.warn( "You should launch node server with npm start command in order to enable gc." )
-        console.log( '\n' )
+        cli.warn( "You should launch node server with npm start command in order to enable gc.\n" )
         warnDisplayed = true
     }
 
@@ -145,7 +144,7 @@ app.use(( req, res, next ) => {
  * See memory usage if specified
  */
 if ( argv.memory ) {
-    app.use(( req, res, next ) => {
+    app.use( ( req, res, next ) => {
         const memory = process.memoryUsage()
 
         cli.info( "---- Memory usage ----" )

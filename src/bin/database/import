@@ -10,7 +10,7 @@ const dbConfig = {
 	password: config.database.connection.password
 }
 
-const container     = bundleManager.container
+const container	= bundleManager.container
 const cli       = container.getComponent( 'Console' )
 
 const titleError		= "Error when importing database"

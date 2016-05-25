@@ -7,9 +7,9 @@ import { kernel, bundleManager }    from './../../bootstrap.js'
 
 let argv = minimist( process.argv.slice( 2 ) )
 
-const container         = bundleManager.container
-const cli           = container.getComponent( 'Console' )
-const bundlesDirectory  = kernel.path.bundles
+const container             = bundleManager.container
+const cli                   = container.getComponent( 'Console' )
+const bundlesTestsDirectory = kernel.path.test.bundles
 /*
  * Instantiate a Mocha instance
  */
@@ -23,10 +23,10 @@ global.container = container
 /*
  * Add each .js file to the mocha instance
  */
-fs.readdir( bundlesDirectory, ( err, files ) => {
+fs.readdir( bundlesTestsDirectory, ( err, files ) => {
     if ( !err && files.length > 0 ) {
         files.forEach( bundle => {
-            const testsDir = bundlesDirectory + '/' + bundle + '/tests'
+            const testsDir = `${bundlesTestsDirectory}/${bundle}`
 
             try {
                 if ( fs.lstatSync( testsDir ).isDirectory() ) {
@@ -41,7 +41,7 @@ fs.readdir( bundlesDirectory, ( err, files ) => {
                     }
                 }
             } catch( e ) {
-                cli.warn( 'No unit tests found for ' + bundle + ' bundle.' )
+                cli.warn( `No unit tests found for ${bundle} bundle.` )
             }
         })
 
@@ -50,7 +50,7 @@ fs.readdir( bundlesDirectory, ( err, files ) => {
          */
         mocha.run( failures => {
             if ( failures ) {
-                cli.warn( failures  + ' failures occurs during tests.' )
+                cli.warn( `${failures} failures occurs during tests.` )
             }
             process.exit()
         })
