@@ -2,7 +2,7 @@ import colors from 'colors'
 
 export default class Console {
     constructor() {
-        this._leftSpaces    = '  '
+        this._leftSpaces = '  '
     }
 
     error( params ) {

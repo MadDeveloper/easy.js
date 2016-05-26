@@ -13,18 +13,26 @@ const cli                   = container.getComponent( 'Console' )
 const schemaDatabaseService = container.getService( 'database.schema' )
 const stringLibrary         = container.getLibrary( 'string' )
 
+cli.error({
+    title: "Test",
+    message: "Test",
+    exit: 0
+})
+
 const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {
+    const bundlesTestPath = `${__dirname}/../../../src/test/bundles`
 
     const positiveAnswers       = [ 'y', 'ye', 'yes' ]
     const negativeAnswers       = [ 'n', 'no' ]
     const bundlesPath           = `${__dirname}/../../../src/bundles`
     const skeletonBundlePath    = `${bundlesPath}/skeleton`
 
-    let nameBundle          = nameBundleFromArgv.trim()
-    let nameBundleLowerCase = nameBundle.toLowerCase()
-    let bundleCreatingPath  = `${bundlesPath}/${nameBundle.toLowerCase()}`
+    let nameBundle              = stringLibrary.cleanSpaces( nameBundleFromArgv )
+    let nameBundleCapitalized   = nameBundle.capitalizeFirstLetter()
+    let nameBundleDecapitalized = nameBundle.decapitalizeFirstLetter()
+    let bundleCreatingPath      = `${bundlesPath}/${nameBundleDecapitalized}`
 
     let tableName   = ''
     let properties  = {}
@@ -36,11 +44,11 @@ if ( nameBundleFromArgv.length > 0 ) {
     /*
      * Check if bundle isn't defined yet
      */
-    fs.lstat( `${bundlesPath}/${nameBundle}`, ( err, stats ) => {
+    fs.lstat( `${bundlesPath}/${nameBundleDecapitalized}`, ( err, stats ) => {
         if ( !err && stats.isDirectory() ) {
             cli.error({
                 title: "Impossible to create bundle",
-                message: `${nameBundle} bundle already exists.`,
+                message: `${nameBundleCapitalized} bundle already exists.`,
                 consequence: "Creation aborted.",
                 exit: 0
             })
@@ -91,7 +99,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     function askForTableName() {
         cli.line()
 
-        const defaultTableName  = `${stringLibrary.asSnakeCase( nameBundleLowerCase )}s`
+        const defaultTableName  = `${stringLibrary.asSnakeCase( nameBundleDecapitalized )}s`
         const answerTableName   = stringLibrary.asSnakeCase( question( `Table name (default: ${defaultTableName}): ` ) )
 
         tableName = ( answerTableName.length > 0 ) ? answerTableName : defaultTableName
@@ -291,6 +299,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
     function askForNullableColumn( columnName ) {
         const answerNullable = question( 'Define as nullable? (y/n) ' ).trim().toLowerCase()
+
         if ( indexOf( positiveAnswers, answerNullable ) !== -1 ) {
             /*
              * Define as nullable
@@ -356,7 +365,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                     const stringToWrite = `export default {\n\t${tableName}: ${JSON.stringify( properties )},\n\n`
                     const dataUpdated = data.replace( /export(\s*)default(\s)\{/i, stringToWrite )
 
-                    fs.writeFile( pathDatabaseSchema, dataUpdated, 'utf8', error => {
+                    fs.writeFile( pathDatabaseSchema, dataUpdated, { encoding: 'utf8' }, error => {
                         if ( !error ) {
                             createBundleDirectory()
                         } else {
@@ -409,10 +418,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                     exit: 0
                 })
             } else {
-                if ( process.geteuid && process.getgid ) { /* doesn't work on Windows, Android (only unix systems) */
-                    fs.chownSync( bundleCreatingPath, process.geteuid(), process.getgid() )
-                }
-
+                fs.chmodSync( bundleCreatingPath, parseInt( 777, 8 ) )
                 launchWalker()
             }
         })
@@ -437,7 +443,7 @@ if ( nameBundleFromArgv.length > 0 ) {
             let newDirName = ''
 
             for ( let i in dirStatsArray ) {
-                newDirName = dirStatsArray[ i ].name.replace( /Skeleton/gi, nameBundle )
+                newDirName = dirStatsArray[ i ].name.replace( /Skeleton/gi, nameBundleCapitalized )
 
                 fs.mkdir( `${bundleCreatingPath}/${newDirName}`, err => {
                     if ( err ) {
@@ -448,9 +454,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                             exit: 0
                         })
                     } else {
-                        if ( process.geteuid && process.getgid ) { /* doesn't work on Windows, Android (only unix systems) */
-                            fs.chownSync( `${bundleCreatingPath}/${newDirName}`, process.geteuid(), process.getgid() )
-                        }
+                        fs.chmodSync( `${bundleCreatingPath}/${newDirName}`, parseInt( 777, 8 ) )
                     }
                 })
             }
@@ -460,7 +464,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
         walker.on( "file", ( root, fileStats, next ) => {
             const skeletonFilePath = path.join( root, fileStats.name )
-            const newBundleFilePath = skeletonFilePath.replace( /Skeleton/g, nameBundle ).replace( /skeleton/g, nameBundleLowerCase )
+            const newBundleFilePath = skeletonFilePath.replace( /Skeleton/g, nameBundleCapitalized ).replace( /skeleton/g, nameBundleDecapitalized )
 
             try {
                 let data = fs.readFileSync( skeletonFilePath, 'utf8' )
@@ -472,11 +476,8 @@ if ( nameBundleFromArgv.length > 0 ) {
                     data = data.replace( /tableName(\s*):(\s*)('|")\w*('|")/i, `tableName$1:$2$3${tableName}$4` )
                 }
 
-                fs.writeFileSync( newBundleFilePath, data.replace( /Skeleton/g, nameBundle ).replace( /skeleton/g, nameBundleLowerCase ), { encoding: 'utf8' } )
-
-                if ( process.geteuid && process.getgid ) { /* doesn't work on Windows, Android (only unix systems) */
-                    fs.chownSync( newBundleFilePath, process.geteuid(), process.getgid() )
-                }
+                fs.writeFileSync( newBundleFilePath, data.replace( /Skeleton/g, nameBundleCapitalized ).replace( /skeleton/g, nameBundleDecapitalized ), { encoding: 'utf8' } )
+                fs.chmodSync( newBundleFilePath, parseInt( 777, 8 ) )
 
                 next()
             } catch( error ) {
@@ -494,9 +495,78 @@ if ( nameBundleFromArgv.length > 0 ) {
         })
 
         walker.on( "end", () => {
-            cli.success( `\nBundle ${nameBundle} created.`, true )
+            const answerCreateBundleTests = question( 'Do you want to create tests file? (y/n) ' ).trim().toLowerCase()
+
+            if ( indexOf( positiveAnswers, answerCreateBundleTests ) !== -1 ) {
+                /*
+                 * Create bundle tests path and file
+                 */
+                createBundleTestPath()
+                .then( () => {
+                    exitProgram()
+                })
+                .catch( error => {
+                    cli.error({
+                        title: "Error when creating bundle tests file",
+                        message: error,
+                        consequence: "Bundle tests file creation aborted, however previous operations are completed.",
+                        exit: 0
+                    })
+                })
+            } else {
+                exitProgram()
+            }
+
         })
 
+    }
+
+    function createBundleTestPath() {
+        const newBundleTestsPath = `${bundlesTestPath}/${nameBundleDecapitalized}`
+
+        return new Promise( ( resolve, reject ) => {
+            fs.mkdir( newBundleTestsPath, error => {
+                if ( error ) {
+                    reject( error )
+                } else {
+                    fs.chmodSync( newBundleTestsPath, parseInt( 777, 8 ) )
+
+                    /*
+                     * Now we create test file modeled on that of skeleton
+                     */
+                    const skeletonBundleTestsFile = `${bundlesTestPath}/skeleton/SkeletonTests.js`
+
+                    fs.readFile( skeletonBundleTestsFile, { encoding: 'utf8' }, ( error, data ) => {
+                        if ( error ) {
+                            reject( error )
+                        } else {
+                            /*
+                             * Finally we create the file
+                             */
+                            const newBundleTestsFile = `${newBundleTestsPath}/${nameBundleCapitalized}Tests.js`
+
+                            fs.writeFile( newBundleTestsFile, data.replace( /Skeleton/g, nameBundleCapitalized ).replace( /skeleton/g, nameBundleDecapitalized ), { encoding: 'utf8' }, error => {
+                                if ( error ) {
+                                    reject( error )
+                                } else {
+                                    /*
+                                     * All is ok!
+                                     */
+                                    fs.chmodSync( newBundleTestsFile, parseInt( 777, 8 ) )
+
+                                    resolve()
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        })
+    }
+
+    function exitProgram() {
+        cli.success( `\nBundle ${nameBundleCapitalized} created.\nYou should (re)start build command with "npm run build".\n`, true )
+        cli.line()
     }
 
 } else {

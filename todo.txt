@@ -1,4 +1,3 @@
-- appliquer le logger aux endroits utiles
 - propose de créer le dossier test du nouveau bundle
 
 - finir les tests pour user / role / skeleton
@@ -12,6 +11,8 @@
 REDIGER LA DOC
 
 --- LATER ---
+
+- appliquer le logger aux endroits utiles
 
 - faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
 - faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)

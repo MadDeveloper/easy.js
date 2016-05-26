@@ -1,5 +1,5 @@
-import { indexOf }        from 'lodash'
-import Service  from './../../vendor/easy/core/Service'
+import { indexOf }  from 'lodash'
+import Service      from './../../vendor/easy/core/Service'
 
 /*
  * You can edit as you want following roles.

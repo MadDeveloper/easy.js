@@ -10,8 +10,12 @@ export function asSnakeCase( originalName ) {
     return formatedName
 }
 
-export function cleanAccents( string ) {
-    return string.replace( /[^\w ]/gi, '' )
+export function cleanAccents( str ) {
+    return str.replace( /[^\w ]/gi, '' )
+}
+
+export function cleanSpaces( str ) {
+    return str.replace( /\s/i, '' )
 }
 
 export function strtr( str, fromObj, to ) {
