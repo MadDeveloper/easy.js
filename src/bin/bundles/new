@@ -7,7 +7,7 @@ import { question }                 from 'readline-sync'
 import { indexOf }                  from 'lodash'
 import { kernel, bundleManager }    from './../../bootstrap.js'
 
-let argv    = minimist( process.argv.slice( 2 ) )
+let argv = minimist( process.argv.slice( 2 ) )
 
 const container             = bundleManager.container
 const cli                   = container.getComponent( 'Console' )
@@ -20,28 +20,28 @@ if ( nameBundleFromArgv.length > 0 ) {
 
     const positiveAnswers       = [ 'y', 'ye', 'yes' ]
     const negativeAnswers       = [ 'n', 'no' ]
-    const bundlesPath           = __dirname + '/../../../src/bundles'
-    const skeletonBundlePath    = bundlesPath + "/skeleton"
+    const bundlesPath           = `${__dirname}/../../../src/bundles`
+    const skeletonBundlePath    = `${bundlesPath}/skeleton`
 
     let nameBundle          = nameBundleFromArgv.trim()
     let nameBundleLowerCase = nameBundle.toLowerCase()
-    let bundleCreatingPath  = bundlesPath + "/" + nameBundle.toLowerCase()
+    let bundleCreatingPath  = `${bundlesPath}/${nameBundle.toLowerCase()}`
 
     let tableName   = ''
     let properties  = {}
 
     const availablesColumnType  = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal', 'boolean', 'date', 'datetime', 'time', 'timestamp' ]
     const specialColumnType     = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal' ]
-    const pathDatabaseSchema    = kernel.path.config + '/database/schema.js'
+    const pathDatabaseSchema    = `${kernel.path.config}/database/schema.js`
 
     /*
      * Check if bundle isn't defined yet
      */
-    fs.lstat( bundlesPath + "/" + nameBundle, ( err, stats ) => {
+    fs.lstat( `${bundlesPath}/${nameBundle}`, ( err, stats ) => {
         if ( !err && stats.isDirectory() ) {
             cli.error({
                 title: "Impossible to create bundle",
-                message: nameBundle + " bundle already exists.",
+                message: `${nameBundle} bundle already exists.`,
                 consequence: "Creation aborted.",
                 exit: 0
             })
@@ -90,10 +90,10 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForTableName() {
-        console.log( '\n' )
+        cli.line()
 
-        const defaultTableName  = stringLibrary.asSnakeCase( nameBundleLowerCase ) + 's'
-        const answerTableName   = stringLibrary.asSnakeCase( question( 'Table name (default: ' + defaultTableName + '): ' ) )
+        const defaultTableName  = `${stringLibrary.asSnakeCase( nameBundleLowerCase )}s`
+        const answerTableName   = stringLibrary.asSnakeCase( question( `Table name (default: ${defaultTableName}): ` ) )
 
         tableName = ( answerTableName.length > 0 ) ? answerTableName : defaultTableName
 
@@ -101,7 +101,8 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForProperties() {
-        console.log( '\n' )
+        cli.line()
+        
         /*
          * We ask for properties
          */
@@ -113,7 +114,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         } else if ( columnName.length === 0 && propertiesLength > 0 ) {
             createTable()
         } else {
-            const columnType = stringLibrary.cleanAccents( question( 'Column type: (availables: ' + availablesColumnType.join( ', ' ) + '): ' ).toLowerCase().trim() )
+            const columnType = stringLibrary.cleanAccents( question( `Column type: (availables: ${availablesColumnType.join( ', ' )}): ` ).toLowerCase().trim() )
 
             if ( indexOf( availablesColumnType, columnType ) !== -1 ) {
                 /*
@@ -133,7 +134,7 @@ if ( nameBundleFromArgv.length > 0 ) {
             } else {
                 cli.error({
                     title: "Column type not valid",
-                    message: "Column type can be: " + availablesColumnType.join( ', ' )
+                    message: `Column type can be: ${availablesColumnType.join( ', ' )}`
                 })
                 askForProperties()
             }
@@ -185,7 +186,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                         /*
                          * OnDelete
                          */
-                        const answerOnDelete = question( 'On delete action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase()
+                        const answerOnDelete = question( `On delete action: (${validsOnEventAction.join( ', ' )}, default: ${defaultOnEventAction}) `).trim().toLowerCase()
 
                         if ( indexOf( validsOnEventAction, answerOnDelete ) !== -1 ) {
                             property.onDelete = answerOnDelete
@@ -196,7 +197,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                         /*
                          * OnUpdate
                          */
-                        const answerOnUpdate = question( 'On update action: (' + validsOnEventAction.join( ', ' ) + ', default: ' + defaultOnEventAction + ') ').trim().toLowerCase()
+                        const answerOnUpdate = question( `On update action: (${validsOnEventAction.join( ', ' )}, default: ${defaultOnEventAction}) `).trim().toLowerCase()
 
                         if ( indexOf( validsOnEventAction, answerOnUpdate ) !== -1 ) {
                             property.onUpdate = answerOnUpdate
@@ -210,7 +211,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                         delete property.unsigned
                         cli.error({
                             title: "Wrong reference",
-                            message: "Reference -> " + answerReference + " is not a valid reference."
+                            message: `Reference -> ${answerReference} is not a valid reference.`
                         })
                         askDetailsForSpecialColumnType( type, columnName )
                     }
@@ -223,7 +224,7 @@ if ( nameBundleFromArgv.length > 0 ) {
             case 'text':
                 const validsTextType  = [ 'text', 'mediumtext', 'longtext' ]
                 const defaultTextType = 'text'
-                const anwserTypeOfText = question( 'Which kind of text? ( ' + validsTextType.join( ', ' ) + ', default: ' + defaultTextType + ') ' ).trim().toLowerCase()
+                const anwserTypeOfText = question( `Which kind of text? ( ${validsTextType.join( ', ' )}, default: ${defaultTextType}) ` ).trim().toLowerCase()
 
                 if ( indexOf( validsTextType, anwserTypeOfText ) !== -1 ) {
                     property.fieldtype = anwserTypeOfText
@@ -236,7 +237,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
             case 'string':
                 const minLength = 1, maxLength = 255
-                const answerMaxLength = question( 'Max length (' + minLength + '-' + maxLength + ', default: ' + maxLength + '): ' ).trim()
+                const answerMaxLength = question( `Max length (${minLength}-${maxLength}, default: ${maxLength}): ` ).trim()
 
                 if ( !isNaN( answerMaxLength ) && answerMaxLength >= minLength && answerMaxLength <= maxLength ) {
                     /*
@@ -262,7 +263,7 @@ if ( nameBundleFromArgv.length > 0 ) {
             case 'float':
             case 'decimal':
                 const defaultPrecision = 8
-                const answerPrecision = question( 'Precision (integer, default: ' + defaultPrecision + '): ' ).trim()
+                const answerPrecision = question( `Precision (integer, default: ${defaultPrecision}): ` ).trim()
 
                 if ( answerPrecision.length === 0 || isNaN( answerPrecision ) || !isFinite( answerPrecision ) ) {
                     property.precision = defaultPrecision
@@ -275,7 +276,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                      * Ask for scale
                      */
                     const defaultScale = 2
-                    const answerScale = question( 'Scale (integer, default: ' + defaultScale + ')' ).trim()
+                    const answerScale = question( `Scale (integer, default: ${defaultScale}): ` ).trim()
 
                     if ( answerScale.length === 0 || isNaN( answerScale ) || !isFinite( answerScale ) ) {
                         property.scale = defaultScale
@@ -353,7 +354,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         .then( () => {
             fs.readFile( pathDatabaseSchema, { encoding: 'utf8' }, ( error, data ) => {
                 if ( !error ) {
-                    const stringToWrite = 'export default {\n\t' + tableName + ': ' + JSON.stringify( properties ) + ',\n\n'
+                    const stringToWrite = `export default {\n\t${tableName}: ${JSON.stringify( properties )},\n\n`
                     const dataUpdated = data.replace( /export(\s*)default(\s)\{/i, stringToWrite )
 
                     fs.writeFile( pathDatabaseSchema, dataUpdated, 'utf8', error => {
@@ -372,7 +373,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         function errorEditingSchema( error ) {
             cli.error({
                 title: "Impossible to update schema",
-                message: "Error when editing schema.js file: " + error,
+                message: `Error when editing schema.js file: ${error}`,
                 consequence: "Bundle creation aborted.",
                 exit: 0
             })
@@ -387,7 +388,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                 } else {
                     cli.error({
                         title: "Impossible to update schema",
-                        message: "schema.js not found at: " + pathDatabaseSchema,
+                        message: `schema.js not found at: ${pathDatabaseSchema}`,
                         consequence: "Bundle creation aborted.",
                         exit: 0
                     })
@@ -439,17 +440,17 @@ if ( nameBundleFromArgv.length > 0 ) {
             for ( let i in dirStatsArray ) {
                 newDirName = dirStatsArray[ i ].name.replace( /Skeleton/gi, nameBundle )
 
-                fs.mkdir( bundleCreatingPath + '/' + newDirName, err => {
+                fs.mkdir( `${bundleCreatingPath}/${newDirName}`, err => {
                     if ( err ) {
                         cli.error({
                             title: "Impossible to create bundle",
-                            message: "Error when trying create bundle sub-directory <" + newDirName + ">.",
+                            message: `Error when trying create bundle sub-directory <${newDirName}>.`,
                             consequence: "Creation aborted.",
                             exit: 0
                         })
                     } else {
                         if ( process.geteuid && process.getgid ) { /* doesn't work on Windows, Android (only unix systems) */
-                            fs.chownSync( bundleCreatingPath + '/' + newDirName, process.geteuid(), process.getgid() )
+                            fs.chownSync( `${bundleCreatingPath}/${newDirName}`, process.geteuid(), process.getgid() )
                         }
                     }
                 })
@@ -469,7 +470,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                  * We write tableName specified above
                  */
                 if ( fileStats.name.toLowerCase().indexOf( 'skeleton.js' ) !== -1 ) {
-                    data = data.replace( /tableName(\s*):(\s*)('|")\w*('|")/i, 'tableName$1:$2$3' + tableName + '$4' )
+                    data = data.replace( /tableName(\s*):(\s*)('|")\w*('|")/i, `tableName$1:$2$3${tableName}$4` )
                 }
 
                 fs.writeFileSync( newBundleFilePath, data.replace( /Skeleton/g, nameBundle ).replace( /skeleton/g, nameBundleLowerCase ), { encoding: 'utf8' } )
@@ -482,7 +483,7 @@ if ( nameBundleFromArgv.length > 0 ) {
             } catch( error ) {
                 cli.error({
                     title: "Impossible to create bundle",
-                    message: "Error: " + JSON.stringify( error ),
+                    message: `Error: ${JSON.stringify( error )}`,
                     consequence: "Creation aborted.",
                     exit: 0
                 })
@@ -494,7 +495,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         })
 
         walker.on( "end", () => {
-            cli.success( "\nBundle " + nameBundle + " created.", true )
+            cli.success( `\nBundle ${nameBundle} created.`, true )
         })
 
     }

@@ -10,11 +10,11 @@ export default class Console {
 
             const consequence = ( params.consequence ) ? params.consequence : ""
 
-            console.log( '\n' )
+            this.line()
             console.log( this.leftSpaces + colors.bgRed( colors.white( `Error: ${params.title}` ) ) )
             console.log( this.leftSpaces + colors.bgRed( colors.white( `    ->  ${params.message}` ) ) )
             console.log( this.leftSpaces + colors.bgRed( colors.white( consequence ) ) )
-            console.log( '\n' )
+            this.line()
 
             if ( typeof params.exit !== "undefined" || !isNaN( params.exit ) ) {
                 process.exit( params.exit )
@@ -42,6 +42,10 @@ export default class Console {
         if ( exit ) {
             process.exit()
         }
+    }
+
+    line() {
+        console.log( '\n' )
     }
 
     /*

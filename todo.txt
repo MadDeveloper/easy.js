@@ -1,6 +1,15 @@
-- change all concatenations into string templates
-
 - appliquer le logger aux endroits utiles
+- propose de créer le dossier test du nouveau bundle
+
+- finir les tests pour user / role / skeleton
+- finir les tests pour les services
+
+- configurer les id des roles dans un fichier de conf pour les récupérer dans le service AccessSecurity
+
+- déplacer les classes dont peuvent étendre les classes bundles ou services ou test dans un dossier spécifique ?
+
+-- IMMINENT --
+REDIGER LA DOC
 
 --- LATER ---
 

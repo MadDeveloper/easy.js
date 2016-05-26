@@ -117,7 +117,7 @@ function startup() {
 		}
 	}
 
-	const sqlUse = 'use ' + config.database.connection.database + ';'
+	const sqlUse = `use ${config.database.connection.database};`
 
 	/*
 	 * Roles part
@@ -146,7 +146,7 @@ function startup() {
 
 		sqlRoles += '('
 		Object.keys( rolesToAppend[ role ] ).forEach( roleProperty => {
-			sqlRoles += ( typeof rolesToAppend[ role ][ roleProperty ] !== 'number' ) ? '"' + rolesToAppend[ role ][ roleProperty ] + '"' : rolesToAppend[ role ][ roleProperty ]
+			sqlRoles += ( typeof rolesToAppend[ role ][ roleProperty ] !== 'number' ) ? `"${rolesToAppend[ role ][ roleProperty ]}"` : rolesToAppend[ role ][ roleProperty ]
 
 			if ( currentRoleProperty++ < rolePropertiesLength ) {
 				sqlRoles += ', '
@@ -189,7 +189,7 @@ function startup() {
 
 		sqlUsers += '('
 		Object.keys( usersToAppend[ user ] ).forEach( userProperty => {
-			sqlUsers += ( typeof usersToAppend[ user ][ userProperty ] !== 'number' ) ? '"' + usersToAppend[ user ][ userProperty ] + '"' : usersToAppend[ user ][ userProperty ]
+			sqlUsers += ( typeof usersToAppend[ user ][ userProperty ] !== 'number' ) ? `"${usersToAppend[ user ][ userProperty ]}"` : usersToAppend[ user ][ userProperty ]
 
 			if ( currentUserProperty++ < userPropertiesLength ) {
 				sqlUsers += ', '

@@ -1,7 +1,7 @@
 {
-  "name": "Easy.js",
-  "version": "1.0.0",
-  "description": "Easy.js framework",
+  "name": "Easy",
+  "version": "0.1.0",
+  "description": "Easy.js Rest API framework",
   "main": "src/app.js",
   "repository": "https://jsergent-prepapp@bitbucket.org/prepapp/easy.js.git",
   "scripts": {
@@ -34,7 +34,11 @@
     "api",
     "rest",
     "restful",
-    "framework"
+    "framework",
+    "fullstack",
+    "javascript",
+    "easy",
+    "easyjs"
   ],
   "author": "Julien Sergent",
   "license": "MIT",

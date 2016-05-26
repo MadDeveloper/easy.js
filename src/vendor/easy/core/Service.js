@@ -4,7 +4,7 @@ export default class Service {
         this._response      = container.getComponent( 'Response' )
         this._bundleManager = container.getComponent( 'BundleManager' )
         this._database      = container.getComponent( 'Database' )
-        this._router        = this._bundleManager.router
+        this._router        = container.getComponent( 'Router' ).scope
 
         this.load()
     }
