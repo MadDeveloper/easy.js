@@ -33,7 +33,8 @@ export default class Container {
             'request': `${this._kernel.path.vendor.easy}/http/Request`,
             'response': `${this._kernel.path.vendor.easy}/http/Response`,
             'logger': `${this._kernel.path.vendor.easy}/log/Logger`,
-            'logfilemanager': `${this._kernel.path.vendor.easy}/log/LogFileManager`
+            'logfilemanager':   `${this._kernel.path.vendor.easy}/log/LogFileManager`,
+            'logwriter': `${this._kernel.path.vendor.easy}/log/LogWriter`
         }
 
         this._librariesMapping = {

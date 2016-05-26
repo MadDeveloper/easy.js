@@ -2,7 +2,7 @@ import colors from 'colors'
 
 export default class Console {
     constructor() {
-        this._leftSpaces = '  '
+        this._leftSpaces    = '  '
     }
 
     error( params ) {
@@ -12,8 +12,15 @@ export default class Console {
 
             this.line()
             console.log( this.leftSpaces + colors.bgRed( colors.white( `Error: ${params.title}` ) ) )
-            console.log( this.leftSpaces + colors.bgRed( colors.white( `    ->  ${params.message}` ) ) )
-            console.log( this.leftSpaces + colors.bgRed( colors.white( consequence ) ) )
+
+            if ( params.message.length > 0 ) {
+                console.log( this.leftSpaces + colors.bgRed( colors.white( `    ->  ${params.message}` ) ) )
+            }
+
+            if ( consequence.length > 0 ) {
+                console.log( this.leftSpaces + colors.bgRed( colors.white( consequence ) ) )
+            }
+
             this.line()
 
             if ( typeof params.exit !== "undefined" || !isNaN( params.exit ) ) {
@@ -42,6 +49,10 @@ export default class Console {
         if ( exit ) {
             process.exit()
         }
+    }
+
+    log( message = "" ) {
+        console.log( message )
     }
 
     line() {

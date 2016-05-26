@@ -15,9 +15,7 @@
  */
 export default class Logger {
     constructor( container ) {
-        this._logFileManager    = container.getComponent( 'LogFileManager' )
-        this._cli               = container.getComponent( 'Console' )
-        this._string            = container.getLibrary( 'String' )
+        this._logWriter = container.getComponent( 'LogWriter' )
     }
 
     /**
@@ -29,7 +27,7 @@ export default class Logger {
      * @return null
      */
     emergency( message, context ) {
-        this.write( 'fatals', message, context )
+        this.logWriter.write( 'fatals', message, context )
     }
 
     /**
@@ -44,7 +42,7 @@ export default class Logger {
      * @return null
      */
     alert( message, context ) {
-        this.write( 'fatals', message, context )
+        this.logWriter.write( 'fatals', message, context )
     }
 
     /**
@@ -58,7 +56,7 @@ export default class Logger {
      * @return null
      */
     critical( message, context ) {
-        this.write( 'errors', message, context )
+        this.logWriter.write( 'errors', message, context )
     }
 
     /**
@@ -71,7 +69,7 @@ export default class Logger {
      * @return null
      */
     error( message, context ) {
-        this.write( 'errors', message, context )
+        this.logWriter.write( 'errors', message, context )
     }
 
     /**
@@ -86,7 +84,7 @@ export default class Logger {
      * @return null
      */
     warning( message, context) {
-        this.write( 'warn', message, context )
+        this.logWriter.write( 'warn', message, context )
     }
 
     /**
@@ -112,7 +110,7 @@ export default class Logger {
      * @return null
      */
     info( message, context ) {
-        this.write( 'events', message, context )
+        this.logWriter.write( 'events', message, context )
     }
 
     /**
@@ -124,11 +122,11 @@ export default class Logger {
      * @return null
      */
     debug( message, context ) {
-        this.write( 'debugs', message, context )
+        this.logWriter.write( 'debugs', message, context )
     }
 
     /**
-     * Logs with an arbitrary level.
+     * Logs message
      * Use std.log
      *
      * @param message
@@ -136,44 +134,14 @@ export default class Logger {
      * @param level
      * @return null
      */
-    log( message, context, level = 0 ) {
-        this.write( 'std', message, context, level )
-    }
-
-    /**
-     * General log method
-     *
-     * @param message
-     * @param context
-     * @param level
-     * @return null
-     */
-    write( file, message, context, level = null ) {
-        this.logFileManager.openLogFile( file )
-        .then( fd => {
-            fs.write( fd, this.string.strtr( message, context ), null, 'utf8' )
-        })
-        .catch( error => {
-            this.cli.error({
-                title: `Impossible to open/create ${file}.log at: ${this.logDirectoryPath}/${file}.log`,
-                message: error,
-                type: 'error'
-            })
-        })
+    log( message, context ) {
+        this.logWriter.write( 'std', message, context )
     }
 
     /*
      * Getters and setters
      */
-    get logFileManager() {
-        return this._logFileManager
-    }
-
-    get cli() {
-        return this._cli
-    }
-
-    get string() {
-        return this._string
+    get logWriter() {
+        return this._logWriter
     }
 }

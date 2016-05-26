@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import execsql								from 'execsql'
-import { kernel, bundleManager, config }	from './../../bootstrap.js'
+import execsql										from 'execsql'
+import { kernel, bundleManager, config, container }	from './../../bootstrap.js'
 
 let argv = minimist( process.argv.slice( 2 ) )
 
@@ -10,7 +10,6 @@ const dbConfig = {
 	password: config.database.connection.password
 }
 
-const container	= bundleManager.container
 const cli       = container.getComponent( 'Console' )
 
 const titleError		= "Error when importing database"

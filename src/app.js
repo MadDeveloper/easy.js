@@ -5,13 +5,14 @@
 /*
  * App requirements
  */
-import https            from 'https'
-import http             from 'http'
-import net              from 'net'
-import minimist         from 'minimist'
-import { app, config }  from './bootstrap'
+import https                        from 'https'
+import http                         from 'http'
+import net                          from 'net'
+import minimist                     from 'minimist'
+import { app, config, container }   from './bootstrap'
 
-const argv = minimist( process.argv.slice( 2 ) )
+const argv  = minimist( process.argv.slice( 2 ) )
+const cli   = container.getComponent( 'Console' )
 
 let server      = null
 let port        = 0
@@ -33,7 +34,7 @@ if ( argv._[ 'http' ] || argv.http || false === config.credentials.found ) {
     protocol    = config.server.protocol.https
 }
 
-let portInUse = ( port ) => {
+let freePort = ( port ) => {
     return new Promise( (resolve, reject) => {
         const serverTest = net.createServer( socket => {
             socket.write( 'Echo server\r\n' )
@@ -53,26 +54,28 @@ let portInUse = ( port ) => {
     })
 }
 
-portInUse( port )
+freePort( port )
 .then( () => {
     /*
      * Everything is ok, starting server
      */
     server.listen( port, () => {
-        // Todo: write it with easy/Console
-        console.log( "-----------------------------" )
-        console.log( "    Server listening..." )
-        console.log( "-----------------------------" )
-        console.log( `    ${protocol}://${config.server.domain}:${port}` )
-        console.log( "-----------------------------" )
-        console.log( `    Mode:   ${app.get( 'env' )}` )
-        console.log( "-----------------------------" )
+        cli.info( "-----------------------------" )
+        cli.info( "    Server listening..." )
+        cli.info( "-----------------------------" )
+        cli.info( `    ${protocol}://${config.server.domain}:${port}` )
+        cli.info( "-----------------------------" )
+        cli.info( `    Mode:   ${app.get( 'env' )}` )
+        cli.info( "-----------------------------" )
     })
 })
 .catch( () => {
     /*
      * Port ${port} is used
      */
-    console.log( `\nPort ${port} is already used or you have no rights to launch server (try as root), impossible to start server.` )
-    process.exit()
+    cli.error({
+        title: 'Impossible to start server',
+        message: `Port ${port} is already used or you have no rights to launch server (try as root)`,
+        exit: 0
+    })
 })

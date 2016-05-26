@@ -1,13 +1,12 @@
 #!/usr/bin/env node
-import fs                           from 'fs'
-import Mocha                        from 'mocha'
-import path                         from 'path'
-import minimist                     from 'minimist'
-import { kernel, bundleManager }    from './../../bootstrap.js'
+import fs                                   from 'fs'
+import Mocha                                from 'mocha'
+import path                                 from 'path'
+import minimist                             from 'minimist'
+import { kernel, bundleManager, container } from './../../bootstrap.js'
 
 let argv = minimist( process.argv.slice( 2 ) )
 
-const container             = bundleManager.container
 const cli                   = container.getComponent( 'Console' )
 const bundlesTestsDirectory = kernel.path.test.bundles
 /*
@@ -42,6 +41,7 @@ fs.readdir( bundlesTestsDirectory, ( err, files ) => {
                 }
             } catch( e ) {
                 cli.warn( `No unit tests found for ${bundle} bundle.` )
+                cli.line()
             }
         })
 
@@ -51,6 +51,7 @@ fs.readdir( bundlesTestsDirectory, ( err, files ) => {
         mocha.run( failures => {
             if ( failures ) {
                 cli.warn( `${failures} failures occurs during tests.` )
+                cli.line()
             }
             process.exit()
         })

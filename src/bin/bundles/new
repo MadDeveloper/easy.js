@@ -1,15 +1,14 @@
 #!/usr/bin/env node
-import fs                           from 'fs'
-import walk                         from 'walk'
-import path                         from 'path'
-import minimist                     from 'minimist'
-import { question }                 from 'readline-sync'
-import { indexOf }                  from 'lodash'
-import { kernel, bundleManager }    from './../../bootstrap.js'
+import fs                                   from 'fs'
+import walk                                 from 'walk'
+import path                                 from 'path'
+import minimist                             from 'minimist'
+import { question }                         from 'readline-sync'
+import { indexOf }                          from 'lodash'
+import { kernel, bundleManager, container } from './../../bootstrap.js'
 
 let argv = minimist( process.argv.slice( 2 ) )
 
-const container             = bundleManager.container
 const cli                   = container.getComponent( 'Console' )
 const schemaDatabaseService = container.getService( 'database.schema' )
 const stringLibrary         = container.getLibrary( 'string' )
@@ -102,7 +101,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
     function askForProperties() {
         cli.line()
-        
+
         /*
          * We ask for properties
          */

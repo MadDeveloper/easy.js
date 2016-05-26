@@ -16,7 +16,7 @@ import config               from './config/config'
 import bundlesDefinition    from './config/bundlesDefinition'
 import routing              from './config/routing'
 
-const argv =  minimist( process.argv.slice( 2 ) )
+const argv = minimist( process.argv.slice( 2 ) )
 
 /*
  * Define root app path
@@ -111,8 +111,10 @@ app.use( ( req, res, next ) => {
 /*
  * Displays everything that happens on the server
  */
-logFileManager.openLogFileSync( 'traffic' )
-app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${__dirname}/../logs/traffic.log`, { flags: 'a' } ) } ) )
+if ( 'l' === argv._[ 0 ] || 'log' === argv._[ 0 ] || argv.log ) {
+    logFileManager.openLogFileSync( 'traffic' )
+    app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${__dirname}/../logs/traffic.log`, { flags: 'a' } ) } ) )
+}
 
 /*
  * Register bundles for routing
@@ -165,4 +167,4 @@ app.use( '/', router.scope )
 /*
  * Returns the application elements configured
  */
-export { app, kernel, bundleManager, config }
+export { app, kernel, bundleManager, config, container }
