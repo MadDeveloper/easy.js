@@ -6,6 +6,11 @@ import Service      from './../../vendor/easy/core/Service'
  * Becareful: You must start your roles' id at 3
  * Roles' id are mapped with ids into database
  */
+
+
+/**
+ * @class AccessSecurityService
+ */
 export default class AccessSecurityService extends Service {
     constructor( container ) {
         super( container )
@@ -21,16 +26,21 @@ export default class AccessSecurityService extends Service {
 
     load() {}
 
+    /**
+     * isAdmin - Check if current role focused is admin
+     *
+     * @returns {bool}
+     */
     isAdmin() {
-        return this.focus === this.roleAdmin
+        return this.focus === this.admin
     }
 
     isUser() {
-        return this.focus === this.roleUser
+        return this.focus === this.user
     }
 
     isAny() {
-        return this.focus === this.roleAny
+        return this.focus === this.any
     }
 
     focusOn( role ) {
@@ -38,55 +48,67 @@ export default class AccessSecurityService extends Service {
         return this
     }
 
-    restrict( params ) {
-        if ( !params.mustBe || params.mustBe.length === 0 ) {
-            params.mustBe = [ this.any ]
+    restrict({ mustBe = [], canCreate = [], canRead = [], canUpdate = [], canDelete = [] }) {
+        if ( !mustBe || mustBe.length === 0 ) {
+            mustBe = [ this.any ]
         }
 
-        if ( !params.canRead || params.canRead.length === 0 ) {
-            params.canRead = params.mustBe
+        if ( !canCreate || canCreate.length === 0 ) {
+            canCreate = mustBe
         }
 
-        if ( !params.canCreate || params.canCreate.length === 0 ) {
-            params.canCreate = params.mustBe
+        if ( !canRead || canRead.length === 0 ) {
+            canRead = mustBe
         }
 
-        if ( !params.canUpdate || params.canUpdate.length === 0 ) {
-            params.canUpdate = params.mustBe
+        if ( !canUpdate || canUpdate.length === 0 ) {
+            canUpdate = mustBe
         }
 
-        if ( !params.canDelete || params.canDelete.length === 0 ) {
-            params.canDelete = params.mustBe
+        if ( !canDelete || canDelete.length === 0 ) {
+            canDelete = mustBe
         }
 
         /*
          * An admin as all privileges
          */
-        if ( indexOf( params.mustBe, this.admin ) === -1 ) {
-            params.mustBe.push( this.admin )
+        if ( indexOf( mustBe, this.admin ) === -1 ) {
+            mustBe.push( this.admin )
         }
 
-        if ( indexOf( params.canRead, this.admin ) === -1 ) {
-            params.canRead.push( this.admin )
+        if ( indexOf( canRead, this.admin ) === -1 ) {
+            canRead.push( this.admin )
         }
 
-        if ( indexOf( params.canCreate, this.admin ) === -1 ) {
-            params.canCreate.push( this.admin )
+        if ( indexOf( canCreate, this.admin ) === -1 ) {
+            canCreate.push( this.admin )
         }
 
-        if ( indexOf( params.canUpdate, this.admin ) === -1 ) {
-            params.canUpdate.push( this.admin )
+        if ( indexOf( canUpdate, this.admin ) === -1 ) {
+            canUpdate.push( this.admin )
         }
 
-        if ( indexOf( params.canDelete, this.admin ) === -1 ) {
-            params.canDelete.push( this.admin )
+        if ( indexOf( canDelete, this.admin ) === -1 ) {
+            canDelete.push( this.admin )
         }
 
-        this.restrictions = params
+        this.restrictions = {
+            mustBe,
+            canCreate,
+            canRead,
+            canUpdate,
+            canDelete
+        }
 
         return this
     }
 
+    /**
+     * canReach - Determine if current user can reach what he requested
+     *
+     * @param  {string} httpMethod HTTP method used
+     * @returns {bool}
+     */
     canReach( httpMethod ) {
         let isAuthorizedToReach = false
 
@@ -139,27 +161,12 @@ export default class AccessSecurityService extends Service {
         return this._admin
     }
 
-    set admin( admin ) {
-        this._admin = admin
-        return this
-    }
-
     get user() {
         return this._user
     }
 
-    set user( user ) {
-        this._user = user
-        return this
-    }
-
     get focus() {
         return this._focus
-    }
-
-    set focus( focus ) {
-        this._focus = focus
-        return this
     }
 
     get restrictions() {

@@ -5,6 +5,10 @@ import schema								from './../../config/database/schema'
 import { indexOf, has }						from 'lodash'
 import { bundleManager, config, container }	from './../../bootstrap.js'
 
+/* needed for migrate binary to returns migrate promise */
+process.argv.standalone = false
+import { migrate } from './migrate'
+
 let argv = minimist( process.argv.slice( 2 ) )
 
 const cli               	= container.getComponent( 'Console' )
@@ -35,20 +39,16 @@ if ( indexOf( 'lite', argv._ ) !== -1 || argv.lite ) {
 	 * Normal mode, we call migrate before init roles and users
 	 * Indicate to migrate we are waiting him to return promise with standalone sets as false
 	 */
-	process.argv.standalone = false
-
-	const migrate = require( './migrate' )
-
-	migrate
+	migrate( process.argv.standalone )
 	.then( () => {
 		startup()
 	})
 }
 
-function raiseError( err ) {
+function raiseError( error ) {
 	cli.error({
 		title: titleError,
-		message: err,
+		message: error,
 		consequence: consequenceError,
 		exit: 0
 	})
@@ -67,11 +67,11 @@ function truncateRolesAndUsersTables() {
 
 		const tables = {
 			users: usersTableName,
-		  	roles: rolesTableName
+			roles: rolesTableName
 		}
 
-		const promiseTruncateUsersTable = schemaDatabaseService.truncateTable( tables.users )
-		const promiseClearRolesTable = schemaDatabaseService.clearTable( tables.roles )
+		const promiseTruncateUsersTable	= schemaDatabaseService.truncateTable( tables.users )
+		const promiseClearRolesTable 	= schemaDatabaseService.clearTable( tables.roles )
 
 	  	promiseTruncateUsersTable
 		.then( promiseClearRolesTable )
@@ -204,17 +204,17 @@ function startup() {
 	})
 
 	execsql.config( dbConfig )
-		.exec( sqlUse, ( err, results ) => {
+		.exec( sqlUse, err => {
 	        if ( err ) {
 				raiseError( err )
 	        }
 	    })
-		.exec( sqlRoles, ( err, results ) => {
+		.exec( sqlRoles, err => {
 	        if ( err ) {
 				raiseError( err )
 	        }
 		})
-		.exec( sqlUsers, ( err, results ) => {
+		.exec( sqlUsers, err => {
 	        if ( err ) {
 				raiseError( err )
 	        } else {

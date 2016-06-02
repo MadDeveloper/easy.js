@@ -23,17 +23,17 @@ export default {
     /*
      * Server configurations
      */
-     server: {
-         protocol: {
-             http: 'http',
-             https: 'https'
-         },
-         domain: 'localhost',
-         port: {
-             http: 80,
-             https: 443
-         }
-     },
+    server: {
+        protocol: {
+            http: 'http',
+            https: 'https'
+        },
+        domain: 'localhost',
+        port: {
+            http: 80,
+            https: 443
+        }
+    },
 
     /*
      * Database credentials
@@ -59,7 +59,7 @@ export default {
      * Json Web Token (JWT) configurations
      * CHANGE IT
      */
-     jwt: {
-         secret: ':p19E}1%&gX1O*K2u8=36#9Jk7I9{f' // http://randomkeygen.com/ -> Ft. Knox Passwords
-     }
+    jwt: {
+        secret: ':p19E}1%&gX1O*K2u8=36#9Jk7I9{f' // http://randomkeygen.com/ -> Ft. Knox Passwords
+    }
 }

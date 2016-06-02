@@ -55,23 +55,18 @@ function createTables () {
 }
 
 function migrate( standalone ) {
-	dropTables()
-	.then( () => {
-		return new Promise( (resolve, reject) => {
-			createTables()
-			.then( () => {
-				const exitAfterSuccess = standalone
-				cli.success( "Schema updated.", exitAfterSuccess )
-				resolve()
-			})
-			.catch( error => {
-				raiseError( error )
-				reject( error )
-			})
+	return new Promise( (resolve, reject) => {
+		dropTables()
+		.then( createTables )
+		.then( () => {
+			const exitAfterSuccess = standalone
+			cli.success( "Schema updated.", exitAfterSuccess )
+			resolve()
 		})
-	})
-	.catch( error => {
-		raiseError( error )
+		.catch( error => {
+			raiseError( error )
+			reject( error )
+		})
 	})
 }
 
@@ -138,18 +133,14 @@ function updateDatabaseNameInConfig() {
 // 	migrate()
 // })
 
-(function() {
+;(function() {
 	'use strict'
 
-	let standalone = true
-
-	if ( false === process.argv.standalone ) {
-		standalone = false
-	}
+	const standalone = false === process.argv.standalone ? true : false
 
 	if ( standalone ) {
 		migrate()
-	} else {
-		return migrate()
 	}
 }())
+
+export { migrate }

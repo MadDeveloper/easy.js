@@ -1,6 +1,13 @@
 import fs from 'fs'
 
+/**
+ * @class LogWriter
+ */
 export default class LogWriter {
+    /**
+     * @constructor
+     * @param  {Container} container
+     */
     constructor( container ) {
         this._logFileManager    = container.getComponent( 'LogFileManager' )
         this._cli               = container.getComponent( 'Console' )
@@ -10,10 +17,9 @@ export default class LogWriter {
     /**
      * General log method
      *
-     * @param message
-     * @param context
-     * @param level
-     * @return null
+     * @param {string} file
+     * @param {string} message
+     * @param {string} context
      */
     write( file, message, context ) {
         this.logFileManager.openLogFile( file )
@@ -29,17 +35,29 @@ export default class LogWriter {
         })
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get logFileManager instance
+     *
+     * @returns {LogFileManager}
      */
     get logFileManager() {
         return this._logFileManager
     }
 
+    /**
+     * get console instance
+     *
+     * @returns {Console}
+     */
     get cli() {
         return this._cli
     }
 
+    /**
+     * get string vendor library
+     *
+     * @returns {object}
+     */
     get string() {
         return this._string
     }

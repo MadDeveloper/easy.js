@@ -5,26 +5,24 @@ export default class Console {
         this._leftSpaces = '  '
     }
 
-    error( params ) {
-        if ( undefined !== params.title && undefined !== params.message ) {
-
-            const consequence = ( params.consequence ) ? params.consequence : ""
+    error({ title, message = '', consequence = '', exit = undefined }) {
+        if ( undefined !== title ) {
 
             this.line()
-            console.log( this.leftSpaces + colors.bgRed( colors.white( `Error: ${params.title}` ) ) )
+            console.log( this.leftSpaces + colors.bgRed( colors.white( `Error: ${title}` ) ) )
 
-            if ( params.message.length > 0 ) {
-                console.log( this.leftSpaces + colors.bgRed( colors.white( `    ->  ${params.message}` ) ) )
+            if ( undefined !== typeof message && message.length > 0 ) {
+                console.log( this.leftSpaces + colors.bgRed( colors.white( `    ->  ${message}` ) ) )
             }
 
-            if ( consequence.length > 0 ) {
+            if ( undefined !== typeof consequence && consequence.length > 0 ) {
                 console.log( this.leftSpaces + colors.bgRed( colors.white( consequence ) ) )
             }
 
             this.line()
 
-            if ( typeof params.exit !== "undefined" || !isNaN( params.exit ) ) {
-                process.exit( params.exit )
+            if ( "undefined" !== typeof exit || !isNaN( exit ) ) {
+                process.exit( exit )
             }
 
         } else {

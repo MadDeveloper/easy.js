@@ -17,6 +17,3 @@ build/
 
 # log files
 *.log
-
-# useless tests
-#test/easy
