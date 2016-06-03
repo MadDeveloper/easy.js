@@ -1,6 +1,6 @@
 export default class Controller {
     constructor( container ) {
-        this._database      = container.getComponent( 'Database')
+        this._database      = container.getComponent( 'Database' ).connection
         this._request       = container.getComponent( 'Request' )
         this._response      = container.getComponent( 'Response' )
         this._bundleManager = container.getComponent( 'BundleManager' )

@@ -1,9 +1,27 @@
 - régler soucis bin/startup (ER_ACCESS_DENIED)
 
+- quand on crée un bundle le fichier schema.js ne se met pas à jour
+
+- proposer d'activer le bundle dans bundlesDefinition dès qu'il est crée
+
+- isRequestWellInitialized inutile de passer le request body vu que c'est un controller et bundleManager pour doesRequiredElementExists
+
 - finir les tests pour user / role / skeleton
 - finir les tests pour les services
 
+- pouvoir reset le skeleton (dans bundles et test)
+
+- toJSON() de bookshelf et .json() de express semblent faire la même chose, donc inutile d'utiliser .toJSON() dans les controllers ?
+
 - configurer les id des roles dans un fichier de conf pour les récupérer dans le service AccessSecurity
+
+- code to show routes ?
+
+- améliorer urlContains pour lui passer en paramètre un tableau de paths
+
+- penser à utiliser methodNotAllowed pour les method sur les routes qui n'implémente pas cette dernière
+
+- uniformiser controller et repository, ne pas mettre RoutingController et UserRepository ! Soit RoutingController et Repository ou soit UserRoutingController et UserRepository (préférable ?)
 
 -- IMMINENT --
 REDIGER LA DOC

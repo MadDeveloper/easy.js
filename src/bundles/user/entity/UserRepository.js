@@ -16,12 +16,12 @@ export default class UserRepository {
         return user.forge( forgeParam ).fetch( options )
     }
 
-    save( user, params, options ) {
+    save( user, { username, email, password, role_id }, options ) {
         return user.save({
-            username: params.username,
-            email: params.email,
-            password: params.password,
-            role_id: params.role_id
+            username,
+            email,
+            password,
+            role_id
         }, options )
     }
 

@@ -13,10 +13,10 @@ export default class RoleRepository {
         return this.roleFactory.getModel().forge({ id }).fetch( options )
     }
 
-    save( role, params, options ) {
+    save( role, { name, slug }, options ) {
         return role.save({
-            name: params.name,
-            slug: params.slug
+            name,
+            slug
         }, options )
     }
 

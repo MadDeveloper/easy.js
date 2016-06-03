@@ -13,12 +13,6 @@ const cli                   = container.getComponent( 'Console' )
 const schemaDatabaseService = container.getService( 'database.schema' )
 const stringLibrary         = container.getLibrary( 'string' )
 
-cli.error({
-    title: "Test",
-    message: "Test",
-    exit: 0
-})
-
 const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {

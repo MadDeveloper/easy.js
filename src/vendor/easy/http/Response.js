@@ -13,8 +13,6 @@ export default class Response extends Http {
         if ( typeof params === "undefined" ) {
             if ( typeof setDefault !== "undefined" ) {
                 params = setDefault
-            } else {
-                params = undefined
             }
         }
 
@@ -23,52 +21,52 @@ export default class Response extends Http {
 
     ok( params ) {
         const res = this.scope
-        res.status( this.status.ok ).json( this.formatParams( params ) )
+        res.status( this.status.ok ).json( params )
     }
 
     created( params ) {
         const res = this.scope
-        res.status( this.status.created ).json( this.formatParams( params ) )
+        res.status( this.status.created ).json( params )
     }
 
     notFound( params ) {
         const res = this.scope
-        res.status( this.status.notFound ).json( this.formatParams( params ) )
+        res.status( this.status.notFound ).json( params )
     }
 
     notModified( params ) {
         const res = this.scope
-        res.status( this.status.notModified ).json( this.formatParams( params ) )
+        res.status( this.status.notModified ).json( params )
     }
 
     gone( params ) {
         const res = this.scope
-        res.status( this.status.gone ).json( this.formatParams( params ) )
+        res.status( this.status.gone ).json( params )
     }
 
     unauthorized( params ) {
         const res = this.scope
-        res.status( this.status.unauthorized ).json( this.formatParams( params ) )
+        res.status( this.status.unauthorized ).json( params )
     }
 
     methodNotAllowed( params ) {
         const res = this.scope
-        res.status( this.status.methodNotAllowed ).json( this.formatParams( params ) )
+        res.status( this.status.methodNotAllowed ).json( params )
     }
 
     unsupportedMediaType( params ) {
         const res = this.scope
-        res.status( this.status.unsupportedMediaType ).json( this.formatParams( params ) )
+        res.status( this.status.unsupportedMediaType ).json( params )
     }
 
     tooManyRequests( params ) {
         const res = this.scope
-        res.status( this.status.tooManyRequests ).json( this.formatParams( params ) )
+        res.status( this.status.tooManyRequests ).json( params )
     }
 
     noContent( params ) {
         const res = this.scope
-        res.status( this.status.noContent ).json( this.formatParams( params ) )
+        res.status( this.status.noContent ).json( params )
     }
 
     internalServerError( params ) {
@@ -84,17 +82,17 @@ export default class Response extends Http {
             '{statusCode}': this.status.internalServerError
         })
 
-        res.status( this.status.internalServerError ).json( this.formatParams( params ) )
+        res.status( this.status.internalServerError ).json( params )
     }
 
     badRequest( params ) {
         const res = this.scope
-        res.status( this.status.badRequest ).json( this.formatParams( params ) )
+        res.status( this.status.badRequest ).json( params )
     }
 
     forbidden( params ) {
         const res = this.scope
-        res.status( this.status.forbidden ).json( this.formatParams( params ) )
+        res.status( this.status.forbidden ).json( params )
     }
 
     attachment( filePath, options ) {

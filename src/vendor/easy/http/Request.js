@@ -8,6 +8,10 @@ export default class Request extends Http {
         this._scope     = null
     }
 
+    methodIs( method ) {
+        return method.toLowerCase() === this.getMethod().toLowerCase()
+    }
+
     getMethod() {
         return this.scope.method
     }
@@ -30,6 +34,10 @@ export default class Request extends Http {
 
     getRouteParameter( param ) {
         return this.getParams()[ param ]
+    }
+
+    urlContains( path ) {
+        return -1 !== this.scope.originalUrl.indexOf( path )
     }
 
     define( property, value ) {
