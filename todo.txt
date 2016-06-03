@@ -23,6 +23,10 @@
 
 - uniformiser controller et repository, ne pas mettre RoutingController et UserRepository ! Soit RoutingController et Repository ou soit UserRoutingController et UserRepository (préférable ?)
 
+- retirer les factory de chaque bundle ? uniquement utiliser la factory easy ?
+
+- enlever la réponse automatique du Controller easy
+
 -- IMMINENT --
 REDIGER LA DOC
 
