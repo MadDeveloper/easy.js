@@ -1,32 +1,47 @@
 import { indexOf }  from 'lodash'
 import Controller   from './../../../vendor/easy/core/Controller'
 
-export default class RoutingController extends Controller {
+/**
+ * @class SkeletonRoutingController
+ */
+export default class SkeletonRoutingController extends Controller {
+    /**
+     * @constructor
+     * @param  {Factory} factory
+     */
     constructor( factory ) {
-        super( skeletonFactory.container )
+        super( factory )
 
-        this._skeletonFactory       = skeletonFactory
-        this._skeletonRepository    = this._skeletonFactory.getRepository()
+        this._skeletonRepository = factory.getRepository( 'skeleton' )
     }
 
+    /**
+     * isRequestWellParameterized - verify if request is contains valid params
+     *
+     * @returns {bool}
+     */
     isRequestWellParameterized() {
         return this.verifyParams([
             { property: 'example', typeExpected: 'string' }
         ], this.request.getBody() )
     }
 
+    /**
+     * getSkeletons - get all skeletons
+     */
     getSkeletons() {
         this.skeletonRepository.readAll()
         .then( skeletons => {
-
-            this.response.ok( skeletons.toJSON() )
-
+            this.response.ok( skeletons )
         })
         .catch( error => {
             this.response.internalServerError( error )
         })
     }
 
+    /**
+     * createSkeleton - create skeleton with params in request
+     */
     createSkeleton() {
         if ( this.isRequestWellParameterized() ) {
 
@@ -35,7 +50,6 @@ export default class RoutingController extends Controller {
                 this.response.created( skeleton )
             })
             .catch( error => {
-                t.rollback()
                 this.response.internalServerError( error )
             })
 
@@ -45,33 +59,29 @@ export default class RoutingController extends Controller {
     }
 
     getSkeleton() {
-        this.response.ok( this.request.find( 'skeleton' ).toJSON() )
+        this.response.ok( this.request.find( 'skeleton' ) )
     }
 
+    /**
+     * updateSkeleton - update skeleton by id
+     */
     updateSkeleton() {
         if ( this.isRequestWellParameterized() ) {
-
-            this.database.transaction( t => {
-
-                this.skeletonRepository.save( this.request.find( 'skeleton' ), this.request.getBody(), { transacting: t } )
-                .then( skeleton => {
-
-                    t.commit()
-                    this.response.ok( skeleton.toJSON() )
-
-                })
-                .catch( error => {
-                    t.rollback()
-                    this.response.internalServerError( error )
-                })
-
+            this.skeletonRepository.save( this.request.find( 'skeleton' ), this.request.getBody(), { transacting: t } )
+            .then( skeleton => {
+                this.response.ok( skeleton )
             })
-
+            .catch( error => {
+                this.response.internalServerError( error )
+            })
         } else {
             this.response.badRequest()
         }
     }
 
+    /**
+     * patchSkeleton - patch skeleton by id (following RFC)
+     */
     patchSkeleton() {
         if ( this.isPatchRequestWellParameterized() ) {
             let patchRequestCorrectlyFormed = false
@@ -85,29 +95,23 @@ export default class RoutingController extends Controller {
                     const opsLength = ops.length
                     let currentPatch = 0
 
-                    this.database.transaction( t => {
-
-                        ops.forEach( patch => {
-                            switch ( patch.op ) {
-                                case 'replace':
-                                    if ( indexOf( validPaths, patch.path ) >= 0 ) {
-                                        this.skeletonRepository.patch( this.request.find( 'skeleton' ), patch, { transacting: t, patch: true } )
-                                        .then( skeleton => {
-                                            if ( ++currentPatch >= opsLength ) {
-                                                // It's ok
-                                                t.commit()
-                                                resolve( skeleton )
-                                            }
-                                        })
-                                        .catch( error => {
-                                            t.rollback()
-                                            reject( error )
-                                        })
-                                    }
-                                    break
-                            }
-                        })
-
+                    ops.forEach( patch => {
+                        switch ( patch.op ) {
+                            case 'replace':
+                                if ( indexOf( validPaths, patch.path ) >= 0 ) {
+                                    this.skeletonRepository.patch( this.request.find( 'skeleton' ), patch )
+                                    .then( skeleton => {
+                                        if ( ++currentPatch >= opsLength ) {
+                                            // It's ok
+                                            resolve( skeleton )
+                                        }
+                                    })
+                                    .catch( error => {
+                                        reject( error )
+                                    })
+                                }
+                                break
+                        }
                     })
                 }
             })
@@ -116,9 +120,7 @@ export default class RoutingController extends Controller {
 
                 patchSkeleton
                 .then( skeleton => {
-
                     this.response.ok( skeleton.toJSON() )
-
                 })
                 .catch( error => {
                     this.response.internalServerError( error )
@@ -133,31 +135,24 @@ export default class RoutingController extends Controller {
         }
     }
 
+    /**
+     * deleteSkeleton - delete skeleton by id
+     */
     deleteSkeleton() {
-        this.database.transaction( t => {
-
-            this.skeletonRepository.delete( this.request.find( 'skeleton' ), { transacting: t } )
-            .then( () => {
-
-                t.commit()
-                this.response.noContent()
-
-            })
-            .catch( error => {
-                t.rollback()
-                this.response.internalServerError( error )
-            })
-
+        this.skeletonRepository.delete( this.request.find( 'skeleton' ) )
+        .then( () => {
+            this.response.noContent()
+        })
+        .catch( error => {
+            this.response.internalServerError( error )
         })
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get - skeleton repository
+     *
+     * @returns {SkeletonRepository}
      */
-    get skeletonFactory() {
-        return this._skeletonFactory
-    }
-
     get skeletonRepository() {
         return this._skeletonRepository
     }

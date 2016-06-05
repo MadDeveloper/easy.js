@@ -5,7 +5,7 @@ export default class SkeletonRepository extends Repository {
         super( database )
     }
 
-    readAll( options ) {
+    readAll( options = {} ) {
         let skeletons = this.getCollection()
         return skeletons.forge().fetch( options )
     }
@@ -19,9 +19,7 @@ export default class SkeletonRepository extends Repository {
             this.database.transaction( t => {
                 options.transacting = t
 
-                skeleton.save({
-
-                }, options )
+                skeleton.save( params, options )
                 .then( skeleton => {
                     t.commit()
                     resolve( skeleton )
@@ -34,15 +32,28 @@ export default class SkeletonRepository extends Repository {
         })
     }
 
-    patch( skeleton, patch, options ) {
-        let patchToApply = {}
+    patch( skeleton, patch, options = {} ) {
+        new Promise( ( resolve, reject ) => {
+            let patchToApply = {}
+            patchToApply[ patch.path.substring( 1 ) ] = patch.value
 
-        patchToApply[ patch.path.substring( 1 ) ] = patch.value
+            options.patch = true
 
-        return skeleton.save( patchToApply, options )
+            this.save( skeleton, patchToApply, options )
+            .then( resolve )
+            .catch( reject )
+        })
     }
 
-    delete( skeleton, options ) {
-        return skeleton.destroy( options )
+    delete( skeleton, options = {} ) {
+        new Promise( ( resolve, reject ) => {
+            this.database.transaction( t => {
+                options.transacting = t
+
+                skeleton.destroy( options )
+                .then( resolve )
+                .catch( reject )
+            })
+        })
     }
 }

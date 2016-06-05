@@ -1,4 +1,4 @@
-export default function middlewares( skeletonFactory ) {
+export default function middlewares( router, factory ) {
     /*
      * Dependencies
      */

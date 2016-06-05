@@ -4,10 +4,10 @@
 import Entity from './../../../vendor/easy/database/Entity'
 
 export default class Skeleton extends Entity {
-    constructor( skeletonFactory ) {
-        super( skeletonFactory )
+    constructor( database ) {
+        super( database )
 
-        return this.database.Model.extend({
+        return database.Model.extend({
             tableName: 'skeletons'
         })
     }

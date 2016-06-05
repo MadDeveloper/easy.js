@@ -1,8 +1,11 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
-export default class SecurityController extends Controller {
-    constructor( skeletonFactory ) {
-        super( skeletonFactory.container )
+/**
+ * @class SkeletonSecurityController
+ */
+export default class SkeletonSecurityController extends Controller {
+    constructor( factory ) {
+        super( factory )
 
         this._access = this.container.getService( 'security.access' )
     }

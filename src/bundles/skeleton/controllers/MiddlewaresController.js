@@ -1,8 +1,8 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
 export default class MiddlewaresController extends Controller {
-    constructor( skeletonFactory ) {
-        super( skeletonFactory.container )
+    constructor( factory ) {
+        super( factory )
     }
 
     skeletonExists() {
@@ -12,7 +12,7 @@ export default class MiddlewaresController extends Controller {
                 options: {}
             }
 
-            this.doesRequiredElementExists( 'skeleton', requireOptions, this.bundleManager )
+            this.doesRequiredElementExists( 'skeleton', requireOptions )
             .then( skeleton => {
                 this.request.define( 'skeleton', skeleton )
                 resolve()

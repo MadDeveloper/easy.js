@@ -1,4 +1,4 @@
-export default function security( skeletonFactory ) {
+export default function security( router, factory ) {
     /*
      * Dependencies
      */
