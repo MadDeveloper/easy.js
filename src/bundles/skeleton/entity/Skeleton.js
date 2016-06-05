@@ -1,7 +1,7 @@
 /*
  * Skeleton model
  */
-import Entity from './../../../vendor/easy/core/Entity'
+import Entity from './../../../vendor/easy/database/Entity'
 
 export default class Skeleton extends Entity {
     constructor( skeletonFactory ) {

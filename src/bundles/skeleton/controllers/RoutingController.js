@@ -2,7 +2,7 @@ import { indexOf }  from 'lodash'
 import Controller   from './../../../vendor/easy/core/Controller'
 
 export default class RoutingController extends Controller {
-    constructor( skeletonFactory ) {
+    constructor( factory ) {
         super( skeletonFactory.container )
 
         this._skeletonFactory       = skeletonFactory
@@ -30,20 +30,13 @@ export default class RoutingController extends Controller {
     createSkeleton() {
         if ( this.isRequestWellParameterized() ) {
 
-            this.database.transaction( t => {
-
-                this.skeletonRepository.save( this.skeletonFactory.getNewModel(), this.request.getBody(), { transacting: t } )
-                .then( skeleton => {
-
-                    t.commit()
-                    this.response.created( skeleton.toJSON() )
-
-                })
-                .catch( error => {
-                    t.rollback()
-                    this.response.internalServerError( error )
-                })
-
+            this.skeletonRepository.save( new this.repository.getModel(), this.request.getBody() )
+            .then( skeleton => {
+                this.response.created( skeleton )
+            })
+            .catch( error => {
+                t.rollback()
+                this.response.internalServerError( error )
             })
 
         } else {

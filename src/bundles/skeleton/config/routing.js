@@ -1,16 +1,14 @@
-export default function routing( skeletonFactory ) {
+export default function routing( router, factory ) {
     /*
      * Dependencies
      */
-    const skeletonRoutingController = skeletonFactory.getController( 'Routing' )
-    const bundleManager             = skeletonFactory.bundleManager
-    const router                    = bundleManager.router
+    const skeletonRoutingController = factory.getController( 'skeleton.Routing' )
 
     /*
      * Middlewares
      */
-    skeletonFactory.getConfig( 'security' )
-    skeletonFactory.getConfig( 'middlewares' )
+    factory.getConfig( 'skeleton.security' )
+    factory.getConfig( 'skeleton.middlewares' )
 
     /*
     * Routes definitions

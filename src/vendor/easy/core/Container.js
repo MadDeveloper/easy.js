@@ -28,7 +28,7 @@ export default class Container {
             'console': `${this._kernel.path.vendor.easy}/core/Console`,
             'polyfills': `${this._kernel.path.vendor.easy}/core/Polyfills`,
             'router': `${this._kernel.path.vendor.easy}/core/Router`,
-            'database': `${this._kernel.path.vendor.easy}/database/Connector`,
+            'database': `${this._kernel.path.vendor.easy}/database/Donnector`,
             'http': `${this._kernel.path.vendor.easy}/http/Http`,
             'request': `${this._kernel.path.vendor.easy}/http/Request`,
             'response': `${this._kernel.path.vendor.easy}/http/Response`,

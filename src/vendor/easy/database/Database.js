@@ -1,4 +1,4 @@
-export default class Connector {
+export default class Database {
     constructor( container ) {
         this._defaultConnector  = 'bookshelf'
         this._databasePath      = `${container.kernel.path.config}/database/database`

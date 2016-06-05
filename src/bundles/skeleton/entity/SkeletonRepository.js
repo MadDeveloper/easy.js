@@ -1,21 +1,37 @@
-export default class SkeletonRepository {
-    constructor( skeletonFactory ) {
-        this._skeletonFactory = skeletonFactory
+import Entity from './../../../vendor/easy/database/Repository'
+
+export default class SkeletonRepository extends Repository {
+    constructor( database ) {
+        super( database )
     }
 
     readAll( options ) {
-        let skeletons = this.skeletonFactory.getCollection()
+        let skeletons = this.getCollection()
         return skeletons.forge().fetch( options )
     }
 
     read( id, options ) {
-        return this.skeletonFactory.getModel().forge({ id }).fetch( options )
+        return this.getModel().forge({ id }).fetch( options )
     }
 
-    save( skeleton, params, options ) {
-        return skeleton.save({
+    save( skeleton, params, options = {} ) {
+        new Promise( ( resolve, reject ) => {
+            this.database.transaction( t => {
+                options.transacting = t
 
-        }, options )
+                skeleton.save({
+
+                }, options )
+                .then( skeleton => {
+                    t.commit()
+                    resolve( skeleton )
+                })
+                .catch( error => {
+                    t.rollback()
+                    reject( error )
+                })
+            })
+        })
     }
 
     patch( skeleton, patch, options ) {
@@ -28,12 +44,5 @@ export default class SkeletonRepository {
 
     delete( skeleton, options ) {
         return skeleton.destroy( options )
-    }
-
-    /*
-     * Getters and setters
-     */
-    get skeletonFactory() {
-        return this._skeletonFactory
     }
 }

@@ -1,15 +1,17 @@
+- reorganiser la gestion de composants bundle
+    - créer une classe repository avec getCollection, getModel etc. dedans, les placer dans database ? changer connector en Database.js ?
+
 - régler soucis bin/startup (ER_ACCESS_DENIED)
 
 - quand on crée un bundle le fichier schema.js ne se met pas à jour
 
-- proposer d'activer le bundle dans bundlesDefinition dès qu'il est crée
+- proposer d'activer le bundle dans bundlesDefinition dès qu'il est créé
 
 - isRequestWellInitialized inutile de passer le request body vu que c'est un controller et bundleManager pour doesRequiredElementExists
 
 - finir les tests pour user / role / skeleton
-- finir les tests pour les services
 
-- pouvoir reset le skeleton (dans bundles et test)
+- finir les tests pour les services
 
 - toJSON() de bookshelf et .json() de express semblent faire la même chose, donc inutile d'utiliser .toJSON() dans les controllers ?
 
@@ -25,16 +27,19 @@
 
 - retirer les factory de chaque bundle ? uniquement utiliser la factory easy ?
 
-- enlever la réponse automatique du Controller easy
+- enlever la réponse automatique du Controller easy, la rendre optionnelle ?
 
 -- IMMINENT --
 REDIGER LA DOC
 
 --- LATER ---
 
+- pouvoir reset le skeleton (dans bundles et test)
+
 - appliquer le logger aux endroits utiles
 
 - faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
+
 - faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
 
 - jsdoc for each class and functions
