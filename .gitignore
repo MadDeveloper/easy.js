@@ -1,5 +1,5 @@
 # installed with npm install
-node_modules/
+# node_modules/
 
 npm-debug.log
 
