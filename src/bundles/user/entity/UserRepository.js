@@ -1,20 +1,20 @@
 import Entity from './../../../vendor/easy/database/Repository'
 
 export default class UserRepository extends Repository {
-    constructor( database ) {
-        super( database, {
-            Role: factory.getController( 'role' ).getRepository().getModel()
-        })
+    constructor( factory ) {
+        super( factory )
+
+        this._userModel = this.entityManager.getModel( 'user' )
     }
 
     readAll( role ) {
-        let user = this.getModel()
+        let user = this.userModel
 
         return user.where({ role_id: role.get( 'id' ) }).fetchAll()
     }
 
     read( byParam, options = {} ) {
-        let user = this.getModel()
+        let user = this.roleModel
         const forgeParam = ( typeof byParam === "number" || ( typeof byParam === 'string' && byParam.isNumber() ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } )
 
         return user.forge( forgeParam ).fetch( options )
@@ -47,5 +47,14 @@ export default class UserRepository extends Repository {
                 .catch( reject )
             })
         })
+    }
+
+    /**
+     * get - user model
+     *
+     * @returns {User}
+     */
+    get userModel() {
+        return this._userModel
     }
 }

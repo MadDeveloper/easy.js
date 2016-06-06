@@ -6,7 +6,10 @@ export default class RoleRoutingController extends Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
-        super( 'role', factory )
+        super( factory )
+
+        this._roleRepository    = this.entityManager.getRepository( 'role' )
+        this._roleModel         = this.entityManager.getModel( 'role' )
     }
 
     isRequestWellParameterized() {
@@ -17,7 +20,7 @@ export default class RoleRoutingController extends Controller {
     }
 
     getRoles() {
-        this.getRepository().readAll()
+        this.roleRepository.readAll()
         .then( roles => {
             this.response.ok( roles )
         })
@@ -28,7 +31,7 @@ export default class RoleRoutingController extends Controller {
 
     createRole() {
         if ( this.isRequestWellParameterized() ) {
-            this.getRepository().save( new this.getRepository().getModel(), this.request.getBody() )
+            this.roleRepository.save( new this.roleModel, this.request.getBody() )
             .then( role => {
                 this.response.created( role )
             })
@@ -46,7 +49,7 @@ export default class RoleRoutingController extends Controller {
 
     updateRole() {
         if ( this.isRequestWellParameterized() ) {
-            this.getRepository().save( this.request.find( 'role' ), this.request.getBody() )
+            this.roleRepository.save( this.request.find( 'role' ), this.request.getBody() )
             .then( role => {
                 this.response.ok( role )
 
@@ -60,7 +63,7 @@ export default class RoleRoutingController extends Controller {
     }
 
     deleteRole() {
-        this.getRepository().delete( this.request.find( 'role' ) )
+        this.roleRepository.delete( this.request.find( 'role' ) )
         .then( () => {
             this.response.noContent()
 
@@ -68,5 +71,23 @@ export default class RoleRoutingController extends Controller {
         .catch( error => {
             this.response.internalServerError( error )
         })
+    }
+
+    /**
+     * get - role repository
+     *
+     * @returns {RoleRepository}
+     */
+    get roleRepository() {
+        return this._roleRepository
+    }
+
+    /**
+     * get - role model
+     *
+     * @returns {Role}
+     */
+    get roleModel() {
+        return this._roleModel
     }
 }

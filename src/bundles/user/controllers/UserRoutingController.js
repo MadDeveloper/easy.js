@@ -9,9 +9,10 @@ export default class UserRoutingController extends Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
-        super( 'user', factory )
+        super( factory )
 
-        this._roleRepository = this._factory.getController( 'role' ).getRepository()
+        this._userRepository    = this.entityManager.getRepository( 'user' )
+        this._roleRepository    = this.entityManager.getRepository( 'role' )
     }
 
     isRequestWellParameterized() {
@@ -24,7 +25,7 @@ export default class UserRoutingController extends Controller {
     }
 
     getUsers() {
-        this.getRepository().readAll( this.request.find( 'role' ) )
+        this.userRepository.readAll( this.request.find( 'role' ) )
         .then( users => {
             this.response.ok( users )
         })
@@ -37,7 +38,7 @@ export default class UserRoutingController extends Controller {
         if ( this.isRequestWellParameterized() ) {
             this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'idRole' ) )
 
-            this.getRepository().save( new this.getRepository().getModel(), this.request.getBody() )
+            this.userRepository.save( new this.userModel, this.request.getBody() )
             .then( user => {
                 this.response.created( user )
             })
@@ -59,7 +60,7 @@ export default class UserRoutingController extends Controller {
                 this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'idRole' ) )
             }
 
-            this.getRepository().save( this.request.find( 'user' ), this.request.getBody() )
+            this.userRepository.save( this.request.find( 'user' ), this.request.getBody() )
             .then( user => {
                 this.response.ok( user )
             })
@@ -76,7 +77,7 @@ export default class UserRoutingController extends Controller {
     }
 
     deleteUser() {
-        this.getRepository().delete( this.request.find( 'user' ) )
+        this.userRepository.delete( this.request.find( 'user' ) )
         .then( () => {
             this.response.noContent()
         })
@@ -85,7 +86,30 @@ export default class UserRoutingController extends Controller {
         })
     }
 
+    /**
+     * get - role repository
+     *
+     * @returns {RoleRepository}
+     */
     get roleRepository() {
         return this._roleRepository
+    }
+
+    /**
+     * get - user repository
+     *
+     * @returns {UserRepository}
+     */
+    get userRepository() {
+        return this._userRepository
+    }
+
+    /**
+     * get - user model
+     *
+     * @returns {User}
+     */
+    get userModel() {
+        return this._userModel
     }
 }

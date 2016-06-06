@@ -18,6 +18,7 @@
     "make-build": "node make-build",
     "new-bundle": "node build/bin/bundles/new",
     "postinstall": "npm run build",
+    "preinstall": "npm i -g --unsafe-perm babel-cli",
     "start": "node --expose-gc build/app.js",
     "start-demon": "nodemon --expose-gc build/app.js",
     "start-demon-log": "nodemon --expose-gc build/app.js --log",

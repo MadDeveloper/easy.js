@@ -7,10 +7,7 @@ export default class Factory {
      * @param  {Container} container
      */
     constructor( container ) {
-        this._container     = container
-        this._database      = container.getComponent( 'Database' ).connection
-        this._bundlesPath   = container.kernel.path.bundles
-        this._router        = container.getComponent( 'Router' ).scope
+        this._container = container
     }
 
     /**
@@ -33,7 +30,7 @@ export default class Factory {
                 controller  = info[ 1 ]
             }
 
-            const controllerClass   = require( `${this.bundlePath}/${bundle}/controllers/${bundle.capitalizeFirstLetter()}${controller.capitalizeFirstLetter()}Controller` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const controllerClass = require( `${this.bundlePath}/${bundle}/controllers/${bundle.capitalizeFirstLetter()}${controller.capitalizeFirstLetter()}Controller` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
             return new controllerClass( this )
         }
@@ -57,15 +54,6 @@ export default class Factory {
     }
 
     /**
-     * get - absolute bundle path
-     *
-     * @returns {string}
-     */
-    get bundlePath() {
-        return this._bundlesPath
-    }
-
-    /**
      * get - vendor container
      *
      * @returns {Container}
@@ -75,12 +63,21 @@ export default class Factory {
     }
 
     /**
+     * get - absolute bundle path
+     *
+     * @returns {string}
+     */
+    get bundlePath() {
+        return this.container.kernel.path.bundles
+    }
+
+    /**
      * get - database instance
      *
      * @returns {object}
      */
     get database() {
-        return this._database
+        return this.container.getComponent( 'Database' ).connection
     }
 
     /**
@@ -89,6 +86,15 @@ export default class Factory {
      * @returns {express.Router}
      */
     get router() {
-        return this._router
+        return this.container.getComponent( 'Router' ).scope
+    }
+
+    /**
+     * get - entity manager instance
+     *
+     * @returns {EntityManager}
+     */
+    get entityManager() {
+        return this.container.getComponent( 'EntityManager' )
     }
 }

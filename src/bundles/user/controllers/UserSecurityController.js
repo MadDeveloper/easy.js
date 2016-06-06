@@ -9,7 +9,7 @@ export default class UserSecurityController extends Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
-        super( 'user', factory )
+        super( factory )
 
         this._access = this.getService( 'security.access' )
     }

@@ -6,7 +6,7 @@ export default class RoleSecurityController extends Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
-        super( 'role', factory )
+        super( factory )
 
         this._access = this.getService( 'security.access' )
     }

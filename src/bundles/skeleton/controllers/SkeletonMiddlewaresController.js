@@ -9,7 +9,7 @@ export default class SkeletonMiddlewaresController extends Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
-        super( 'skeleton', factory )
+        super( factory )
     }
 
     /**

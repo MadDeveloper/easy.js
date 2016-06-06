@@ -1,20 +1,21 @@
 import Entity from './../../../vendor/easy/database/Repository'
 
 export default class RoleRepository extends Repository {
-    constructor( database ) {
-        super( database, {
-            User: factory.getController( 'user' ).getRepository().getModel()
-        })
+    constructor( factory ) {
+        super( factory )
+
+        this._roleCollection    = this.entityManager.getCollection( 'role' )
+        this._roleModel         = this.entityManager.getModel( 'role' )
     }
 
     readAll() {
-        let roles = this.getCollection()
+        let roles = this.roleCollection
 
         return roles.forge().fetch()
     }
 
     read( id, options = {} ) {
-        return this.getModel().forge({ id }).fetch( options )
+        return this.roleModel.forge({ id }).fetch( options )
     }
 
     save( role, { name, slug }, options = {} ) {
@@ -42,5 +43,23 @@ export default class RoleRepository extends Repository {
                 .catch( reject )
             })
         })
+    }
+
+    /**
+     * get - role collection
+     *
+     * @returns {Collection}
+     */
+    get roleCollection() {
+        return this._roleCollection
+    }
+
+    /**
+     * get - role model
+     *
+     * @returns {Role}
+     */
+    get roleModel() {
+        return this._roleModel
     }
 }

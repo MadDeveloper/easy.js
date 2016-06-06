@@ -9,7 +9,7 @@ export default class SkeletonSecurityController extends Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
-        super( 'skeleton', factory )
+        super( factory )
 
         this._access = this.getService( 'security.access' )
     }

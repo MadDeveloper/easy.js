@@ -14,12 +14,12 @@ export default function authentication( container, bundleManager, router ) {
      */
     const request   = container.getComponent( 'Request' )
     const response  = container.getComponent( 'Response' )
+    const factory   = container.getComponent( 'Factory' )
 
     /*
      * User classes
      */
-    const userFactory     = bundleManager.getFactory( 'user' )
-    const userRepository  = userFactory.getRepository()
+    const userRepository = factory.entityManager.getRepository( 'user' )
 
     /*
      * Defining routes with authorization required
@@ -42,7 +42,7 @@ export default function authentication( container, bundleManager, router ) {
                         if ( request.getBodyParameter( 'password' ) == user.get('password') ) {
 
                             const token = jwt.sign( user.toJSON(), config.jwt.secret, { expiresIn: 86400 /* 24 hours */ } )
-                            response.ok({ token: token })
+                            response.ok({ user, token })
 
                         } else {
                             response.unauthorized()

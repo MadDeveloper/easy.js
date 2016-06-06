@@ -21,7 +21,6 @@ class RoleTests extends Tests {
         /*
          * Local dependencies
          */
-        this._roleFactory           = this._bundleManager.getFactory( 'role' )
         this._roleRoutingController = this._roleFactory.getController()
         this._roleRepository        = this._roleFactory.getRepository()
         this._role                  = this._roleFactory.getModel()

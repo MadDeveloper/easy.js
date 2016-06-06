@@ -9,7 +9,7 @@ export default class UserMiddlewaresController extends Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
-        super( 'user', factory )
+        super( factory )
     }
 
     userExists() {

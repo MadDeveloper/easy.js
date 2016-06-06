@@ -1,4 +1,12 @@
-- utiliser mkdirp de npm et non la commande linux
+- finir bundleManager et les fichiers BundleTests et Tests
+
+- verifyParams doit être placer dans une librarie http et non dans Controller
+
+- permettre d'accéder à des routes sans être authentifier
+
+- au lieu de créer des propriété autant passer par les getters si on les exposes ou sinon les laisser en this._ ??
+
+- renommer database en bookshelf dans les propriétés ?
 
 - créer un EntityManager permettant de getEntity() et getRepository(), accessible dans controller et factory, par défaut factory et controller en tant que shortcut ?
   regrouper dans Entity/ Entity, Repository et EntityManager

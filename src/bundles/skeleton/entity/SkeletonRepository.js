@@ -1,17 +1,20 @@
 import Entity from './../../../vendor/easy/database/Repository'
 
 export default class SkeletonRepository extends Repository {
-    constructor( database ) {
-        super( database, {} )
+    constructor( entityManager ) {
+        super( entityManager )
+
+        this._skeletonCollection    = this.entityManager.getCollection( 'skeleton' )
+        this._skeletonModel         = this.entityManager.getModel( 'skeleton' )
     }
 
     readAll( options = {} ) {
-        let skeletons = this.getCollection()
+        let skeletons = this.skeletonCollection
         return skeletons.forge().fetch( options )
     }
 
     read( id, options = {} ) {
-        return this.getModel().forge({ id }).fetch( options )
+        return this.skeletonModel.forge({ id }).fetch( options )
     }
 
     save( skeleton, params, options = {} ) {
@@ -55,5 +58,23 @@ export default class SkeletonRepository extends Repository {
                 .catch( reject )
             })
         })
+    }
+
+    /**
+     * get - skeleton collection
+     *
+     * @returns {Collection}
+     */
+    get skeletonCollection() {
+        return this._skeletonCollection
+    }
+
+    /**
+     * get - skeleton model
+     *
+     * @returns {Skeleton}
+     */
+    get skeletonModel() {
+        return this._skeletonModel
     }
 }

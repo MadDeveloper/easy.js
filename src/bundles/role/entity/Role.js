@@ -6,11 +6,12 @@ import Entity from './../../../vendor/easy/core/Entity'
 export default class Role extends Entity {
     /**
      * @constructor
-     * @param  {Bookshelf} database
      * @param  {object} dependencies
      */
-    constructor( database, { User } ) {
-        super( database )
+    constructor( entityManager ) {
+        super( entityManager )
+
+        const User = entityManager.getModel( 'user' )
 
         return database.Model.extend({
             tableName: 'roles',

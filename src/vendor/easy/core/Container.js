@@ -30,6 +30,7 @@ export default class Container {
             'polyfills': `${this._kernel.path.vendor.easy}/core/Polyfills`,
             'router': `${this._kernel.path.vendor.easy}/core/Router`,
             'database': `${this._kernel.path.vendor.easy}/database/Database`,
+            'entitymanger': `${this._kernel.path.vendor.easy}/database/EntityManager`,
             'http': `${this._kernel.path.vendor.easy}/http/Http`,
             'request': `${this._kernel.path.vendor.easy}/http/Request`,
             'response': `${this._kernel.path.vendor.easy}/http/Response`,

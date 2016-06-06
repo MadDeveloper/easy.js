@@ -1,5 +1,7 @@
 export default class Tests {
     constructor( container ) {
+        this._factory       = container.getComponent( 'Factory' )
+        this._entityManager = container.getComponent( 'EntityManager' )
         this._request       = container.getComponent( 'Request' )
         this._response      = container.getComponent( 'Response' )
         this._bundleManager = container.getComponent( 'BundleManager' )
@@ -13,6 +15,14 @@ export default class Tests {
     /*
      * Getters and setters
      */
+    get factory() {
+        return this._factory
+    }
+
+    get entityManager() {
+        return this._entityManager
+    }
+
     get container() {
         return this._bundleManager.container
     }

@@ -4,14 +4,14 @@
 export default class Entity {
     /**
      * @constructor
-     * @param  {Bookshelf} database
+     * @param {EntityManager} entityManager
      */
-    constructor( database ) {
-        this._database = database
+    constructor( entityManager ) {
+        this._database = entityManager.database
     }
 
     /**
-     * get - database (Bookshelf) object
+     * get - ORM (Bookshelf)
      *
      * @returns {Bookshelf}
      */

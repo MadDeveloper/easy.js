@@ -6,7 +6,7 @@ export default class RoleMiddlewaresController extends Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
-        super( 'role', factory )
+        super( factory )
     }
 
     roleExists() {

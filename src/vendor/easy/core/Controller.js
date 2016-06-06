@@ -6,26 +6,12 @@ export default class Controller {
      * @constructor
      * @param  {Factory} factory
      */
-    constructor( bundle, factory ) {
-        this._bundle        = bundle
+    constructor( factory ) {
         this._container     = factory.container
         this._request       = this._container.getComponent( 'Request' )
         this._response      = this._container.getComponent( 'Response' )
         this._router        = this._container.getComponent( 'Router' ).scope
-        this._bundlesPath   = this._container.kernel.path.bundles
-    }
-
-    /**
-     * getRepository - get specific bundle repository (e.g. skeleton -> SkeletonRepository)
-     *
-     * @returns {Repository}
-     */
-    getRepository() {
-        if ( repository.length > 0 ) {
-            const repositoryClass = require( `${this.bundlePath}/${this.bundle}/entity/${this.bundle.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
-
-            return new repositoryClass( this.database )
-        }
+        this._entityManager = this._container.getComponent( 'EntityManager' )
     }
 
     /**
@@ -203,11 +189,11 @@ export default class Controller {
     }
 
     /**
-     * get - absolute bundle path
+     * get - entity manager instance
      *
-     * @returns {string}
+     * @returns {EntityManager}
      */
-    get bundlePath() {
-        return this._bundlesPath
+    get entityManager() {
+        return this._entityManager
     }
 }
