@@ -15,7 +15,7 @@
     "db-startup": "node build/bin/database/startup",
     "db-startup-lite": "node build/bin/database/startup --lite",
     "debug": "node --expose-gc debug build/app.js",
-    "make-build": "mkdir -p build/bin/database && mkdir -p build/bin/bundles && mkdir -p build/bin/lib && mkdir -p build/bin/services && chmod -R 755 build",
+    "make-build": "node make-build",
     "new-bundle": "node build/bin/bundles/new",
     "postinstall": "npm run build",
     "start": "node --expose-gc build/app.js",

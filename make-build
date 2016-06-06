@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+const mkdirp    = require( 'mkdirp' )
+const path      = require( 'path' )
+
+createBinDirectory( 'bundles' )
+.then( () => createBinDirectory( 'database' ) )
+.then( () => createBinDirectory( 'lib' ) )
+.then( () => createBinDirectory( 'services' ) )
+.catch( raiseError )
+
+function raiseError( error ) {
+    console.log( `Error when creating build binaries directories: ${error}` )
+    process.exit()
+}
+
+function createBinDirectory( binary ) {
+    return new Promise( ( resolve, reject ) => {
+        const binPath = path.resolve( `./build/bin/${binary}` )
+
+        mkdirp( binPath, error => {
+            if ( error ) {
+                reject( error )
+            } else {
+                console.log( `${binPath} created` )
+                resolve()
+            }
+        })
+    })
+}
