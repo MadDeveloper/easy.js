@@ -2,7 +2,7 @@ import Entity from './../../../vendor/easy/database/Repository'
 
 export default class SkeletonRepository extends Repository {
     constructor( database ) {
-        super( database )
+        super( database, {} )
     }
 
     readAll( options = {} ) {
@@ -10,12 +10,12 @@ export default class SkeletonRepository extends Repository {
         return skeletons.forge().fetch( options )
     }
 
-    read( id, options ) {
+    read( id, options = {} ) {
         return this.getModel().forge({ id }).fetch( options )
     }
 
     save( skeleton, params, options = {} ) {
-        new Promise( ( resolve, reject ) => {
+        return new Promise( ( resolve, reject ) => {
             this.database.transaction( t => {
                 options.transacting = t
 
@@ -33,7 +33,7 @@ export default class SkeletonRepository extends Repository {
     }
 
     patch( skeleton, patch, options = {} ) {
-        new Promise( ( resolve, reject ) => {
+        return new Promise( ( resolve, reject ) => {
             let patchToApply = {}
             patchToApply[ patch.path.substring( 1 ) ] = patch.value
 
@@ -46,7 +46,7 @@ export default class SkeletonRepository extends Repository {
     }
 
     delete( skeleton, options = {} ) {
-        new Promise( ( resolve, reject ) => {
+        return new Promise( ( resolve, reject ) => {
             this.database.transaction( t => {
                 options.transacting = t
 

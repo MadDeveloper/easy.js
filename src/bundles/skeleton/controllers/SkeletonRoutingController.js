@@ -10,9 +10,7 @@ export default class SkeletonRoutingController extends Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
-        super( factory )
-
-        this._skeletonRepository = factory.getRepository( 'skeleton' )
+        super( 'skeleton', factory )
     }
 
     /**
@@ -30,7 +28,7 @@ export default class SkeletonRoutingController extends Controller {
      * getSkeletons - get all skeletons
      */
     getSkeletons() {
-        this.skeletonRepository.readAll()
+        this.getRepository().readAll()
         .then( skeletons => {
             this.response.ok( skeletons )
         })
@@ -45,7 +43,7 @@ export default class SkeletonRoutingController extends Controller {
     createSkeleton() {
         if ( this.isRequestWellParameterized() ) {
 
-            this.skeletonRepository.save( new this.repository.getModel(), this.request.getBody() )
+            this.getRepository().save( new this.getRepository().getModel(), this.request.getBody() )
             .then( skeleton => {
                 this.response.created( skeleton )
             })
@@ -67,7 +65,7 @@ export default class SkeletonRoutingController extends Controller {
      */
     updateSkeleton() {
         if ( this.isRequestWellParameterized() ) {
-            this.skeletonRepository.save( this.request.find( 'skeleton' ), this.request.getBody(), { transacting: t } )
+            this.getRepository().save( this.request.find( 'skeleton' ), this.request.getBody(), { transacting: t } )
             .then( skeleton => {
                 this.response.ok( skeleton )
             })
@@ -99,7 +97,7 @@ export default class SkeletonRoutingController extends Controller {
                         switch ( patch.op ) {
                             case 'replace':
                                 if ( indexOf( validPaths, patch.path ) >= 0 ) {
-                                    this.skeletonRepository.patch( this.request.find( 'skeleton' ), patch )
+                                    this.getRepository().patch( this.request.find( 'skeleton' ), patch )
                                     .then( skeleton => {
                                         if ( ++currentPatch >= opsLength ) {
                                             // It's ok
@@ -139,21 +137,12 @@ export default class SkeletonRoutingController extends Controller {
      * deleteSkeleton - delete skeleton by id
      */
     deleteSkeleton() {
-        this.skeletonRepository.delete( this.request.find( 'skeleton' ) )
+        this.getRepository().delete( this.request.find( 'skeleton' ) )
         .then( () => {
             this.response.noContent()
         })
         .catch( error => {
             this.response.internalServerError( error )
         })
-    }
-
-    /**
-     * get - skeleton repository
-     *
-     * @returns {SkeletonRepository}
-     */
-    get skeletonRepository() {
-        return this._skeletonRepository
     }
 }

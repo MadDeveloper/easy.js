@@ -3,7 +3,8 @@ import fs from 'fs'
 export default class BundleManager {
     constructor( container ) {
         this._container         = container
-        this._kernel            = this._container.kernel
+        this._kernel            = container.kernel
+        this._factory           = container.getComponent( 'Factory' )
         this._bundlesDefinition = []
     }
 
@@ -73,5 +74,9 @@ export default class BundleManager {
 
     get container() {
         return this._container
+    }
+
+    get factory() {
+        return this._factory
     }
 }

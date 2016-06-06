@@ -1,13 +1,17 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
 /**
- * @class SkeletonSecurityController
+ * @class UserSecurityController
  */
-export default class SkeletonSecurityController extends Controller {
+export default class UserSecurityController extends Controller {
+    /**
+     * @constructor
+     * @param  {Factory} factory
+     */
     constructor( factory ) {
-        super( factory )
+        super( 'user', factory )
 
-        this._access = this.container.getService( 'security.access' )
+        this._access = this.getService( 'security.access' )
     }
 
     authorize() {
@@ -17,10 +21,10 @@ export default class SkeletonSecurityController extends Controller {
 
                 this.access.restrict({
                     mustBe: [ this.access.any ],
-                    canCreate: [],
+                    canCreate: [ this.access.admin ],
                     canRead: [],
-                    canUpdate: [],
-                    canDelete: []
+                    canUpdate: [ this.access.admin ],
+                    canDelete: [ this.access.admin ]
                 })
 
                 if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {

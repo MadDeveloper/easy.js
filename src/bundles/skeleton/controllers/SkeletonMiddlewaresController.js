@@ -1,10 +1,22 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
-export default class MiddlewaresController extends Controller {
+/**
+ * @class SkeletonMiddlewaresController
+ */
+export default class SkeletonMiddlewaresController extends Controller {
+    /**
+     * @constructor
+     * @param  {Factory} factory
+     */
     constructor( factory ) {
-        super( factory )
+        super( 'skeleton', factory )
     }
 
+    /**
+     * skeletonExists - check if skeleton exists (with id)
+     *
+     * @returns {Promise}
+     */
     skeletonExists() {
         return new Promise( ( resolve, reject ) => {
             const requireOptions = {
@@ -22,8 +34,4 @@ export default class MiddlewaresController extends Controller {
             })
         })
     }
-
-    /*
-     * Getters and setters
-     */
 }

@@ -1,19 +1,22 @@
-/*
- * Role model
- */
 import Entity from './../../../vendor/easy/core/Entity'
 
+/**
+ * @class Role
+ */
 export default class Role extends Entity {
-    constructor( roleFactory ) {
-        super( roleFactory )
+    /**
+     * @constructor
+     * @param  {Bookshelf} database
+     * @param  {object} dependencies
+     */
+    constructor( database, { User } ) {
+        super( database )
 
-        const self = this
-
-        return this.database.Model.extend({
+        return database.Model.extend({
             tableName: 'roles',
 
             users() {
-                return this.hasMany( self.bundleManager.getFactory( 'user' ).getModel() )
+                return this.hasMany( User )
             }
         })
     }

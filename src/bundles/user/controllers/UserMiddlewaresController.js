@@ -1,8 +1,15 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
-export default class MiddlewaresController extends Controller {
-    constructor( userFactory ) {
-        super( userFactory.container )
+/**
+ * @class UserMiddlewaresController
+ */
+export default class UserMiddlewaresController extends Controller {
+    /**
+     * @constructor
+     * @param  {Factory} factory
+     */
+    constructor( factory ) {
+        super( 'user', factory )
     }
 
     userExists() {
@@ -22,8 +29,4 @@ export default class MiddlewaresController extends Controller {
             })
         })
     }
-
-    /*
-     * Getters and setters
-     */
 }

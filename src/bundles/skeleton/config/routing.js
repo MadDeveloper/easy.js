@@ -1,3 +1,9 @@
+/**
+ * routing - define routes for skeleton bundle
+ *
+ * @param  {express.Router} router
+ * @param  {Factory} factory
+ */
 export default function routing( router, factory ) {
     /*
      * Dependencies

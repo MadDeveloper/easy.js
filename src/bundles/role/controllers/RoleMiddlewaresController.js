@@ -1,8 +1,12 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
-export default class MiddlewaresController extends Controller {
-    constructor( roleFactory ) {
-        super( roleFactory.container )
+export default class RoleMiddlewaresController extends Controller {
+    /**
+     * @constructor
+     * @param  {Factory} factory
+     */
+    constructor( factory ) {
+        super( 'role', factory )
     }
 
     roleExists() {
@@ -12,7 +16,7 @@ export default class MiddlewaresController extends Controller {
                 options: {}
             }
 
-            this.doesRequiredElementExists( 'role', requireOptions, this.bundleManager )
+            this.doesRequiredElementExists( 'role', requireOptions )
             .then( role => {
                 this.request.define( 'role', role )
                 resolve()
@@ -22,8 +26,4 @@ export default class MiddlewaresController extends Controller {
             })
         })
     }
-
-    /*
-     * Getters and setters
-     */
 }

@@ -1,10 +1,8 @@
-export default function middlewares( userFactory ) {
+export default function middlewares( router, factory ) {
     /*
      * Dependencies
      */
-    const userMiddlewaresController = userFactory.getController( 'Middlewares' )
-    const bundleManager             = userFactory.bundleManager
-    const router                    = bundleManager.router
+    const userMiddlewaresController = factory.getController( 'user.Middlewares' )
 
     /*
      * Middlewares

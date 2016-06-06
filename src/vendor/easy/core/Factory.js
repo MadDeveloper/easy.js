@@ -14,20 +14,6 @@ export default class Factory {
     }
 
     /**
-     * getRepository - get specific bundle repository (e.g. skeleton -> SkeletonRepository)
-     *
-     * @param  {string} repository
-     * @returns {Repository}
-     */
-    getRepository( repository ) {
-        if ( repository.length > 0 ) {
-            const repositoryClass = require( `${this.bundlePath}/${repository}/entity/${repository.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
-
-            return new repositoryClass( this.database )
-        }
-    }
-
-    /**
      * getController - get specific bundle controller (e.g. skeleton.routing -> SkeletonRoutingController )
      *
      * @param  {string} controller description
@@ -35,9 +21,18 @@ export default class Factory {
      */
     getController( controller ) {
         if ( controller.length > 0 ) {
-            const info              = controller.split( '.' )
-            const bundle            = info[ 0 ]
-            const controller        = info[ 1 ]
+            let bundle      = ''
+            let controller  = ''
+
+            if ( -1 === controller.indexOf( '.' ) ) {
+                bundle = controller
+                controller = 'Routing'
+            } else {
+                const info  = controller.split( '.' )
+                bundle      = info[ 0 ]
+                controller  = info[ 1 ]
+            }
+
             const controllerClass   = require( `${this.bundlePath}/${bundle}/controllers/${bundle.capitalizeFirstLetter()}${controller.capitalizeFirstLetter()}Controller` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
             return new controllerClass( this )

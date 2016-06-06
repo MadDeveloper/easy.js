@@ -1,10 +1,8 @@
-export default function security( roleFactory ) {
+export default function security( router, factory ) {
     /*
      * Dependencies
      */
-    const roleSecurityController    = roleFactory.getController( 'Security' )
-    const bundleManager             = roleFactory.bundleManager
-    const router                    = bundleManager.router
+    const roleSecurityController = factory.getController( 'role.Security' )
 
     /*
      * Security middlewares

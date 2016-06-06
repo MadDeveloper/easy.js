@@ -1,12 +1,24 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
-export default class SecurityController extends Controller {
-    constructor( roleFactory ) {
-        super( roleFactory.container )
+/**
+ * @class SkeletonSecurityController
+ */
+export default class SkeletonSecurityController extends Controller {
+    /**
+     * @constructor
+     * @param  {Factory} factory
+     */
+    constructor( factory ) {
+        super( 'skeleton', factory )
 
-        this._access = this.container.getService( 'security.access' )
+        this._access = this.getService( 'security.access' )
     }
 
+    /**
+     * authorize - determine is current user can access to bundle routes
+     *
+     * @returns {Promise}
+     */
     authorize() {
         return new Promise( ( resolve, reject ) => {
             if ( this.isProdEnv() ) {
@@ -14,10 +26,10 @@ export default class SecurityController extends Controller {
 
                 this.access.restrict({
                     mustBe: [ this.access.any ],
-                    canCreate: [ this.access.admin ],
+                    canCreate: [],
                     canRead: [],
-                    canUpdate: [ this.access.admin ],
-                    canDelete: [ this.access.admin ]
+                    canUpdate: [],
+                    canDelete: []
                 })
 
                 if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {
@@ -32,8 +44,10 @@ export default class SecurityController extends Controller {
         })
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get - access service
+     *
+     * @returns {AccessSecurityService}
      */
     get access() {
         return this._access

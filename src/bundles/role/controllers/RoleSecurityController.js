@@ -1,10 +1,14 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
-export default class SecurityController extends Controller {
-    constructor( userFactory ) {
-        super( userFactory.container )
+export default class RoleSecurityController extends Controller {
+    /**
+     * @constructor
+     * @param  {Factory} factory
+     */
+    constructor( factory ) {
+        super( 'role', factory )
 
-        this._access = this.container.getService( 'security.access' )
+        this._access = this.getService( 'security.access' )
     }
 
     authorize() {

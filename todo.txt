@@ -1,5 +1,5 @@
-- reorganiser la gestion de composants bundle
-    - créer une classe repository avec getCollection, getModel etc. dedans, les placer dans database ? changer connector en Database.js ?
+- créer un EntityManager permettant de getEntity() et getRepository(), accessible dans controller et factory, par défaut factory et controller en tant que shortcut ?
+  regrouper dans Entity/ Entity, Repository et EntityManager
 
 - régler soucis bin/startup (ER_ACCESS_DENIED)
 

@@ -1,38 +1,51 @@
-export default class UserRepository {
-    constructor( userFactory ) {
-        this._userFactory = userFactory
+import Entity from './../../../vendor/easy/database/Repository'
+
+export default class UserRepository extends Repository {
+    constructor( database ) {
+        super( database, {
+            Role: factory.getController( 'role' ).getRepository().getModel()
+        })
     }
 
     readAll( role ) {
-        let user = this.userFactory.getModel()
+        let user = this.getModel()
 
         return user.where({ role_id: role.get( 'id' ) }).fetchAll()
     }
 
-    read( byParam, options ) {
-        let user = this.userFactory.getModel()
+    read( byParam, options = {} ) {
+        let user = this.getModel()
         const forgeParam = ( typeof byParam === "number" || ( typeof byParam === 'string' && byParam.isNumber() ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } )
 
         return user.forge( forgeParam ).fetch( options )
     }
 
-    save( user, { username, email, password, role_id }, options ) {
-        return user.save({
-            username,
-            email,
-            password,
-            role_id
-        }, options )
+    save( user, { username, email, password, role_id }, options = {} ) {
+        return new Promise( ( resolve, reject ) => {
+            this.database.transaction( t => {
+                options.transacting = t
+
+                user.save({
+                    username,
+                    email,
+                    password,
+                    role_id
+                }, options )
+                .then( resolve )
+                .catch( reject )
+            })
+        })
     }
 
-    delete( user, options ) {
-        return user.destroy( options )
-    }
+    delete( user, options = {} ) {
+        return new Promise( ( resolve, reject ) => {
+            this.database.transaction( t => {
+                options.transacting = t
 
-    /*
-     * Getters and setters
-     */
-    get userFactory() {
-        return this._userFactory
+                user.destroy( options )
+                .then( resolve )
+                .catch( reject )
+            })
+        })
     }
 }

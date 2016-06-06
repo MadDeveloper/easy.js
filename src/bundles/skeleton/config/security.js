@@ -2,9 +2,7 @@ export default function security( router, factory ) {
     /*
      * Dependencies
      */
-    const skeletonSecurityController    = skeletonFactory.getController( 'Security' )
-    const bundleManager                 = skeletonFactory.bundleManager
-    const router                        = bundleManager.router
+    const skeletonSecurityController = factory.getController( 'skeleton.Security' )
 
     /*
      * Security middlewares
