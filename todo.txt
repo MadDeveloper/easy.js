@@ -1,3 +1,5 @@
+- utiliser mkdirp de npm et non la commande linux
+
 - créer un EntityManager permettant de getEntity() et getRepository(), accessible dans controller et factory, par défaut factory et controller en tant que shortcut ?
   regrouper dans Entity/ Entity, Repository et EntityManager
 

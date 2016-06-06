@@ -5,9 +5,9 @@
   "main": "src/app.js",
   "repository": "https://jsergent-prepapp@bitbucket.org/prepapp/easy.js.git",
   "scripts": {
-    "build": "npm run build-bin && node_modules/.bin/babel -w src/ -d build/",
-    "build-bin": "npm run make-build && node_modules/.bin/babel src/bin/bundles/new -o build/bin/bundles/new && node_modules/.bin/babel src/bin/bundles/tests -o build/bin/bundles/tests && node_modules/.bin/babel src/bin/database/import -o build/bin/database/import && node_modules/.bin/babel src/bin/database/migrate -o build/bin/database/migrate && node_modules/.bin/babel src/bin/database/startup -o build/bin/database/startup && node_modules/.bin/babel src/bin/lib/tests -o build/bin/lib/tests && node_modules/.bin/babel src/bin/services/tests -o build/bin/services/tests",
-    "build-maps": "node_modules/.bin/babel -w src/ -d build/ -s",
+    "build": "npm run build-bin && node node_modules/.bin/babel -w src/ -d build/",
+    "build-bin": "npm run make-build && node node_modules/.bin/babel src/bin/bundles/new -o build/bin/bundles/new && node node_modules/.bin/babel src/bin/bundles/tests -o build/bin/bundles/tests && node node_modules/.bin/babel src/bin/database/import -o build/bin/database/import && node node_modules/.bin/babel src/bin/database/migrate -o build/bin/database/migrate && node node_modules/.bin/babel src/bin/database/startup -o build/bin/database/startup && node node_modules/.bin/babel src/bin/lib/tests -o build/bin/lib/tests && node node_modules/.bin/babel src/bin/services/tests -o build/bin/services/tests",
+    "build-maps": "node node_modules/.bin/babel -w src/ -d build/ -s",
     "clean-build": "rm -rf build/* && npm run make-build",
     "clear-logs": "rm -rf logs/*.log",
     "db-migrate": "node build/bin/database/migrate",
@@ -17,6 +17,7 @@
     "debug": "node --expose-gc debug build/app.js",
     "make-build": "mkdir -p build/bin/database && mkdir -p build/bin/bundles && mkdir -p build/bin/lib && mkdir -p build/bin/services && chmod -R 755 build",
     "new-bundle": "node build/bin/bundles/new",
+    "postinstall": "npm run build",
     "start": "node --expose-gc build/app.js",
     "start-demon": "nodemon --expose-gc build/app.js",
     "start-demon-log": "nodemon --expose-gc build/app.js --log",
@@ -72,6 +73,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-preset-stage-2": "^6.5.0",
     "execsql": "0.0.3",
+    "mkdirp": "^0.5.1",
     "mocha": "~2.5.3",
     "unit.js": "^2.0.0",
     "walk": "^2.3.9"
