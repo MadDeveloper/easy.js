@@ -8,7 +8,7 @@
     "build": "npm run build-bin && babel -w src/ -d build/",
     "build-bin": "npm run make-build && babel src/bin/bundles/new -o build/bin/bundles/new && babel src/bin/bundles/tests -o build/bin/bundles/tests && babel src/bin/database/import -o build/bin/database/import && babel src/bin/database/migrate -o build/bin/database/migrate && babel src/bin/database/startup -o build/bin/database/startup && babel src/bin/lib/tests -o build/bin/lib/tests && babel src/bin/services/tests -o build/bin/services/tests",
     "build-maps": "babel -w src/ -d build/ -s",
-    "clean-build": "rm -rf build/* && npm run make-build",
+    "clean-build": "rm -rf build/* ",
     "clear-logs": "rm -rf logs/*.log",
     "db-migrate": "node build/bin/database/migrate",
     "db-import": "node build/bin/database/import",

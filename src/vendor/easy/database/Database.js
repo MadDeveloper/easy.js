@@ -18,7 +18,7 @@ export default class Database {
         return this._connection
     }
 
-    set connection ( connection ) {
+    set connection( connection ) {
         this._connection = connection
         return this
     }

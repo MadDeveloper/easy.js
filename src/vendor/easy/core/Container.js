@@ -3,7 +3,14 @@ import path                 from 'path'
 import servicesMapping      from './../../../config/services/config'
 import userLibrariesMapping from './../../../config/lib/config'
 
+/**
+ * @class Container
+ */
 export default class Container {
+    /**
+     * @constructor
+     * @param  {Kernel} kernel
+     */
     constructor( kernel ) {
         this._kernel = kernel
 
@@ -30,7 +37,7 @@ export default class Container {
             'polyfills': `${this._kernel.path.vendor.easy}/core/Polyfills`,
             'router': `${this._kernel.path.vendor.easy}/core/Router`,
             'database': `${this._kernel.path.vendor.easy}/database/Database`,
-            'entitymanger': `${this._kernel.path.vendor.easy}/database/EntityManager`,
+            'entitymanager': `${this._kernel.path.vendor.easy}/database/EntityManager`,
             'http': `${this._kernel.path.vendor.easy}/http/Http`,
             'request': `${this._kernel.path.vendor.easy}/http/Request`,
             'response': `${this._kernel.path.vendor.easy}/http/Response`,
@@ -51,12 +58,16 @@ export default class Container {
     /*
      * Components
      */
-    loadComponent( name ) {
+    loadComponent( name, clearCache = false ) {
         if ( "undefined" === typeof this.componentsLoaded[ name ] ) {
             if ( this.componentsMapping.hasOwnProperty( name ) ) {
                 const pathComponent = `${this.componentsMapping[ name ]}.js`
 
                 if ( fs.statSync( pathComponent ).isFile() ) {
+                    if ( clearCache ) {
+                        delete require.cache[ require.resolve( pathComponent ) ]
+                    }
+
                     const component = require( pathComponent ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
                     this.componentsLoaded[ name ] = new component( this )
                 }
@@ -77,17 +88,7 @@ export default class Container {
 
         if ( this.isComponentMapped( name ) && this.isComponentLoaded( name ) ) {
             delete this.componentsLoaded[ name ]
-            this.loadComponent( name )
-
-            return this.componentsLoaded[ name ]
-        }
-    }
-
-    changeComponent( name, newComponent ) {
-        name = name.toLowerCase()
-
-        if ( this.isComponentMapped( name ) && this.isComponentLoaded( name ) ) {
-            this.componentsLoaded[ name ] = newComponent
+            this.loadComponent( name, true )
 
             return this.componentsLoaded[ name ]
         }

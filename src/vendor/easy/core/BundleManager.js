@@ -11,8 +11,6 @@ export default class BundleManager {
     constructor( container ) {
         this._container         = container
         this._kernel            = container.kernel
-        this._factory           = container.getComponent( 'Factory' )
-        this._router            = container.getComponent( 'Router' ).scope
         this._bundlesPath       = container.kernel.path.bundles
         this._bundlesDefinition = []
     }
@@ -24,7 +22,7 @@ export default class BundleManager {
      * @returns {BundleManager}
      */
     define( bundle ) {
-        const bundleDirPath = `${this.getBundlesDirectory()}/${bundle}`
+        const bundleDirPath = `${this.bundlesPath}/${bundle}`
 
         if ( fs.statSync( bundleDirPath ).isDirectory() ) {
             this.bundlesDefinition.push( bundle )
@@ -40,7 +38,7 @@ export default class BundleManager {
      * @returns {type}
      */
     getRouting( bundle ) {
-        const routingPath = `${this.getBundlesDirectory()}/${bundle}/config/routing.js`
+        const routingPath = `${this.bundlesPath}/${bundle}/config/routing.js`
 
         if ( fs.statSync( routingPath ).isFile() ) {
             const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
@@ -49,6 +47,11 @@ export default class BundleManager {
         }
     }
 
+    /**
+     * getBundlesDefinitionRouting - will register bundles routing into express router stack
+     *
+     * @returns {type}  description
+     */
     getBundlesDefinitionRouting() {
         for ( var i in this.bundlesDefinition ) {
             const bundle = this.bundlesDefinition[ i ]
@@ -65,19 +68,30 @@ export default class BundleManager {
         return this._bundlesPath
     }
 
+    /**
+     * get - all bundles defined
+     *
+     * @returns {type}  description
+     */
     get bundlesDefinition() {
         return this._bundlesDefinition
     }
 
-    get container() {
-        return this._container
-    }
-
+    /**
+     * get - express router
+     *
+     * @returns {express.Router}
+     */
     get router() {
-        return this._router
+        return this._container.getComponent( 'Router' ).scope
     }
 
+    /**
+     * get - factory instance
+     *
+     * @returns {Factory}
+     */
     get factory() {
-        return this._factory
+        return this._container.getComponent( 'Factory' )
     }
 }

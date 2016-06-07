@@ -9,21 +9,24 @@ export default class RoleMiddlewaresController extends Controller {
         super( factory )
     }
 
-    roleExists() {
-        return new Promise( ( resolve, reject ) => {
-            const requireOptions = {
-                requireBy: this.request.getRouteParameter( 'id' ),
-                options: {}
-            }
+    /**
+     * roleExists
+     *
+     * @param {function} next
+     */
+    roleExists( next ) {
+        const requireOptions = {
+            requireBy: this.request.getRouteParameter( 'id' ),
+            options: {}
+        }
 
-            this.doesRequiredElementExists( 'role', requireOptions )
-            .then( role => {
-                this.request.define( 'role', role )
-                resolve()
-            })
-            .catch( error => {
-                reject( error )
-            })
+        this.doesRequiredElementExists( 'role', requireOptions )
+        .then( role => {
+            this.request.define( 'role', role )
+            next()
+        })
+        .catch( error => {
+            this.response.notFound()
         })
     }
 }

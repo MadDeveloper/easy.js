@@ -1,4 +1,4 @@
-import Entity from './../../../vendor/easy/core/Entity'
+import Entity from './../../../vendor/easy/database/Entity'
 
 /**
  * @class Role
@@ -11,13 +11,11 @@ export default class Role extends Entity {
     constructor( entityManager ) {
         super( entityManager )
 
-        const User = entityManager.getModel( 'user' )
-
-        return database.Model.extend({
+        return this.database.Model.extend({
             tableName: 'roles',
 
             users() {
-                return this.hasMany( User )
+                return this.hasMany( entityManager.getModel( 'user' ) )
             }
         })
     }

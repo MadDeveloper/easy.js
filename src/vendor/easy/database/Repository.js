@@ -19,4 +19,13 @@ export default class Repository {
     get database() {
         return this._database
     }
+
+    /**
+     * get - entity manager instance
+     *
+     * @returns {EntityManager}
+     */
+    get entityManager() {
+        return this._entityManager
+    }
 }

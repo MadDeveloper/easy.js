@@ -12,8 +12,14 @@
  *
  * See https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md
  * for the full specification.
+ *
+ * @class Logger
  */
 export default class Logger {
+    /**
+     * @constructor
+     * @param  {Container} container
+     */
     constructor( container ) {
         this._logWriter = container.getComponent( 'LogWriter' )
     }
@@ -22,9 +28,8 @@ export default class Logger {
      * System is unusable.
      * Use fatals.log
      *
-     * @param message
-     * @param context
-     * @return null
+     * @param {string} message
+     * @param {object} context
      */
     emergency( message, context ) {
         this.logWriter.write( 'fatals', message, context )
@@ -37,9 +42,8 @@ export default class Logger {
      * trigger the SMS alerts and wake you up.
      * Use fatals.log
      *
-     * @param message
-     * @param context
-     * @return null
+     * @param {string} message
+     * @param {object} context
      */
     alert( message, context ) {
         this.logWriter.write( 'fatals', message, context )
@@ -51,9 +55,8 @@ export default class Logger {
      * Example: Application component unavailable, unexpected exception.
      * Use errors.log
      *
-     * @param message
-     * @param context
-     * @return null
+     * @param {string} message
+     * @param {object} context
      */
     critical( message, context ) {
         this.logWriter.write( 'errors', message, context )
@@ -64,9 +67,8 @@ export default class Logger {
      * be logged and monitored.
      * Use errors.log
      *
-     * @param message
-     * @param context
-     * @return null
+     * @param {string} message
+     * @param {object} context
      */
     error( message, context ) {
         this.logWriter.write( 'errors', message, context )
@@ -79,9 +81,8 @@ export default class Logger {
      * Example: Use of deprecated APIs, poor use of an API, undesirable things
      * that are not necessarily wrong.
      *
-     * @param message
-     * @param context
-     * @return null
+     * @param {string} message
+     * @param {object} context
      */
     warning( message, context) {
         this.logWriter.write( 'warn', message, context )
@@ -91,9 +92,8 @@ export default class Logger {
      * Normal but significant events.
      * Use events.log
      *
-     * @param message
-     * @param context
-     * @return null
+     * @param {string} message
+     * @param {object} context
      */
     notice( message, context) {
         this.write( 'events', message, context )
@@ -105,9 +105,8 @@ export default class Logger {
      *
      * Example: User logs in, SQL logs.
      *
-     * @param message
-     * @param context
-     * @return null
+     * @param {string} message
+     * @param {object} context
      */
     info( message, context ) {
         this.logWriter.write( 'events', message, context )
@@ -117,9 +116,8 @@ export default class Logger {
      * Detailed debug information.
      * Use debugs.log
      *
-     * @param message
-     * @param context
-     * @return null
+     * @param {string} message
+     * @param {object} context
      */
     debug( message, context ) {
         this.logWriter.write( 'debugs', message, context )
@@ -129,17 +127,17 @@ export default class Logger {
      * Logs message
      * Use std.log
      *
-     * @param message
-     * @param context
-     * @param level
-     * @return null
+     * @param {string} message
+     * @param {object} context
      */
     log( message, context ) {
         this.logWriter.write( 'std', message, context )
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get - log writer instance
+     *
+     * @returns {LogWriter}
      */
     get logWriter() {
         return this._logWriter

@@ -1,11 +1,25 @@
 import colors from 'colors'
 
+/**
+ * @class Console
+ */
 export default class Console {
+    /**
+     * @constructor
+     */
     constructor() {
         this._leftSpaces = '  '
     }
 
-    error({ title, message = '', consequence = '', exit = undefined }) {
+    /**
+     * error - display error in console
+     *
+     * @param  {string} { title
+     * @param  {string} message = ''
+     * @param  {string} consequence = ''
+     * @param  {number} exit = null }
+     */
+    error({ title, message = '', consequence = '', exit = null }) {
         if ( undefined !== title ) {
 
             this.line()
@@ -33,15 +47,31 @@ export default class Console {
         }
     }
 
+    /**
+     * warn - display warning in console
+     *
+     * @param  {string} message = ""
+     */
     warn( message = "" ) {
         console.log( this.leftSpaces + colors.bgYellow( colors.black( `WARN: ${message}` ) ) )
     }
 
+    /**
+     * info - display info message in console
+     *
+     * @param  {string} message = ""
+     */
     info( message = "" ) {
         console.log( this.leftSpaces + colors.cyan( message ) )
     }
 
-    success( message = "", exit ) {
+    /**
+     * success - display success message in console
+     *
+     * @param  {string} message = ""
+     * @param  {number} exit
+     */
+    success( message = "", exit = null ) {
         console.log( this.leftSpaces + colors.green( message ) )
 
         if ( exit ) {
@@ -49,23 +79,28 @@ export default class Console {
         }
     }
 
+    /**
+     * log - display sample message in console
+     *
+     * @param  {string} message = ""
+     */
     log( message = "" ) {
         console.log( message )
     }
 
+    /**
+     * line - insert new line in console
+     */
     line() {
         console.log( '\n' )
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get - left spaces (e.g. tab)
+     *
+     * @returns {string}
      */
     get leftSpaces() {
         return this._leftSpaces
-    }
-
-    set leftSpaces( leftSpaces ) {
-        this._leftSpaces = leftSpaces
-        return this
     }
 }

@@ -17,31 +17,28 @@ export default class SkeletonSecurityController extends Controller {
     /**
      * authorize - determine is current user can access to bundle routes
      *
-     * @returns {Promise}
+     * @param {function} next
      */
-    authorize() {
-        return new Promise( ( resolve, reject ) => {
-            if ( this.isProdEnv() ) {
-                const token = this.request.getBodyParameter( 'token' )
+    authorize( next ) {
+        if ( this.isProdEnv() ) {
+            const token = this.request.getBodyParameter( 'token' )
 
-                this.access.restrict({
-                    mustBe: [ this.access.any ],
-                    canCreate: [],
-                    canRead: [],
-                    canUpdate: [],
-                    canDelete: []
-                })
+            this.access.restrict({
+                mustBe: [ this.access.any ],
+                canCreate: [],
+                canRead: [],
+                canUpdate: [],
+                canDelete: []
+            })
 
-                if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {
-                    resolve()
-                } else {
-                    this.response.forbidden()
-                    reject()
-                }
+            if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {
+                next()
             } else {
-                resolve()
+                this.response.forbidden()
             }
-        })
+        } else {
+            next()
+        }
     }
 
     /**

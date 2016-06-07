@@ -1,8 +1,8 @@
-import Entity from './../../../vendor/easy/database/Repository'
+import Repository from './../../../vendor/easy/database/Repository'
 
 export default class RoleRepository extends Repository {
-    constructor( factory ) {
-        super( factory )
+    constructor( entityManager ) {
+        super( entityManager )
 
         this._roleCollection    = this.entityManager.getCollection( 'role' )
         this._roleModel         = this.entityManager.getModel( 'role' )

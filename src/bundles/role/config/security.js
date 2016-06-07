@@ -8,9 +8,6 @@ export default function security( router, factory ) {
      * Security middlewares
      */
     router.use( '/roles', ( req, res, next ) => {
-        roleSecurityController.authorize()
-        .then( () => {
-            next()
-        })
+        roleSecurityController.authorize( next )
     })
 }

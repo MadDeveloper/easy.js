@@ -1,12 +1,25 @@
 import Container from './Container'
 
+/**
+ * @class Kernel
+ */
 export default class Kernel {
+    /**
+     * @constructor
+     */
     constructor() {
         this._appName   = ''
         this._container = null
         this._path      = {}
     }
 
+    /**
+     * init - init kernel and components
+     *
+     * @param  {string} root
+     * @param  {object} config
+     * @returns {Kernel}
+     */
     init( root, config ) {
         /*
          * paths
@@ -27,7 +40,7 @@ export default class Kernel {
         /*
          * Usefull to store app data with namespace into the request
          */
-        this.appName = config.app.name
+        this._appName = config.app.name
 
         /*
          * Starting and initializing container
@@ -37,45 +50,65 @@ export default class Kernel {
         return this
     }
 
+    /**
+     * initContainer - init container component
+     */
     initContainer() {
         this._container = new Container( this )
         this.container.loadComponents()
     }
 
+    /**
+     * getEnv - get node environment
+     *
+     * @returns {string}
+     */
     getEnv() {
         return process.env.NODE_ENV
     }
 
+    /**
+     * isDevEnv - check if we are in dev environment
+     *
+     * @returns {bool}
+     */
     isDevEnv() {
         return "development" === this.getEnv().toLowerCase()
     }
 
+    /**
+     * isDevEnv - check if we are in dev environment
+     *
+     * @returns {bool}
+     */
     isProdEnv() {
         return !this.isDevEnv()
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get - app name
+     *
+     * @returns {string}
      */
     get appName() {
         return this._appName
     }
 
-    set appName( appName ) {
-        this._appName = appName
-        return this
-    }
-
+    /**
+     * get - container instance
+     *
+     * @returns {Container}
+     */
     get container() {
         return this._container
     }
 
+    /**
+     * get - all paths
+     *
+     * @returns {object}     
+     */
     get path() {
         return this._path
-    }
-
-    set path( path ) {
-        this._path = path
-        return this
     }
 }

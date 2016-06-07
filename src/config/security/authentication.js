@@ -4,7 +4,7 @@ import authorized   from './authorized'
 import Controller   from './../../vendor/easy/core/Controller'
 
 export default function authentication( container, router ) {
-    const factory   = container.getComponent( 'Factory' )
+    const factory = container.getComponent( 'Factory' )
 
     /*
      * Provide Http helpers
@@ -68,7 +68,7 @@ export default function authentication( container, router ) {
     authorized({
         request,
         response,
-        secre:t config.jwt.secret,
+        secret: config.jwt.secret,
         router
     })
 }

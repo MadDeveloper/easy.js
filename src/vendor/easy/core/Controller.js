@@ -113,16 +113,12 @@ export default class Controller {
 
             elementRepository.read( requireBy, optionsFetch )
             .then( element => {
-
                 if ( element ) {
-
                     resolve( element )
-
                 } else {
                     this.response.notFound()
                     reject( "Element not found" )
                 }
-
             })
             .catch( error => {
                 this.response.internalServerError( error )

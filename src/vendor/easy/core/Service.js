@@ -12,6 +12,7 @@ export default class Service {
         this._response      = container.getComponent( 'Response' )
         this._database      = container.getComponent( 'Database' ).connection
         this._router        = container.getComponent( 'Router' ).scope
+        this._entityManager = container.getComponent( 'EntityManager' )
 
         this.load()
     }
@@ -64,5 +65,14 @@ export default class Service {
      */
     get database() {
         return this._database
+    }
+
+    /**
+     * get - entity manager instance
+     *
+     * @returns {EntityManager}
+     */
+    get entityManager() {
+        return this._entityManager
     }
 }

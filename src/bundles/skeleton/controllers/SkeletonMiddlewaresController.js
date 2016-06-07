@@ -15,23 +15,21 @@ export default class SkeletonMiddlewaresController extends Controller {
     /**
      * skeletonExists - check if skeleton exists (with id)
      *
-     * @returns {Promise}
+     * @param {function} next
      */
-    skeletonExists() {
-        return new Promise( ( resolve, reject ) => {
-            const requireOptions = {
-                requireBy: this.request.getRouteParameter( 'id' ),
-                options: {}
-            }
+    skeletonExists( next ) {
+        const requireOptions = {
+            requireBy: this.request.getRouteParameter( 'id' ),
+            options: {}
+        }
 
-            this.doesRequiredElementExists( 'skeleton', requireOptions )
-            .then( skeleton => {
-                this.request.define( 'skeleton', skeleton )
-                resolve()
-            })
-            .catch( error => {
-                reject( error )
-            })
+        this.doesRequiredElementExists( 'skeleton', requireOptions )
+        .then( skeleton => {
+            this.request.define( 'skeleton', skeleton )
+            next()
+        })
+        .catch( error => {
+            this.response.notFound()
         })
     }
 }

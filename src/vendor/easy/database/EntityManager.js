@@ -9,18 +9,17 @@ export default class EntityManager {
     constructor( container ) {
         this._container     = container
         this._bundlesPath   = container.kernel.path.bundles
-        this._database      = container.getComponent( 'Database' ).scope
     }
 
     /**
      * getRepository - get specific bundle repository (e.g. skeleton -> SkeletonRepository)
      *
-     * @param {Repository} repository
+     * @param {string} repository
      * @returns {Repository}
      */
     getRepository( repository ) {
         if ( repository.length > 0 ) {
-            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${this.bundle.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
             return new repositoryClass( this )
         }
@@ -65,6 +64,6 @@ export default class EntityManager {
      * @returns {Bookshelf}
      */
     get database() {
-        return this._database
+        return this._container.getComponent( 'Database' ).connection
     }
 }

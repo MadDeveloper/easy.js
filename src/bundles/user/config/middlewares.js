@@ -8,9 +8,6 @@ export default function middlewares( router, factory ) {
      * Middlewares
      */
     router.use( '/roles/:idRole/users/:idUser', ( req, res, next ) => {
-        userMiddlewaresController.userExists()
-        .then( () => {
-            next()
-        })
+        userMiddlewaresController.userExists( next )
     })
 }

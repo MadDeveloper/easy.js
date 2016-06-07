@@ -11,33 +11,37 @@ export default class RoleSecurityController extends Controller {
         this._access = this.getService( 'security.access' )
     }
 
-    authorize() {
-        return new Promise( ( resolve, reject ) => {
-            if ( this.isProdEnv() ) {
-                const token = this.request.getBodyParameter( 'token' )
+    /**
+     * authorize - determine is current user can access to bundle routes
+     *
+     * @param {function} next
+     */
+    authorize( next ) {
+        if ( this.isProdEnv() ) {
+            const token = this.request.getBodyParameter( 'token' )
 
-                this.access.restrict({
-                    mustBe: [ this.access.any ],
-                    canCreate: [ this.access.admin ],
-                    canRead: [],
-                    canUpdate: [ this.access.admin ],
-                    canDelete: [ this.access.admin ]
-                })
+            this.access.restrict({
+                mustBe: [ this.access.any ],
+                canCreate: [ this.access.admin ],
+                canRead: [],
+                canUpdate: [ this.access.admin ],
+                canDelete: [ this.access.admin ]
+            })
 
-                if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {
-                    resolve()
-                } else {
-                    this.response.forbidden()
-                    reject()
-                }
+            if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {
+                next()
             } else {
-                resolve()
+                this.response.forbidden()
             }
-        })
+        } else {
+            next()
+        }
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get - access service
+     *
+     * @returns {AccessSecurityService}
      */
     get access() {
         return this._access

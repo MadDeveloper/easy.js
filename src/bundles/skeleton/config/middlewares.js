@@ -8,9 +8,6 @@ export default function middlewares( router, factory ) {
      * Middlewares
      */
     router.use( '/skeletons/:id', ( req, res, next ) => {
-        skeletonMiddlewaresController.skeletonExists()
-        .then( () => {
-            next()
-        })
+        skeletonMiddlewaresController.skeletonExists( next )
     })
 }

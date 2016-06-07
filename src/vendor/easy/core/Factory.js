@@ -8,33 +8,30 @@ export default class Factory {
      */
     constructor( container ) {
         this._container     = container
-        this._database      = container.getComponent( 'Database' ).connection
-        this._router        = container.getComponent( 'Router' ).scope
-        this._entityManager = container.getComponent( 'EntityManager' )
         this._bundlesPath   = container.kernel.path.bundles
     }
 
     /**
      * getController - get specific bundle controller (e.g. skeleton.routing -> SkeletonRoutingController )
      *
-     * @param  {string} controller description
+     * @param  {string} controller
      * @returns {Controller}
      */
     getController( controller ) {
         if ( controller.length > 0 ) {
-            let bundle      = ''
-            let controller  = ''
+            let bundle          = ''
+            let controllerFile  = ''
 
             if ( -1 === controller.indexOf( '.' ) ) {
-                bundle = controller
-                controller = 'Routing'
+                bundle          = controller
+                controllerFile  = 'Routing'
             } else {
-                const info  = controller.split( '.' )
-                bundle      = info[ 0 ]
-                controller  = info[ 1 ]
+                const info      = controller.split( '.' )
+                bundle          = info[ 0 ]
+                controllerFile  = info[ 1 ]
             }
 
-            const controllerClass = require( `${this.bundlesPath}/${bundle}/controllers/${bundle.capitalizeFirstLetter()}${controller.capitalizeFirstLetter()}Controller` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const controllerClass = require( `${this.bundlesPath}/${bundle}/controllers/${bundle.capitalizeFirstLetter()}${controllerFile.capitalizeFirstLetter()}Controller` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
             return new controllerClass( this )
         }
@@ -47,11 +44,11 @@ export default class Factory {
      * @returns {function}
      */
     getConfig( config ) {
-        if ( config.length > 0 ) {
+        if ( config && config.length > 0 ) {
             const info          = config.split( '.' )
             const bundle        = info[ 0 ]
-            const config        = info[ 1 ]
-            const configClass   = require( `${this.bundlesPath}/${bundle}/config/${config}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const configFile    = info[ 1 ]
+            const configClass   = require( `${this.bundlesPath}/${bundle}/config/${configFile}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
             return configClass( this.router, this )
         }
@@ -81,7 +78,7 @@ export default class Factory {
      * @returns {object}
      */
     get database() {
-        return this._database
+        return this.container.getComponent( 'Database' ).connection
     }
 
     /**
@@ -90,7 +87,7 @@ export default class Factory {
      * @returns {express.Router}
      */
     get router() {
-        return this._router
+        return this.container.getComponent( 'Router' ).scope
     }
 
     /**
@@ -99,6 +96,6 @@ export default class Factory {
      * @returns {EntityManager}
      */
     get entityManager() {
-        return this._entityManager
+        return this.container.getComponent( 'EntityManager' )
     }
 }

@@ -1,15 +1,21 @@
 import fs   from 'fs'
 import path from 'path'
 
+/**
+ * @class LogFileManager
+ */
 export default class LogFileManager {
+    /**
+     * @constructor
+     */
     constructor() {
-        this._logDirectoryPath  = `${__dirname}/../../../../logs`
+        this._logDirectoryPath = `${__dirname}/../../../../logs`
     }
 
     /**
      * Open log file (create it if doesn't exist) and returns it
      *
-     * @param name
+     * @param {string} name
      */
     openLogFile( name ) {
         return new Promise( ( resolve, reject ) => {
@@ -22,14 +28,16 @@ export default class LogFileManager {
     /**
      * Synchronous version of openLogFile
      *
-     * @param name
+     * @param {string} name
      */
     openLogFileSync( name ) {
         return fs.openSync( path.resolve( `${this.logDirectoryPath}/${name}.log` ), 'a+' )
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get - log directory path (default: ~/logs)
+     *
+     * @returns {string}
      */
     get logDirectoryPath() {
         return this._logDirectoryPath

@@ -1,4 +1,4 @@
-import Entity from './../../../vendor/easy/database/Repository'
+import Repository from './../../../vendor/easy/database/Repository'
 
 export default class SkeletonRepository extends Repository {
     constructor( entityManager ) {

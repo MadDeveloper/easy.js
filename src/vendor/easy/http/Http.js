@@ -1,4 +1,10 @@
+/**
+ * @class Http
+ */
 export default class Http {
+    /**
+     * @constructor
+     */
     constructor() {
         this._status = {
             // Response to a successful GET, PUT, PATCH or DELETE. Can also be used for a POST that doesn't result in a creation
@@ -32,8 +38,10 @@ export default class Http {
         }
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get - http status
+     *
+     * @returns {object}     
      */
     get status() {
         return this._status

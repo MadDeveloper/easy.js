@@ -12,21 +12,24 @@ export default class UserMiddlewaresController extends Controller {
         super( factory )
     }
 
-    userExists() {
-        return new Promise( ( resolve, reject ) => {
-            const requireOptions = {
-                requireBy: this.request.getRouteParameter( 'idUser' ),
-                options: {}
-            }
+    /**
+     * userExists
+     *
+     * @param {function} next
+     */
+    userExists( next ) {
+        const requireOptions = {
+            requireBy: this.request.getRouteParameter( 'idUser' ),
+            options: {}
+        }
 
-            this.doesRequiredElementExists( 'user', requireOptions )
-            .then( user => {
-                this.request.define( 'user', user )
-                resolve()
-            })
-            .catch( error => {
-                reject( error )
-            })
+        this.doesRequiredElementExists( 'user', requireOptions )
+        .then( user => {
+            this.request.define( 'user', user )
+            next()
+        })
+        .catch( error => {
+            this.response.notFound()
         })
     }
 }

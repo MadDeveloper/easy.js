@@ -8,9 +8,6 @@ export default function security( router, factory ) {
      * Security middlewares
      */
     router.use( '/roles/:idrole/users', ( req, res, next ) => {
-        userSecurityController.authorize()
-        .then( () => {
-            next()
-        })
+        userSecurityController.authorize( next )
     })
 }
