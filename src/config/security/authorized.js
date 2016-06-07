@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-export default function authorized( response, request, secret, router ) {
+export default function authorized({ request, response, secret, router }) {
     /*
      * Define authorization control middleware
      */

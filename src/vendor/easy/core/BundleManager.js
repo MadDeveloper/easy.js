@@ -1,13 +1,28 @@
 import fs from 'fs'
 
+/**
+ * @class BundleManager
+ */
 export default class BundleManager {
+    /**
+     * @constructor
+     * @param  {Container} container
+     */
     constructor( container ) {
         this._container         = container
         this._kernel            = container.kernel
         this._factory           = container.getComponent( 'Factory' )
+        this._router            = container.getComponent( 'Router' ).scope
+        this._bundlesPath       = container.kernel.path.bundles
         this._bundlesDefinition = []
     }
 
+    /**
+     * define - register bundle
+     *
+     * @param  {string} bundle
+     * @returns {BundleManager}
+     */
     define( bundle ) {
         const bundleDirPath = `${this.getBundlesDirectory()}/${bundle}`
 
@@ -18,23 +33,19 @@ export default class BundleManager {
         return this
     }
 
-    getFactory( bundle ) {
-        const factoryPath = `${this.getBundlesDirectory()}/${bundle}/${bundle.capitalizeFirstLetter()}Factory.js`
-
-        if ( fs.statSync( factoryPath ).isFile() ) {
-            const factoryBundle = require( factoryPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
-
-            return new factoryBundle( this )
-        }
-    }
-
+    /**
+     * getRouting - retrieve defined bundle routing
+     *
+     * @param  {string} bundle
+     * @returns {type}
+     */
     getRouting( bundle ) {
         const routingPath = `${this.getBundlesDirectory()}/${bundle}/config/routing.js`
 
         if ( fs.statSync( routingPath ).isFile() ) {
             const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
-            return routingBundle( this.getFactory( bundle ) )
+            return routingBundle( this.router, this.factory )
         }
     }
 
@@ -45,27 +56,13 @@ export default class BundleManager {
         }
     }
 
-    getBundlesDirectory() {
-        return this._kernel.path.bundles
-    }
-
-    /*
-     * Getters and setter
+    /**
+     * get - absolute bundle path
+     *
+     * @returns {string}
      */
-    get appName() {
-        return this.kernel.appName
-    }
-
-    get routerComponent() {
-        return this.container.getComponent( 'Router' )
-    }
-
-    get router() {
-        return this.routerComponent.scope
-    }
-
-    get database() {
-        return this.container.getComponent( 'Database' ).connection
+    get bundlesPath() {
+        return this._bundlesPath
     }
 
     get bundlesDefinition() {
@@ -74,6 +71,10 @@ export default class BundleManager {
 
     get container() {
         return this._container
+    }
+
+    get router() {
+        return this._router
     }
 
     get factory() {

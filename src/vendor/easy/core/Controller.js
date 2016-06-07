@@ -7,6 +7,7 @@ export default class Controller {
      * @param  {Factory} factory
      */
     constructor( factory ) {
+        this._factory       = factory
         this._container     = factory.container
         this._request       = this._container.getComponent( 'Request' )
         this._response      = this._container.getComponent( 'Response' )
@@ -108,7 +109,7 @@ export default class Controller {
                 requireBy = options
             }
 
-            const elementRepository = this.bundleManager.getFactory( element ).getRepository()
+            const elementRepository = this.entityManager.getRepository( element )
 
             elementRepository.read( requireBy, optionsFetch )
             .then( element => {
@@ -148,8 +149,13 @@ export default class Controller {
         return !this.isDevEnv()
     }
 
-    get bundle() {
-        return this._bundle
+    /**
+     * get - factory instance
+     *
+     * @returns {Factory}
+     */
+    get factory() {
+        return this._factory
     }
 
     /**

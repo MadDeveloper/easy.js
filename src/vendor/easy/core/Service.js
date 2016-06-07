@@ -7,9 +7,9 @@ export default class Service {
      * @param  {Container} container
      */
     constructor( container ) {
+        this._container     = container
         this._request       = container.getComponent( 'Request' )
         this._response      = container.getComponent( 'Response' )
-        this._bundleManager = container.getComponent( 'BundleManager' )
         this._database      = container.getComponent( 'Database' ).connection
         this._router        = container.getComponent( 'Router' ).scope
 
@@ -27,7 +27,7 @@ export default class Service {
      * @returns {Container}
      */
     get container() {
-        return this._bundleManager.container
+        return this._container
     }
 
     /**
@@ -46,15 +46,6 @@ export default class Service {
      */
     get response() {
         return this._response
-    }
-
-    /**
-     * get BundleManager
-     *
-     * @returns {BundleManager}
-     */
-    get bundleManager() {
-        return this._bundleManager
     }
 
     /**

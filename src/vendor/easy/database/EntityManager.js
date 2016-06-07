@@ -20,7 +20,7 @@ export default class EntityManager {
      */
     getRepository( repository ) {
         if ( repository.length > 0 ) {
-            const repositoryClass = require( `${this.bundlePath}/${repository.decapitalizeFirstLetter()}/entity/${this.bundle.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${this.bundle.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
             return new repositoryClass( this )
         }
@@ -33,7 +33,7 @@ export default class EntityManager {
      * @returns {Entity}
      */
     getModel( model ) {
-        const modelClass = require( `${this.bundlePath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
         return new modelClass( this )
     }

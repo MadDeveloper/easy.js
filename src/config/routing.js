@@ -16,7 +16,7 @@ export default function routing( container, bundleManager, router ) {
         /*
          * Security
          */
-        authentication( container, bundleManager, router )
+        authentication( container, router )
         container.getService( 'security.default' )
 
     /*
