@@ -5,5 +5,4 @@ export default function bundlesDefinition( bundleManager ) {
     bundleManager
     .define( 'role' )
     .define( 'user' )
-    //.define( 'skeleton' ) // uncomment this line if you want verify Skeleton files syntax
 }

@@ -2,7 +2,7 @@
 import execsql										from 'execsql'
 import { kernel, bundleManager, config, container }	from './../../bootstrap.js'
 
-let argv = minimist( process.argv.slice( 2 ) )
+const argv = minimist( process.argv.slice( 2 ) )
 
 const dbConfig = {
 	host: config.database.connection.host,

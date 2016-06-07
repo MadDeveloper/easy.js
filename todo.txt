@@ -1,46 +1,27 @@
-- finir bundleManager et les fichiers BundleTests et Tests
-
 - verifyParams doit être placer dans une librarie http et non dans Controller
 
 - permettre d'accéder à des routes sans être authentifier
 
-- au lieu de créer des propriété autant passer par les getters si on les exposes ou sinon les laisser en this._ ??
-
-- renommer database en bookshelf dans les propriétés ?
-
-- créer un EntityManager permettant de getEntity() et getRepository(), accessible dans controller et factory, par défaut factory et controller en tant que shortcut ?
-  regrouper dans Entity/ Entity, Repository et EntityManager
-
 - régler soucis bin/startup (ER_ACCESS_DENIED)
-
-- quand on crée un bundle le fichier schema.js ne se met pas à jour
-
-- proposer d'activer le bundle dans bundlesDefinition dès qu'il est créé
-
-- isRequestWellInitialized inutile de passer le request body vu que c'est un controller et bundleManager pour doesRequiredElementExists
 
 - finir les tests pour user / role / skeleton
 
 - finir les tests pour les services
 
-- toJSON() de bookshelf et .json() de express semblent faire la même chose, donc inutile d'utiliser .toJSON() dans les controllers ?
-
 - configurer les id des roles dans un fichier de conf pour les récupérer dans le service AccessSecurity
 
-- code to show routes ?
+- bin to show routes: mettre l'option -s pour sauvegarder dans un fichier
 
 - améliorer urlContains pour lui passer en paramètre un tableau de paths
 
-- penser à utiliser methodNotAllowed pour les method sur les routes qui n'implémente pas cette dernière
-
-- uniformiser controller et repository, ne pas mettre RoutingController et UserRepository ! Soit RoutingController et Repository ou soit UserRoutingController et UserRepository (préférable ?)
-
-- retirer les factory de chaque bundle ? uniquement utiliser la factory easy ?
+- penser à utiliser methodNotAllowed pour les method sur les routes qui n'implémente pas cette dernière (un verbe non authorisé)
 
 - enlever la réponse automatique du Controller easy, la rendre optionnelle ?
 
+
 -- IMMINENT --
 REDIGER LA DOC
+
 
 --- LATER ---
 
@@ -53,3 +34,5 @@ REDIGER LA DOC
 - faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
 
 - jsdoc for each class and functions
+
+- mettre dans la doc le fait de mettre le skeleton dans le bundlesDefinition afin de tester la syntaxe des fichiers

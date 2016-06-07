@@ -9,11 +9,10 @@ import { bundleManager, config, container }	from './../../bootstrap.js'
 process.argv.standalone = false
 import { migrate } from './migrate'
 
-let argv = minimist( process.argv.slice( 2 ) )
+const argv = minimist( process.argv.slice( 2 ) )
 
 const cli               	= container.getComponent( 'Console' )
-let schemaDatabaseService 	= container.getService( 'database.schema' )
-
+const schemaDatabaseService	= container.getService( 'database.schema' )
 const dbConfig = {
 	host: config.database.connection.host,
 	user: config.database.connection.user,

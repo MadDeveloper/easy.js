@@ -5,7 +5,7 @@ import path                                 from 'path'
 import minimist                             from 'minimist'
 import { kernel, bundleManager, container } from './../../bootstrap.js'
 
-let argv = minimist( process.argv.slice( 2 ) )
+const argv = minimist( process.argv.slice( 2 ) )
 
 const cli                   = container.getComponent( 'Console' )
 const bundlesTestsDirectory = kernel.path.test.bundles

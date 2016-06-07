@@ -7,7 +7,7 @@ import { question }                         from 'readline-sync'
 import { indexOf }                          from 'lodash'
 import { kernel, bundleManager, container } from './../../bootstrap.js'
 
-let argv = minimist( process.argv.slice( 2 ) )
+const argv = minimist( process.argv.slice( 2 ) )
 
 const cli                   = container.getComponent( 'Console' )
 const schemaDatabaseService = container.getService( 'database.schema' )
@@ -16,12 +16,13 @@ const stringLibrary         = container.getLibrary( 'string' )
 const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {
-    const bundlesTestPath = `${__dirname}/../../../src/test/bundles`
+    const bundlesTestPath       = `${kernel.path.root}/../src/test/bundles`
 
     const positiveAnswers       = [ 'y', 'ye', 'yes' ]
     const negativeAnswers       = [ 'n', 'no' ]
-    const bundlesPath           = `${__dirname}/../../../src/bundles`
+    const bundlesPath           = `${kernel.path.root}/../src/bundles`
     const skeletonBundlePath    = `${bundlesPath}/skeleton`
+    const bundlesDefinitionPath = `${kernel.path.root}/../src/config/bundlesDefinition.js`
 
     let nameBundle              = stringLibrary.cleanSpaces( nameBundleFromArgv )
     let nameBundleCapitalized   = nameBundle.capitalizeFirstLetter()
@@ -33,7 +34,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
     const availablesColumnType  = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal', 'boolean', 'date', 'datetime', 'time', 'timestamp' ]
     const specialColumnType     = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal' ]
-    const pathDatabaseSchema    = `${kernel.path.config}/database/schema.js`
+    const pathDatabaseSchema    = `${kernel.path.root}/../src/config/database/schema.js`
 
     /*
      * Check if bundle isn't defined yet
@@ -356,8 +357,8 @@ if ( nameBundleFromArgv.length > 0 ) {
         .then( () => {
             fs.readFile( pathDatabaseSchema, { encoding: 'utf8' }, ( error, data ) => {
                 if ( !error ) {
-                    const stringToWrite = `export default {\n\t${tableName}: ${JSON.stringify( properties )},\n\n`
-                    const dataUpdated = data.replace( /export(\s*)default(\s)\{/i, stringToWrite )
+                    const stringToWrite = `export default {\n\t${tableName}: ${JSON.stringify( properties )},\n`
+                    const dataUpdated = data.replace( /export default {/i, stringToWrite )
 
                     fs.writeFile( pathDatabaseSchema, dataUpdated, { encoding: 'utf8' }, error => {
                         if ( !error ) {
@@ -413,9 +414,43 @@ if ( nameBundleFromArgv.length > 0 ) {
                 })
             } else {
                 fs.chmodSync( bundleCreatingPath, parseInt( 777, 8 ) )
-                launchWalker()
+                registerBundleRouting()
             }
         })
+    }
+
+    function registerBundleRouting() {
+        const answerRegisterRouting = question( 'Do you want to expose bundle routes? (y/n) ' ).trim().toLowerCase()
+
+        if ( -1 !== indexOf( positiveAnswers, answerRegisterRouting ) ) {
+            fs.readFile( bundlesDefinitionPath, { encoding: 'utf8' }, ( error, data ) => {
+                if ( !error ) {
+                    const stringToWrite = `\t.define( '${nameBundleDecapitalized}' )\n}`
+                    const dataUpdated = data.replace( /\}/i, stringToWrite )
+
+                    fs.writeFile( bundlesDefinitionPath, dataUpdated, { encoding: 'utf8' }, error => {
+                        if ( !error ) {
+                            launchWalker()
+                        } else {
+                            errorEditingBundlesDefinition( error )
+                        }
+                    })
+                } else {
+                    errorEditingBundlesDefinition( error )
+                }
+            })
+        } else {
+            launchWalker()
+        }
+
+        function errorEditingBundlesDefinition( error ) {
+            cli.error({
+                title: "Impossible to expose bundle routing",
+                message: `Error when editing bundlesDefinition.js file: ${error}`,
+                consequence: "Bundle creation incomplete.",
+                exit: 0
+            })
+        }
     }
 
     function launchWalker() {

@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+import pad                                  from 'pad-right'
+import { kernel, bundleManager, container } from './../../bootstrap.js'
+
+const cli       = container.getComponent( 'Console' )
+const router    = container.getComponent( 'Router' )
+
+let route = ''
+
+const routesStack = router.scope.stack
+for ( let stack in routesStack ) {
+   if ( routesStack.hasOwnProperty( stack ) ) {
+       route = routesStack[ stack ].route
+
+       if ( route ) {
+           route.stack.forEach( layer => {
+               cli.log( `${pad( layer.method.toUpperCase(), 'delete'.length, ' ' )} - ${route.path}` )
+           })
+       }
+   }
+}
+
+cli.line()
+process.exit()

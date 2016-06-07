@@ -6,7 +6,7 @@ import schema										from './../../config/database/schema'
 import { keys, map }								from 'lodash'
 import { kernel, bundleManager, config, container }	from './../../bootstrap.js'
 
-let argv = minimist( process.argv.slice( 2 ) )
+const argv = minimist( process.argv.slice( 2 ) )
 
 const cli               	= container.getComponent( 'Console' )
 let schemaDatabaseService 	= container.getService( 'database.schema' )

@@ -168,19 +168,3 @@ app.use( '/', router.scope )
  * Returns the application elements configured
  */
 export { app, kernel, bundleManager, config, container }
-
-
-/*
- * Show routes
- */
- const routesStack = router.scope.stack
- for ( let stack in routesStack ) {
-    if ( routesStack.hasOwnProperty( stack ) ) {
-        const route = routesStack[ stack ].route
-        if ( route ) {
-            route.stack.forEach( layer => {
-                cli.log( `${layer.method.toUpperCase()} - ${route.path}` )
-            })
-        }
-    }
-}
