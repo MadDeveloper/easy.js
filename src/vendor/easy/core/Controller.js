@@ -28,7 +28,7 @@ export default class Controller {
      */
     registerHttp( request, response ) {
         this.request = new Request( request, this.container.kernel.appName )
-        this.response = new Response( request, response, this.container.getComponent( 'Logger' ) )
+        this.response = new Response( response, this.request, this.container.getComponent( 'Logger' ) )
     }
 
     /**

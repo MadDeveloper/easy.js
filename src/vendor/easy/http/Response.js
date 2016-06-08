@@ -1,7 +1,7 @@
 import Http from './Http'
 
 export default class Response extends Http {
-    constructor( request, response, logger ) {
+    constructor( response, request, logger ) {
         super()
 
         this._scope     = response
