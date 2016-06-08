@@ -9,7 +9,7 @@ export default class DefaultSecurityService extends Service {
         /*
          * Add your defaults policies security
          */
-        this.router.use(( req, res, next ) => {
+        this.router.use( ( req, res, next ) => {
             next()
         })
     }

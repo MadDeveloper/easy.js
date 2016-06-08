@@ -1,12 +1,12 @@
 import Http from './Http'
 
 export default class Response extends Http {
-    constructor( container ) {
+    constructor( request, response, logger ) {
         super()
 
-        this._scope     = null
-        this._logger    = container.getComponent( 'Logger' )
-        this._request   = container.getComponent( 'Request' )
+        this._scope     = response
+        this._logger    = logger
+        this._request   = request
     }
 
     formatParams( params, setDefault ) {

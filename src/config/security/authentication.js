@@ -3,20 +3,17 @@ import config       from './../config'
 import authorized   from './authorized'
 import Controller   from './../../vendor/easy/core/Controller'
 
-export default function authentication( container, router ) {
+export default function authentication( container, req, res, router ) {
     const factory = container.getComponent( 'Factory' )
-
-    /*
-     * Provide Http helpers
-     */
-    const request   = container.getComponent( 'Request' )
-    const response  = container.getComponent( 'Response' )
 
     /*
      * Special case, use easy Controller to use specifics methods
      */
     const controller = new Controller( factory )
+    controller.registerHttp( req, res )
 
+    const request   = controller.request
+    const response  = controller.response
 
     /*
      * User classes

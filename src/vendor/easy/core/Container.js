@@ -38,9 +38,6 @@ export default class Container {
             'router': `${this._kernel.path.vendor.easy}/core/Router`,
             'database': `${this._kernel.path.vendor.easy}/database/Database`,
             'entitymanager': `${this._kernel.path.vendor.easy}/database/EntityManager`,
-            'http': `${this._kernel.path.vendor.easy}/http/Http`,
-            'request': `${this._kernel.path.vendor.easy}/http/Request`,
-            'response': `${this._kernel.path.vendor.easy}/http/Response`,
             'logger': `${this._kernel.path.vendor.easy}/log/Logger`,
             'logfilemanager':   `${this._kernel.path.vendor.easy}/log/LogFileManager`,
             'logwriter': `${this._kernel.path.vendor.easy}/log/LogWriter`

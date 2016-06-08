@@ -52,7 +52,6 @@ export default class RoleRoutingController extends Controller {
             this.roleRepository.save( this.request.find( 'role' ), this.request.getBody() )
             .then( role => {
                 this.response.ok( role )
-
             })
             .catch( error => {
                 this.response.internalServerError( error )
@@ -66,7 +65,6 @@ export default class RoleRoutingController extends Controller {
         this.roleRepository.delete( this.request.find( 'role' ) )
         .then( () => {
             this.response.noContent()
-
         })
         .catch( error => {
             this.response.internalServerError( error )

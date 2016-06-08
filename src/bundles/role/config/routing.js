@@ -11,6 +11,14 @@ export default function routing( router, factory ) {
     factory.getConfig( 'role.middlewares' )
 
     /*
+     * Register request and response into Controller
+     */
+    router.use( ( req, res, next ) => {
+        roleRoutingController.registerHttp( req, res )
+        next()
+    })
+
+    /*
      * Routes definitions
      */
     router.route( '/roles' )

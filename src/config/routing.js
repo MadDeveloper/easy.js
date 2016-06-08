@@ -4,20 +4,15 @@ export default function routing( container, bundleManager, router ) {
     /*
      * Middlewares
      */
-        /*
-         * Use Request ans Response class as a middleware to manage respectively request and response scope vars
-         */
-        router.use( ( req, res, next ) => {
-            container.getComponent( 'Request' ).scope = req
-            container.getComponent( 'Response' ).scope = res
-            next()
-        })
 
         /*
          * Security
          */
-        authentication( container, router )
-        container.getService( 'security.default' )
+        router.use( ( req, res, next ) => {
+            authentication( container, req, res, router )
+            container.getService( 'security.default' )
+            next()
+        })
 
     /*
     * bundles routes definitions

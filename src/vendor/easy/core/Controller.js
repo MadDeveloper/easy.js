@@ -1,18 +1,34 @@
+import Request  from './../http/Request'
+import Response from './../http/Response'
+
 /**
  * @class Controller
  */
 export default class Controller {
     /**
      * @constructor
+     * @param  {express.Request} request
+     * @param  {express.Response} response
      * @param  {Factory} factory
      */
     constructor( factory ) {
         this._factory       = factory
         this._container     = factory.container
-        this._request       = this._container.getComponent( 'Request' )
-        this._response      = this._container.getComponent( 'Response' )
+        this._request       = null
+        this._response      = null
         this._router        = this._container.getComponent( 'Router' ).scope
         this._entityManager = this._container.getComponent( 'EntityManager' )
+    }
+
+    /**
+     * registerHttp - register http request and response
+     *
+     * @param  {express.Request} request
+     * @param  {express.Respone} response
+     */
+    registerHttp( request, response ) {
+        this.request = new Request( request, this.container.kernel.appName )
+        this.response = new Response( request, response, this.container.getComponent( 'Logger' ) )
     }
 
     /**
@@ -173,12 +189,34 @@ export default class Controller {
     }
 
     /**
+     * set - define request scope
+     *
+     * @param  {express.Request} request
+     * @returns {Controller}
+     */
+    set request( request ) {
+        this._request = request
+        return this
+    }
+
+    /**
      * get - response instance
      *
      * @returns {Response}
      */
     get response() {
         return this._response
+    }
+
+    /**
+     * set - define response scope
+     *
+     * @param  {express.Response} response
+     * @returns {Controller}
+     */
+    set response( response ) {
+        this._response = response
+        return this
     }
 
     /**
