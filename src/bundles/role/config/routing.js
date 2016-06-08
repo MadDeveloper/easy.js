@@ -1,8 +1,10 @@
+import RoleRoutingController from './../controllers/RoleRoutingController'
+
 export default function routing( router, factory ) {
     /*
      * Dependencies
      */
-    const roleRoutingController = factory.getController( 'role.Routing' )
+    let roleRoutingController
 
     /*
      * Middlewares
@@ -14,7 +16,7 @@ export default function routing( router, factory ) {
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        roleRoutingController.registerHttp( req, res )
+        roleRoutingController = new RoleRoutingController( req, res, factory )
         next()
     })
 
@@ -22,8 +24,8 @@ export default function routing( router, factory ) {
      * Routes definitions
      */
     router.route( '/roles' )
-        .get( () => {
-            roleRoutingController.getRoles()
+        .get( ( req, res ) => {
+            roleRoutingController.getRoles( req, res )
         })
         .post( () => {
             roleRoutingController.createRole()

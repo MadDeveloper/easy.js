@@ -18,6 +18,8 @@
 
 - enlever la réponse automatique du Controller easy, la rendre optionnelle ?
 
+- mieux gérer les injections de dépendances pour les composants, services, controllers, etc.
+
 
 -- IMMINENT --
 REDIGER LA DOC

@@ -1,14 +1,16 @@
+import RoleSecurityController from './../controllers/RoleSecurityController'
+
 export default function security( router, factory ) {
     /*
      * Dependencies
      */
-    const roleSecurityController = factory.getController( 'role.Security' )
+    let roleSecurityController
 
     /*
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        roleSecurityController.registerHttp( req, res )
+        roleSecurityController = new RoleSecurityController( req, res, factory )
         next()
     })
 

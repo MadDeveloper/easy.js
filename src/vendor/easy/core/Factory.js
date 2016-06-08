@@ -17,7 +17,7 @@ export default class Factory {
      * @param  {string} controller
      * @returns {Controller}
      */
-    getController( controller ) {
+    getController( controller, req, res  ) {
         if ( controller.length > 0 ) {
             let bundle          = ''
             let controllerFile  = ''
@@ -33,7 +33,7 @@ export default class Factory {
 
             const controllerClass = require( `${this.bundlesPath}/${bundle}/controllers/${bundle.capitalizeFirstLetter()}${controllerFile.capitalizeFirstLetter()}Controller` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
 
-            return new controllerClass( this )
+            return new controllerClass( req, res, this )
         }
     }
 

@@ -1,8 +1,18 @@
+import UserMiddlewaresController from './../controllers/UserMiddlewaresController'
+
 export default function middlewares( router, factory ) {
     /*
      * Dependencies
      */
-    const userMiddlewaresController = factory.getController( 'user.Middlewares' )
+    let userMiddlewaresController
+
+    /*
+     * Register request and response into Controller
+     */
+    router.use( ( req, res, next ) => {
+        userMiddlewaresController = new UserMiddlewaresController( req, res, factory )
+        next()
+    })
 
     /*
      * Middlewares

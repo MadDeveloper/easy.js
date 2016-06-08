@@ -1,8 +1,18 @@
+import UserSecurityControllers from './../controllers/UserSecurityController'
+
 export default function security( router, factory ) {
     /*
      * Dependencies
      */
-    const userSecurityController    = factory.getController( 'user.Security' )
+    let userSecurityController
+
+    /*
+     * Register request and response into Controller
+     */
+    router.use( ( req, res, next ) => {
+        userSecurityController = new UserSecurityController( req, res, factory )
+        next()
+    })
 
     /*
      * Security middlewares

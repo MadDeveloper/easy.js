@@ -11,24 +11,13 @@ export default class Controller {
      * @param  {express.Response} response
      * @param  {Factory} factory
      */
-    constructor( factory ) {
+    constructor( req, res, factory ) {
         this._factory       = factory
         this._container     = factory.container
-        this._request       = null
-        this._response      = null
+        this._request       = new Request( req, this.container.kernel.appName )
+        this._response      = new Response( res, this.request, this.container.getComponent( 'Logger' ) )
         this._router        = this._container.getComponent( 'Router' ).scope
         this._entityManager = this._container.getComponent( 'EntityManager' )
-    }
-
-    /**
-     * registerHttp - register http request and response
-     *
-     * @param  {express.Request} request
-     * @param  {express.Respone} response
-     */
-    registerHttp( request, response ) {
-        this.request = new Request( request, this.container.kernel.appName )
-        this.response = new Response( response, this.request, this.container.getComponent( 'Logger' ) )
     }
 
     /**

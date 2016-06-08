@@ -4,27 +4,21 @@ import authorized   from './authorized'
 import Controller   from './../../vendor/easy/core/Controller'
 
 export default function authentication( container, req, res, router ) {
-    const factory = container.getComponent( 'Factory' )
-
-    /*
-     * Special case, use easy Controller to use specifics methods
-     */
-    const controller = new Controller( factory )
-    controller.registerHttp( req, res )
-
-    const request   = controller.request
-    const response  = controller.response
-
-    /*
-     * User classes
-     */
-    const userRepository = factory.entityManager.getRepository( 'user' )
+    const factory       = container.getComponent( 'Factory' )
+    const controller    = new Controller( req, res, factory )
+    const request       = controller.request
+    const response      = controller.response
 
     /*
      * Defining routes with authorization required
      */
     router.route( '/authentication' )
         .post( () => {
+            /*
+             * User classes
+             */
+            const userRepository = factory.entityManager.getRepository( 'user' )
+
             const requestValidity = controller.verifyParams(
                 [
                     { property: 'email', typeExpected: 'string' },

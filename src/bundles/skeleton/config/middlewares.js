@@ -1,8 +1,18 @@
+import SkeletonMiddlewaresController from './../controllers/SkeletonMiddlewaresController'
+
 export default function middlewares( router, factory ) {
     /*
      * Dependencies
      */
-    const skeletonMiddlewaresController = factory.getController( 'skeleton.Middlewares' )
+    let skeletonMiddlewaresController
+
+    /*
+     * Register request and response into Controller
+     */
+    router.use( ( req, res, next ) => {
+        skeletonMiddlewaresController = new SkeletonMiddlewaresController( req, res, factory )
+        next()
+    })
 
     /*
      * Middlewares

@@ -9,8 +9,8 @@ export default class SkeletonRoutingController extends Controller {
      * @constructor
      * @param  {Factory} factory
      */
-    constructor( factory ) {
-        super( factory )
+    constructor( req, res, factory ) {
+        super( req, res, factory )
 
         this._skeletonRepository    = this.entityManager.getRepository( 'skeleton' )
         this._skeletonModel         = this.entityManager.getModel( 'skeleton' )

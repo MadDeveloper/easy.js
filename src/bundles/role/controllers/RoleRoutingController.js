@@ -5,8 +5,8 @@ export default class RoleRoutingController extends Controller {
      * @constructor
      * @param  {Factory} factory
      */
-    constructor( factory ) {
-        super( factory )
+    constructor( req, res, factory ) {
+        super( req, res, factory )
 
         this._roleRepository    = this.entityManager.getRepository( 'role' )
         this._roleModel         = this.entityManager.getModel( 'role' )
@@ -19,13 +19,15 @@ export default class RoleRoutingController extends Controller {
         ], this.request.getBody() )
     }
 
-    getRoles() {
+    getRoles( req, res ) {
         this.roleRepository.readAll()
         .then( roles => {
             this.response.ok( roles )
+            // res.status(200).json(roles)
         })
         .catch( error => {
             this.response.internalServerError( error )
+            // res.status(500).end()
         })
     }
 

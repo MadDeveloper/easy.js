@@ -1,3 +1,5 @@
+import SkeletonRoutingController from './../controllers/SkeletonRoutingController'
+
 /**
  * routing - define routes for skeleton bundle
  *
@@ -8,13 +10,21 @@ export default function routing( router, factory ) {
     /*
      * Dependencies
      */
-    const skeletonRoutingController = factory.getController( 'skeleton.Routing' )
+    let skeletonRoutingController
 
     /*
      * Middlewares
      */
     factory.getConfig( 'skeleton.security' )
     factory.getConfig( 'skeleton.middlewares' )
+
+    /*
+     * Register request and response into Controller
+     */
+    router.use( ( req, res, next ) => {
+        skeletonRoutingController = new SkeletonRoutingController( req, res, factory )
+        next()
+    })
 
     /*
     * Routes definitions

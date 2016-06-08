@@ -5,8 +5,8 @@ export default class RoleMiddlewaresController extends Controller {
      * @constructor
      * @param  {Factory} factory
      */
-    constructor( factory ) {
-        super( factory )
+    constructor( req, res, factory ) {
+        super( req, res, factory )
     }
 
     /**

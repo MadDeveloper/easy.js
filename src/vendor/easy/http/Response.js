@@ -1,10 +1,10 @@
 import Http from './Http'
 
 export default class Response extends Http {
-    constructor( response, request, logger ) {
+    constructor( res, request, logger ) {
         super()
 
-        this._scope     = response
+        this._scope     = res
         this._logger    = logger
         this._request   = request
     }

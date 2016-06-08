@@ -1,11 +1,11 @@
 import Http from './Http'
 
 export default class Request extends Http {
-    constructor( request, appName ) {
+    constructor( req, appName ) {
         super()
 
         this._appName   = appName
-        this._scope     = request
+        this._scope     = req
     }
 
     methodIs( method ) {

@@ -8,8 +8,8 @@ export default class UserSecurityController extends Controller {
      * @constructor
      * @param  {Factory} factory
      */
-    constructor( factory ) {
-        super( factory )
+    constructor( req, res, factory ) {
+        super( req, res, factory )
 
         this._access = this.getService( 'security.access' )
     }

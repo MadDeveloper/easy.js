@@ -8,8 +8,8 @@ export default class UserRoutingController extends Controller {
      * @constructor
      * @param  {Factory} factory
      */
-    constructor( factory ) {
-        super( factory )
+    constructor( req, res, factory ) {
+        super( req, res, factory )
 
         this._userRepository    = this.entityManager.getRepository( 'user' )
         this._roleRepository    = this.entityManager.getRepository( 'role' )
