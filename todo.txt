@@ -1,6 +1,4 @@
-- laisser un seul controller (le routing, mais en normal name), enlever getController de factory et getConfig aussi, on import les fichier à la mano, plus propre
-
-- verifyParams doit être placer dans une librarie http et non dans Controller
+- verifyParams doit être placer dans une librarie http et non dans Controller ?
 
 - permettre d'accéder à des routes sans être authentifier
 

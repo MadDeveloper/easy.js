@@ -32,6 +32,9 @@ export default function routing( router, factory ) {
         .post( () => {
             roleController.createRole()
         })
+        .all( ( req, res ) => {
+            res.status( 405 ).send( 'Method Not Allowed' )
+        })
 
     router.route( '/roles/:id' )
         .get( () => {

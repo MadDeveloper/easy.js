@@ -16,19 +16,27 @@ export default class BundleManager {
     }
 
     /**
-     * define - register bundle
+     * loadBundlesEnabledConfiguration - load all bundles enabled into ~/config/bundles/enabled.js
      *
-     * @param  {string} bundle
-     * @returns {BundleManager}
+     * @param {Array} bundlesEnabled
      */
-    define( bundle ) {
+    loadBundlesEnabledConfiguration( bundlesEnabled ) {
+        bundlesEnabled.forEach( element => {
+            this.enable( element )
+        })
+    }
+
+    /**
+     * enable - enable bundle (routing)
+     *
+     * @param {string} bundle
+     */
+    enable( bundle ) {
         const bundleDirPath = `${this.bundlesPath}/${bundle}`
 
         if ( fs.statSync( bundleDirPath ).isDirectory() ) {
             this.bundlesDefinition.push( bundle )
         }
-
-        return this
     }
 
     /**

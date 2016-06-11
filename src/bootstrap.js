@@ -13,8 +13,8 @@ import { indexOf }          from 'lodash'
 import minimist             from 'minimist'
 import Kernel               from './vendor/easy/core/Kernel'
 import config               from './config/config'
-import bundlesDefinition    from './config/bundlesDefinition'
 import routing              from './config/routing'
+import bundlesEnabled       from './config/bundles/enabled'
 
 const argv = minimist( process.argv.slice( 2 ) )
 
@@ -22,13 +22,6 @@ const argv = minimist( process.argv.slice( 2 ) )
  * We force cwd to be the directory where bootstrap.js is running, usefull for Unix os
  */
 process.chdir( __dirname )
-
-/*
- * Define root app path
- *
- * global.app      = global.app || {}
- * global.app.root = path.resolve( __dirname )
- */
 
 /*
  * API environement
@@ -61,6 +54,11 @@ database.connect()
  * Init router
  */
 router.scope = express.Router()
+
+/*
+ * Load all bundles enabled
+ */
+bundleManager.loadBundlesEnabledConfiguration( bundlesEnabled )
 
 /*
  * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
@@ -120,11 +118,6 @@ if ( 'l' === argv._[ 0 ] || 'log' === argv._[ 0 ] || argv.log ) {
     logFileManager.openLogFileSync( 'traffic' )
     app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${__dirname}/../logs/traffic.log`, { flags: 'a' } ) } ) )
 }
-
-/*
- * Register bundles for routing
- */
-bundlesDefinition( bundleManager )
 
 /*
  * Loads all the API routes
