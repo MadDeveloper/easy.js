@@ -3,51 +3,42 @@ import config       from './../config'
 import authorized   from './authorized'
 import Controller   from './../../vendor/easy/core/Controller'
 
-export default function authentication( container, req, res, router ) {
-    const factory       = container.getComponent( 'Factory' )
-    const controller    = new Controller( req, res, factory )
-    const request       = controller.request
-    const response      = controller.response
-
+export default function authentication( container, router ) {
     /*
      * Defining routes with authorization required
      */
     router.route( '/authentication' )
-        .post( () => {
+        .post( ( req, res ) => {
+            const factory       = container.getComponent( 'Factory' )
+            const controller    = new Controller( req, res, factory )
+            const request       = controller.request
+            const response      = controller.response
+
             /*
              * User classes
              */
             const userRepository = factory.entityManager.getRepository( 'user' )
 
-            const requestValidity = controller.verifyParams(
-                [
-                    { property: 'email', typeExpected: 'string' },
-                    { property: 'password', typeExpected: 'string' }
-                ],
-                request.getBody()
-            )
+            const requestValidity = controller.verifyParams([
+                { property: 'email', typeExpected: 'string' },
+                { property: 'password', typeExpected: 'string' }
+            ])
 
             if ( requestValidity ) {
                 userRepository.read({ email: request.getBodyParameter( 'email' ) })
                 .then( user => {
                     if ( user ) {
-
-                        if ( request.getBodyParameter( 'password' ) == user.get('password') ) {
-
+                        if ( request.getBodyParameter( 'password' ) == user.get( 'password' ) ) {
                             const token = jwt.sign( user.toJSON(), config.jwt.secret, { expiresIn: 86400 /* 24 hours */ } )
                             response.ok({ user, token })
-
                         } else {
                             response.unauthorized()
                         }
-
                     } else {
                         response.notFound()
                     }
                 })
-                .catch( error => {
-                    response.internalServerError( error )
-                })
+                .catch( error => response.internalServerError( error ) )
             } else {
                 response.badRequest()
             }
@@ -56,10 +47,5 @@ export default function authentication( container, req, res, router ) {
     /*
      * Check token validity
      */
-    authorized({
-        request,
-        response,
-        secret: config.jwt.secret,
-        router
-    })
+    authorized( container, config.jwt.secret, router )
 }

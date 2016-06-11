@@ -1,9 +1,14 @@
 import Controller from './../../../vendor/easy/core/Controller'
 
-export default class RoleRoutingController extends Controller {
+/**
+ * @class RoleController
+ */
+export default class RoleController extends Controller {
     /**
      * @constructor
-     * @param  {Factory} factory
+     * @param {express.Request} req
+     * @param {express.Response} res
+     * @param {Factory} factory
      */
     constructor( req, res, factory ) {
         super( req, res, factory )
@@ -12,23 +17,22 @@ export default class RoleRoutingController extends Controller {
         this._roleModel         = this.entityManager.getModel( 'role' )
     }
 
+    /**
+     * isRequestWellParameterized - verify if request is contains valid params
+     *
+     * @returns {bool}
+     */
     isRequestWellParameterized() {
         return this.verifyParams([
             { property: 'name', typeExpected: 'string' },
             { property: 'slug', typeExpected: 'string' }
-        ], this.request.getBody() )
+        ])
     }
 
     getRoles( req, res ) {
         this.roleRepository.readAll()
-        .then( roles => {
-            this.response.ok( roles )
-            // res.status(200).json(roles)
-        })
-        .catch( error => {
-            this.response.internalServerError( error )
-            // res.status(500).end()
-        })
+        .then( roles => this.response.ok( roles ) )
+        .catch( error => this.response.internalServerError( error ) )
     }
 
     createRole() {
@@ -37,9 +41,7 @@ export default class RoleRoutingController extends Controller {
             .then( role => {
                 this.response.created( role )
             })
-            .catch( error => {
-                this.response.internalServerError( error )
-            })
+            .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
         }
@@ -52,12 +54,8 @@ export default class RoleRoutingController extends Controller {
     updateRole() {
         if ( this.isRequestWellParameterized() ) {
             this.roleRepository.save( this.request.find( 'role' ), this.request.getBody() )
-            .then( role => {
-                this.response.ok( role )
-            })
-            .catch( error => {
-                this.response.internalServerError( error )
-            })
+            .then( role => this.response.ok( role ) )
+            .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
         }
@@ -65,12 +63,8 @@ export default class RoleRoutingController extends Controller {
 
     deleteRole() {
         this.roleRepository.delete( this.request.find( 'role' ) )
-        .then( () => {
-            this.response.noContent()
-        })
-        .catch( error => {
-            this.response.internalServerError( error )
-        })
+        .then( () => this.response.noContent() )
+        .catch( error => this.response.internalServerError( error ) )
     }
 
     /**

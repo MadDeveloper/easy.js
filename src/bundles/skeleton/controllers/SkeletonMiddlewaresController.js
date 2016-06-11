@@ -28,8 +28,6 @@ export default class SkeletonMiddlewaresController extends Controller {
             this.request.define( 'skeleton', skeleton )
             next()
         })
-        .catch( error => {
-            this.response.notFound()
-        })
+        .catch( error => this.response.notFound() )
     }
 }

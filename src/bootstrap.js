@@ -11,12 +11,17 @@ import compression          from 'compression'
 import numeral              from 'numeral'
 import { indexOf }          from 'lodash'
 import minimist             from 'minimist'
-import Kernel               from './vendor/easy/core/kernel'
+import Kernel               from './vendor/easy/core/Kernel'
 import config               from './config/config'
 import bundlesDefinition    from './config/bundlesDefinition'
 import routing              from './config/routing'
 
 const argv = minimist( process.argv.slice( 2 ) )
+
+/*
+ * We force cwd to be the directory where bootstrap.js is running, usefull for Unix os
+ */
+process.chdir( __dirname )
 
 /*
  * Define root app path

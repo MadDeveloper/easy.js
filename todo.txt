@@ -1,12 +1,12 @@
+- laisser un seul controller (le routing, mais en normal name), enlever getController de factory et getConfig aussi, on import les fichier à la mano, plus propre
+
 - verifyParams doit être placer dans une librarie http et non dans Controller
 
 - permettre d'accéder à des routes sans être authentifier
 
 - régler soucis bin/startup (ER_ACCESS_DENIED)
 
-- finir les tests pour user / role / skeleton
-
-- finir les tests pour les services
+- finir les tests pour user / role / skeleton / services
 
 - configurer les id des roles dans un fichier de conf pour les récupérer dans le service AccessSecurity
 
@@ -31,10 +31,4 @@ REDIGER LA DOC
 
 - appliquer le logger aux endroits utiles
 
-- faire de l'injection de dépendances dans les contructeurs, par exemples les controlleurs leur envoyer request et response
-
 - faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)
-
-- jsdoc for each class and functions
-
-- mettre dans la doc le fait de mettre le skeleton dans le bundlesDefinition afin de tester la syntaxe des fichiers

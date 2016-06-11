@@ -1,22 +1,24 @@
-import RoleRoutingController from './../controllers/RoleRoutingController'
+import roleSecurity     from './security'
+import roleMiddlewares  from './middlewares'
+import RoleController   from './../controllers/RoleController'
 
 export default function routing( router, factory ) {
     /*
      * Dependencies
      */
-    let roleRoutingController
+    let roleController
 
     /*
-     * Middlewares
+     * Security & middlewares
      */
-    factory.getConfig( 'role.security' )
-    factory.getConfig( 'role.middlewares' )
+    roleSecurity( router, factory )
+    roleMiddlewares( router, factory )
 
     /*
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        roleRoutingController = new RoleRoutingController( req, res, factory )
+        roleController = new RoleController( req, res, factory )
         next()
     })
 
@@ -25,20 +27,20 @@ export default function routing( router, factory ) {
      */
     router.route( '/roles' )
         .get( ( req, res ) => {
-            roleRoutingController.getRoles( req, res )
+            roleController.getRoles( req, res )
         })
         .post( () => {
-            roleRoutingController.createRole()
+            roleController.createRole()
         })
 
     router.route( '/roles/:id' )
         .get( () => {
-            roleRoutingController.getRole()
+            roleController.getRole()
         })
         .put( () => {
-            roleRoutingController.updateRole()
+            roleController.updateRole()
         })
         .delete( () => {
-            roleRoutingController.deleteRole()
+            roleController.deleteRole()
         })
 }

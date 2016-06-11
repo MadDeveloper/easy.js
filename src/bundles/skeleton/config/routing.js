@@ -1,4 +1,6 @@
-import SkeletonRoutingController from './../controllers/SkeletonRoutingController'
+import skeletonSecurity     from './security'
+import skeletonMiddlewares  from './middlewares'
+import SkeletonController   from './../controllers/SkeletonController'
 
 /**
  * routing - define routes for skeleton bundle
@@ -10,19 +12,19 @@ export default function routing( router, factory ) {
     /*
      * Dependencies
      */
-    let skeletonRoutingController
+    let skeletonController
 
     /*
-     * Middlewares
+     * Security & middlewares
      */
-    factory.getConfig( 'skeleton.security' )
-    factory.getConfig( 'skeleton.middlewares' )
+    skeletonSecurity( router, factory )
+    skeletonMiddlewares( router, factory )
 
     /*
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        skeletonRoutingController = new SkeletonRoutingController( req, res, factory )
+        skeletonController = new SkeletonController( req, res, factory )
         next()
     })
 
@@ -31,23 +33,23 @@ export default function routing( router, factory ) {
     */
     router.route( '/skeletons' )
         .get( () => {
-            skeletonRoutingController.getSkeletons()
+            skeletonController.getSkeletons()
         })
         .post( () => {
-            skeletonRoutingController.createSkeleton()
+            skeletonController.createSkeleton()
         })
 
     router.route( '/skeletons/:id' )
         .get( () => {
-            skeletonRoutingController.getSkeleton()
+            skeletonController.getSkeleton()
         })
         .put( () => {
-            skeletonRoutingController.updateSkeleton()
+            skeletonController.updateSkeleton()
         })
         .patch( () => {
-            skeletonRoutingController.patchSkeleton()
+            skeletonController.patchSkeleton()
         })
         .delete( () => {
-            skeletonRoutingController.deleteSkeleton()
+            skeletonController.deleteSkeleton()
         })
 }

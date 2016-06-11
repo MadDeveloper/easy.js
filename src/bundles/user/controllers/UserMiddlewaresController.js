@@ -28,8 +28,6 @@ export default class UserMiddlewaresController extends Controller {
             this.request.define( 'user', user )
             next()
         })
-        .catch( error => {
-            this.response.notFound()
-        })
+        .catch( error => this.response.notFound() )
     }
 }

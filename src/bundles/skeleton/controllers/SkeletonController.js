@@ -2,11 +2,13 @@ import { indexOf }  from 'lodash'
 import Controller   from './../../../vendor/easy/core/Controller'
 
 /**
- * @class SkeletonRoutingController
+ * @class SkeletonController
  */
-export default class SkeletonRoutingController extends Controller {
+export default class SkeletonController extends Controller {
     /**
      * @constructor
+     * @param {express.Request} req
+     * @param {express.Response} res
      * @param  {Factory} factory
      */
     constructor( req, res, factory ) {
@@ -24,7 +26,7 @@ export default class SkeletonRoutingController extends Controller {
     isRequestWellParameterized() {
         return this.verifyParams([
             { property: 'example', typeExpected: 'string' }
-        ], this.request.getBody() )
+        ])
     }
 
     /**
@@ -32,12 +34,8 @@ export default class SkeletonRoutingController extends Controller {
      */
     getSkeletons() {
         this.skeletonRepository.readAll()
-        .then( skeletons => {
-            this.response.ok( skeletons )
-        })
-        .catch( error => {
-            this.response.internalServerError( error )
-        })
+        .then( skeletons => this.response.ok( skeletons ) )
+        .catch( error => this.response.internalServerError( error ) )
     }
 
     /**
@@ -45,15 +43,9 @@ export default class SkeletonRoutingController extends Controller {
      */
     createSkeleton() {
         if ( this.isRequestWellParameterized() ) {
-
             this.skeletonRepository.save( new this.skeletonModel, this.request.getBody() )
-            .then( skeleton => {
-                this.response.created( skeleton )
-            })
-            .catch( error => {
-                this.response.internalServerError( error )
-            })
-
+            .then( skeleton => this.response.created( skeleton ) )
+            .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
         }
@@ -69,12 +61,8 @@ export default class SkeletonRoutingController extends Controller {
     updateSkeleton() {
         if ( this.isRequestWellParameterized() ) {
             this.skeletonRepository.save( this.request.find( 'skeleton' ), this.request.getBody(), { transacting: t } )
-            .then( skeleton => {
-                this.response.ok( skeleton )
-            })
-            .catch( error => {
-                this.response.internalServerError( error )
-            })
+            .then( skeleton => this.response.ok( skeleton ) )
+            .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
         }
@@ -107,9 +95,7 @@ export default class SkeletonRoutingController extends Controller {
                                             resolve( skeleton )
                                         }
                                     })
-                                    .catch( error => {
-                                        reject( error )
-                                    })
+                                    .catch( reject )
                                 }
                                 break
                         }
@@ -118,15 +104,9 @@ export default class SkeletonRoutingController extends Controller {
             })
 
             if ( patchRequestCorrectlyFormed ) {
-
                 patchSkeleton
-                .then( skeleton => {
-                    this.response.ok( skeleton.toJSON() )
-                })
-                .catch( error => {
-                    this.response.internalServerError( error )
-                })
-
+                .then( skeleton => this.response.ok( skeleton ) )
+                .catch( error => this.response.internalServerError( error ) )
             } else {
                 this.response.badRequest()
             }
@@ -141,12 +121,8 @@ export default class SkeletonRoutingController extends Controller {
      */
     deleteSkeleton() {
         this.skeletonRepository.delete( this.request.find( 'skeleton' ) )
-        .then( () => {
-            this.response.noContent()
-        })
-        .catch( error => {
-            this.response.internalServerError( error )
-        })
+        .then( () => this.response.noContent() )
+        .catch( error => this.response.internalServerError( error ) )
     }
 
     /**

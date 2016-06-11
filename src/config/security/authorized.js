@@ -1,11 +1,16 @@
-import jwt from 'jsonwebtoken'
+import jwt          from 'jsonwebtoken'
+import Controller   from './../../vendor/easy/core/Controller'
 
-export default function authorized({ request, response, secret, router }) {
+export default function authorized( container, secret, router ) {
     /*
      * Define authorization control middleware
      */
     router.use( ( req, res, next ) => {
-        const token = request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.scope.headers[ 'x-access-token' ]
+        const factory       = container.getComponent( 'Factory' )
+        const controller    = new Controller( req, res, factory )
+        const request       = controller.request
+        const response      = controller.response
+        const token         = request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.scope.headers[ 'x-access-token' ]
 
         if ( token ) {
 

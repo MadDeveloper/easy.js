@@ -14,8 +14,8 @@ export default class Controller {
     constructor( req, res, factory ) {
         this._factory       = factory
         this._container     = factory.container
-        this._request       = new Request( req, this.container.kernel.appName )
-        this._response      = new Response( res, this.request, this.container.getComponent( 'Logger' ) )
+        this._request       = new Request( req, this._container.kernel.appName )
+        this._response      = new Response( res, this._request, this._container.getComponent( 'Logger' ) )
         this._router        = this._container.getComponent( 'Router' ).scope
         this._entityManager = this._container.getComponent( 'EntityManager' )
     }
@@ -35,11 +35,15 @@ export default class Controller {
      * verifyParams - verify params by type expected, can be optional
      *
      * @param  {object} required
-     * @param  {object} params
+     * @param  {object} params = {}
      * @returns {bool}
      */
-    verifyParams( required, params ) {
+    verifyParams( required, params = {} ) {
         let verified = true
+
+        if ( !params || {} == params ) {
+            params = this.request.getBody()
+        }
 
         for ( let requiredParam in required ) {
             const optional = required[ requiredParam ].optional
@@ -82,7 +86,7 @@ export default class Controller {
      */
     parsePatchParams() {
         try {
-            return JSON.parse( this.request.scope.rawBody )
+            return JSON.parse( this.request.getRawbody() )
         } catch ( error ) {}
     }
 
@@ -92,7 +96,7 @@ export default class Controller {
      * @returns {type}  description
      */
     isPatchRequestWellParameterized() {
-        return this.request.scope.rawBody.length > 0
+        return this.request.getRawbody().length > 0
     }
 
     /**

@@ -20,6 +20,10 @@ export default class Request extends Http {
         return this.scope.body
     }
 
+    getRawbody() {
+        return this.scope.rawBody
+    }
+
     getParams() {
         return this.scope.params
     }

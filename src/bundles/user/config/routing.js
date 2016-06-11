@@ -1,22 +1,24 @@
-import UserRoutingController from './../controllers/UserRoutingController'
+import userSecurity     from './security'
+import userMiddlewares  from './middlewares'
+import UserController   from './../controllers/UserController'
 
 export default function routing( router, factory ) {
     /*
      * Dependencies
      */
-    let userRoutingController
+    let userController
 
     /*
-     * Middlewares
+     * Security & middlewares
      */
-    factory.getConfig( 'user.security' )
-    factory.getConfig( 'user.middlewares' )
+    userSecurity( router, factory )
+    userMiddlewares( router, factory )
 
     /*
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        userRoutingController = new UserRoutingController( req, res, factory )
+        userController = new UserController( req, res, factory )
         next()
     })
 
@@ -25,23 +27,23 @@ export default function routing( router, factory ) {
     */
     router.route( '/roles/:idRole/users' )
         .get( () => {
-            userRoutingController.getUsers()
+            userController.getUsers()
         })
         .post( () => {
-            userRoutingController.createUser()
+            userController.createUser()
         })
 
     router.route( '/roles/:idRole/users/:idUser' )
         .get( () => {
-            userRoutingController.getUser()
+            userController.getUser()
         })
         .put( () => {
-            userRoutingController.updateUser()
+            userController.updateUser()
         })
         .patch( () => {
-            userRoutingController.patchUser()
+            userController.patchUser()
         })
         .delete( () => {
-            userRoutingController.deleteUser()
+            userController.deleteUser()
         })
 }
