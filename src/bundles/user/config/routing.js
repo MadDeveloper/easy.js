@@ -32,6 +32,9 @@ export default function routing( router, factory ) {
         .post( () => {
             userController.createUser()
         })
+        .all( () => {
+            userController.methodNotAllowed()
+        })
 
     router.route( '/roles/:idRole/users/:idUser' )
         .get( () => {
@@ -45,5 +48,8 @@ export default function routing( router, factory ) {
         })
         .delete( () => {
             userController.deleteUser()
+        })
+        .all( () => {
+            userController.methodNotAllowed()
         })
 }

@@ -108,32 +108,45 @@ export default class Controller {
      */
     doesRequiredElementExists( element, options ) {
         return new Promise( ( resolve, reject ) => {
-            let requireBy = null
-            let optionsFetch = null
+            let requireBy       = null
+            let optionsFetch    = null
+            let respond         = true
 
-            if ( options instanceof Object && !( options instanceof Array ) ) {
-                requireBy = options.requireBy
-                optionsFetch = options.options
+            if ( options instanceof Object && !Array.isArray( options ) ) {
+                requireBy       = options.requireBy
+                optionsFetch    = options.options
+                respond         = options.respond || respond
+
+                const elementRepository = this.entityManager.getRepository( element )
+
+                elementRepository.read( requireBy, optionsFetch )
+                .then( element => {
+                    if ( element ) {
+                        resolve( element )
+                    } else {
+                        if ( respond ) {
+                            this.response.notFound()
+                        }
+                        reject( "Element not found" )
+                    }
+                })
+                .catch( error => {
+                    if ( respond ) {
+                        this.response.internalServerError( error )
+                    }
+                    reject( error )
+                })
             } else {
-                requireBy = options
+                reject( 'Missing parameter "requireBy" in doesRequiredElementExists()' )
             }
-
-            const elementRepository = this.entityManager.getRepository( element )
-
-            elementRepository.read( requireBy, optionsFetch )
-            .then( element => {
-                if ( element ) {
-                    resolve( element )
-                } else {
-                    this.response.notFound()
-                    reject( "Element not found" )
-                }
-            })
-            .catch( error => {
-                this.response.internalServerError( error )
-                reject( error )
-            })
         })
+    }
+
+    /**
+     * methodNotAllowed - when a method is used on a route which not provide that method for this route
+     */
+    methodNotAllowed() {
+        this.reponse.methodNotAllowed()
     }
 
     /**

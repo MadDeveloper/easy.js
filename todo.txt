@@ -1,20 +1,10 @@
-- verifyParams doit être placer dans une librarie http et non dans Controller ?
-
 - permettre d'accéder à des routes sans être authentifier
 
 - régler soucis bin/startup (ER_ACCESS_DENIED)
 
 - finir les tests pour user / role / skeleton / services
 
-- configurer les id des roles dans un fichier de conf pour les récupérer dans le service AccessSecurity
-
 - bin to show routes: mettre l'option -s pour sauvegarder dans un fichier
-
-- améliorer urlContains pour lui passer en paramètre un tableau de paths
-
-- penser à utiliser methodNotAllowed pour les method sur les routes qui n'implémente pas cette dernière (un verbe non authorisé)
-
-- enlever la réponse automatique du Controller easy, la rendre optionnelle ?
 
 - mieux gérer les injections de dépendances pour les composants, services, controllers, etc.
 

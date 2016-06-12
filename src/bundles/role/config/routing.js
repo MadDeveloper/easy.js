@@ -26,14 +26,14 @@ export default function routing( router, factory ) {
      * Routes definitions
      */
     router.route( '/roles' )
-        .get( ( req, res ) => {
-            roleController.getRoles( req, res )
+        .get( () => {
+            roleController.getRoles()
         })
         .post( () => {
             roleController.createRole()
         })
-        .all( ( req, res ) => {
-            res.status( 405 ).send( 'Method Not Allowed' )
+        .all( () => {
+            roleController.methodNotAllowed()
         })
 
     router.route( '/roles/:id' )
@@ -45,5 +45,8 @@ export default function routing( router, factory ) {
         })
         .delete( () => {
             roleController.deleteRole()
+        })
+        .all( () => {
+            roleController.methodNotAllowed()
         })
 }

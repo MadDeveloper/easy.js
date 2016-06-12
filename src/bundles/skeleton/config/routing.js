@@ -38,6 +38,9 @@ export default function routing( router, factory ) {
         .post( () => {
             skeletonController.createSkeleton()
         })
+        .all( () => {
+            skeletonController.methodNotAllowed()
+        })
 
     router.route( '/skeletons/:id' )
         .get( () => {
@@ -51,5 +54,8 @@ export default function routing( router, factory ) {
         })
         .delete( () => {
             skeletonController.deleteSkeleton()
+        })
+        .all( () => {
+            skeletonController.methodNotAllowed()
         })
 }

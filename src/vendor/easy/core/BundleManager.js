@@ -10,7 +10,6 @@ export default class BundleManager {
      */
     constructor( container ) {
         this._container         = container
-        this._kernel            = container.kernel
         this._bundlesPath       = container.kernel.path.bundles
         this._bundlesDefinition = []
     }

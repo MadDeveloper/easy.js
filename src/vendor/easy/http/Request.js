@@ -40,8 +40,18 @@ export default class Request extends Http {
         return this.getParams()[ param ]
     }
 
-    urlContains( path ) {
-        return -1 !== this.scope.originalUrl.indexOf( path )
+    urlContains( paths ) {
+        let contains = false
+
+        if ( 'string' === typeof paths ) {
+            contains = -1 !== this.scope.originalUrl.indexOf( path )
+        } else if ( Array.isArray( paths ) ) {
+            paths.forEach( path => {
+                contains = contains || -1 !== this.scope.originalUrl.indexOf( path )
+            })
+        }
+
+        return contains
     }
 
     define( property, value ) {

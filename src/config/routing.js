@@ -4,12 +4,12 @@ export default function routing( container, bundleManager, router ) {
     /*
      * Middlewares
      */
-
         /*
          * Security
          */
+        authentication( container, router )
+
         router.use( ( req, res, next ) => {
-            authentication( container, req, res, router )
             container.getService( 'security.default' )
             next()
         })

@@ -1,5 +1,6 @@
 import { indexOf }  from 'lodash'
 import Service      from './../../vendor/easy/core/Service'
+import roles        from './../../config/roles'
 
 /*
  * You can edit as you want following roles.
@@ -17,10 +18,10 @@ export default class AccessSecurityService extends Service {
         /*
          * BECAREFUL WHEN EDITING OR DELETING THE FOLLOWING VARIABLES
          */
-        this._any           = 0
-        this._admin         = 1
-        this._user          = 2
-        this._focus         = this._any
+        this._any           = roles.any
+        this._admin         = roles.admin
+        this._user          = roles.user
+        this._focus         = roles.any
         this._restrictions  = {}
     }
 

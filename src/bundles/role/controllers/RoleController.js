@@ -29,7 +29,7 @@ export default class RoleController extends Controller {
         ])
     }
 
-    getRoles( req, res ) {
+    getRoles() {
         this.roleRepository.readAll()
         .then( roles => this.response.ok( roles ) )
         .catch( error => this.response.internalServerError( error ) )
