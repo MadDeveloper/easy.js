@@ -45,7 +45,7 @@ export default {
             host: 'localhost',
             user: 'root',
             password: 'root',
-            database: 'prepapp',
+            database: 'test',
             charset: 'utf8'
         }
     },

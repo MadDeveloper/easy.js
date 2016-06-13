@@ -1,29 +1,78 @@
 #!/usr/bin/env node
-import fs           								from 'fs'
-import minimist     								from 'minimist'
-import sequence 									from 'when/sequence'
-import schema										from './../../config/database/schema'
-import { keys, map }								from 'lodash'
-import { kernel, bundleManager, config, container }	from './../../bootstrap.js'
-
-const argv = minimist( process.argv.slice( 2 ) )
+import execsql          					from 'execsql'
+import minimist     						from 'minimist'
+import schema								from './../../config/database/schema'
+import sequence 							from 'when/sequence'
+import { indexOf, has, keys, map }			from 'lodash'
+import { bundleManager, config, container }	from './../../bootstrap.js'
 
 const cli               	= container.getComponent( 'Console' )
-let schemaDatabaseService 	= container.getService( 'database.schemaBuilder' )
+const schemaDatabaseService	= container.getService( 'database.schemaBuilder' )
+const knex					= schemaDatabaseService.knex
 
-const titleError		= "Error when updating database"
-const consequenceError	= "Migration aborted."
+const dbConfig = {
+	host: config.database.connection.host,
+	user: config.database.connection.user,
+	password: config.database.connection.password
+}
 
-/*
- * Functions
- */
-function raiseError( err ) {
+const titleError		= "Error when initializing roles and users"
+const consequenceError	= "Initialization aborted."
+
+migrate()
+.then( startup )
+.catch( raiseError )
+
+function raiseError( error ) {
+	console.log(error);
 	cli.error({
 		title: titleError,
-		message: err,
+		message: error,
 		consequence: consequenceError,
 		exit: 0
 	})
+}
+
+function startup() {
+	const rolesTable 	= schema.roles
+	const rolesToAppend	= {
+		admin: {
+			id: 1,
+			name: 'Administrator',
+			slug: 'administrator'
+		},
+
+		user: {
+			id: 2,
+			name: 'User',
+			slug: 'user'
+		}
+	}
+
+	const usersTable 	= schema.users
+	const usersToAppend	= {
+		admin: {
+			id: 1,
+			username: 'admin',
+			email: 'admin@easy.com',
+			password: 'K18necxhS4G;ur4', // http://randomkeygen.com/ -> Strong passwords
+			role_id: rolesToAppend.admin.id
+		},
+
+		john: {
+			id: 2,
+			username: 'johndoe',
+			email: 'john.doe@easy.com',
+			password: '2Z7P97Y3o829gnr',
+			role_id: rolesToAppend.user.id
+		}
+	}
+
+	knex.table( 'roles' ).insert( rolesToAppend.admin )
+	.then( () => knex.table( 'roles' ).insert( rolesToAppend.user ) )
+	.then( () => knex.table( 'users' ).insert( usersToAppend.admin ) )
+	.then( () => knex.table( 'users' ).insert( usersToAppend.john ) )
+	.then( () => cli.success( 'Database initialized.', true ) )
 }
 
 function dropTables() {
@@ -55,92 +104,13 @@ function createTables () {
 }
 
 function migrate( standalone ) {
-	return new Promise( (resolve, reject) => {
+	return new Promise( ( resolve, reject ) => {
 		dropTables()
 		.then( createTables )
 		.then( () => {
-			const exitAfterSuccess = standalone
-			cli.success( "Schema updated.", exitAfterSuccess )
+			cli.success( "Schema updated." )
 			resolve()
 		})
-		.catch( error => {
-			raiseError( error )
-			reject( error )
-		})
+		.catch( reject )
 	})
 }
-
-
-function updateDatabaseNameInConfig() {
-	const databaseConfigFilePath = `${__dirname}/../../../config/database/connector/knex.js`
-
-	fs.readFile( databaseConfigFilePath, { encoding: 'utf8' }, ( error, data ) => {
-		if ( error ) {
-			errorUpdatingDatabaseConfigProperty( error )
-		} else {
-	   		const dataUpdated = data.replace( /database\s*:\s*\w+/, 'database : params.connection.database' )
-
-			fs.writeFile( databaseConfigFilePath, dataUpdated, 'utf8', error => {
-				if ( error ) {
-					errorUpdatingDatabaseConfigProperty( error )
-				} else {
-					/*
-					 * Configuration succefully edited
-					 * we reconnect database to new schema
-					 */
-					delete require.cache[ require.resolve( `${__dirname}/../../../config/database/database` ) ]
-
-					const clearCache = true
-					schemaDatabaseService = container.getService( 'database.schemaBuilder', clearCache )
-
-					/*
-					 * Continue migration
-					 */
-					migrate()
-				}
-		  	})
-		}
-	})
-
-	function errorUpdatingDatabaseConfigProperty( error ) {
-		cli.error({
-			title: 'Error when trying to edit the database connection property into ~/src/config/config.js path',
-			message: error,
-			consequence: 'Migration aborted.',
-			exit: 0
-		})
-	}
-}
-
-
-/*
- * Code executed first
- * Code permits create database, and we have to change connection string into knex conf file
- * Not finalized
- */
-// schemaDatabaseService.createSchema( config.database.connection.database )
-// .then( schema => {
-// 	/*
-// 	 * Database created for first time, we set the database config property into ~/src/config/config.js -> database.connection.database
-// 	 */
-//  	/*
-// 	 *
-// 	 * cli.success( 'Database ' + config.database.connection.database + ' created. Think to check database encoding.' )
-// 	 * updateDatabaseNameInConfig()
-// 	 */
-// })
-// .catch( error => {
-// 	migrate()
-// })
-
-;(function() {
-	'use strict'
-
-	const standalone = false === process.argv.standalone ? true : false
-
-	if ( standalone ) {
-		migrate()
-	}
-}())
-
-export { migrate }

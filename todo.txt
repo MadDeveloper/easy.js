@@ -1,5 +1,3 @@
-- régler soucis bin/startup (ER_ACCESS_DENIED)
-
 - finir les tests pour user / role / skeleton / services
 
 
