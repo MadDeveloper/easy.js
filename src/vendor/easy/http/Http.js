@@ -41,7 +41,7 @@ export default class Http {
     /**
      * get - http status
      *
-     * @returns {object}     
+     * @returns {object}
      */
     get status() {
         return this._status

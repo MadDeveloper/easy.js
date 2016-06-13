@@ -9,7 +9,7 @@ import { kernel, bundleManager, config, container }	from './../../bootstrap.js'
 const argv = minimist( process.argv.slice( 2 ) )
 
 const cli               	= container.getComponent( 'Console' )
-let schemaDatabaseService 	= container.getService( 'database.schema' )
+let schemaDatabaseService 	= container.getService( 'database.schemaBuilder' )
 
 const titleError		= "Error when updating database"
 const consequenceError	= "Migration aborted."
@@ -91,7 +91,7 @@ function updateDatabaseNameInConfig() {
 					delete require.cache[ require.resolve( `${__dirname}/../../../config/database/database` ) ]
 
 					const clearCache = true
-					schemaDatabaseService = container.getService( 'database.schema', clearCache )
+					schemaDatabaseService = container.getService( 'database.schemaBuilder', clearCache )
 
 					/*
 					 * Continue migration

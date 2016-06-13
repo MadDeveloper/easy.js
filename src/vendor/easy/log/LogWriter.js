@@ -1,14 +1,18 @@
-import fs from 'fs'
+import fs           from 'fs'
+import Component    from './../core/Component'
 
 /**
  * @class LogWriter
+ * @extends Component
  */
-export default class LogWriter {
+export default class LogWriter extends Component {
     /**
      * @constructor
      * @param  {Container} container
      */
     constructor( container ) {
+        super()
+
         this._logFileManager    = container.getComponent( 'LogFileManager' )
         this._cli               = container.getComponent( 'Console' )
         this._string            = container.getLibrary( 'String' )

@@ -1,22 +1,19 @@
-import authentication from './security/authentication'
+import authentication from './../security/authentication'
 
 export default function routing( container, bundleManager, router ) {
     /*
-     * Middlewares
+     * Security
      */
-        /*
-         * Security
-         */
-        authentication( container, router )
+    router.use( ( req, res, next ) => {
+        container.getService( 'security.default' )
+        next()
+    })
 
-        router.use( ( req, res, next ) => {
-            container.getService( 'security.default' )
-            next()
-        })
+    authentication( container, router )
 
     /*
-    * bundles routes definitions
-    */
+     * Bundles routes definitions
+     */
     bundleManager.getBundlesDefinitionRouting()
 
     /*

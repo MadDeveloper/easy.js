@@ -44,7 +44,7 @@ export default class Request extends Http {
         let contains = false
 
         if ( 'string' === typeof paths ) {
-            contains = -1 !== this.scope.originalUrl.indexOf( path )
+            contains = -1 !== this.scope.originalUrl.indexOf( paths )
         } else if ( Array.isArray( paths ) ) {
             paths.forEach( path => {
                 contains = contains || -1 !== this.scope.originalUrl.indexOf( path )

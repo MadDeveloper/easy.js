@@ -1,20 +1,11 @@
 import { indexOf }  from 'lodash'
-import Service      from './../../vendor/easy/core/Service'
 import roles        from './../../config/roles'
-
-/*
- * You can edit as you want following roles.
- * Becareful: You must start your roles' id at 3
- * Roles' id are mapped with ids into database
- */
-
 
 /**
  * @class AccessSecurityService
  */
-export default class AccessSecurityService extends Service {
-    constructor( container ) {
-        super( container )
+export default class AccessSecurityService {
+    constructor() {
         /*
          * BECAREFUL WHEN EDITING OR DELETING THE FOLLOWING VARIABLES
          */

@@ -1,12 +1,6 @@
-- permettre d'accéder à des routes sans être authentifier
-
 - régler soucis bin/startup (ER_ACCESS_DENIED)
 
 - finir les tests pour user / role / skeleton / services
-
-- bin to show routes: mettre l'option -s pour sauvegarder dans un fichier
-
-- mieux gérer les injections de dépendances pour les composants, services, controllers, etc.
 
 
 -- IMMINENT --
@@ -18,5 +12,3 @@ REDIGER LA DOC
 - pouvoir reset le skeleton (dans bundles et test)
 
 - appliquer le logger aux endroits utiles
-
-- faire un config des services dispo et les paramètres à charger par le container quand on appelle notre service (cf. Container Symfo / Fabien Potencier)

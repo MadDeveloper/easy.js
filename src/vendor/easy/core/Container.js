@@ -1,7 +1,7 @@
 import fs                   from 'fs'
 import path                 from 'path'
-import servicesMapping      from './../../../config/services/config'
-import userLibrariesMapping from './../../../config/lib/config'
+import servicesMapping      from './../../../config/services'
+import userLibrariesMapping from './../../../config/lib'
 
 /**
  * @class Container
@@ -42,14 +42,11 @@ export default class Container {
             'logfilemanager':   `${this._kernel.path.vendor.easy}/log/LogFileManager`,
             'logwriter': `${this._kernel.path.vendor.easy}/log/LogWriter`
         }
-
         this._librariesMapping = {
             'string': `${this._kernel.path.vendor.easy}/lib/string`
         }
-
-        this._servicesMapping = servicesMapping
-
-        this._userLibrariesMapping = userLibrariesMapping
+        this._servicesMapping       = servicesMapping
+        this._userLibrariesMapping  = userLibrariesMapping
     }
 
     /*
@@ -65,7 +62,7 @@ export default class Container {
                         delete require.cache[ require.resolve( pathComponent ) ]
                     }
 
-                    const component = require( pathComponent ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+                    const component = require( pathComponent ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
                     this.componentsLoaded[ name ] = new component( this )
                 }
             }
@@ -80,6 +77,12 @@ export default class Container {
         }
     }
 
+    /**
+     * reloadComponent - reload component into container
+     *
+     * @param  {string} name
+     * @returns {Component|undefined}
+     */
     reloadComponent( name ) {
         name = name.toLowerCase()
 
@@ -88,9 +91,17 @@ export default class Container {
             this.loadComponent( name, true )
 
             return this.componentsLoaded[ name ]
+        } else {
+            return undefined
         }
     }
 
+    /**
+     * getComponent - get component by name
+     *
+     * @param  {string} name
+     * @returns {Component|undefined}
+     */
     getComponent( name ) {
         name = name.toLowerCase()
 
@@ -124,9 +135,9 @@ export default class Container {
         return this.shared.hasOwnProperty( name )
     }
 
-    storeService( name, pathService ) {
-        const serviceClass  = require( pathService ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
-        this.shared[ name ] = new serviceClass( this )
+    storeService( name, path ) {
+        const serviceClass  = require( path ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
+        this.shared[ name ] = new serviceClass( this.injectDependencies( name ) )
     }
 
     reloadService( name ) {
@@ -134,6 +145,37 @@ export default class Container {
             delete this.shared[ name ]
             this.getService( name )
         }
+    }
+
+    injectDependencies( service ) {
+        let dependencies = {}
+        const serviceRequestedDependencies = this.servicesMapping[ service ].dependencies
+
+        if ( serviceRequestedDependencies ) {
+            let nameDependency
+            let currentDependency
+
+            for ( const dependency in serviceRequestedDependencies ) {
+                if ( serviceRequestedDependencies.hasOwnProperty( dependency ) ) {
+                    currentDependency = serviceRequestedDependencies[ dependency ]
+                    nameDependency = currentDependency.substr( currentDependency.lastIndexOf( '.' ) + 1 )
+
+                    if ( currentDependency.match( /^component\./ ) ) {
+                        /*
+                         * Component dependency
+                         */
+                        dependencies[ nameDependency ] = this.getComponent( nameDependency )
+                    } else {
+                        /*
+                         * Service dependency
+                         */
+                        dependencies[ nameDependency ] = this.getService( currentDependency )
+                    }
+                }
+            }
+        }
+
+        return dependencies
     }
 
     getService( name, clearCache ) {
@@ -148,17 +190,15 @@ export default class Container {
                 return this.shared[ name ]
             }
 
-            const serviceFile = `${this.servicesDirectoryPath}/${this.servicesMapping[ name ]}.js`
+            const serviceFile = `${this.servicesDirectoryPath}/${this.servicesMapping[ name ].path}.js`
 
             try {
                 const statsServiceFile = fs.lstatSync( serviceFile )
 
                 if ( statsServiceFile.isFile() ) {
-
                     this.storeService( name, serviceFile )
 
                     return this.shared[ name ]
-
                 } else {
                     throw new Error()
                 }

@@ -1,11 +1,16 @@
+import Component from './Component'
+
 /**
  * @class Router
+ * @extends Component
  */
-export default class Router {
+export default class Router extends Component {
     /**
      * @constructor
      */
     constructor() {
+        super()
+
         this._scope = null
     }
 

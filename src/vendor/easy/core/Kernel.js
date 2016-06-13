@@ -106,7 +106,7 @@ export default class Kernel {
     /**
      * get - all paths
      *
-     * @returns {object}     
+     * @returns {object}
      */
     get path() {
         return this._path

@@ -1,11 +1,18 @@
 #!/usr/bin/env node
+import fs                                   from 'fs'
+import path                                 from 'path'
 import pad                                  from 'pad-right'
+import minimist                             from 'minimist'
 import { kernel, bundleManager, container } from './../../bootstrap.js'
 
+const argv      = minimist( process.argv.slice( 2 ) )
 const cli       = container.getComponent( 'Console' )
 const router    = container.getComponent( 'Router' )
+const save      = argv.s || 's' === argv._[ 0 ] || argv.save || 'save' === argv._[ 0 ]
 
-let route = ''
+let route               = ''
+let routes              = ''
+let currentDisplayRoute = ''
 
 const routesStack = router.scope.stack
 for ( let stack in routesStack ) {
@@ -14,10 +21,24 @@ for ( let stack in routesStack ) {
 
        if ( route ) {
            route.stack.forEach( layer => {
-               cli.log( `${pad( layer.method.toUpperCase(), 'delete'.length, ' ' )} - ${route.path}` )
+               if ( layer.method ) {
+                   currentDisplayRoute = `${pad( layer.method.toUpperCase(), 'delete'.length, ' ' )} - ${route.path}`
+
+                   if ( save ) {
+                       routes += `${currentDisplayRoute}\n`
+                   } else {
+                       cli.log( currentDisplayRoute )
+                   }
+               }
            })
        }
    }
+}
+
+if ( save ) {
+    const routesFilePath = path.resolve( `${kernel.path.root}/../routes.txt` )
+    fs.writeFileSync( routesFilePath, routes, { encoding: 'utf8' } )
+    cli.success( `Routes saved into ${routesFilePath}` )
 }
 
 cli.line()

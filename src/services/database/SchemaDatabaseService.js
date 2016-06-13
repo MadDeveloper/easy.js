@@ -1,14 +1,12 @@
-import { keys, each }   from 'lodash'
-import Service          from './../../vendor/easy/core/Service'
+import { keys, each } from 'lodash'
 
-export default class SchemaDatabaseService extends Service {
-    constructor( container ) {
-        super( container )
-
-        this._knex = this.database.knex
+/**
+ * @class SchemaDatabaseService
+ */
+export default class SchemaDatabaseService {
+    constructor({ database }) {
+        this._knex = database.connection.knex
     }
-
-    load() {}
 
     createSchema( schemaName ) {
         return this.knex.raw( `CREATE DATABASE ${schemaName}` )

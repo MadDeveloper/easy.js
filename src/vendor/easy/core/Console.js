@@ -1,13 +1,17 @@
-import colors from 'colors'
+import colors       from 'colors'
+import Component    from './Component'
 
 /**
  * @class Console
+ * @extends Component
  */
-export default class Console {
+export default class Console extends Component {
     /**
      * @constructor
      */
     constructor() {
+        super()
+
         this._leftSpaces = '  '
     }
 

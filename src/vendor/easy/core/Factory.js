@@ -1,12 +1,17 @@
+import Component from './Component'
+
 /**
  * @class Factory
+ * @extends Component
  */
-export default class Factory {
+export default class Factory extends Component {
     /**
      * @constructor
      * @param  {Container} container
      */
     constructor( container ) {
+        super()
+
         this._container     = container
         this._bundlesPath   = container.kernel.path.bundles
     }
@@ -31,7 +36,7 @@ export default class Factory {
                 controllerFile  = info[ 1 ]
             }
 
-            const controllerClass = require( `${this.bundlesPath}/${bundle}/controllers/${bundle.capitalizeFirstLetter()}${controllerFile.capitalizeFirstLetter()}Controller` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const controllerClass = require( `${this.bundlesPath}/${bundle}/controllers/${bundle.capitalizeFirstLetter()}${controllerFile.capitalizeFirstLetter()}Controller` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
 
             return new controllerClass( req, res, this )
         }
@@ -48,7 +53,7 @@ export default class Factory {
             const info          = config.split( '.' )
             const bundle        = info[ 0 ]
             const configFile    = info[ 1 ]
-            const configClass   = require( `${this.bundlesPath}/${bundle}/config/${configFile}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const configClass   = require( `${this.bundlesPath}/${bundle}/config/${configFile}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
 
             return configClass( this.router, this )
         }

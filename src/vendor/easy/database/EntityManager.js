@@ -1,12 +1,17 @@
+import Component from './../core/Component'
+
 /**
  * @class EntityManager
+ * @extends Component
  */
-export default class EntityManager {
+export default class EntityManager extends Component {
     /**
      * @constructor
      * @param  {Container} container
      */
     constructor( container ) {
+        super()
+
         this._container     = container
         this._bundlesPath   = container.kernel.path.bundles
     }
@@ -19,7 +24,7 @@ export default class EntityManager {
      */
     getRepository( repository ) {
         if ( repository.length > 0 ) {
-            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
 
             return new repositoryClass( this )
         }
@@ -32,7 +37,7 @@ export default class EntityManager {
      * @returns {Entity}
      */
     getModel( model ) {
-        const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+        const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
 
         return new modelClass( this )
     }

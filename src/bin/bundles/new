@@ -10,7 +10,7 @@ import { kernel, bundleManager, container } from './../../bootstrap.js'
 const argv = minimist( process.argv.slice( 2 ) )
 
 const cli                   = container.getComponent( 'Console' )
-const schemaDatabaseService = container.getService( 'database.schema' )
+const schemaDatabaseService = container.getService( 'database.schemaBuilder' )
 const stringLibrary         = container.getLibrary( 'string' )
 
 const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""

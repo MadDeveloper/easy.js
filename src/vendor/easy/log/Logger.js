@@ -1,3 +1,5 @@
+import Component from './../core/Component'
+
 /**
  * Describes a logger instance
  *
@@ -14,13 +16,16 @@
  * for the full specification.
  *
  * @class Logger
+ * @extends Component
  */
-export default class Logger {
+export default class Logger extends Component {
     /**
      * @constructor
      * @param  {Container} container
      */
     constructor( container ) {
+        super()
+
         this._logWriter = container.getComponent( 'LogWriter' )
     }
 

@@ -4,8 +4,16 @@
  * /!\ Never add a polyfill on Object (can cause problems with ORM or librairies which are based on objects).
  */
 
-export default class Polyfills {
+import Component from './Component'
+
+/**
+ * @class Polyfills
+ * @extends Component
+ */
+export default class Polyfills extends Component {
     constructor() {
+        super()
+
         this.stringPolyfills()
     }
 

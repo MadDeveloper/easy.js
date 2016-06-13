@@ -1,4 +1,4 @@
-import UserSecurityControllers from './../controllers/UserSecurityController'
+import UserSecurityController from './../controllers/UserSecurityController'
 
 export default function security( router, factory ) {
     /*

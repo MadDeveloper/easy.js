@@ -1,14 +1,18 @@
-import fs from 'fs'
+import fs           from 'fs'
+import Component    from './Component'
 
 /**
  * @class BundleManager
+ * @extends Component
  */
-export default class BundleManager {
+export default class BundleManager extends Component {
     /**
      * @constructor
      * @param  {Container} container
      */
     constructor( container ) {
+        super()
+
         this._container         = container
         this._bundlesPath       = container.kernel.path.bundles
         this._bundlesDefinition = []
@@ -48,7 +52,7 @@ export default class BundleManager {
         const routingPath = `${this.bundlesPath}/${bundle}/config/routing.js`
 
         if ( fs.statSync( routingPath ).isFile() ) {
-            const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import do */
+            const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
 
             return routingBundle( this.router, this.factory )
         }

@@ -1,14 +1,18 @@
-import fs   from 'fs'
-import path from 'path'
+import fs           from 'fs'
+import path         from 'path'
+import Component    from './../core/Component'
 
 /**
  * @class LogFileManager
+ * @extends Component
  */
-export default class LogFileManager {
+export default class LogFileManager extends Component {
     /**
      * @constructor
      */
     constructor() {
+        super()
+
         this._logDirectoryPath = `${__dirname}/../../../../logs`
     }
 

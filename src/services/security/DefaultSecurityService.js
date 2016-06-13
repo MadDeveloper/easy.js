@@ -1,15 +1,21 @@
-import Service  from './../../vendor/easy/core/Service'
+/**
+ * @class DefaultSecurityService
+ */
+export default class DefaultSecurityService {
+    /**
+     * @constructor
+     * @param  {Router} { router }
+     */
+    constructor({ router }) {
+        /*
+         * Refer to express router
+         */
+        router = router.scope
 
-export default class DefaultSecurityService extends Service {
-    constructor( container ) {
-        super( container )
-    }
-
-    load() {
         /*
          * Add your defaults policies security
          */
-        this.router.use( ( req, res, next ) => {
+        router.use( ( req, res, next ) => {
             next()
         })
     }

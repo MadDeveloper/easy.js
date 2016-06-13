@@ -60,7 +60,7 @@ export default class SkeletonController extends Controller {
      */
     updateSkeleton() {
         if ( this.isRequestWellParameterized() ) {
-            this.skeletonRepository.save( this.request.find( 'skeleton' ), this.request.getBody(), { transacting: t } )
+            this.skeletonRepository.save( this.request.find( 'skeleton' ), this.request.getBody() )
             .then( skeleton => this.response.ok( skeleton ) )
             .catch( error => this.response.internalServerError( error ) )
         } else {
