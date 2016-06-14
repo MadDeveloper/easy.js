@@ -1,7 +1,7 @@
 import jwt          from 'jsonwebtoken'
 import config       from './../config'
 import authorized   from './authorized'
-import Controller   from './../../vendor/easy/core/Controller'
+import Controller   from '~/vendor/easy/core/Controller'
 
 export default function authentication( container, router ) {
     /*

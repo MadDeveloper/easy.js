@@ -4,7 +4,7 @@
  * Unit tests
  */
 import test     from 'unit.js'
-import Tests    from './../../../vendor/easy/core/Tests'
+import Tests    from '~/vendor/easy/core/Tests'
 
 /*
  * Alternative style

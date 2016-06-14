@@ -12,7 +12,7 @@ export default class Tests {
         this._entityManager = container.getComponent( 'EntityManager' )
         this._request       = container.getComponent( 'Request' )
         this._response      = container.getComponent( 'Response' )
-        this._database      = container.getComponent( 'Database' ).connection
+        this._database      = container.getComponent( 'Database' ).instance
 
         this.run()
     }

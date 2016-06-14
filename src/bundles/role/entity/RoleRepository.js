@@ -1,21 +1,50 @@
-import Repository from './../../../vendor/easy/database/Repository'
+import Repository from '~/vendor/easy/database/Repository'
 
 export default class RoleRepository extends Repository {
     constructor( entityManager ) {
         super( entityManager )
 
-        this._roleCollection    = this.entityManager.getCollection( 'role' )
-        this._roleModel         = this.entityManager.getModel( 'role' )
+        /*
+         * Bookshelf
+         */
+        // this._roleCollection    = this.entityManager.getCollection( 'role' )
+        this._roleCollection    = {}
+        this._role              = this.entityManager.getModel( 'role' )
     }
 
     readAll() {
-        let roles = this.roleCollection
+        /*
+         * Bookshelf
+         */
+        // let roles = this.roleCollection
+        //
+        // return roles.forge().fetch()
 
-        return roles.forge().fetch()
+        /*
+         * Mongoose
+         */
+        return new Promise( ( resolve, reject ) => {
+            this.role.find( ( error, roles ) => {
+                error ? reject( error ) : resolve( roles )
+                return
+            })
+        })
     }
 
     read( id, options = {} ) {
-        return this.roleModel.forge({ id }).fetch( options )
+        /*
+         * Bookshelf
+         */
+        // return this.roleModel.forge({ id }).fetch( options )
+
+        /*
+         * Mongoose
+         */
+        return new Promise( ( resolve, reject ) => {
+            this.role.findById( id, ( error, role ) => {
+                error ? reject( error ) : resolve( role )
+            })
+        })
     }
 
     save( role, { name, slug }, options = {} ) {
@@ -59,7 +88,7 @@ export default class RoleRepository extends Repository {
      *
      * @returns {Role}
      */
-    get roleModel() {
-        return this._roleModel
+    get role() {
+        return this._role
     }
 }

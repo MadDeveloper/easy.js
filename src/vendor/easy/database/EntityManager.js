@@ -69,6 +69,6 @@ export default class EntityManager extends Component {
      * @returns {Bookshelf}
      */
     get database() {
-        return this._container.getComponent( 'Database' ).connection
+        return this._container.getComponent( 'Database' ).instance
     }
 }

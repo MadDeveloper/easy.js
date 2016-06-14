@@ -40,12 +40,12 @@ export default {
      */
     database: {
         client: 'mysql',
-        connector: 'knex',
+        connector: 'mongoose',
         connection: {
             host: 'localhost',
             user: 'root',
             password: 'root',
-            database: 'test',
+            database: 'prepapp',
             charset: 'utf8'
         }
     },

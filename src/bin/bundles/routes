@@ -3,7 +3,7 @@ import fs                                   from 'fs'
 import path                                 from 'path'
 import pad                                  from 'pad-right'
 import minimist                             from 'minimist'
-import { kernel, bundleManager, container } from './../../bootstrap.js'
+import { kernel, bundleManager, container } from '~/bootstrap'
 
 const argv      = minimist( process.argv.slice( 2 ) )
 const cli       = container.getComponent( 'Console' )

@@ -1,8 +1,6 @@
 # installed with npm install
 node_modules/
 
-npm-debug.log
-
 # JetBrains IDE directory
 .idea/
 
@@ -17,3 +15,6 @@ build/
 
 # log files
 *.log
+
+# doc
+doc/

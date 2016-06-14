@@ -83,7 +83,7 @@ export default class Factory extends Component {
      * @returns {object}
      */
     get database() {
-        return this.container.getComponent( 'Database' ).connection
+        return this.container.getComponent( 'Database' ).instance
     }
 
     /**

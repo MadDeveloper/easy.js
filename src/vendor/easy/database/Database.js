@@ -1,4 +1,4 @@
-import Component from './../core/Component'
+import Component    from './../core/Component'
 
 /**
  * @class Database
@@ -8,34 +8,33 @@ export default class Database extends Component {
     constructor( container ) {
         super()
 
-        this._defaultConnector  = 'bookshelf'
-        this._databasePath      = `${container.kernel.path.config}/database/database`
-        this._connection        = null
+        this._databasePath  = `${container.kernel.path.config}/database/database`
+        this._instance      = null
+        this._connected     = false
     }
 
-    connect( connector = this.defaultConnector ) {
-        this.connection = ( require( this.databasePath ) ).default( connector ) /* .default is needed to patch babel exports.default build, require doesn't work, import does */
-
-        return this.connection
+    connect() {
+        this.instance = ( require( this._databasePath ) ).default() /* .default is needed to patch babel exports.default build, require doesn't work, import does */
     }
 
     /*
      * Getters and setters
      */
-    get connection() {
-        return this._connection
+    get instance() {
+        return this._instance
     }
 
-    set connection( connection ) {
-        this._connection = connection
+    set instance( instance ) {
+        this._instance = instance
+        return this._instance
+    }
+
+    get connected() {
+        return this._connected
+    }
+
+    set connected( connected ) {
+        this._connected = connected
         return this
-    }
-
-    get defaultConnector() {
-        return this._defaultConnector
-    }
-
-    get databasePath() {
-        return this._databasePath
     }
 }

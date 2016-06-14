@@ -1,7 +1,7 @@
 import jwt          from 'jsonwebtoken'
 import { indexOf }  from 'lodash'
 import publicRoutes from './../routing/public'
-import Controller   from './../../vendor/easy/core/Controller'
+import Controller   from '~/vendor/easy/core/Controller'
 
 export default function authorized( container, secret, router ) {
     /*

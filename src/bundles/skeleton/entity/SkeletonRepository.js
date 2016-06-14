@@ -1,4 +1,4 @@
-import Repository from './../../../vendor/easy/database/Repository'
+import Repository from '~/vendor/easy/database/Repository'
 
 export default class SkeletonRepository extends Repository {
     constructor( entityManager ) {
@@ -9,8 +9,20 @@ export default class SkeletonRepository extends Repository {
     }
 
     readAll( options = {} ) {
+        /*
+         * Bookshelf
+         */
         let skeletons = this.skeletonCollection
         return skeletons.forge().fetch( options )
+
+        /*
+         * Mongoose
+         */
+        // return new Promise( ( resolve, reject ) => {
+        //     this.roleModel.find( ( error, roles ) => {
+        //         error ? reject( error ) : resolve( roles )
+        //     })
+        // })
     }
 
     read( id, options = {} ) {

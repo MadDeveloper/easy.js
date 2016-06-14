@@ -1,4 +1,4 @@
-import Entity from './../../../vendor/easy/database/Entity'
+import Entity from '~/vendor/easy/database/Entity'
 
 /**
  * @class User

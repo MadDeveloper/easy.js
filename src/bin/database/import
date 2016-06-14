@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import execsql										from 'execsql'
-import { kernel, bundleManager, config, container }	from './../../bootstrap.js'
+import { kernel, bundleManager, config, container }	from '~/bootstrap'
 
 const argv = minimist( process.argv.slice( 2 ) )
 

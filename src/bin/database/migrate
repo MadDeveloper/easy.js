@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import execsql          					from 'execsql'
 import minimist     						from 'minimist'
-import schema								from './../../config/database/schema'
+import schema								from '~/config/database/schema'
 import sequence 							from 'when/sequence'
 import { indexOf, has, keys, map }			from 'lodash'
-import { bundleManager, config, container }	from './../../bootstrap.js'
+import { bundleManager, config, container }	from '~/bootstrap'
 
 const cli               	= container.getComponent( 'Console' )
 const schemaDatabaseService	= container.getService( 'database.schemaBuilder' )

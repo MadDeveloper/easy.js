@@ -1,3 +1,7 @@
+- proposer deux version Repository et Entity pour Bookshelf et Mongoose
+
+- rédiger apidoc pour les controlleurs
+
 - finir les tests pour user / role / skeleton / services
 
 

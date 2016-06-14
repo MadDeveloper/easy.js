@@ -5,7 +5,7 @@ import path                                 from 'path'
 import minimist                             from 'minimist'
 import { question }                         from 'readline-sync'
 import { indexOf }                          from 'lodash'
-import { kernel, bundleManager, container } from './../../bootstrap.js'
+import { kernel, bundleManager, container } from '~/bootstrap'
 
 const argv = minimist( process.argv.slice( 2 ) )
 

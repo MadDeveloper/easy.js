@@ -1,4 +1,4 @@
-import Repository from './../../../vendor/easy/database/Repository'
+import Repository from '~/vendor/easy/database/Repository'
 
 export default class UserRepository extends Repository {
     constructor( entityManager ) {

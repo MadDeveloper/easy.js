@@ -1,11 +1,4 @@
-/*
- * Knex
- */
-import knex from './knex'
-
-/*
- * Bookshelf (ORM)
- */
-import Bookshelf from 'bookshelf'
+import knex         from './knex'
+import Bookshelf    from 'bookshelf'
 
 export default Bookshelf( knex )

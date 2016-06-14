@@ -1,4 +1,4 @@
-import Controller from './../../../vendor/easy/core/Controller'
+import Controller from '~/vendor/easy/core/Controller'
 
 /**
  * @class SkeletonSecurityController

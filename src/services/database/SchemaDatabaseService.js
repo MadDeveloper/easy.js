@@ -5,7 +5,7 @@ import { keys, each } from 'lodash'
  */
 export default class SchemaDatabaseService {
     constructor({ database }) {
-        this._knex = database.connection.knex
+        this._knex = database.instance.knex
     }
 
     createSchema( schemaName ) {
