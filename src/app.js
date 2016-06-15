@@ -1,3 +1,5 @@
+/* @flow */
+
 /*
  * Start server: npm start
  */

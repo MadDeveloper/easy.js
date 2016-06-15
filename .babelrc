@@ -1,8 +1,7 @@
 {
   "presets": ["es2015", "stage-2"],
   "plugins": [
-    ["babel-root-import", {
-      "rootPathSuffix": "build"
-    }]
+    ["babel-root-import", { "rootPathSuffix": "build" }],
+    ["transform-flow-strip-types"]
   ]
 }
