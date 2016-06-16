@@ -2,6 +2,7 @@ import Controller   from '~/vendor/easy/core/Controller'
 
 /**
  * @class UserController
+ * @extends Controller
  */
 export default class UserController extends Controller {
     /**
@@ -83,7 +84,47 @@ export default class UserController extends Controller {
      * patchUser - patch user from specific properties
      */
     patchUser() {
+        if ( this.isPatchRequestWellParameterized() ) {
+            let patchRequestCorrectlyFormed = false
 
+            let patchUser = new Promise( ( resolve, reject ) => {
+                const validPaths = [ '/email', '/username', '/password', '/role_id' ]
+                const ops = this.parsePatchParams()
+
+                if ( ops ) {
+                    patchRequestCorrectlyFormed = true
+                    const opsLength = ops.length
+                    let currentPatch = 0
+
+                    ops.forEach( patch => {
+                        switch ( patch.op ) {
+                            case 'replace':
+                                if ( indexOf( validPaths, patch.path ) >= 0 ) {
+                                    this.userRepository.patch( this.request.find( 'user' ), patch )
+                                    .then( user => {
+                                        if ( ++currentPatch >= opsLength ) {
+                                            // It's ok
+                                            resolve( user )
+                                        }
+                                    })
+                                    .catch( reject )
+                                }
+                                break
+                        }
+                    })
+                }
+            })
+
+            if ( patchRequestCorrectlyFormed ) {
+                patchUser
+                .then( user => this.response.ok( user ) )
+                .catch( error => this.response.internalServerError( error ) )
+            } else {
+                this.response.badRequest()
+            }
+        } else {
+            this.response.badRequest()
+        }
     }
 
     /**

@@ -1,5 +1,9 @@
 import Controller from '~/vendor/easy/core/Controller'
 
+/**
+ * @class RoleMiddlewaresController
+ * @extends Controller
+ */
 export default class RoleMiddlewaresController extends Controller {
     /**
      * @constructor

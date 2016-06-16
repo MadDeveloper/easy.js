@@ -2,6 +2,7 @@ import Controller from '~/vendor/easy/core/Controller'
 
 /**
  * @class RoleController
+ * @extends Controller
  */
 export default class RoleController extends Controller {
     /**

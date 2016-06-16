@@ -2,6 +2,7 @@ import Controller from '~/vendor/easy/core/Controller'
 
 /**
  * @class UserSecurityController
+ * @extends Controller
  */
 export default class UserSecurityController extends Controller {
     /**

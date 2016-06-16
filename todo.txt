@@ -1,9 +1,9 @@
-- rédiger apidoc pour les controlleurs
-
 - finir les tests pour user / role / skeleton / services
 
-- faire les interfaces easy
+- faire les interfaces easy et adapter le code (typé)
 
+- simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
+tout lier en promise pour les patchs
 
 -- IMMINENT --
 REDIGER LA DOC

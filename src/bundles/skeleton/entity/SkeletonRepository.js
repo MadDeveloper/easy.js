@@ -1,6 +1,14 @@
 import Repository from '~/vendor/easy/database/Repository'
 
+/**
+ * @class SkeletonRepository
+ * @extends Repository
+ */
 export default class SkeletonRepository extends Repository {
+    /**
+     * @constructor
+     * @param  {EntityManager} entityManager
+     */
     constructor( entityManager ) {
         super( entityManager )
 
@@ -8,6 +16,12 @@ export default class SkeletonRepository extends Repository {
         this._skeleton         = this.entityManager.getModel( 'skeleton' )
     }
 
+    /**
+     * readAll - fetch all skeletons
+     *
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
     readAll( options = {} ) {
         /*
          * Bookshelf
@@ -24,10 +38,25 @@ export default class SkeletonRepository extends Repository {
         // })
     }
 
+    /**
+     * read - fetch skeleton by id
+     *
+     * @param  {Number} id
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
     read( id, options = {} ) {
         return this.skeleton.forge({ id }).fetch( options )
     }
 
+    /**
+     * save - save or update skeleton if already exists
+     *
+     * @param  {Skeleton} skeleton
+     * @param  {Object} params
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
     save( skeleton, params, options = {} ) {
         return new Promise( ( resolve, reject ) => {
             this.database.transaction( t => {
@@ -46,27 +75,57 @@ export default class SkeletonRepository extends Repository {
         })
     }
 
+    /**
+     * patch - patch skeleton
+     *
+     * @param  {Skeleton} skeleton
+     * @param  {Object} patch
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
     patch( skeleton, patch, options = {} ) {
         return new Promise( ( resolve, reject ) => {
             let patchToApply = {}
             patchToApply[ patch.path.substring( 1 ) ] = patch.value
 
-            options.patch = true
+            this.database.transaction( t => {
+                options.transacting = t
+                options.patch = true
 
-            this.save( skeleton, patchToApply, options )
-            .then( resolve )
-            .catch( reject )
+                this.save( skeleton, patchToApply, options )
+                .then( skeleton => {
+                    t.commit()
+                    resolve( skeleton )
+                })
+                .catch( error => {
+                    t.rollback()
+                    reject( error )
+                })
+            })
         })
     }
 
+    /**
+     * delete - delete skeleton
+     *
+     * @param  {Skeleton} skeleton
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
     delete( skeleton, options = {} ) {
         return new Promise( ( resolve, reject ) => {
             this.database.transaction( t => {
                 options.transacting = t
 
                 skeleton.destroy( options )
-                .then( resolve )
-                .catch( reject )
+                .then( () => {
+                    t.commit()
+                    resolve()
+                })
+                .catch( error => {
+                    t.rollback()
+                    reject( error )
+                })
             })
         })
     }

@@ -2,6 +2,7 @@ import Controller from '~/vendor/easy/core/Controller'
 
 /**
  * @class UserMiddlewaresController
+ * @extends Controller
  */
 export default class UserMiddlewaresController extends Controller {
     /**

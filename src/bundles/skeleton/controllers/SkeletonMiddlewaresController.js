@@ -2,6 +2,7 @@ import Controller from '~/vendor/easy/core/Controller'
 
 /**
  * @class SkeletonMiddlewaresController
+ * @extends Controller
  */
 export default class SkeletonMiddlewaresController extends Controller {
     /**

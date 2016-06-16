@@ -2,6 +2,7 @@ import Controller from '~/vendor/easy/core/Controller'
 
 /**
  * @class SkeletonSecurityController
+ * @extends Controller
  */
 export default class SkeletonSecurityController extends Controller {
     /**

@@ -2,6 +2,7 @@ import Entity from '~/vendor/easy/database/Entity'
 
 /**
  * @class Skeleton
+ * @extends Entity
  */
 export default class Skeleton extends Entity {
     /**

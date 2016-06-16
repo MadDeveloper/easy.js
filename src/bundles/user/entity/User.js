@@ -2,6 +2,7 @@ import Entity from '~/vendor/easy/database/Entity'
 
 /**
  * @class User
+ * @extends Entity
  */
 export default class User extends Entity {
     /**

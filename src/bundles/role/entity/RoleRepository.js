@@ -1,6 +1,15 @@
 import Repository from '~/vendor/easy/database/Repository'
 
+/**
+ * @class RoleRepository
+ * @extends Repository
+ */
 export default class RoleRepository extends Repository {
+    /**
+     * @constructor
+     *
+     * @param  {EntityManager} entityManager
+     */
     constructor( entityManager ) {
         super( entityManager )
 
@@ -11,6 +20,11 @@ export default class RoleRepository extends Repository {
         this._role              = this.entityManager.getModel( 'role' )
     }
 
+    /**
+     * readAll - fetch all roles
+     *
+     * @returns {Promise}
+     */
     readAll() {
         /*
          * Bookshelf
@@ -28,6 +42,13 @@ export default class RoleRepository extends Repository {
         // })
     }
 
+    /**
+     * read - fetch role by id
+     *
+     * @param  {Number} id
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
     read( id, options = {} ) {
         /*
          * Bookshelf
@@ -44,29 +65,54 @@ export default class RoleRepository extends Repository {
         // })
     }
 
+    /**
+     * save - save or update role if already exists
+     *
+     * @param  {Role} role
+     * @param  {String} { params
+     * @param  {String} slug }
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
     save( role, { name, slug }, options = {} ) {
         return new Promise( ( resolve, reject ) => {
             this.database.transaction( t => {
                 options.transacting = t
 
-                role.save({
-                    name,
-                    slug
-                }, options )
-                .then( resolve )
-                .catch( reject )
+                role.save({ name, slug }, options )
+                .then( role => {
+                    t.commit()
+                    resolve( role )
+                })
+                .catch( error => {
+                    t.rollback()
+                    reject( error )
+                })
             })
         })
     }
 
+    /**
+     * delete - delete role
+     *
+     * @param  {Role} role
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
     delete( role, options = {} ) {
         return new Promise( ( resolve, reject ) => {
             this.database.transaction( t => {
                 options.transacting = t
 
                 role.destroy( options )
-                .then( resolve )
-                .catch( reject )
+                .then( () => {
+                    t.commit()
+                    resolve()
+                })
+                .catch( error => {
+                    t.rollback()
+                    reject( error )
+                })
             })
         })
     }

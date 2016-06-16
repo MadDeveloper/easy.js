@@ -1,5 +1,8 @@
 import Controller from '~/vendor/easy/core/Controller'
-
+/**
+ * @class RoleSecurityController
+ * @extends Controller
+ */
 export default class RoleSecurityController extends Controller {
     /**
      * @constructor

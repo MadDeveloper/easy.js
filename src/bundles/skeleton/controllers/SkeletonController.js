@@ -3,6 +3,7 @@ import Controller   from '~/vendor/easy/core/Controller'
 
 /**
  * @class SkeletonController
+ * @extends Controller
  */
 export default class SkeletonController extends Controller {
     /**
@@ -113,7 +114,6 @@ export default class SkeletonController extends Controller {
             } else {
                 this.response.badRequest()
             }
-
         } else {
             this.response.badRequest()
         }
