@@ -40,7 +40,7 @@ export default {
      */
     database: {
         client: 'mysql',
-        connector: 'mongoose',
+        connector: 'bookshelf',
         connection: {
             host: 'localhost',
             user: 'root',

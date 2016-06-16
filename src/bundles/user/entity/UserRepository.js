@@ -4,20 +4,17 @@ export default class UserRepository extends Repository {
     constructor( entityManager ) {
         super( entityManager )
 
-        this._userModel = this.entityManager.getModel( 'user' )
+        this._user = this.entityManager.getModel( 'user' )
     }
 
     readAll( role ) {
-        let user = this.userModel
-
-        return user.where({ role_id: role.get( 'id' ) }).fetchAll()
+        return this.user.where({ role_id: role.get( 'id' ) }).fetchAll()
     }
 
     read( byParam, options = {} ) {
-        let user = this.userModel
         const forgeParam = ( typeof byParam === "number" || ( typeof byParam === 'string' && byParam.isNumber() ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } )
 
-        return user.forge( forgeParam ).fetch( options )
+        return this.user.forge( forgeParam ).fetch( options )
     }
 
     save( user, { username, email, password, role_id }, options = {} ) {
@@ -54,7 +51,7 @@ export default class UserRepository extends Repository {
      *
      * @returns {User}
      */
-    get userModel() {
-        return this._userModel
+    get user() {
+        return this._user
     }
 }

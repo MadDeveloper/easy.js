@@ -39,11 +39,11 @@ export default class SkeletonController extends Controller {
     }
 
     /**
-     * createSkeleton - create skeleton with params in request
+     * createSkeleton - create new skeleton
      */
     createSkeleton() {
         if ( this.isRequestWellParameterized() ) {
-            this.skeletonRepository.save( new this.skeletonModel, this.request.getBody() )
+            this.skeletonRepository.save( new this.skeletonModel(), this.request.getBody() )
             .then( skeleton => this.response.created( skeleton ) )
             .catch( error => this.response.internalServerError( error ) )
         } else {
@@ -51,6 +51,9 @@ export default class SkeletonController extends Controller {
         }
     }
 
+    /**
+     * getSkeleton - get skeleton by id
+     */
     getSkeleton() {
         this.response.ok( this.request.find( 'skeleton' ) )
     }

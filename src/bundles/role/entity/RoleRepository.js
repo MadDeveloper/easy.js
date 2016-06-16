@@ -7,8 +7,7 @@ export default class RoleRepository extends Repository {
         /*
          * Bookshelf
          */
-        // this._roleCollection    = this.entityManager.getCollection( 'role' )
-        this._roleCollection    = {}
+        this._roleCollection    = this.entityManager.getCollection( 'role' )
         this._role              = this.entityManager.getModel( 'role' )
     }
 
@@ -16,35 +15,33 @@ export default class RoleRepository extends Repository {
         /*
          * Bookshelf
          */
-        // let roles = this.roleCollection
-        //
-        // return roles.forge().fetch()
+        return this.roleCollection.forge().fetch()
 
         /*
          * Mongoose
          */
-        return new Promise( ( resolve, reject ) => {
-            this.role.find( ( error, roles ) => {
-                error ? reject( error ) : resolve( roles )
-                return
-            })
-        })
+        // return new Promise( ( resolve, reject ) => {
+        //     this.role.find( ( error, roles ) => {
+        //         error ? reject( error ) : resolve( roles )
+        //         return
+        //     })
+        // })
     }
 
     read( id, options = {} ) {
         /*
          * Bookshelf
          */
-        // return this.roleModel.forge({ id }).fetch( options )
+        return this.role.forge({ id }).fetch( options )
 
         /*
          * Mongoose
          */
-        return new Promise( ( resolve, reject ) => {
-            this.role.findById( id, ( error, role ) => {
-                error ? reject( error ) : resolve( role )
-            })
-        })
+        // return new Promise( ( resolve, reject ) => {
+        //     this.role.findById( id, ( error, role ) => {
+        //         error ? reject( error ) : resolve( role )
+        //     })
+        // })
     }
 
     save( role, { name, slug }, options = {} ) {

@@ -7,6 +7,7 @@
   "scripts": {
     "build": "npm run build-bin && npm run build-app",
     "build-app": "babel -w src -d build",
+    "build-app-once": "babel src -d build",
     "build-bin": "npm run make-build && babel src/bin/bundles/new -o build/bin/bundles/new && babel src/bin/bundles/routes -o build/bin/bundles/routes && babel src/bin/bundles/tests -o build/bin/bundles/tests && babel src/bin/database/import -o build/bin/database/import && babel src/bin/database/migrate -o build/bin/database/migrate && babel src/bin/lib/tests -o build/bin/lib/tests && babel src/bin/services/tests -o build/bin/services/tests",
     "build-maps": "babel -w src -d build -s",
     "build-once": "npm run build-bin && babel src -d build",
@@ -16,7 +17,7 @@
     "db-migrate": "node build/bin/database/migrate",
     "db-import": "node build/bin/database/import",
     "debug": "node --expose-gc debug build/app.js",
-    "generate-doc": "apidoc -i src/bundles",
+    "generate-doc": "apidoc -i src\/ -e skeleton\/ -o doc/",
     "make-build": "node make-build",
     "new-bundle": "node build/bin/bundles/new",
     "postinstall": "npm run build-once",

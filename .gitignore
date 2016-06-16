@@ -2,22 +2,19 @@
 node_modules/
 
 # JetBrains IDE directory
-.idea/
+.idea
 
 # git directory
-.git/
+.git
 
 # mac user
 .DS_Store
 
 # built with npm command
-build/
+/build
 
 # log files
 *.log
 
 # doc
-doc/
-
-# flow
-.flowconfig
+/doc

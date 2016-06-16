@@ -33,8 +33,6 @@ export default class UserController extends Controller {
 
     /**
      * getUsers - get all users from specific role
-     *
-     * @returns {type}  description
      */
     getUsers() {
         this.userRepository.readAll( this.request.find( 'role' ) )
@@ -43,15 +41,13 @@ export default class UserController extends Controller {
     }
 
     /**
-     * createUser - create new user with specific role id
-     *
-     * @returns {type}  description
+     * createUser - create new user
      */
     createUser() {
         if ( this.isRequestWellParameterized() ) {
             this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'idRole' ) )
 
-            this.userRepository.save( new this.userModel, this.request.getBody() )
+            this.userRepository.save( new this.userModel(), this.request.getBody() )
             .then( user => this.response.created( user ) )
             .catch( error => this.response.internalServerError( error ) )
         } else {
@@ -60,7 +56,7 @@ export default class UserController extends Controller {
     }
 
     /**
-     * getUser - get specific user from id
+     * getUser - get user by id
      */
     getUser() {
         this.response.ok( this.request.find( 'user' ) )

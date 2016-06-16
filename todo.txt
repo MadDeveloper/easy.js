@@ -1,8 +1,8 @@
-- proposer deux version Repository et Entity pour Bookshelf et Mongoose
-
 - rédiger apidoc pour les controlleurs
 
 - finir les tests pour user / role / skeleton / services
+
+- faire les interfaces easy
 
 
 -- IMMINENT --
@@ -14,3 +14,5 @@ REDIGER LA DOC
 - pouvoir reset le skeleton (dans bundles et test)
 
 - appliquer le logger aux endroits utiles
+
+- proposer deux version Repository et Entity pour Bookshelf et Mongoose

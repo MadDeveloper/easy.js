@@ -25,6 +25,6 @@ export default class RoleMiddlewaresController extends Controller {
             this.request.define( 'role', role )
             next()
         })
-        .catch( () => this.response.notFound() )
+        .catch( error => { console.log(error); this.response.notFound() })
     }
 }

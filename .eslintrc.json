@@ -87,7 +87,7 @@
         "max-params": "off",
         "max-statements": "off",
         "max-statements-per-line": "error",
-        "new-parens": "off",
+        "new-parens": "error",
         "newline-after-var": "off",
         "newline-before-return": "off",
         "newline-per-chained-call": "off",

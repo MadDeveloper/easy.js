@@ -5,15 +5,14 @@ export default class SkeletonRepository extends Repository {
         super( entityManager )
 
         this._skeletonCollection    = this.entityManager.getCollection( 'skeleton' )
-        this._skeletonModel         = this.entityManager.getModel( 'skeleton' )
+        this._skeleton         = this.entityManager.getModel( 'skeleton' )
     }
 
     readAll( options = {} ) {
         /*
          * Bookshelf
          */
-        let skeletons = this.skeletonCollection
-        return skeletons.forge().fetch( options )
+        return this.skeletonCollection.forge().fetch( options )
 
         /*
          * Mongoose
@@ -26,7 +25,7 @@ export default class SkeletonRepository extends Repository {
     }
 
     read( id, options = {} ) {
-        return this.skeletonModel.forge({ id }).fetch( options )
+        return this.skeleton.forge({ id }).fetch( options )
     }
 
     save( skeleton, params, options = {} ) {
@@ -86,7 +85,7 @@ export default class SkeletonRepository extends Repository {
      *
      * @returns {Skeleton}
      */
-    get skeletonModel() {
-        return this._skeletonModel
+    get skeleton() {
+        return this._skeleton
     }
 }

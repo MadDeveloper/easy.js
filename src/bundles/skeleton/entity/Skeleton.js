@@ -21,18 +21,12 @@ export default class Skeleton extends Entity {
         /*
          * Mongoose
          */
-        // let model
+        // if ( !this.database.models.skeleton ) {
+        //     this.database.model( 'skeleton', this.database.Schema({
         //
-        // if ( this.database.models.role ) {
-        //     model = this.database.model( 'role' )
-        // } else {
-        //     const roleSchema = this.database.Schema({
-        //         name: String,
-        //         slug: String
-        //     })
-        //     model = this.database.model( 'role', roleSchema )
+        //     }))
         // }
         //
-        // return model
+        // return this.database.model( 'skeleton' )
     }
 }

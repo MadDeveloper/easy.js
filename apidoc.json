@@ -1,6 +1,6 @@
 {
-  "name": "MyApp Rest API",
+  "name": "MyApp API",
   "version": "0.1.0",
-  "description": "A basic apiDoc example",
+  "description": "Documentation",
   "sampleUrl": "http://localhost"
 }
