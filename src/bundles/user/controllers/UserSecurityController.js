@@ -25,10 +25,10 @@ export default class UserSecurityController extends Controller {
 
             this.access.restrict({
                 mustBe: [ this.access.any ],
-                canCreate: [ this.access.admin ],
+                canCreate: [ this.access.user ],
                 canRead: [],
-                canUpdate: [ this.access.admin ],
-                canDelete: [ this.access.admin ]
+                canUpdate: [ this.access.user ],
+                canDelete: [ this.access.user ]
             })
 
             if ( this.access.focusOn( token.role_id ).canReach( this.request.getMethod() ) ) {

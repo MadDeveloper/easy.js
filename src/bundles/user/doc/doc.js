@@ -28,6 +28,7 @@
  * @api {post} /roles/:idRole/users Create a user
  * @apiName CreateUser
  * @apiGroup User
+ * @apiPermission user
  *
  * @apiParam {String} username Username of new user
  * @apiParam {String} email Email of new user
@@ -81,9 +82,10 @@
 /**
  * updateUser - update user
  *
- * @api {put} /roles/:idRole/users/:idUser Update role from id
+ * @api {put} /roles/:idRole/users/:idUser Update user from id
  * @apiName UpdateUser
  * @apiGroup User
+ * @apiPermission user
  *
  *
  * @apiParam {String} username New user name
@@ -113,6 +115,7 @@
 
 /**
  * deleteUser - delete user
+ * @apiPermission user
  *
  * @api {delete} /roles/:idRole/users/:idUser Delete user from id
  * @apiName DeleteUser

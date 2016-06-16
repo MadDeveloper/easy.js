@@ -24,3 +24,11 @@
  * @apiErrorExample Error-Client:
  *     HTTP/1.1 404 Not Found
  */
+
+/**
+ * @apiDefine admin
+ */
+
+/**
+ * @apiDefine user
+ */

@@ -26,6 +26,7 @@
  * @api {post} /roles Create a role
  * @apiName CreateRole
  * @apiGroup Role
+ * @apiPermission admin
  *
  * @apiParam {String} name Name of new role
  * @apiParam {String} slug Slug from name of new role
@@ -73,6 +74,7 @@
  * @api {put} /roles/:id Update role from id
  * @apiName UpdateRole
  * @apiGroup Role
+ * @apiPermission admin
  *
  *
  * @apiParam {String} name New role name
@@ -100,6 +102,7 @@
  * @api {delete} /roles/:id Delete role from id
  * @apiName DeleteRole
  * @apiGroup Role
+ * @apiPermission admin
  *
  *
  * @apiSuccessExample Success-Response:
