@@ -1,10 +1,5 @@
 - finir les tests pour user / role / skeleton / services
 
-- faire les interfaces easy et adapter le code (typé)
-
-- simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
-tout lier en promise pour les patchs
-
 -- IMMINENT --
 REDIGER LA DOC
 
@@ -16,3 +11,8 @@ REDIGER LA DOC
 - appliquer le logger aux endroits utiles
 
 - proposer deux version Repository et Entity pour Bookshelf et Mongoose
+
+- faire les interfaces easy et adapter le code (typé)
+
+- simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
+tout lier en promise pour les patchs

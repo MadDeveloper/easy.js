@@ -1,3 +1,4 @@
+import { indexOf }  from 'lodash'
 import Controller   from '~/vendor/easy/core/Controller'
 
 /**
