@@ -1,5 +1,7 @@
 - finir les tests pour user / role / skeleton / services
 
+- bin permettant de sync roles from db into config file, and reverse
+
 -- IMMINENT --
 REDIGER LA DOC
 

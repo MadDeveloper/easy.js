@@ -22,7 +22,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     const negativeAnswers       = [ 'n', 'no' ]
     const bundlesPath           = `${kernel.path.root}/../src/bundles`
     const skeletonBundlePath    = `${bundlesPath}/skeleton`
-    const bundlesDefinitionPath = `${kernel.path.root}/../src/config/bundlesDefinition.js`
+    const bundlesDefinitionPath = `${kernel.path.root}/../src/config/bundles/enabled.js`
 
     let nameBundle              = stringLibrary.cleanSpaces( nameBundleFromArgv )
     let nameBundleCapitalized   = nameBundle.capitalizeFirstLetter()
@@ -425,8 +425,8 @@ if ( nameBundleFromArgv.length > 0 ) {
         if ( -1 !== indexOf( positiveAnswers, answerRegisterRouting ) ) {
             fs.readFile( bundlesDefinitionPath, { encoding: 'utf8' }, ( error, data ) => {
                 if ( !error ) {
-                    const stringToWrite = `\t'${nameBundleDecapitalized}'\n}`
-                    const dataUpdated = data.replace( /\}/i, stringToWrite )
+                    const stringToWrite = `$1$2$3,\n\t'${nameBundleDecapitalized}'\n]`
+                    const dataUpdated = data.replace( /('|")(\w+)('|")\s*\]/, stringToWrite )
 
                     fs.writeFile( bundlesDefinitionPath, dataUpdated, { encoding: 'utf8' }, error => {
                         if ( !error ) {
@@ -446,7 +446,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         function errorEditingBundlesDefinition( error ) {
             cli.error({
                 title: "Impossible to expose bundle routing",
-                message: `Error when editing bundlesDefinition.js file: ${error}`,
+                message: `Error when editing ~/src/bundles/enabled.js file: ${error}`,
                 consequence: "Bundle creation incomplete.",
                 exit: 0
             })
