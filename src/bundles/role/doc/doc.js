@@ -6,7 +6,7 @@
  * @apiGroup Role
  *
  *
- * @apiSuccess {Array[]} raw Return table of roles
+ * @apiSuccess {Array[Role]} raw Return table of roles
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     [

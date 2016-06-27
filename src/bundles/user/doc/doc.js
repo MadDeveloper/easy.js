@@ -6,7 +6,7 @@
  * @apiGroup User
  *
  *
- * @apiSuccess {Array[]} raw Return table of users
+ * @apiSuccess {Array[User]} raw Return table of users
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     [

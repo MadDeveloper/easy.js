@@ -41,7 +41,7 @@ export default class Controller {
     verifyParams( required, params = {} ) {
         let verified = true
 
-        if ( !params || {} == params ) {
+        if ( !params || JSON.stringify({}) === JSON.stringify( params ) ) {
             params = this.request.getBody()
         }
 

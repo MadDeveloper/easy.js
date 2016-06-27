@@ -21,7 +21,7 @@ export default function routing( container, bundleManager, router ) {
      */
     router.use( ( req, res ) => {
         if ( !res.headersSent ) { // if you want strict mode, comment this condition
-            container.getComponent( 'Response' ).notFound()
+            res.status( 404 ).end()
         }
     })
 }

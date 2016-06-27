@@ -26,7 +26,7 @@ export default class SkeletonController extends Controller {
      */
     isRequestWellParameterized() {
         return this.verifyParams([
-            { property: 'example', typeExpected: 'string' }
+            { property: 'property', typeExpected: 'string' }
         ])
     }
 

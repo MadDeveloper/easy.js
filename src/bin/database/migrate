@@ -24,7 +24,6 @@ migrate()
 .catch( raiseError )
 
 function raiseError( error ) {
-	console.log(error);
 	cli.error({
 		title: titleError,
 		message: error,

@@ -13,7 +13,7 @@ export default class SkeletonRepository extends Repository {
         super( entityManager )
 
         this._skeletonCollection    = this.entityManager.getCollection( 'skeleton' )
-        this._skeleton         = this.entityManager.getModel( 'skeleton' )
+        this._skeleton              = this.entityManager.getModel( 'skeleton' )
     }
 
     /**
@@ -32,8 +32,8 @@ export default class SkeletonRepository extends Repository {
          * Mongoose
          */
         // return new Promise( ( resolve, reject ) => {
-        //     this.roleModel.find( ( error, roles ) => {
-        //         error ? reject( error ) : resolve( roles )
+        //     this.skeleton.find( ( error, skeletons ) => {
+        //         error ? reject( error ) : resolve( skeletons )
         //     })
         // })
     }

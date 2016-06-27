@@ -1,10 +1,3 @@
-/*
- * Start server: npm start
- */
-
-/*
- * App requirements
- */
 import https                        from 'https'
 import http                         from 'http'
 import net                          from 'net'

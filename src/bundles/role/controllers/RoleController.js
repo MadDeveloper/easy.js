@@ -45,9 +45,7 @@ export default class RoleController extends Controller {
     createRole() {
         if ( this.isRequestWellParameterized() ) {
             this.roleRepository.save( new this.roleModel(), this.request.getBody() )
-            .then( role => {
-                this.response.created( role )
-            })
+            .then( role => this.response.created( role ) )
             .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
