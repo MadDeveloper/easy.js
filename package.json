@@ -10,7 +10,7 @@
     "build-app-once": "babel src -d build",
     "build-bin": "npm run make-build && babel src/bin/bundles/new -o build/bin/bundles/new && babel src/bin/bundles/routes -o build/bin/bundles/routes && babel src/bin/bundles/tests -o build/bin/bundles/tests && babel src/bin/database/import -o build/bin/database/import && babel src/bin/database/migrate -o build/bin/database/migrate && babel src/bin/lib/tests -o build/bin/lib/tests && babel src/bin/services/tests -o build/bin/services/tests",
     "build-maps": "babel -w src -d build -s",
-    "build-once": "npm run build-bin && babel src -d build",
+    "build-once": "npm run build-bin && npm run build-app-once",
     "bundles-routes": "node build/bin/bundles/routes",
     "clean-build": "rm -rf build/* ",
     "clear-logs": "rm -rf logs/*.log",

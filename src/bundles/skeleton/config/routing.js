@@ -15,18 +15,20 @@ export default function routing( router, factory ) {
     let skeletonController
 
     /*
+     * Register request and response into Controller
+     * and register skeletonController into req.tmp
+     */
+    router.use( ( req, res, next ) => {
+        skeletonController = new SkeletonController( req, res, factory )
+        req.tmp.skeletonController = skeletonController
+        next()
+    })
+
+    /*
      * Security & middlewares
      */
     skeletonSecurity( router, factory )
     skeletonMiddlewares( router, factory )
-
-    /*
-     * Register request and response into Controller
-     */
-    router.use( ( req, res, next ) => {
-        skeletonController = new SkeletonController( req, res, factory )
-        next()
-    })
 
     /*
     * Routes definitions
@@ -39,10 +41,10 @@ export default function routing( router, factory ) {
             skeletonController.createSkeleton()
         })
         .all( () => {
-            skeletonController.methodNotAllowed()
+            skeletonController.response.methodNotAllowed()
         })
 
-    router.route( '/skeletons/:id' )
+    router.route( '/skeletons/:skeleton_id' )
         .get( () => {
             skeletonController.getSkeleton()
         })
@@ -56,6 +58,6 @@ export default function routing( router, factory ) {
             skeletonController.deleteSkeleton()
         })
         .all( () => {
-            skeletonController.methodNotAllowed()
+            skeletonController.response.methodNotAllowed()
         })
 }

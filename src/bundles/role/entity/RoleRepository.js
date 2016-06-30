@@ -13,56 +13,28 @@ export default class RoleRepository extends Repository {
     constructor( entityManager ) {
         super( entityManager )
 
-        /*
-         * Bookshelf
-         */
         this._roleCollection    = this.entityManager.getCollection( 'role' )
         this._role              = this.entityManager.getModel( 'role' )
     }
 
     /**
-     * readAll - fetch all roles
+     * findAll - fetch all roles
      *
      * @returns {Promise}
      */
-    readAll() {
-        /*
-         * Bookshelf
-         */
+    findAll() {
         return this.roleCollection.forge().fetch()
-
-        /*
-         * Mongoose
-         */
-        // return new Promise( ( resolve, reject ) => {
-        //     this.role.find( ( error, roles ) => {
-        //         error ? reject( error ) : resolve( roles )
-        //         return
-        //     })
-        // })
     }
 
     /**
-     * read - fetch role by id
+     * find - fetch role by id
      *
      * @param  {Number} id
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    read( id, options = {} ) {
-        /*
-         * Bookshelf
-         */
+    find( id, options = {} ) {
         return this.role.forge({ id }).fetch( options )
-
-        /*
-         * Mongoose
-         */
-        // return new Promise( ( resolve, reject ) => {
-        //     this.role.findById( id, ( error, role ) => {
-        //         error ? reject( error ) : resolve( role )
-        //     })
-        // })
     }
 
     /**

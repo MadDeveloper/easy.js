@@ -1,23 +1,21 @@
-import SkeletonMiddlewaresController from './../controllers/SkeletonMiddlewaresController'
-
 export default function middlewares( router, factory ) {
     /*
      * Dependencies
      */
-    let skeletonMiddlewaresController
+    let skeletonController
 
     /*
-     * Register request and response into Controller
+     * Retrieve skeletonController
      */
     router.use( ( req, res, next ) => {
-        skeletonMiddlewaresController = new SkeletonMiddlewaresController( req, res, factory )
+        skeletonController = req.tmp.skeletonController
         next()
     })
 
     /*
      * Middlewares
      */
-    router.use( '/skeletons/:id', ( req, res, next ) => {
-        skeletonMiddlewaresController.skeletonExists( next )
+    router.param( 'skeleton_id', ( req, res, next ) => {
+        skeletonController.skeletonExists( next )
     })
 }

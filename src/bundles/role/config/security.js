@@ -1,16 +1,16 @@
-import RoleSecurityController from './../controllers/RoleSecurityController'
-
 export default function security( router, factory ) {
     /*
      * Dependencies
      */
-    let roleSecurityController
+    let roleController
+    let access
 
     /*
-     * Register request and response into Controller
+     * Retrieve roleController
      */
     router.use( ( req, res, next ) => {
-        roleSecurityController = new RoleSecurityController( req, res, factory )
+        roleController = req.tmp.roleController
+        access = roleController.access
         next()
     })
 
@@ -18,6 +18,16 @@ export default function security( router, factory ) {
      * Security middlewares
      */
     router.use( '/roles', ( req, res, next ) => {
-        roleSecurityController.authorize( next )
+        roleController.authorize({
+            restrictions: {
+                mustBe: [ access.any ],
+                canCreate: [ access.admin ],
+                canRead: [],
+                canUpdate: [ access.admin ],
+                canDelete: [ access.admin ]
+            },
+            focus: 'role_id',
+            next
+        })
     })
 }

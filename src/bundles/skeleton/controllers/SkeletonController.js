@@ -16,7 +16,7 @@ export default class SkeletonController extends Controller {
         super( req, res, factory )
 
         this._skeletonRepository    = this.entityManager.getRepository( 'skeleton' )
-        this._skeletonModel         = this.entityManager.getModel( 'skeleton' )
+        this._skeleton              = this.entityManager.getModel( 'skeleton' )
     }
 
     /**
@@ -31,10 +31,29 @@ export default class SkeletonController extends Controller {
     }
 
     /**
+     * skeletonExists - check if skeleton exists (with id)
+     *
+     * @param {function} next
+     */
+    skeletonExists( next ) {
+        const requireOptions = {
+            requireBy: this.request.getRouteParameter( 'skeleton_id' ),
+            options: {}
+        }
+
+        this.doesRequiredElementExists( 'skeleton', requireOptions )
+        .then( skeleton => {
+            this.request.define( 'skeleton', skeleton )
+            next()
+        })
+        .catch( () => this.response.notFound() )
+    }
+
+    /**
      * getSkeletons - get all skeletons
      */
     getSkeletons() {
-        this.skeletonRepository.readAll()
+        this.skeletonRepository.findAll()
         .then( skeletons => this.response.ok( skeletons ) )
         .catch( error => this.response.internalServerError( error ) )
     }
@@ -44,7 +63,7 @@ export default class SkeletonController extends Controller {
      */
     createSkeleton() {
         if ( this.isRequestWellParameterized() ) {
-            this.skeletonRepository.save( new this.skeletonModel(), this.request.getBody() )
+            this.skeletonRepository.save( new this.skeleton(), this.request.getBody() )
             .then( skeleton => this.response.created( skeleton ) )
             .catch( error => this.response.internalServerError( error ) )
         } else {
@@ -142,7 +161,7 @@ export default class SkeletonController extends Controller {
      *
      * @returns {Skeleton}
      */
-    get skeletonModel() {
-        return this._skeletonModel
+    get skeleton() {
+        return this._skeleton
     }
 }

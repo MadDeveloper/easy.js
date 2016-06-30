@@ -1,23 +1,21 @@
-import UserMiddlewaresController from './../controllers/UserMiddlewaresController'
-
 export default function middlewares( router, factory ) {
     /*
      * Dependencies
      */
-    let userMiddlewaresController
+    let userController
 
     /*
-     * Register request and response into Controller
+     * Retrieve userController
      */
     router.use( ( req, res, next ) => {
-        userMiddlewaresController = new UserMiddlewaresController( req, res, factory )
+        userController = req.tmp.userController
         next()
     })
 
     /*
      * Middlewares
      */
-    router.use( '/roles/:idRole/users/:idUser', ( req, res, next ) => {
-        userMiddlewaresController.userExists( next )
+    router.param( 'user_id', ( req, res, next ) => {
+        userController.userExists( next )
     })
 }

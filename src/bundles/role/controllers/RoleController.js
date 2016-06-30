@@ -15,7 +15,7 @@ export default class RoleController extends Controller {
         super( req, res, factory )
 
         this._roleRepository    = this.entityManager.getRepository( 'role' )
-        this._roleModel         = this.entityManager.getModel( 'role' )
+        this._role              = this.entityManager.getModel( 'role' )
     }
 
     /**
@@ -31,10 +31,29 @@ export default class RoleController extends Controller {
     }
 
     /**
+     * roleExists
+     *
+     * @param {function} next
+     */
+    roleExists( next ) {
+        const requireOptions = {
+            requireBy: this.request.getRouteParameter( 'role_id' ),
+            options: {}
+        }
+
+        this.doesRequiredElementExists( 'role', requireOptions )
+        .then( role => {
+            this.request.define( 'role', role )
+            next()
+        })
+        .catch( () => this.response.notFound() )
+    }
+
+    /**
      * getRoles - get all roles
      */
     getRoles() {
-        this.roleRepository.readAll()
+        this.roleRepository.findAll()
         .then( roles => this.response.ok( roles ) )
         .catch( error => this.response.internalServerError( error ) )
     }

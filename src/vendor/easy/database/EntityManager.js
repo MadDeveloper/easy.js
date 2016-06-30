@@ -14,6 +14,11 @@ export default class EntityManager extends Component {
 
         this._container     = container
         this._bundlesPath   = container.kernel.path.bundles
+        this._cached        = {
+            models: {},
+            repositories: {},
+            collections: {}
+        }
     }
 
     /**
@@ -24,9 +29,13 @@ export default class EntityManager extends Component {
      */
     getRepository( repository ) {
         if ( repository.length > 0 ) {
+            if ( this.isCached( repository ) ) {
+                return this.getCache( repository, 'repositories' )
+            }
+
             const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
 
-            return new repositoryClass( this )
+            return this.cache( new repositoryClass( this ), repository, 'repositories' )
         }
     }
 
@@ -37,9 +46,13 @@ export default class EntityManager extends Component {
      * @returns {Entity}
      */
     getModel( model ) {
+        if ( this.isCached( model ) ) {
+            return this.getCache( model, 'models' )
+        }
+
         const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
 
-        return new modelClass( this )
+        return this.cache( new modelClass( this ), model, 'models' )
     }
 
     /**
@@ -52,6 +65,58 @@ export default class EntityManager extends Component {
         return this.database.Collection.extend({
             model: this.getModel( model )
         })
+    }
+
+    /**
+     * isCached - check if an object is cached from a key id following a type
+     *
+     * @param  {string} key = ''
+     * @param  {string} type = 'models'
+     * @returns {bool}
+     */
+    isCached( key = '', type = 'models' ) {
+        return this.cached.hasOwnProperty( type ) && this.cached[ type ].hasOwnProperty( key )
+    }
+
+    /**
+     * getCache - retrieve cached object by a key id following a type
+     *
+     * @param  {string} key = ''
+     * @param  {string} type = 'models'
+     * @returns {object}
+     */
+    getCache( key = '', type = 'models' ) {
+        return ( this.cached.hasOwnProperty( type ) && this.cached[ type ].hasOwnProperty( key ) ) ? this.cached[ type ][ key ] : {}
+    }
+
+    /**
+     * cache - cache an object with a key id into specific type
+     *
+     * @param  {object} object = {}
+     * @param  {string} key = ''
+     * @param  {string} type = 'models'
+     * @returns {object}
+     */
+    cache( object = {}, key = '', type = 'models' ) {
+        if ( this.cached.hasOwnProperty( type ) ) {
+            this.cached[ type ][ key ] = object
+
+            return object
+        }
+
+        return {}
+    }
+
+    /**
+     * uncache - uncache object referenced by a key id following a type
+     *
+     * @param  {string} key = ''
+     * @param  {string} type = 'models'
+     */
+    uncache( key = '', type = 'models' ) {
+        if ( this.cached.hasOwnProperty( type ) ) {
+            delete this.cached[ type ][ key ]
+        }
     }
 
     /**
@@ -70,5 +135,14 @@ export default class EntityManager extends Component {
      */
     get database() {
         return this._container.getComponent( 'Database' ).instance
+    }
+
+    /**
+     * get - get cached objects
+     *
+     * @returns {object}
+     */
+    get cached() {
+        return this._cached
     }
 }

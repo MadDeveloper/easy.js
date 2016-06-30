@@ -1,20 +1,6 @@
 - finir les tests pour user / role / skeleton / services
 
-- bin permettant de sync roles from db into config file, and reverse
-
-- getModel du entityManager doit mettre en cache le schema, ce n'est pas à l'entité de faire de la logique métier de cache
-(éviter de redéclarer l'entité à chaque appel de la classe Model)
-Rendre en cache tout ce qui est stateless (Repo, Controller ?, Model, classes vendor ?, etc.)
-
-- au démarrage du serveur, certains fichiers doivent être lu, par exemeple celui des models, car la db doit pouvoir linked les entités étrangères etc.
-
-- changer read et readAll par find et findAll respectivement
-
-- il faut enlever le securityController, il faut que ce soit une classe Easy qui permette de gérer ça, la config routing doit juste définir
-la route et les accès
-
--- IMMINENT --
-REDIGER LA DOC
+- REDIGER LA DOC
 
 
 --- LATER ---
@@ -23,13 +9,19 @@ REDIGER LA DOC
 
 - appliquer le logger aux endroits utiles
 
-- proposer deux version Repository et Entity pour Bookshelf et Mongoose
-
 - faire les interfaces easy et adapter le code (typé)
 
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
 tout lier en promise pour les patchs
 
-- Utiliser CarminteJS (cross-db ORM) ?
-
 - revoir le système de droit, il faut sync les roles, un meilleur système de gestion, lier avec la db
+
+- bin permettant de sync roles from db into config file, and reverse
+
+- créer une classe CacheManager ? dans laquelle on peut déclarer des namespaces (entitymanager par exemple) et y travailler dedans avec des méthodes
+génériques
+
+
+---  MAYBE ---
+
+- ? Utiliser CarminteJS (cross-db ORM)

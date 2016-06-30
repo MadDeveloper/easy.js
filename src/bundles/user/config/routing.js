@@ -9,23 +9,25 @@ export default function routing( router, factory ) {
     let userController
 
     /*
+     * Register request and response into Controller
+     * and register userController into req.tmp
+     */
+    router.use( ( req, res, next ) => {
+        userController = new UserController( req, res, factory )
+        req.tmp.userController = userController
+        next()
+    })
+
+    /*
      * Security & middlewares
      */
     userSecurity( router, factory )
     userMiddlewares( router, factory )
 
     /*
-     * Register request and response into Controller
-     */
-    router.use( ( req, res, next ) => {
-        userController = new UserController( req, res, factory )
-        next()
-    })
-
-    /*
     * Routes definitions
     */
-    router.route( '/roles/:idRole/users' )
+    router.route( '/roles/:role_id/users' )
         .get( () => {
             userController.getUsers()
         })
@@ -33,10 +35,10 @@ export default function routing( router, factory ) {
             userController.createUser()
         })
         .all( () => {
-            userController.methodNotAllowed()
+            userController.response.methodNotAllowed()
         })
 
-    router.route( '/roles/:idRole/users/:idUser' )
+    router.route( '/roles/:role_id/users/:user_id' )
         .get( () => {
             userController.getUser()
         })
@@ -50,6 +52,6 @@ export default function routing( router, factory ) {
             userController.deleteUser()
         })
         .all( () => {
-            userController.methodNotAllowed()
+            userController.response.methodNotAllowed()
         })
 }

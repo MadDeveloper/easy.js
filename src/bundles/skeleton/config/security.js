@@ -1,16 +1,16 @@
-import SkeletonSecurityController from './../controllers/SkeletonSecurityController'
-
 export default function security( router, factory ) {
     /*
      * Dependencies
      */
-    let skeletonSecurityController
+    let skeletonController
+    let access
 
     /*
-     * Register request and response into Controller
+     * Retrieve skeletonController
      */
     router.use( ( req, res, next ) => {
-        skeletonSecurityController = new SkeletonSecurityController( req, res, factory )
+        skeletonController = req.tmp.skeletonController
+        access = skeletonController.access
         next()
     })
 
@@ -18,6 +18,16 @@ export default function security( router, factory ) {
      * Security middlewares
      */
     router.use( '/skeletons', ( req, res, next ) => {
-        skeletonSecurityController.authorize( next )
+        skeletonController.authorize({
+            restrictions: {
+                mustBe: [ access.any ],
+                canCreate: [],
+                canRead: [],
+                canUpdate: [],
+                canDelete: []
+            },
+            focus: 'role_id',
+            next
+        })
     })
 }

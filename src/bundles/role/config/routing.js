@@ -9,18 +9,20 @@ export default function routing( router, factory ) {
     let roleController
 
     /*
+     * Register request and response into Controller
+     * and register roleController into req.tmp
+     */
+    router.use( ( req, res, next ) => {
+        roleController          = new RoleController( req, res, factory )
+        req.tmp.roleController  = roleController
+        next()
+    })
+
+    /*
      * Security & middlewares
      */
     roleSecurity( router, factory )
     roleMiddlewares( router, factory )
-
-    /*
-     * Register request and response into Controller
-     */
-    router.use( ( req, res, next ) => {
-        roleController = new RoleController( req, res, factory )
-        next()
-    })
 
     /*
      * Routes definitions
@@ -33,10 +35,10 @@ export default function routing( router, factory ) {
             roleController.createRole()
         })
         .all( () => {
-            roleController.methodNotAllowed()
+            roleController.response.methodNotAllowed()
         })
 
-    router.route( '/roles/:id' )
+    router.route( '/roles/:role_id' )
         .get( () => {
             roleController.getRole()
         })
@@ -47,6 +49,6 @@ export default function routing( router, factory ) {
             roleController.deleteRole()
         })
         .all( () => {
-            roleController.methodNotAllowed()
+            roleController.response.methodNotAllowed()
         })
 }

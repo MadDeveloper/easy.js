@@ -16,23 +16,23 @@ export default class UserRepository extends Repository {
     }
 
     /**
-     * readAll - fetch all users from role
+     * findAll - fetch all users from role
      *
      * @param  {Role} role
      * @returns {Promise}
      */
-    readAll( role ) {
+    findAll( role ) {
         return this.user.where({ role_id: role.get( 'id' ) }).fetchAll()
     }
 
     /**
-     * read - fetch user by id or email
+     * find - fetch user by id or email
      *
      * @param  {Object} byParam
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    read( byParam, options = {} ) {
+    find( byParam, options = {} ) {
         const forgeParam = ( typeof byParam === "number" || ( typeof byParam === 'string' && byParam.isNumber() ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } )
 
         return this.user.forge( forgeParam ).fetch( options )

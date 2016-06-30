@@ -16,6 +16,7 @@ export default class UserController extends Controller {
         super( req, res, factory )
 
         this._userRepository    = this.entityManager.getRepository( 'user' )
+        this._user              = this.entityManager.getModel( 'user' )
         this._roleRepository    = this.entityManager.getRepository( 'role' )
     }
 
@@ -34,10 +35,29 @@ export default class UserController extends Controller {
     }
 
     /**
+     * userExists
+     *
+     * @param {function} next
+     */
+    userExists( next ) {
+        const requireOptions = {
+            requireBy: this.request.getRouteParameter( 'user_id' ),
+            options: {}
+        }
+
+        this.doesRequiredElementExists( 'user', requireOptions )
+        .then( user => {
+            this.request.define( 'user', user )
+            next()
+        })
+        .catch( () => this.response.notFound() )
+    }
+
+    /**
      * getUsers - get all users from specific role
      */
     getUsers() {
-        this.userRepository.readAll( this.request.find( 'role' ) )
+        this.userRepository.findAll( this.request.find( 'role' ) )
         .then( users => this.response.ok( users ) )
         .catch( error => this.response.internalServerError( error ) )
     }
@@ -47,9 +67,9 @@ export default class UserController extends Controller {
      */
     createUser() {
         if ( this.isRequestWellParameterized() ) {
-            this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'idRole' ) )
+            this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'role_id' ) )
 
-            this.userRepository.save( new this.userModel(), this.request.getBody() )
+            this.userRepository.save( new this.user(), this.request.getBody() )
             .then( user => this.response.created( user ) )
             .catch( error => this.response.internalServerError( error ) )
         } else {
@@ -70,7 +90,7 @@ export default class UserController extends Controller {
     updateUser() {
         if ( this.isRequestWellParameterized() ) {
             if ( typeof this.request.getBodyParameter( 'role_id' ) === "undefined" ) {
-                this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'idRole' ) )
+                this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'role_id' ) )
             }
 
             this.userRepository.save( this.request.find( 'user' ), this.request.getBody() )
@@ -160,7 +180,7 @@ export default class UserController extends Controller {
      *
      * @returns {User}
      */
-    get userModel() {
-        return this._userModel
+    get user() {
+        return this._user
     }
 }

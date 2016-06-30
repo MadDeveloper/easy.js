@@ -2,6 +2,14 @@ import authentication from './../security/authentication'
 
 export default function routing( container, bundleManager, router ) {
     /*
+     * Create tmp object into request to permit transit object without Request class, use it carefully
+     */
+    router.all( '*', ( req, res, next ) => {
+        req.tmp = {}
+        next()
+    })
+
+    /*
      * Security
      */
     router.use( ( req, res, next ) => {

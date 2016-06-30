@@ -1,23 +1,21 @@
-import RoleMiddlewaresController from './../controllers/RoleMiddlewaresController'
-
 export default function middlewares( router, factory ) {
     /*
      * Dependencies
      */
-    let roleMiddlewaresController
+    let roleController
 
     /*
-     * Register request and response into Controller
+     * Retrieve roleController
      */
     router.use( ( req, res, next ) => {
-        roleMiddlewaresController = new RoleMiddlewaresController( req, res, factory )
+        roleController = req.tmp.roleController
         next()
     })
 
     /*
      * Middlewares
      */
-    router.use( '/roles/:id', ( req, res, next ) => {
-        roleMiddlewaresController.roleExists( next )
+    router.param( 'role_id', ( req, res, next ) => {
+        roleController.roleExists( next )
     })
 }

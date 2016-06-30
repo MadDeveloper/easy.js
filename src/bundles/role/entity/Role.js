@@ -12,9 +12,6 @@ export default class Role extends Entity {
     constructor( entityManager ) {
         super( entityManager )
 
-        /*
-         * Bookshelf
-         */
         return this.database.Model.extend({
             tableName: 'roles',
 
@@ -22,17 +19,5 @@ export default class Role extends Entity {
                 return this.hasMany( entityManager.getModel( 'user' ) )
             }
         })
-
-        /*
-         * Mongoose
-         */
-        // if ( !this.database.models.role ) {
-        //     this.database.model( 'role', this.database.Schema({
-        //         name: String,
-        //         slug: String
-        //     }))
-        // }
-        //
-        // return this.database.model( 'role' )
     }
 }

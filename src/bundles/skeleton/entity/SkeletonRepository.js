@@ -17,35 +17,23 @@ export default class SkeletonRepository extends Repository {
     }
 
     /**
-     * readAll - fetch all skeletons
+     * findAll - fetch all skeletons
      *
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    readAll( options = {} ) {
-        /*
-         * Bookshelf
-         */
+    findAll( options = {} ) {
         return this.skeletonCollection.forge().fetch( options )
-
-        /*
-         * Mongoose
-         */
-        // return new Promise( ( resolve, reject ) => {
-        //     this.skeleton.find( ( error, skeletons ) => {
-        //         error ? reject( error ) : resolve( skeletons )
-        //     })
-        // })
     }
 
     /**
-     * read - fetch skeleton by id
+     * find - fetch skeleton by id
      *
      * @param  {Number} id
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    read( id, options = {} ) {
+    find( id, options = {} ) {
         return this.skeleton.forge({ id }).fetch( options )
     }
 

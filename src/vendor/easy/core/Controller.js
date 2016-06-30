@@ -18,6 +18,7 @@ export default class Controller {
         this._response      = new Response( res, this._request, this._container.getComponent( 'Logger' ) )
         this._router        = this._container.getComponent( 'Router' ).scope
         this._entityManager = this._container.getComponent( 'EntityManager' )
+        this._access = this.getService( 'security.access' )
     }
 
     /**
@@ -29,6 +30,29 @@ export default class Controller {
      */
     getService( service, clearCache = false ) {
         return this.container.getService( service, clearCache )
+    }
+
+    /**
+     * authorize - determine is current user can access to bundle routes
+     *
+     * @param  {type} { restrictions = {}
+     * @param  {type} focus = 'role_id'
+     * @param  {type} next }
+     */
+    authorize({ restrictions = {}, focus = 'role_id', next }) {
+        if ( this.isProdEnv() ) {
+            const token = this.request.getBodyParameter( 'token' )
+
+            this.access.restrict( restrictions )
+
+            if ( this.access.focusOn( token[ focus ] ).canReach( this.request.getMethod() ) ) {
+                next()
+            } else {
+                this.response.forbidden()
+            }
+        } else {
+            next()
+        }
     }
 
     /**
@@ -119,7 +143,7 @@ export default class Controller {
 
                 const elementRepository = this.entityManager.getRepository( element )
 
-                elementRepository.read( requireBy, optionsFetch )
+                elementRepository.find( requireBy, optionsFetch )
                 .then( element => {
                     if ( element ) {
                         resolve( element )
@@ -241,5 +265,14 @@ export default class Controller {
      */
     get entityManager() {
         return this._entityManager
+    }
+
+    /**
+     * get - access service
+     *
+     * @returns {AccessSecurityService}
+     */
+    get access() {
+        return this._access
     }
 }

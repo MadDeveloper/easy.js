@@ -25,7 +25,7 @@ export default function authentication( container, router ) {
             ])
 
             if ( requestValidity ) {
-                userRepository.read({ email: request.getBodyParameter( 'email' ) })
+                userRepository.find({ email: request.getBodyParameter( 'email' ) })
                 .then( user => {
                     if ( user ) {
                         if ( request.getBodyParameter( 'password' ) == user.get( 'password' ) ) {

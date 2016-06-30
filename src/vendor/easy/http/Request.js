@@ -6,6 +6,13 @@ export default class Request extends Http {
 
         this._appName   = appName
         this._scope     = req
+
+        /*
+         * Defining global app scope in request
+         */
+        if ( !this.scope.hasOwnProperty( this.appName ) ) {
+            this.scope[ this.appName ] = {}
+        }
     }
 
     methodIs( method ) {
@@ -55,13 +62,6 @@ export default class Request extends Http {
     }
 
     define( property, value ) {
-        /*
-         * Defining global app scope in request
-         */
-        if ( !this.scope.hasOwnProperty( this.appName ) ) {
-            this.scope[ this.appName ] = {}
-        }
-
         /*
          * Defining or redefine property in app scope in request
          */
