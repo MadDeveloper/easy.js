@@ -1,24 +1,25 @@
-import jwt          from 'jsonwebtoken'
-import { indexOf }  from 'lodash'
-import publicRoutes from './../routing/public'
-import Controller   from '~/vendor/easy/core/Controller'
+import jwt                  from 'jsonwebtoken'
+import { indexOf, find }    from 'lodash'
+import publicRoutes         from './../routing/public'
+import Controller           from '~/vendor/easy/core/Controller'
 
 export default function authorized( container, secret, router ) {
     /*
      * Authorization control middleware
      */
     router.use( ( req, res, next ) => {
+        const factory       = container.getComponent( 'Factory' )
+        const controller    = new Controller( req, res, factory )
+
         /*
          * public route or dev mode
          */
-        if ( -1 !== indexOf( publicRoutes, req.originalUrl ) || 'development' == process.env.NODE_ENV ) {
+        if ( find( publicRoutes, pattern => req.originalUrl.match( new RegExp( pattern, 'i' ) ) ) || controller.isDevEnv() ) {
             next()
         } else {
             /*
              * Prod mode
              */
-            const factory       = container.getComponent( 'Factory' )
-            const controller    = new Controller( req, res, factory )
             const request       = controller.request
             const response      = controller.response
             const token         = request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.scope.headers[ 'x-access-token' ]

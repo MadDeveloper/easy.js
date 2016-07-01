@@ -1,4 +1,4 @@
 export default {
-    /* default user library for example */
+    /* default user library */
     'debug.array': 'debug/array'
 }

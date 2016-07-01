@@ -46,15 +46,13 @@ export default class BundleManager extends Component {
      * getRouting - retrieve defined bundle routing
      *
      * @param  {string} bundle
-     * @returns {type}
      */
     getRouting( bundle ) {
         const routingPath = `${this.bundlesPath}/${bundle}/config/routing.js`
 
         if ( fs.statSync( routingPath ).isFile() ) {
             const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
-
-            return routingBundle( this.router, this.factory )
+            routingBundle( this.router, this.factory )
         }
     }
 
@@ -64,8 +62,10 @@ export default class BundleManager extends Component {
      * @returns {type}  description
      */
     getBundlesDefinitionRouting() {
+        let bundle
+
         for ( var i in this.bundlesDefinition ) {
-            const bundle = this.bundlesDefinition[ i ]
+            bundle = this.bundlesDefinition[ i ]
             this.getRouting( bundle )
         }
     }

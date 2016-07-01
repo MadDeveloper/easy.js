@@ -6,9 +6,7 @@ export default {
     /* database */
     'database.schemaBuilder': {
         path: 'database/SchemaDatabaseService',
-        dependencies: [
-            'component.database'
-        ]
+        dependencies: [ 'component.database' ]
     },
 
     /* security */
@@ -18,8 +16,6 @@ export default {
 
     'security.default': {
         path: 'security/DefaultSecurityService',
-        dependencies: [
-            'component.router'
-        ]
+        dependencies: [ 'component.router' ]
     }
 }

@@ -109,7 +109,7 @@ app.use( ( req, res, next ) => {
 })
 
 /*
- * Displays everything that happens on the server
+ * Trace everything that happens on the server
  */
 if ( 'l' === argv._[ 0 ] || 'log' === argv._[ 0 ] || argv.log ) {
     logFileManager.openLogFileSync( 'traffic' )
