@@ -72,7 +72,7 @@ export default class EntityManager extends Component {
      *
      * @param  {string} key = ''
      * @param  {string} type = 'models'
-     * @returns {bool}
+     * @returns {boolean}
      */
     isCached( key = '', type = 'models' ) {
         return this.cached.hasOwnProperty( type ) && this.cached[ type ].hasOwnProperty( key )

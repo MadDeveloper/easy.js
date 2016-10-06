@@ -2,7 +2,7 @@ import https                        from 'https'
 import http                         from 'http'
 import net                          from 'net'
 import minimist                     from 'minimist'
-import { app, config, container }   from '~/bootstrap'
+import { app, config, container }   from './bootstrap'
 
 const argv  = minimist( process.argv.slice( 2 ) )
 const cli   = container.getComponent( 'Console' )

@@ -1,4 +1,4 @@
 export default {
-    /* default user library */
-    'debug.array': 'debug/array'
+    /* default easy library */
+    'string': 'string/string'
 }

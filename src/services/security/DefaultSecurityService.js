@@ -8,7 +8,7 @@ export default class DefaultSecurityService {
      */
     constructor({ router }) {
         /*
-         * Refer to express router
+         * Refers to express router
          */
         router = router.scope
 

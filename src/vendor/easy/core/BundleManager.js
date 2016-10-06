@@ -59,7 +59,6 @@ export default class BundleManager extends Component {
     /**
      * getBundlesDefinitionRouting - will register bundles routing into express router stack
      *
-     * @returns {type}  description
      */
     getBundlesDefinitionRouting() {
         let bundle
@@ -82,7 +81,7 @@ export default class BundleManager extends Component {
     /**
      * get - all bundles defined
      *
-     * @returns {type}  description
+     * @returns {Array}
      */
     get bundlesDefinition() {
         return this._bundlesDefinition

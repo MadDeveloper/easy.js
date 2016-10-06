@@ -1,7 +1,7 @@
 # installed with npm install
 node_modules/
 
-# JetBrains IDE directory
+# IDE directory
 .idea
 
 # git directory

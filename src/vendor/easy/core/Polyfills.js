@@ -11,12 +11,18 @@ import Component from './Component'
  * @extends Component
  */
 export default class Polyfills extends Component {
+    /**
+     * constructor
+     */
     constructor() {
         super()
 
         this.stringPolyfills()
     }
 
+    /**
+     * stringPolyfills - polyfills for String prototype
+     */
     stringPolyfills() {
         if ( !String.prototype.isEmpty ) {
             String.prototype.isEmpty = function() {

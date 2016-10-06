@@ -1,7 +1,7 @@
 import fs                   from 'fs'
 import path                 from 'path'
 import servicesMapping      from './../../../config/services'
-import userLibrariesMapping from './../../../config/lib'
+import librariesMapping from './../../../config/lib'
 
 /**
  * @class Container
@@ -19,16 +19,10 @@ export default class Container {
          */
         this._componentsLoaded      = {}
         this._librariesLoaded       = {}
-        this._userLibrariesLoaded   = {}
         this._shared                = {}
 
-        this._servicesDirectoryExists           = false
-        this._checkExistanceOfServicesDirectory = true
-        this._servicesDirectoryPath             = this._kernel.path.services
-
-        this._userLibrariesDirectoryExists           = false
-        this._checkExistanceOfUserLibrariesDirectory = true
-        this._userLibrariesDirectoryPath             = this._kernel.path.lib
+        this._servicesDirectoryPath = this._kernel.path.services
+        this._librariesDirectoryPath = this._kernel.path.lib
 
         this._componentsMapping = {
             'bundlemanager': `${this._kernel.path.vendor.easy}/core/BundleManager`,
@@ -43,14 +37,20 @@ export default class Container {
             'logwriter': `${this._kernel.path.vendor.easy}/log/LogWriter`
         }
         this._librariesMapping = {
-            'string': `${this._kernel.path.vendor.easy}/lib/string`
+            'string': `${this._kernel.path.lib}/string`
         }
-        this._servicesMapping       = servicesMapping
-        this._userLibrariesMapping  = userLibrariesMapping
+        this._servicesMapping = servicesMapping
     }
 
     /*
      * Components
+     */
+
+    /**
+     * loadComponent - load specific component
+     *
+     * @param  {string} name
+     * @param  {boolean} clearCache = false
      */
     loadComponent( name, clearCache = false ) {
         if ( "undefined" === typeof this.componentsLoaded[ name ] ) {
@@ -69,6 +69,9 @@ export default class Container {
         }
     }
 
+    /**
+     * loadComponents - load all components
+     */
     loadComponents() {
         for ( let componentName in this.componentsMapping ) {
             if ( this.componentsMapping.hasOwnProperty( componentName ) ) {
@@ -116,10 +119,22 @@ export default class Container {
         }
     }
 
+    /**
+     * isComponentLoaded - check if component is already loaded
+     *
+     * @param  {string} name
+     * @returns {boolean}
+     */
     isComponentLoaded( name ) {
         return this.componentsLoaded.hasOwnProperty( name  )
     }
 
+    /**
+     * isComponentMapped - check if component is mapped
+     *
+     * @param  {string} name
+     * @returns {boolean}
+     */
     isComponentMapped( name ) {
         return this.componentsMapping.hasOwnProperty( name )
     }
@@ -127,19 +142,44 @@ export default class Container {
     /*
      * Services
      */
+
+
+    /**
+     * isServiceMapped - check if service is mapped
+     *
+     * @param  {string} name
+     * @returns {boolean}
+     */
     isServiceMapped( name ) {
         return this.servicesMapping.hasOwnProperty( name )
     }
 
+    /**
+     * isServicesLoaded - check if service is already loaded
+     *
+     * @param  {string} name
+     * @returns {boolean}
+     */
     isServicesLoaded( name ) {
         return this.shared.hasOwnProperty( name )
     }
 
+    /**
+     * storeService - store a new instance of a service
+     *
+     * @param  {string} name
+     * @param  {string} path
+     */
     storeService( name, path ) {
         const serviceClass  = require( path ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
         this.shared[ name ] = new serviceClass( this.injectDependencies( name ) )
     }
 
+    /**
+     * reloadService - reload a new instance of the service in the cache
+     *
+     * @param  {string} name
+     */
     reloadService( name ) {
         if ( this.isServiceMapped( name ) && this.isServicesLoaded( name ) ) {
             delete this.shared[ name ]
@@ -147,6 +187,12 @@ export default class Container {
         }
     }
 
+    /**
+     * injectDependencies - inject dependencies into the service requested
+     *
+     * @param  {string} service
+     * @returns {Object}
+     */
     injectDependencies( service ) {
         let dependencies = {}
         const serviceRequestedDependencies = this.servicesMapping[ service ].dependencies
@@ -178,9 +224,14 @@ export default class Container {
         return dependencies
     }
 
-    getService( name, clearCache ) {
-        this.servicesCheckDirectory()
-
+    /**
+     * getService - gets service by name
+     *
+     * @param  {string} name
+     * @param  {boolean} clearCache = false
+     * @returns {Service|undefined}
+     */
+    getService( name, clearCache = false ) {
         if ( this.isServiceMapped( name ) ) {
             if ( clearCache ) {
                 this.reloadService( name )
@@ -215,36 +266,35 @@ export default class Container {
         }
     }
 
-    servicesCheckDirectory() {
-        if ( false !== this._checkExistanceOfServicesDirectory && false === this._servicesDirectoryExists ) {
-            const statsServiceDirectory = fs.lstatSync( this.servicesDirectoryPath )
-
-            if ( statsServiceDirectory.isDirectory() ) {
-                this._servicesDirectoryExists = true
-            } else {
-                this.getComponent( 'Console' ).error({
-                    title: "Service directory not found",
-                    message: `Directory path resolved: ${this.servicesDirectoryPath}`,
-                    type: 'error',
-                    exit: 0
-                })
-            }
-        }
-
-        return true
-    }
-
     /*
      * Libraries
+     */
+
+    /**
+     * isLibraryMapped - check if library is mapped
+     *
+     * @param  {string} name
+     * @returns {boolean}
      */
     isLibraryMapped( name ) {
         return this.librariesMapping.hasOwnProperty( name )
     }
 
+    /**
+     * isLibraryLoaded - check if library is already loaded
+     *
+     * @param  {string} name
+     * @returns {boolean}
+     */
     isLibraryLoaded( name ) {
         return this.librariesLoaded.hasOwnProperty( name )
     }
 
+    /**
+     * reloadLibrary - reload a new instance of the service in the cache
+     *
+     * @param  {string} name description
+     */
     reloadLibrary( name ) {
         if ( this.isLibraryMapped( name ) && this.isLibraryLoaded( name ) ) {
             delete this.librariesLoaded[ name ]
@@ -252,6 +302,12 @@ export default class Container {
         }
     }
 
+    /**
+     * getLibrary - get library by name
+     *
+     * @param  {string} name
+     * @returns {Object|undefined}
+     */
     getLibrary( name ) {
         name = name.toLowerCase()
 
@@ -267,138 +323,95 @@ export default class Container {
 
             return this.librariesLoaded[ name ]
         } else {
+            this.getComponent( 'Console' ).error({
+                title: "Impossible to call library",
+                message: `Library ${name} not found, path: ${path.resolve( `${this.librariesMapping[ name ]}.js` )}\n${error}`,
+                type: 'error',
+                exit: 0
+            })
+
             return undefined
         }
     }
 
-    /*
-     * User libraries
-     */
-    isUserLibraryMapped( name ) {
-        return this.userLibrariesMapping.hasOwnProperty( name )
-    }
-
-    isUserLibraryLoaded( name ) {
-        return this.userLibrariesLoaded.hasOwnProperty( name )
-    }
-
-    storeUserLibrary( name, pathLibrary ) {
-        const library = require( pathLibrary )
-        this.userLibrariesLoaded[ name ] = library
-    }
-
-    reloadUserLibrary( name ) {
-        if ( this.isUserLibraryMapped( name ) && this.isUserLibraryLoaded( name ) ) {
-            delete this.userLibrariesLoaded[ name ]
-            this.getUserLibrary( name )
-        }
-    }
-
-    getUserLibrary( name, clearCache ) {
-        this.servicesCheckDirectory()
-
-        if ( this.isUserLibraryMapped( name ) ) {
-
-            if ( clearCache ) {
-                this.reloadUserLibrary( name )
-            }
-
-            if ( this.isUserLibraryLoaded( name ) ) {
-                return this.userLibrariesLoaded[ name ]
-            }
-
-            const userLibraryFile = `${this.userLibrariesDirectoryPath}/${this.userLibrariesMapping[ name ]}.js`
-
-            try {
-                const statsUserLibraryFile = fs.lstatSync( userLibraryFile )
-
-                if ( statsUserLibraryFile.isFile() ) {
-
-                    this.storeUserLibrary( name, userLibraryFile )
-
-                    return this.userLibrariesLoaded[ name ]
-
-                } else {
-                    throw new Error()
-                }
-            } catch ( error ) {
-                this.getComponent( 'Console' ).error({
-                    title: "Impossible to call user library",
-                    message: `Library ${name} not found, path: ${path.resolve( userLibraryFile )}\n${error}`,
-                    type: 'error',
-                    exit: 0
-                })
-            }
-
-        } else {
-            return undefined
-        }
-    }
-
-    userLibrariesCheckDirectory() {
-        if ( false !== this._checkExistanceOfUserLibrariesDirectory && false === this._userLibrariesDirectoryExists ) {
-            const statsUserLibrariesDirectory = fs.lstatSync( this.userLibrariesDirectoryPath )
-
-            if ( statsUserLibrariesDirectory.isDirectory() ) {
-                this._userLibrariesDirectoryExists = true
-            } else {
-                this.getComponent( 'Console' ).error({
-                    title: "User's libraries directory not found",
-                    message: `Directory path resolved: ${this.userLibrariesDirectoryPath}`,
-                    type: 'error',
-                    exit: 0
-                })
-            }
-        }
-
-        return true
-    }
-
-
-    /*
-     * Getters and setters
+    /**
+     * get - kernel instance
+     *
+     * @returns {Kernel}
      */
     get kernel() {
         return this._kernel
     }
 
+    /**
+     * get - services directory path
+     *
+     * @returns {string}
+     */
     get servicesDirectoryPath() {
         return this._servicesDirectoryPath
     }
 
-    get userLibrariesDirectoryPath() {
-        return this._userLibrariesDirectoryPath
+    /**
+     * get - libraries directory path
+     *
+     * @returns {string}
+     */
+    get librariesDirectoryPath() {
+        return this._librariesDirectoryPath
     }
 
+    /**
+     * get - all components loaded
+     *
+     * @returns {Object}
+     */
     get componentsLoaded() {
         return this._componentsLoaded
     }
 
+    /**
+     * get - services loaded
+     *
+     * @returns {Object}
+     */
     get shared() {
         return this._shared
     }
 
+    /**
+     * get - libraries loaded
+     *
+     * @returns {Object}
+     */
     get librariesLoaded() {
         return this._librariesLoaded
     }
 
-    get userLibrariesLoaded() {
-        return this._userLibrariesLoaded
-    }
-
+    /**
+     * get - components mapping
+     *
+     * @returns {Object}
+     */
     get componentsMapping() {
         return this._componentsMapping
     }
 
+    /**
+     * get - libraries mapping
+     *
+     * @returns {Object}
+     */
     get librariesMapping() {
         return this._librariesMapping
     }
 
+    /**
+     * get - services mapping
+     *
+     * @returns {Object}
+     */
     get servicesMapping() {
         return this._servicesMapping
-    }
-
-    get userLibrariesMapping() {
-        return this._userLibrariesMapping
     }
 }

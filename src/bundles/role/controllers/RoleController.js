@@ -21,7 +21,7 @@ export default class RoleController extends Controller {
     /**
      * isRequestWellParameterized - verify if request is contains valid params
      *
-     * @returns {bool}
+     * @returns {boolean}
      */
     isRequestWellParameterized() {
         return this.verifyParams([

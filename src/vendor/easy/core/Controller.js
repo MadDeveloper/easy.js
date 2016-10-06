@@ -18,14 +18,14 @@ export default class Controller {
         this._response      = new Response( res, this._request, this._container.getComponent( 'Logger' ) )
         this._router        = this._container.getComponent( 'Router' ).scope
         this._entityManager = this._container.getComponent( 'EntityManager' )
-        this._access = this.getService( 'security.access' )
+        this._access        = this.getService( 'security.access' )
     }
 
     /**
      * getService - get service by name (alias from container)
      *
      * @param  {string} service
-     * @param  {bool} clearCache = false
+     * @param  {boolean} clearCache = false
      * @returns {Service}
      */
     getService( service, clearCache = false ) {
@@ -35,9 +35,9 @@ export default class Controller {
     /**
      * authorize - determine is current user can access to bundle routes
      *
-     * @param  {type} { restrictions = {}
-     * @param  {type} focus = 'role_id'
-     * @param  {type} next }
+     * @param  {Object} { restrictions = {}
+     * @param  {string} focus = 'role_id'
+     * @param  {Function} next }
      */
     authorize({ restrictions = {}, focus = 'role_id', next }) {
         if ( this.isProdEnv() ) {
@@ -60,7 +60,7 @@ export default class Controller {
      *
      * @param  {object} required
      * @param  {object} params = {}
-     * @returns {bool}
+     * @returns {boolean}
      */
     verifyParams( required, params = {} ) {
         let verified = true
@@ -97,7 +97,7 @@ export default class Controller {
      * isNumber - check if object is a number
      *
      * @param  {object} number
-     * @returns {bool}
+     * @returns {boolean}
      */
     isNumber( number ) {
         return typeof number === "number" || ( typeof number === 'string' && number.isNumber() )
@@ -117,7 +117,7 @@ export default class Controller {
     /**
      * isPatchRequestWellParameterized - check if patch request are correct
      *
-     * @returns {type}  description
+     * @returns {boolean}
      */
     isPatchRequestWellParameterized() {
         return this.request.getRawbody().length > 0
@@ -176,7 +176,7 @@ export default class Controller {
     /**
      * isDevEnv - check if we are in dev environment
      *
-     * @returns {type}  description
+     * @returns {boolean}
      */
     isDevEnv() {
         return 'development' === process.env.NODE_ENV
@@ -185,7 +185,7 @@ export default class Controller {
     /**
      * isProdEnv - check if we are in prod environment
      *
-     * @returns {type}  description
+     * @returns {boolean}
      */
     isProdEnv() {
         return !this.isDevEnv()

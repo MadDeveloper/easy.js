@@ -1,54 +1,56 @@
-import roleSecurity     from './security'
-import roleMiddlewares  from './middlewares'
-import RoleController   from './../controllers/RoleController'
+import RoleController from './../controllers/RoleController'
 
 export default function routing( router, factory ) {
     /*
      * Dependencies
      */
-    let roleController
+    let roleController, access
 
     /*
      * Register request and response into Controller
-     * and register roleController into req.tmp
      */
     router.use( ( req, res, next ) => {
-        roleController          = new RoleController( req, res, factory )
-        req.tmp.roleController  = roleController
+        roleController = new RoleController( req, res, factory )
         next()
     })
 
     /*
-     * Security & middlewares
+     * Security
      */
-    roleSecurity( router, factory )
-    roleMiddlewares( router, factory )
+    router.use( '/roles', ( req, res, next ) => {
+        roleController.authorize({
+            restrictions: {
+                mustBe: [ access.any ],
+                canCreate: [ access.admin ],
+                canRead: [],
+                canUpdate: [ access.admin ],
+                canDelete: [ access.admin ]
+            },
+            focus: 'role_id',
+            next
+        })
+    })
+
+    /*
+     * Middlewares
+     */
+    router.param( 'role_id', ( req, res, next ) => {
+        roleController.roleExists( next )
+    })
 
     /*
      * Routes definitions
      */
-    router.route( '/roles' )
-        .get( () => {
-            roleController.getRoles()
-        })
-        .post( () => {
-            roleController.createRole()
-        })
-        .all( () => {
-            roleController.response.methodNotAllowed()
-        })
+    router
+		.route( '/roles' )
+        	.get( () => roleController.getRoles() )
+    		.post( () => roleController.createRole() )
+    		.all( () => roleController.response.methodNotAllowed() )
 
-    router.route( '/roles/:role_id' )
-        .get( () => {
-            roleController.getRole()
-        })
-        .put( () => {
-            roleController.updateRole()
-        })
-        .delete( () => {
-            roleController.deleteRole()
-        })
-        .all( () => {
-            roleController.response.methodNotAllowed()
-        })
+    router
+		.route( '/roles/:role_id' )
+        	.get( () => roleController.getRole() )
+        	.put( () => roleController.updateRole() )
+        	.delete( () => roleController.deleteRole() )
+        	.all( () => roleController.response.methodNotAllowed() )
 }

@@ -8,10 +8,10 @@ import compression          from 'compression'
 import numeral              from 'numeral'
 import { indexOf }          from 'lodash'
 import minimist             from 'minimist'
-import Kernel               from '~/vendor/easy/core/Kernel'
-import config               from '~/config/config'
-import routing              from '~/config/routing/routing'
-import bundlesEnabled       from '~/config/bundles/enabled'
+import Kernel               from './vendor/easy/core/Kernel'
+import config               from './config/config'
+import routing              from './config/routing/routing'
+import bundlesEnabled       from './config/bundles/enabled'
 
 const argv = minimist( process.argv.slice( 2 ) )
 

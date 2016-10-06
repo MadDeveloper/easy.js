@@ -21,7 +21,7 @@ export default class AccessSecurityService {
     /**
      * isAdmin - Check if current role focused is admin
      *
-     * @returns {bool}
+     * @returns {boolean}
      */
     isAdmin() {
         return this.focus === this.admin
@@ -99,7 +99,7 @@ export default class AccessSecurityService {
      * canReach - Determine if current user can reach what he requested
      *
      * @param  {string} httpMethod HTTP method used
-     * @returns {bool}
+     * @returns {boolean}
      */
     canReach( httpMethod ) {
         let isAuthorizedToReach = false

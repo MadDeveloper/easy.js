@@ -15,7 +15,7 @@ export default class LogWriter extends Component {
 
         this._logFileManager    = container.getComponent( 'LogFileManager' )
         this._cli               = container.getComponent( 'Console' )
-        this._string            = container.getLibrary( 'String' )
+        this._string            = container.getLibrary( 'string' )
     }
 
     /**

@@ -1,6 +1,4 @@
-import skeletonSecurity     from './security'
-import skeletonMiddlewares  from './middlewares'
-import SkeletonController   from './../controllers/SkeletonController'
+import SkeletonController from './../controllers/SkeletonController'
 
 /**
  * routing - define routes for skeleton bundle
@@ -12,52 +10,54 @@ export default function routing( router, factory ) {
     /*
      * Dependencies
      */
-    let skeletonController
+    let skeletonController, access
 
     /*
      * Register request and response into Controller
-     * and register skeletonController into req.tmp
      */
     router.use( ( req, res, next ) => {
         skeletonController = new SkeletonController( req, res, factory )
-        req.tmp.skeletonController = skeletonController
         next()
     })
 
+	/*
+	 * Security
+	 */
+    router.use( '/skeletons', ( req, res, next ) => {
+        skeletonController.authorize({
+            restrictions: {
+                mustBe: [ access.any ],
+                canCreate: [],
+                canRead: [],
+                canUpdate: [],
+                canDelete: []
+            },
+            focus: 'role_id',
+            next
+        })
+    })
+
     /*
-     * Security & middlewares
+     * Middlewares
      */
-    skeletonSecurity( router, factory )
-    skeletonMiddlewares( router, factory )
+	router.param( 'skeleton_id', ( req, res, next ) => {
+        skeletonController.skeletonExists( next )
+    })
 
     /*
     * Routes definitions
     */
-    router.route( '/skeletons' )
-        .get( () => {
-            skeletonController.getSkeletons()
-        })
-        .post( () => {
-            skeletonController.createSkeleton()
-        })
-        .all( () => {
-            skeletonController.response.methodNotAllowed()
-        })
+    router
+		.route( '/skeletons' )
+	        .get( () => skeletonController.getSkeletons() )
+	        .post( () => skeletonController.createSkeleton() )
+	        .all( () => skeletonController.response.methodNotAllowed() )
 
-    router.route( '/skeletons/:skeleton_id' )
-        .get( () => {
-            skeletonController.getSkeleton()
-        })
-        .put( () => {
-            skeletonController.updateSkeleton()
-        })
-        .patch( () => {
-            skeletonController.patchSkeleton()
-        })
-        .delete( () => {
-            skeletonController.deleteSkeleton()
-        })
-        .all( () => {
-            skeletonController.response.methodNotAllowed()
-        })
+    router
+		.route( '/skeletons/:skeleton_id' )
+	        .get( () => skeletonController.getSkeleton() )
+	        .put( () => skeletonController.updateSkeleton() )
+	        .patch( () => skeletonController.patchSkeleton() )
+	        .delete( () => skeletonController.deleteSkeleton() )
+	        .all( () => skeletonController.response.methodNotAllowed() )
 }

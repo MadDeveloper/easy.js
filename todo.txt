@@ -1,4 +1,7 @@
-- finir les tests pour user / role / skeleton / services
+- rename test as tests
+- rename file as: user.controller.js with class UserController, idem for repository and doc
+- regroup some config ?
+- finir les tests
 
 - REDIGER LA DOC
 
@@ -21,7 +24,12 @@ tout lier en promise pour les patchs
 - créer une classe CacheManager ? dans laquelle on peut déclarer des namespaces (entitymanager par exemple) et y travailler dedans avec des méthodes
 génériques
 
+- faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
+
+- ConfigLoader dans vendor
 
 ---  MAYBE ---
 
 - ? Utiliser CarminteJS (cross-db ORM)
+
+- translate project to ts ?

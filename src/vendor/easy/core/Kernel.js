@@ -70,7 +70,7 @@ export default class Kernel {
     /**
      * isDevEnv - check if we are in dev environment
      *
-     * @returns {bool}
+     * @returns {boolean}
      */
     isDevEnv() {
         return "development" === this.getEnv().toLowerCase()
@@ -79,7 +79,7 @@ export default class Kernel {
     /**
      * isDevEnv - check if we are in dev environment
      *
-     * @returns {bool}
+     * @returns {boolean}
      */
     isProdEnv() {
         return !this.isDevEnv()

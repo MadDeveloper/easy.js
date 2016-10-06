@@ -4,7 +4,7 @@ export default {
      */
 
     /* database */
-    'database.schemaBuilder': {
+    'database.schema': {
         path: 'database/SchemaDatabaseService',
         dependencies: [ 'component.database' ]
     },

@@ -10,7 +10,7 @@ export default class SkeletonController extends Controller {
      * @constructor
      * @param {express.Request} req
      * @param {express.Response} res
-     * @param  {Factory} factory
+     * @param {Factory} factory
      */
     constructor( req, res, factory ) {
         super( req, res, factory )
@@ -22,7 +22,7 @@ export default class SkeletonController extends Controller {
     /**
      * isRequestWellParameterized - verify if request is contains valid params
      *
-     * @returns {bool}
+     * @returns {boolean}
      */
     isRequestWellParameterized() {
         return this.verifyParams([
@@ -53,9 +53,10 @@ export default class SkeletonController extends Controller {
      * getSkeletons - get all skeletons
      */
     getSkeletons() {
-        this.skeletonRepository.findAll()
-        .then( skeletons => this.response.ok( skeletons ) )
-        .catch( error => this.response.internalServerError( error ) )
+        this.skeletonRepository
+            .findAll()
+            .then( skeletons => this.response.ok( skeletons ) )
+            .catch( error => this.response.internalServerError( error ) )
     }
 
     /**
@@ -63,9 +64,10 @@ export default class SkeletonController extends Controller {
      */
     createSkeleton() {
         if ( this.isRequestWellParameterized() ) {
-            this.skeletonRepository.save( new this.skeleton(), this.request.getBody() )
-            .then( skeleton => this.response.created( skeleton ) )
-            .catch( error => this.response.internalServerError( error ) )
+            this.skeletonRepository
+                .save( new this.skeleton(), this.request.getBody() )
+                .then( skeleton => this.response.created( skeleton ) )
+                .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
         }
@@ -83,9 +85,10 @@ export default class SkeletonController extends Controller {
      */
     updateSkeleton() {
         if ( this.isRequestWellParameterized() ) {
-            this.skeletonRepository.save( this.request.find( 'skeleton' ), this.request.getBody() )
-            .then( skeleton => this.response.ok( skeleton ) )
-            .catch( error => this.response.internalServerError( error ) )
+            this.skeletonRepository
+                .save( this.request.find( 'skeleton' ), this.request.getBody() )
+                .then( skeleton => this.response.ok( skeleton ) )
+                .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
         }
@@ -111,14 +114,15 @@ export default class SkeletonController extends Controller {
                         switch ( patch.op ) {
                             case 'replace':
                                 if ( indexOf( validPaths, patch.path ) >= 0 ) {
-                                    this.skeletonRepository.patch( this.request.find( 'skeleton' ), patch )
-                                    .then( skeleton => {
-                                        if ( ++currentPatch >= opsLength ) {
-                                            // It's ok
-                                            resolve( skeleton )
-                                        }
-                                    })
-                                    .catch( reject )
+                                    this.skeletonRepository
+                                        .patch( this.request.find( 'skeleton' ), patch )
+                                        .then( skeleton => {
+                                            if ( ++currentPatch >= opsLength ) {
+                                                // It's ok
+                                                resolve( skeleton )
+                                            }
+                                        })
+                                        .catch( reject )
                                 }
                                 break
                         }
@@ -128,8 +132,8 @@ export default class SkeletonController extends Controller {
 
             if ( patchRequestCorrectlyFormed ) {
                 patchSkeleton
-                .then( skeleton => this.response.ok( skeleton ) )
-                .catch( error => this.response.internalServerError( error ) )
+                    .then( skeleton => this.response.ok( skeleton ) )
+                    .catch( error => this.response.internalServerError( error ) )
             } else {
                 this.response.badRequest()
             }
@@ -142,9 +146,10 @@ export default class SkeletonController extends Controller {
      * deleteSkeleton - delete skeleton by id
      */
     deleteSkeleton() {
-        this.skeletonRepository.delete( this.request.find( 'skeleton' ) )
-        .then( () => this.response.noContent() )
-        .catch( error => this.response.internalServerError( error ) )
+        this.skeletonRepository
+            .delete( this.request.find( 'skeleton' ) )
+            .then( () => this.response.noContent() )
+            .catch( error => this.response.internalServerError( error ) )
     }
 
     /**

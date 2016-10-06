@@ -7,7 +7,7 @@ import { indexOf, has, keys, map }			from 'lodash'
 import { bundleManager, config, container }	from '~/bootstrap'
 
 const cli               	= container.getComponent( 'Console' )
-const schemaDatabaseService	= container.getService( 'database.schemaBuilder' )
+const schemaDatabaseService	= container.getService( 'database.schema' )
 const knex					= schemaDatabaseService.knex
 
 const dbConfig = {
