@@ -1,5 +1,6 @@
 import Component 		from './Component'
-import Authentication	from './Authentication'
+import Authentication	from './../authentication/Authentication'
+import ConfigLoader		from './ConfigLoader'
 
 /**
  * @class Router
@@ -30,19 +31,30 @@ export default class Router extends Component {
 		/*
 		 * Authentication management
 		 */
-		const authentication = new Authentication( router )
+		const authConfig = ConfigLoader.loadFromGlobal( 'authentication' )
 
-	    /*
-		 * Authentication
-		 */
-	    router.all( '*', ( req, res, next ) => {
-			new Authentication()
-	    })
+		if ( authConfig.enabled ) {
+			const authentication = new Authentication( router )
+
+		    /*
+			 * Authentication
+			 */
+		    router.post( authConfig.path, ( req, res, next ) => {
+				authentication.login( req, res ).then( next )
+		    })
+
+			/*
+			 * Verify token
+			 */
+			router.use( ( req, res, next ) => {
+				authentication.isLogged( req, res ).then( next )
+			})
+		}
 
 	    /*
 	     * Bundles routes definitions
 	     */
-	    bundleManager.getBundlesDefinitionRouting( router, this._container, request, response )
+	    bundleManager.getBundlesDefinitionRouting( router )
 
 	    /*
 	     * Final middleware: No route found

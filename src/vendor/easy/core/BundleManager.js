@@ -45,17 +45,15 @@ export default class BundleManager extends Component {
     /**
      * getRouting - retrieve defined bundle routing
      *
-     * @param  {string} { bundle
+     * @param  {string} bundle
      * @param  {express.Router} router
-     * @param  {Request} request
-     * @param  {Response} response }
      */
-    getRouting({ bundle, router, request, response }) {
-        const routingPath = `${this.bundlesPath}/${bundle}`
+    getRouting( bundle, router ) {
+        const routingPath = `${this.bundlesPath}/${bundle}/index.js`
 
         if ( fs.statSync( routingPath ).isFile() ) {
             const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
-            routingBundle( request, response, router )
+            routingBundle( router )
         }
     }
 
@@ -64,21 +62,13 @@ export default class BundleManager extends Component {
      * getBundlesDefinitionRouting - will register bundles routing into express router stack
      *
      * @param  {express.Router} router
-     * @param  {Request} request
-     * @param  {Response} response
      */
-    getBundlesDefinitionRouting( router, request, response ) {
+    getBundlesDefinitionRouting( router ) {
         let bundle
 
         for ( var i in this.bundlesDefinition ) {
             bundle = this.bundlesDefinition[ i ]
-            this.getRouting({
-                bundle,
-                router,
-                this._container,
-                request,
-                response
-            })
+            this.getRouting( bundle, router )
         }
     }
 

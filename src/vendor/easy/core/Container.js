@@ -36,9 +36,7 @@ export default class Container {
             'logfilemanager':   `${this._kernel.path.vendor.easy}/log/LogFileManager`,
             'logwriter': `${this._kernel.path.vendor.easy}/log/LogWriter`
         }
-        this._librariesMapping = {
-            'string': `${this._kernel.path.lib}/string`
-        }
+        this._librariesMapping = librariesMapping
         this._servicesMapping = servicesMapping
     }
 
@@ -316,7 +314,7 @@ export default class Container {
                 return this.librariesLoaded[ name ]
             }
 
-            const pathLibrary   = `${this.librariesMapping[ name ]}.js`
+            const pathLibrary   = `${this.librariesDirectoryPath}/${this.librariesMapping[ name ]}.js`
             const library       = require( pathLibrary )
 
             this.librariesLoaded[ name ] = library

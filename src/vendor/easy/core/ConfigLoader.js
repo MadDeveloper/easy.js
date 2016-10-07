@@ -5,8 +5,8 @@ export default class ConfigLoader {
 	 * @param  {type} file description
 	 * @returns {type}      description
 	 */
-	loadFromGlobal( file ) {
-
+	static loadFromGlobal( file ) {
+		return {}
 	}
 
 	/**
@@ -16,7 +16,7 @@ export default class ConfigLoader {
 	 * @param  {type} file   description
 	 * @returns {type}        description
 	 */
-	loadFromBundle( bundle, file ) {
+	static loadFromBundle( bundle, file ) {
 
 	}
 }

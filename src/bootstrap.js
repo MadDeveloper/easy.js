@@ -8,6 +8,7 @@ import compression          from 'compression'
 import numeral              from 'numeral'
 import { indexOf }          from 'lodash'
 import minimist             from 'minimist'
+import passport             from 'passport'
 import Kernel               from './vendor/easy/core/Kernel'
 import config               from './config/config'
 import bundlesEnabled       from './config/bundles/enabled'
@@ -49,7 +50,7 @@ global.easy = {
 }
 
 /*
- * Define database connector (default: ~/config/database/connector/bookshelf)
+ * Define database connector (default: ~/config/database/connectors/bookshelf)
  */
 database.connect()
 
@@ -88,6 +89,11 @@ app.use( compression() )
  */
 app.use( bodyParser.json() ) // support json encoded bodies
 app.use( bodyParser.urlencoded({ extended: true }) ) // support encoded bodies
+
+/*
+ * Initialize Passport
+ */
+app.use( passport.initialize() )
 
 /*
  * Permit to retrieve rawBody into PATCH method

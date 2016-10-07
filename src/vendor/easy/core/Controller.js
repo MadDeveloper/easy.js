@@ -15,11 +15,10 @@ export default class Controller {
     constructor( req, res, router ) {
         this._container     = global.easy.container
         this._request       = new Request( req, this.container.kernel.appName )
-        this._response      = new Response( res, request, this.container.getComponent( 'Logger' ) )
+        this._response      = new Response( res, this.request, this.container.getComponent( 'Logger' ) )
         this._router        = router
         this._entityManager = this._container.getComponent( 'EntityManager' )
         this._access        = this.getService( 'security.access' )
-        this._configLoader  = new ConfigLoader()
     }
 
     /**
@@ -244,14 +243,5 @@ export default class Controller {
      */
     get access() {
         return this._access
-    }
-
-    /**
-     * get - config loader instance
-     *
-     * @returns {ConfigLoader}
-     */
-    get configLoader() {
-        return this._configLoader
     }
 }

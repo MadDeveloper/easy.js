@@ -1,4 +1,4 @@
-import RoleController   from './../controllers/RoleController'
+import RoleController   from './controllers/RoleController'
 import { security }		from './config/security'
 
 /**
@@ -6,7 +6,7 @@ import { security }		from './config/security'
  *
  * @param  {express.Router} router
  */
-export default function routing( req, res, router ) {
+export default function routing( router ) {
     /*
      * Dependencies
      */

@@ -1,4 +1,4 @@
-import UserController 	from './../controllers/UserController'
+import UserController 	from './controllers/UserController'
 import { security }		from './config/security'
 
 /**

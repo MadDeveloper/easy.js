@@ -1,6 +1,6 @@
 import { roles } from '~/config/roles'
 
-export const security {
+export const security = {
 	'/roles': {
 		mustBe: [ roles.any ],
 		canCreate: [ roles.admin ],

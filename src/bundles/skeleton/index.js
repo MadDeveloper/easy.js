@@ -1,4 +1,4 @@
-import SkeletonController   from './../controllers/SkeletonController'
+import SkeletonController   from './controllers/SkeletonController'
 import { security }         from './config/security'
 
 /**

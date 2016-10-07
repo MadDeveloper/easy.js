@@ -1,6 +1,6 @@
 import { roles } from '~/config/roles'
 
-export const security {
+export const security = {
 	'/skeletons': {
 		mustBe: [ roles.any ],
 		canCreate: [],

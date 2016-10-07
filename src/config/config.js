@@ -1,17 +1,5 @@
 import fs from 'fs'
 
-function getCredentials() {
-    let credentials = { key: null, cert: null, found: false }
-
-    try {
-        credentials.key     = fs.readFileSync( `${__dirname}/keys/myapp-privkey.pem` )
-        credentials.cert    = fs.readFileSync( `${__dirname}/keys/myapp-cert.pem` )
-        credentials.found   = true
-    } finally {
-        return credentials
-    }
-}
-
 export default {
     /*
      * App configurations
@@ -61,5 +49,17 @@ export default {
      */
     jwt: {
         secret: ':p19E}1%&gX1O*K2u8=36#9Jk7I9{f' // http://randomkeygen.com/ -> Ft. Knox Passwords
+    }
+}
+
+function getCredentials() {
+    let credentials = { key: null, cert: null, found: false }
+
+    try {
+        credentials.key     = fs.readFileSync( `${__dirname}/keys/myapp-privkey.pem` )
+        credentials.cert    = fs.readFileSync( `${__dirname}/keys/myapp-cert.pem` )
+        credentials.found   = true
+    } finally {
+        return credentials
     }
 }

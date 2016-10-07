@@ -1,5 +1,5 @@
 /**
- * Acts more like an interface
+ * Acts as an interface
  *
  * @class Component
  */
