@@ -12,10 +12,5 @@ export default {
     /* security */
     'security.access': {
         path: 'security/AccessSecurityService'
-    },
-
-    'security.default': {
-        path: 'security/DefaultSecurityService',
-        dependencies: [ 'component.router' ]
     }
 }

@@ -95,4 +95,4 @@ class RoleTests extends Tests {
 /*
  * Permit mocha to access to run() method called implicitely and run unit tests
  */
-new RoleTests( global.container )
+new RoleTests()

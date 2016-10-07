@@ -1,22 +1,19 @@
-import SkeletonController from './../controllers/SkeletonController'
+import SkeletonController   from './../controllers/SkeletonController'
+import { security }         from './config/security'
 
 /**
  * routing - define routes for skeleton bundle
  *
  * @param  {express.Router} router
- * @param  {Factory} factory
  */
-export default function routing( router, factory ) {
-    /*
-     * Dependencies
-     */
-    let skeletonController, access
+export default function routing( router ) {
+    let skeletonController
 
     /*
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        skeletonController = new SkeletonController( req, res, factory )
+        skeletonController = new SkeletonController( req, res, router )
         next()
     })
 
@@ -25,13 +22,7 @@ export default function routing( router, factory ) {
 	 */
     router.use( '/skeletons', ( req, res, next ) => {
         skeletonController.authorize({
-            restrictions: {
-                mustBe: [ access.any ],
-                canCreate: [],
-                canRead: [],
-                canUpdate: [],
-                canDelete: []
-            },
+            restrictions: security[ '/skeletons' ],
             focus: 'role_id',
             next
         })

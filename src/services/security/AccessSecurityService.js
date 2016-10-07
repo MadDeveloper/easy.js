@@ -1,45 +1,44 @@
 import { indexOf }  from 'lodash'
-import roles        from './../../config/roles'
+import { roles }    from './../../config/roles'
 
 /**
  * @class AccessSecurityService
  */
 export default class AccessSecurityService {
     constructor() {
-        /*
-         * BECAREFUL WHEN EDITING OR DELETING THE FOLLOWING VARIABLES
-         */
-        this._any           = roles.any
-        this._admin         = roles.admin
-        this._user          = roles.user
-        this._focus         = roles.any
+        this.loadRoles()
+    }
+
+    loadRoles() {
+        for ( let role in roles ) {
+            this[ `${role}` ] = roles[ role ]
+        }
+
         this._restrictions  = {}
     }
 
-    load() {}
-
     /**
-     * isAdmin - Check if current role focused is admin
+     * focusOn - specify the role to focus on
      *
-     * @returns {boolean}
+     * @param  {string|number} role
+     * @returns {AccessSecurityService}
      */
-    isAdmin() {
-        return this.focus === this.admin
-    }
-
-    isUser() {
-        return this.focus === this.user
-    }
-
-    isAny() {
-        return this.focus === this.any
-    }
-
     focusOn( role ) {
         this.focus = role
+
         return this
     }
 
+    /**
+     * restrict - define rules
+     *
+     * @param  {Array} { mustBe = []
+     * @param  {Array} canCreate = []
+     * @param  {Array} canRead = []
+     * @param  {Array} canUpdate = []
+     * @param  {Array} canDelete = [] }
+     * @returns {AccessSecurityService}
+     */
     restrict({ mustBe = [], canCreate = [], canRead = [], canUpdate = [], canDelete = [] }) {
         if ( !mustBe || mustBe.length === 0 ) {
             mustBe = [ this.any ]
@@ -59,29 +58,6 @@ export default class AccessSecurityService {
 
         if ( !canDelete || canDelete.length === 0 ) {
             canDelete = mustBe
-        }
-
-        /*
-         * An admin as all privileges
-         */
-        if ( indexOf( mustBe, this.admin ) === -1 ) {
-            mustBe.push( this.admin )
-        }
-
-        if ( indexOf( canRead, this.admin ) === -1 ) {
-            canRead.push( this.admin )
-        }
-
-        if ( indexOf( canCreate, this.admin ) === -1 ) {
-            canCreate.push( this.admin )
-        }
-
-        if ( indexOf( canUpdate, this.admin ) === -1 ) {
-            canUpdate.push( this.admin )
-        }
-
-        if ( indexOf( canDelete, this.admin ) === -1 ) {
-            canDelete.push( this.admin )
         }
 
         this.restrictions = {
@@ -137,34 +113,30 @@ export default class AccessSecurityService {
         return isAuthorizedToReach
     }
 
-    /*
-     * Getters and setters
+    /**
+     * get - role focused
+     *
+     * @returns {string|number}
      */
-    get any() {
-        return this._any
-    }
-
-    set any( any ) {
-        this._any = any
-        return this
-    }
-
-    get admin() {
-        return this._admin
-    }
-
-    get user() {
-        return this._user
-    }
-
     get focus() {
         return this._focus
     }
 
+    /**
+     * get - restrictions
+     *
+     * @returns {Object}
+     */
     get restrictions() {
         return this._restrictions
     }
 
+    /**
+     * set - restrictions
+     *
+     * @param  {Object} restrictions
+     * @returns {AccessSecurityService}
+     */
     set restrictions( restrictions ) {
         this._restrictions = restrictions
         return this

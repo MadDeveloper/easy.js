@@ -1,5 +1,6 @@
-import Request  from './../http/Request'
-import Response from './../http/Response'
+import Request      from './../http/Request'
+import Response     from './../http/Response'
+import ConfigLoader from './ConfigLoader'
 
 /**
  * @class Controller
@@ -9,16 +10,16 @@ export default class Controller {
      * @constructor
      * @param  {express.Request} request
      * @param  {express.Response} response
-     * @param  {Factory} factory
+     * @param  {express.Router} router
      */
-    constructor( req, res, factory ) {
-        this._factory       = factory
-        this._container     = factory.container
-        this._request       = new Request( req, this._container.kernel.appName )
-        this._response      = new Response( res, this._request, this._container.getComponent( 'Logger' ) )
-        this._router        = this._container.getComponent( 'Router' ).scope
+    constructor( req, res, router ) {
+        this._container     = global.easy.container
+        this._request       = new Request( req, this.container.kernel.appName )
+        this._response      = new Response( res, request, this.container.getComponent( 'Logger' ) )
+        this._router        = router
         this._entityManager = this._container.getComponent( 'EntityManager' )
         this._access        = this.getService( 'security.access' )
+        this._configLoader  = new ConfigLoader()
     }
 
     /**
@@ -192,15 +193,6 @@ export default class Controller {
     }
 
     /**
-     * get - factory instance
-     *
-     * @returns {Factory}
-     */
-    get factory() {
-        return this._factory
-    }
-
-    /**
      * get - express router
      *
      * @returns {express.Router}
@@ -219,34 +211,12 @@ export default class Controller {
     }
 
     /**
-     * set - define request scope
-     *
-     * @param  {express.Request} request
-     * @returns {Controller}
-     */
-    set request( request ) {
-        this._request = request
-        return this
-    }
-
-    /**
      * get - response instance
      *
      * @returns {Response}
      */
     get response() {
         return this._response
-    }
-
-    /**
-     * set - define response scope
-     *
-     * @param  {express.Response} response
-     * @returns {Controller}
-     */
-    set response( response ) {
-        this._response = response
-        return this
     }
 
     /**
@@ -274,5 +244,14 @@ export default class Controller {
      */
     get access() {
         return this._access
+    }
+
+    /**
+     * get - config loader instance
+     *
+     * @returns {ConfigLoader}
+     */
+    get configLoader() {
+        return this._configLoader
     }
 }

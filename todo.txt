@@ -3,6 +3,10 @@
 - regroup some config ?
 - finir les tests
 
+- virer les config avec de la logique et mettre ça dans le vendor (auth, routing)
+- voir pour virer ou enlever plus facilement roles/users
+- virer access ou laisser ?
+
 - REDIGER LA DOC
 
 

@@ -6,13 +6,13 @@ export default class Tests {
      * @constructor
      * @param  {Container} container
      */
-    constructor( container ) {
-        this._container     = container
-        this._factory       = container.getComponent( 'Factory' )
-        this._entityManager = container.getComponent( 'EntityManager' )
-        this._request       = container.getComponent( 'Request' )
-        this._response      = container.getComponent( 'Response' )
-        this._database      = container.getComponent( 'Database' ).instance
+    constructor() {
+        this._container     = global.easy.container
+        this._factory       = this.container.getComponent( 'Factory' )
+        this._entityManager = this.container.getComponent( 'EntityManager' )
+        this._request       = this.container.getComponent( 'Request' )
+        this._response      = this.container.getComponent( 'Response' )
+        this._database      = this.container.getComponent( 'Database' ).instance
 
         this.run()
     }

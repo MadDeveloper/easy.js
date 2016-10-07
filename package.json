@@ -67,6 +67,13 @@
     "morgan": "~1.7.0",
     "mysql": "~2.11.1",
     "numeral": "^1.5.3",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-oauth": "^1.0.0",
+    "passport-openid": "^0.4.0",
+    "passport-twitter": "^1.0.4",
     "readline-sync": "^1.4.4",
     "when": "~3.7.7"
   },

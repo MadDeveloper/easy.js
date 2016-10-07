@@ -1,16 +1,22 @@
-import UserController from './../controllers/UserController'
+import UserController 	from './../controllers/UserController'
+import { security }		from './config/security'
 
-export default function routing( router, factory ) {
+/**
+ * routing - define routes for user bundle
+ *
+ * @param  {express.Router} router
+ */
+export default function routing( router ) {
     /*
      * Dependencies
      */
-    let userController, access
+    let userController
 
     /*
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        userController = new UserController( req, res, factory )
+        userController = new UserController( req, res, router )
         next()
     })
 
@@ -19,13 +25,7 @@ export default function routing( router, factory ) {
      */
     router.use( '/roles/:role_id/users', ( req, res, next ) => {
         userController.authorize({
-            restrictions: {
-                mustBe: [ access.any ],
-                canCreate: [ access.user ],
-                canRead: [],
-                canUpdate: [ access.user ],
-                canDelete: [ access.user ]
-            },
+            restrictions: security[ '/roles/:role_id/users' ],
             focus: 'role_id',
             next
         })

@@ -10,7 +10,6 @@ import { indexOf }          from 'lodash'
 import minimist             from 'minimist'
 import Kernel               from './vendor/easy/core/Kernel'
 import config               from './config/config'
-import routing              from './config/routing/routing'
 import bundlesEnabled       from './config/bundles/enabled'
 
 const argv = minimist( process.argv.slice( 2 ) )
@@ -41,6 +40,13 @@ const database          = container.getComponent( 'Database' )
 const router            = container.getComponent( 'Router' )
 const bundleManager     = container.getComponent( 'BundleManager' )
 const logFileManager    = container.getComponent( 'LogFileManager' )
+
+/*
+ * Expose as global the container
+ */
+global.easy = {
+    container
+}
 
 /*
  * Define database connector (default: ~/config/database/connector/bookshelf)
@@ -117,9 +123,9 @@ if ( 'l' === argv._[ 0 ] || 'log' === argv._[ 0 ] || argv.log ) {
 }
 
 /*
- * Loads all the API routes
+ * Loads all the app routes
  */
-routing( container, bundleManager, router.scope )
+router.init( bundleManager )
 
 /*
  * Auto call to gc

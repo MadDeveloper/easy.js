@@ -15,11 +15,6 @@ const bundlesTestsDirectory = kernel.path.test.bundles
 const mocha = new Mocha()
 
 /*
- * Expose container into global scope for unit tests classes, because file are called by mocha and not ourselves
- */
-global.container = container
-
-/*
  * Add each .js file to the mocha instance
  */
 fs.readdir( bundlesTestsDirectory, ( err, files ) => {

@@ -1,7 +1,7 @@
 import fs                   from 'fs'
 import path                 from 'path'
 import servicesMapping      from './../../../config/services'
-import librariesMapping from './../../../config/lib'
+import librariesMapping     from './../../../config/lib'
 
 /**
  * @class Container

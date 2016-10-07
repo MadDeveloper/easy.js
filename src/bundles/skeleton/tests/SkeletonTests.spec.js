@@ -14,23 +14,23 @@ import Tests    from '~/vendor/easy/core/Tests'
  * const should    = test.should
  */
 
-class UserTests extends Tests {
+class SkeletonTests extends Tests {
     constructor( container ) {
         super( container )
 
         /*
          * Local dependencies
          */
-        this._userRoutingController = this.factory.getController( 'user' )
-        this._userRepository        = this.entityManager.getRepository( 'user' )
-        this._user                  = this.entityManager.getModel( 'user' )
+        this._skeletonRoutingController = this.factory.getController( 'skeleton.Routing' )
+        this._skeletonRepository        = this.entityManager.getRepository( 'skeleton' )
+        this._skeleton                  = this.entityManager.getModel( 'skeleton' )
     }
 
     /*
      * Automatically called
      */
     run() {
-        describe( 'User bundle tests', () => {
+        describe( 'Skeleton bundle tests', () => {
           it( 'example variable', () => {
             // just for example of tested value
             let example = 'hello world'
@@ -75,24 +75,24 @@ class UserTests extends Tests {
     /*
      * Getters and setters
      */
-    get userFactory() {
-        return this._userFactory
+    get skeletonFactory() {
+        return this._skeletonFactory
     }
 
-    get userRoutingController() {
-        return this._userRoutingController
+    get skeletonRoutingController() {
+        return this._skeletonRoutingController
     }
 
-    get userRepository() {
-        return this._userRepository
+    get skeletonRepository() {
+        return this._skeletonRepository
     }
 
-    get user() {
-        return this._user
+    get skeleton() {
+        return this._skeleton
     }
 }
 
 /*
  * Permit mocha to access to run() method called implicitely and run unit tests
  */
-new UserTests( global.container )
+new SkeletonTests()

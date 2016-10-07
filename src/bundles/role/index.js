@@ -1,16 +1,22 @@
-import RoleController from './../controllers/RoleController'
+import RoleController   from './../controllers/RoleController'
+import { security }		from './config/security'
 
-export default function routing( router, factory ) {
+/**
+ * routing - define routes for role bundle
+ *
+ * @param  {express.Router} router
+ */
+export default function routing( req, res, router ) {
     /*
      * Dependencies
      */
-    let roleController, access
+    let roleController
 
     /*
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        roleController = new RoleController( req, res, factory )
+        roleController = new RoleController( req, res, router )
         next()
     })
 
@@ -19,13 +25,7 @@ export default function routing( router, factory ) {
      */
     router.use( '/roles', ( req, res, next ) => {
         roleController.authorize({
-            restrictions: {
-                mustBe: [ access.any ],
-                canCreate: [ access.admin ],
-                canRead: [],
-                canUpdate: [ access.admin ],
-                canDelete: [ access.admin ]
-            },
+            restrictions: security[ '/roles '],
             focus: 'role_id',
             next
         })

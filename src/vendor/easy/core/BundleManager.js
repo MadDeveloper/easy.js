@@ -45,27 +45,40 @@ export default class BundleManager extends Component {
     /**
      * getRouting - retrieve defined bundle routing
      *
-     * @param  {string} bundle
+     * @param  {string} { bundle
+     * @param  {express.Router} router
+     * @param  {Request} request
+     * @param  {Response} response }
      */
-    getRouting( bundle ) {
-        const routingPath = `${this.bundlesPath}/${bundle}/config/routing.js`
+    getRouting({ bundle, router, request, response }) {
+        const routingPath = `${this.bundlesPath}/${bundle}`
 
         if ( fs.statSync( routingPath ).isFile() ) {
             const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
-            routingBundle( this.router, this.factory )
+            routingBundle( request, response, router )
         }
     }
+
 
     /**
      * getBundlesDefinitionRouting - will register bundles routing into express router stack
      *
+     * @param  {express.Router} router
+     * @param  {Request} request
+     * @param  {Response} response
      */
-    getBundlesDefinitionRouting() {
+    getBundlesDefinitionRouting( router, request, response ) {
         let bundle
 
         for ( var i in this.bundlesDefinition ) {
             bundle = this.bundlesDefinition[ i ]
-            this.getRouting( bundle )
+            this.getRouting({
+                bundle,
+                router,
+                this._container,
+                request,
+                response
+            })
         }
     }
 
@@ -85,23 +98,5 @@ export default class BundleManager extends Component {
      */
     get bundlesDefinition() {
         return this._bundlesDefinition
-    }
-
-    /**
-     * get - express router
-     *
-     * @returns {express.Router}
-     */
-    get router() {
-        return this._container.getComponent( 'Router' ).scope
-    }
-
-    /**
-     * get - factory instance
-     *
-     * @returns {Factory}
-     */
-    get factory() {
-        return this._container.getComponent( 'Factory' )
     }
 }

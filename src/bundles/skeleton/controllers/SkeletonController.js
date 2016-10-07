@@ -10,10 +10,10 @@ export default class SkeletonController extends Controller {
      * @constructor
      * @param {express.Request} req
      * @param {express.Response} res
-     * @param {Factory} factory
+     * @param {express.Router} router
      */
-    constructor( req, res, factory ) {
-        super( req, res, factory )
+    constructor( req, res, router ) {
+        super( req, res, router )
 
         this._skeletonRepository    = this.entityManager.getRepository( 'skeleton' )
         this._skeleton              = this.entityManager.getModel( 'skeleton' )

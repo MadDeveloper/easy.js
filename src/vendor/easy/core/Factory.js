@@ -22,7 +22,7 @@ export default class Factory extends Component {
      * @param  {string} controller
      * @returns {Controller}
      */
-    getController( controller, req, res  ) {
+    getController( controller, req, res ) {
         if ( controller.length > 0 ) {
             let bundle          = ''
             let controllerFile  = ''
