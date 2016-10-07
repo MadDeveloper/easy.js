@@ -9,15 +9,14 @@ export default function authentication( container, router ) {
      */
     router.route( '/authentication' )
         .post( ( req, res ) => {
-            const factory       = container.getComponent( 'Factory' )
-            const controller    = new Controller( req, res, factory )
+            const controller    = new Controller( req, res, router )
             const request       = controller.request
             const response      = controller.response
 
             /*
              * User classes
              */
-            const userRepository = factory.entityManager.getRepository( 'user' )
+            const userRepository = controller.entityManager.getRepository( 'user' )
 
             const requestValidity = controller.verifyParams([
                 { property: 'email', typeExpected: 'string' },

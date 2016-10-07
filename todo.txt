@@ -34,6 +34,9 @@ génériques
 
 - ConfigLoader dans vendor
 
+- créer des sous-container permettant d'avoir un rôle définit : Container services, container lib, container components, etc. et le tout supervisé
+  par un container parent.
+
 ---  MAYBE ---
 
 - ? Utiliser CarminteJS (cross-db ORM)

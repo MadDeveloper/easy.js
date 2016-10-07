@@ -1,5 +1,5 @@
-import UserController 	from './controllers/UserController'
-import { security }		from './config/security'
+import UserController	from './controllers/UserController'
+import security			from './config/security'
 
 /**
  * routing - define routes for user bundle
@@ -16,7 +16,7 @@ export default function routing( router ) {
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        userController = new UserController( req, res, router )
+        userController = new UserController( req, res )
         next()
     })
 

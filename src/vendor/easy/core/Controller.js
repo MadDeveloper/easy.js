@@ -10,13 +10,11 @@ export default class Controller {
      * @constructor
      * @param  {express.Request} request
      * @param  {express.Response} response
-     * @param  {express.Router} router
      */
-    constructor( req, res, router ) {
+    constructor( req, res ) {
         this._container     = global.easy.container
         this._request       = new Request( req, this.container.kernel.appName )
         this._response      = new Response( res, this.request, this.container.getComponent( 'Logger' ) )
-        this._router        = router
         this._entityManager = this._container.getComponent( 'EntityManager' )
         this._access        = this.getService( 'security.access' )
     }
@@ -189,15 +187,6 @@ export default class Controller {
      */
     isProdEnv() {
         return !this.isDevEnv()
-    }
-
-    /**
-     * get - express router
-     *
-     * @returns {express.Router}
-     */
-    get router() {
-        return this._router
     }
 
     /**

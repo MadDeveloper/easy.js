@@ -10,10 +10,9 @@ export default class UserController extends Controller {
      * @constructor
      * @param {express.Request} req
      * @param {express.Response} res
-     * @param {Factory} factory
      */
-    constructor( req, res, factory ) {
-        super( req, res, factory )
+    constructor( req, res ) {
+        super( req, res )
 
         this._userRepository    = this.entityManager.getRepository( 'user' )
         this._user              = this.entityManager.getModel( 'user' )
@@ -21,7 +20,7 @@ export default class UserController extends Controller {
     }
 
     /**
-     * isRequestWellParameterized - verify if request is contains valid params
+     * isRequestWellParameterized - verify if request contains valids params
      *
      * @returns {boolean}
      */

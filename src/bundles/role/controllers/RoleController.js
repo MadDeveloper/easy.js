@@ -9,17 +9,16 @@ export default class RoleController extends Controller {
      * @constructor
      * @param {express.Request} req
      * @param {express.Response} res
-     * @param {Factory} factory
      */
-    constructor( req, res, factory ) {
-        super( req, res, factory )
+    constructor( req, res ) {
+        super( req, res )
 
         this._roleRepository    = this.entityManager.getRepository( 'role' )
         this._role              = this.entityManager.getModel( 'role' )
     }
 
     /**
-     * isRequestWellParameterized - verify if request is contains valid params
+     * isRequestWellParameterized - verify if request contains valid params
      *
      * @returns {boolean}
      */

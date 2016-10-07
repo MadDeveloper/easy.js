@@ -10,17 +10,16 @@ export default class SkeletonController extends Controller {
      * @constructor
      * @param {express.Request} req
      * @param {express.Response} res
-     * @param {express.Router} router
      */
-    constructor( req, res, router ) {
-        super( req, res, router )
+    constructor( req, res ) {
+        super( req, res )
 
         this._skeletonRepository    = this.entityManager.getRepository( 'skeleton' )
         this._skeleton              = this.entityManager.getModel( 'skeleton' )
     }
 
     /**
-     * isRequestWellParameterized - verify if request is contains valid params
+     * isRequestWellParameterized - verify if request contains valid params
      *
      * @returns {boolean}
      */

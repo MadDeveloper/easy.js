@@ -1,5 +1,5 @@
 import SkeletonController   from './controllers/SkeletonController'
-import { security }         from './config/security'
+import security             from './config/security'
 
 /**
  * routing - define routes for skeleton bundle
@@ -13,7 +13,7 @@ export default function routing( router ) {
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        skeletonController = new SkeletonController( req, res, router )
+        skeletonController = new SkeletonController( req, res )
         next()
     })
 

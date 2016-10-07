@@ -1,5 +1,5 @@
-export const authentication = {
+export default {
 	enabled: true,
 	path: '/login',
-	provider: 'custom'
+	providers: [ 'custom', 'facebook', 'google', 'twitter' ]
 }

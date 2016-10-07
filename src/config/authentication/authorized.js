@@ -1,5 +1,5 @@
 import jwt                  from 'jsonwebtoken'
-import { indexOf, find }    from 'lodash'
+import { find }    from 'lodash'
 import publicRoutes         from './../routing/public'
 import Controller           from '~/vendor/easy/core/Controller'
 

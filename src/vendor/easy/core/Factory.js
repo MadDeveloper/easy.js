@@ -43,23 +43,6 @@ export default class Factory extends Component {
     }
 
     /**
-     * getConfig - get specific bundle configuration (e.g. skeleton.middlewares -> skeleton/config/middlewares.js )
-     *
-     * @param  {string} config
-     * @returns {function}
-     */
-    getConfig( config ) {
-        if ( config && config.length > 0 ) {
-            const info          = config.split( '.' )
-            const bundle        = info[ 0 ]
-            const configFile    = info[ 1 ]
-            const configClass   = require( `${this.bundlesPath}/${bundle}/config/${configFile}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
-
-            return configClass( this.router, this )
-        }
-    }
-
-    /**
      * get - vendor container
      *
      * @returns {Container}

@@ -6,6 +6,7 @@ import passportFacebook	from 'passport-facebook'
 import passportTwitter	from 'passport-twitter'
 import passportGoogle	from 'passport-google-oauth'
 import ConfigLoader		from './../core/ConfigLoader'
+import Controller   	from './../core/Controller'
 import TokenManager		from './TokenManager'
 
 const LocalStrategy 	= passportLocal.Strategy
@@ -15,22 +16,77 @@ const FaceboookStrategy	= passportFacebook.Strategy
 const TwitterStrategy 	= passportTwitter.Strategy
 const GoogleStrategy 	= passportLocal.OAuthStrategy
 
+/**
+ * @class Authentication
+ */
 export default class Authentication {
 	/**
 	 * constructor
-	 *
-	 * @param  {express.Router} router
 	 */
-	constructor( router ) {
-		const authenticationConfig = ConfigLoader.loadFromGlobal( 'authentication' )
-
+	constructor() {
+		this._config = ConfigLoader.loadFromGlobal( 'authentication' )
 	}
 
-	login() {
-		return Promise.resolve()
+	/**
+	 * login - login user and provide new token
+	 *
+	 * @param  {express.Request} req
+	 * @param  {express.Response} res
+	 * @returns {Promise}
+	 */
+	login( req, res ) {
+		return new Promise( ( resolve, reject )=> {
+			const tokenManager		= new TokenManager()
+			const controller		= this.buildController( req, res )
+			const request			= controller.request
+			const userRepository 	= controller.entityManager.getRepository( 'user' )
+
+			const token = tokenManager.sign({})
+
+			resolve( token )
+		})
 	}
 
-	isLogged() {
-		return Promise.resolve()
+	/**
+	 * isLogged - check if user is logged with his token
+	 *
+	 * @param  {express.Request} req
+	 * @param  {express.Response} res
+	 * @returns {Promise}     description
+	 */
+	isLogged( req, res ) {
+		const tokenManager	= new TokenManager()
+		const controller	= this.buildController( req, res )
+		const request		= controller.request
+		const response		= controller.response
+		const token			= request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.scope.headers[ 'x-access-token' ]
+
+		if ( token ) {
+			return tokenManager.verify( token ).then( decoded => request.setBodyParameter( 'token', decoded ) )
+		} else {
+			response.unauthorized()
+
+			return Promise.reject()
+		}
+	}
+
+	/**
+	 * buildController - build controller to access
+	 *
+	 * @param  {express.Request} req
+	 * @param  {express.Response} res
+	 * @returns {Controller}
+	 */
+	buildController( req, res ) {
+		return new Controller( req, res )
+	}
+
+	/**
+	 * get - authentication config
+	 *
+	 * @returns {Object}
+	 */
+	get config() {
+		return this._config
 	}
 }

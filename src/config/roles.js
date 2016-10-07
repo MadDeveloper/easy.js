@@ -1,4 +1,4 @@
-export const roles = {
+export default {
     /*
      * Id roles mapped with database, used by AccessSecurityService
      */

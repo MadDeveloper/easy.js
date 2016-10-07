@@ -1,5 +1,5 @@
 import RoleController   from './controllers/RoleController'
-import { security }		from './config/security'
+import security			from './config/security'
 
 /**
  * routing - define routes for role bundle
@@ -16,7 +16,7 @@ export default function routing( router ) {
      * Register request and response into Controller
      */
     router.use( ( req, res, next ) => {
-        roleController = new RoleController( req, res, router )
+        roleController = new RoleController( req, res )
         next()
     })
 

@@ -1,6 +1,7 @@
-import Component 		from './Component'
-import Authentication	from './../authentication/Authentication'
-import ConfigLoader		from './ConfigLoader'
+import Component            from './Component'
+import Authentication       from './../authentication/Authentication'
+import ConfigLoader         from './ConfigLoader'
+import { indexOf, find }    from 'lodash'
 
 /**
  * @class Router
@@ -13,8 +14,9 @@ export default class Router extends Component {
     constructor( container ) {
         super()
 
-        this._scope = null
-		this._container = container
+        this._scope       = null
+		this._container   = container
+        this._config      = ConfigLoader.loadFromGlobal( 'routing/public' )
     }
 
 	/**
@@ -31,15 +33,13 @@ export default class Router extends Component {
 		/*
 		 * Authentication management
 		 */
-		const authConfig = ConfigLoader.loadFromGlobal( 'authentication' )
+		const authentication = new Authentication()
 
-		if ( authConfig.enabled ) {
-			const authentication = new Authentication( router )
-
+		if ( authentication.config.enabled ) {
 		    /*
 			 * Authentication
 			 */
-		    router.post( authConfig.path, ( req, res, next ) => {
+		    router.post( authentication.config.path, ( req, res, next ) => {
 				authentication.login( req, res ).then( next )
 		    })
 
@@ -47,7 +47,15 @@ export default class Router extends Component {
 			 * Verify token
 			 */
 			router.use( ( req, res, next ) => {
-				authentication.isLogged( req, res ).then( next )
+                /*
+                 * Don't verify for publics routes
+                 */
+                if ( find( this.config, pattern => req.originalUrl.match( new RegExp( pattern, 'i' ) ) ) || this._container.kernel.isDevEnv() ) {
+                    next()
+                } else {
+                    authentication.isLogged( req, res ).then( next )
+                }
+
 			})
 		}
 
@@ -84,5 +92,14 @@ export default class Router extends Component {
     set scope( scope ) {
         this._scope = scope
         return this
+    }
+
+    /**
+     * get - routing config
+     *
+     * @returns {Array}
+     */
+    get config() {
+        return this._config
     }
 }

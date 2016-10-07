@@ -1,5 +1,5 @@
 import { indexOf }  from 'lodash'
-import { roles }    from './../../config/roles'
+import roles        from './../../config/roles'
 
 /**
  * @class AccessSecurityService
