@@ -14,10 +14,6 @@ import Polyfills            from './vendor/easy/core/Polyfills'
 import config               from './config/config'
 import bundlesEnabled       from './config/bundles/enabled'
 
-import passportLocal	from 'passport-local'
-
-const LocalStrategy 	= passportLocal.Strategy
-
 const argv = minimist( process.argv.slice( 2 ) )
 
 /*

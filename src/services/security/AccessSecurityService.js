@@ -11,7 +11,7 @@ export default class AccessSecurityService {
 
     loadRoles() {
         for ( let role in roles ) {
-            this[ `${role}` ] = roles[ role ]
+            this[ role ] = roles[ role ]
         }
 
         this._restrictions  = {}

@@ -1,19 +1,9 @@
 import passportLocal	from 'passport-local'
-import passportGithub	from 'passport-github2'
-import passportOAuth2	from 'passport-oauth'
-import passportFacebook	from 'passport-facebook'
-import passportTwitter	from 'passport-twitter'
-import passportGoogle	from 'passport-google-oauth'
 import ConfigLoader		from './../core/ConfigLoader'
 import Controller   	from './../core/Controller'
 import TokenManager		from './TokenManager'
 
-const LocalStrategy 	= passportLocal.Strategy
-const GithubStrategy 	= passportGithub.Strategy
-const OAuth2Strategy 	= passportOAuth2.OAuth2Strategy
-const FaceboookStrategy	= passportFacebook.Strategy
-const TwitterStrategy 	= passportTwitter.Strategy
-const GoogleStrategy 	= passportLocal.OAuthStrategy
+const LocalStrategy = passportLocal.Strategy
 
 /**
  * @class Authentication
@@ -38,26 +28,6 @@ export default class Authentication {
 	init() {
 		if ( this.config.strategies.local ) {
 			this.initLocalStrategy()
-		}
-
-		if ( this.config.strategies.facebook ) {
-			this.initFacebookStrategy()
-		}
-
-		if ( this.config.strategies.google ) {
-			this.initGoogleStrategy()
-		}
-
-		if ( this.config.strategies.twitter ) {
-			this.initTwitterStrategy()
-		}
-
-		if ( this.config.strategies.github ) {
-			this.initGithubStrategy()
-		}
-
-		if ( this.config.strategies.oauth2 ) {
-			this.initOAuth2Strategy()
 		}
 	}
 
@@ -108,10 +78,8 @@ export default class Authentication {
 	 * initLocalStrategy - init local strategy
 	 */
 	initLocalStrategy() {
-		const localConfig = this.config.strategies.local
-
 		this._router.post(
-			localConfig.route,
+			this.config.route,
 			this._passport.authenticate( 'local', { session: false }),
 			( req, res ) => {
 				const controller = this.buildController( req, res )
@@ -122,8 +90,8 @@ export default class Authentication {
 		})
 
 		this._passport.use( new LocalStrategy({
-			usernameField: localConfig.usernameField,
-			passwordField: localConfig.passwordField
+			usernameField: this.config.usernameField,
+			passwordField: this.config.passwordField
 		}, ( username, password, done ) => {
 			let findBy = {}
 			findBy[ localConfig.usernameField ] = username
@@ -138,66 +106,6 @@ export default class Authentication {
 					}
 				})
 				.catch( error => done( error ) )
-		}))
-	}
-
-	/**
-	 * initFacebookStrategy - init facebook strategy
-	 */
-	initFacebookStrategy() {
-		const facebookConfig = this.config.strategies.facebook
-
-		this._router.get( facebookConfig.route, ( req, res, next ) => {
-			passport.authenticate( 'facebook' )
-		})
-
-		passport.use( new FaceboookStrategy({
-			clientID: facebookConfig.clientID,
-			clientSecret: facebookConfig.clientSecret,
-			callbackURL: facebookConfig.callbackURL
-		}, ( accessToken, refreshToken, profile, done ) => {
-			if ( this.config.register ) {
-
-			} else {
-
-				done( null, { accessToken, refreshToken, profile } )
-			}
-		}))
-	}
-
-	/**
-	 * initGoogleStrategy - init google strategy
-	 */
-	initGoogleStrategy() {
-		passport.use( new GoogleStrategy( this.config.strategies.google, ( token, tokenSecret, profile, done ) => {
-
-		}))
-	}
-
-	/**
-	 * initTwitterStrategy - init twitter strategy
-	 */
-	initTwitterStrategy() {
-		passport.use( new TwitterStrategy( this.config.strategies.twitter, ( token, tokenSecret, profile, done ) => {
-
-		}))
-	}
-
-	/**
-	 * initGithubStrategy - init Github strategy
-	 */
-	initGithubStrategy() {
-		passport.use( new GithubStrategy( this.config.strategies.github, ( token, tokenSecret, profile, done ) => {
-
-		}))
-	}
-
-	/**
-	 * initOAuth2Strategy - init OAuth2 strategy
-	 */
-	initOAuth2Strategy() {
-		passport.use( 'provider', new OAuth2Strategy( this.config.strategies.oauth2, ( accessToken, refreshToken, profile, done ) => {
-
 		}))
 	}
 

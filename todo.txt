@@ -11,6 +11,10 @@
 
 - mettre les confs de dev/prod dans config app
 
+- revoir la partie database dans config
+
+- custom middleware pour gérer l'auth (via facebook)
+
 - REDIGER LA DOC
 
 
