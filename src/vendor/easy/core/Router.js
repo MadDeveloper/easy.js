@@ -1,7 +1,7 @@
-import Component            from './Component'
-import Authentication       from './../authentication/Authentication'
-import ConfigLoader         from './ConfigLoader'
-import { indexOf, find }    from 'lodash'
+import Component        from './Component'
+import Authentication	from './../authentication/Authentication'
+import ConfigLoader     from './ConfigLoader'
+import { find }    		from 'lodash'
 
 /**
  * @class Router
@@ -16,7 +16,7 @@ export default class Router extends Component {
 
         this._scope       = null
 		this._container   = container
-        this._config      = ConfigLoader.loadFromGlobal( 'routing/public' )
+        this._config      = ConfigLoader.loadFromGlobal( 'routing' )
     }
 
 	/**
@@ -33,27 +33,25 @@ export default class Router extends Component {
 		/*
 		 * Authentication management
 		 */
-		const authentication = new Authentication()
+		const authentication = new Authentication( router )
 
 		if ( authentication.config.enabled ) {
-		    /*
-			 * Authentication
-			 */
-		    router.post( authentication.config.path, ( req, res, next ) => {
-				authentication.login( req, res ).then( next )
-		    })
+            /*
+             * Init authentication
+             */
+            authentication.init()
 
 			/*
 			 * Verify token
 			 */
 			router.use( ( req, res, next ) => {
                 /*
-                 * Don't verify for publics routes
+                 * Apply authentication only for protected routes
                  */
-                if ( find( this.config, pattern => req.originalUrl.match( new RegExp( pattern, 'i' ) ) ) || this._container.kernel.isDevEnv() ) {
-                    next()
+                if ( find( this.config.protected, pattern => req.originalUrl.match( new RegExp( pattern, 'i' ) ) ) ) {
+                    authentication.isLogged( req, res, next )
                 } else {
-                    authentication.isLogged( req, res ).then( next )
+                    next()
                 }
 
 			})

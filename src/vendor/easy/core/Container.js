@@ -28,7 +28,6 @@ export default class Container {
             'bundlemanager': `${this._kernel.path.vendor.easy}/core/BundleManager`,
             'console': `${this._kernel.path.vendor.easy}/core/Console`,
             'factory': `${this._kernel.path.vendor.easy}/core/Factory`,
-            'polyfills': `${this._kernel.path.vendor.easy}/core/Polyfills`,
             'router': `${this._kernel.path.vendor.easy}/core/Router`,
             'database': `${this._kernel.path.vendor.easy}/database/Database`,
             'entitymanager': `${this._kernel.path.vendor.easy}/database/EntityManager`,

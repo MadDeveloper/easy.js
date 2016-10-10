@@ -4,26 +4,21 @@
  * /!\ Never add a polyfill on Object (can cause problems with ORM or librairies which are based on objects).
  */
 
-import Component from './Component'
-
 /**
  * @class Polyfills
- * @extends Component
  */
-export default class Polyfills extends Component {
+export default class Polyfills {
     /**
      * constructor
      */
-    constructor() {
-        super()
-
-        this.stringPolyfills()
+    static load() {
+        Polyfills.stringPolyfills()
     }
 
     /**
      * stringPolyfills - polyfills for String prototype
      */
-    stringPolyfills() {
+    static stringPolyfills() {
         if ( !String.prototype.isEmpty ) {
             String.prototype.isEmpty = function() {
                 return this.valueOf().length === 0

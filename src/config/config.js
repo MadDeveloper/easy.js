@@ -5,7 +5,8 @@ export default {
      * App configurations
      */
     app: {
-        name: 'myapp'
+        name: 'myapp',
+		production: false
     },
 
     /*
@@ -45,11 +46,11 @@ export default {
 
     /*
      * Json Web Token (JWT) configurations
-     * CHANGE IT
+     * CHANGE SECRET
      */
     jwt: {
         secret: ':p19E}1%&gX1O*K2u8=36#9Jk7I9{f', // http://randomkeygen.com/ -> Ft. Knox Passwords
-        duration: 86400 // 24hours
+        duration: 86400 // in seconds, 24hours
     }
 }
 

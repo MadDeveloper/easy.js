@@ -1,3 +1,5 @@
+import path from 'path'
+
 export default class ConfigLoader {
 	/**
 	 * loadFromGlobal - description
@@ -6,7 +8,7 @@ export default class ConfigLoader {
 	 * @returns {type}      description
 	 */
 	static loadFromGlobal( file ) {
-		return {}
+		return require( `./../../../config/${file}.js` ).default
 	}
 
 	/**

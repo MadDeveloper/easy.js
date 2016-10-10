@@ -9,6 +9,8 @@
 
 - changer les export const ... = en export default
 
+- mettre les confs de dev/prod dans config app
+
 - REDIGER LA DOC
 
 
@@ -36,6 +38,8 @@ génériques
 
 - créer des sous-container permettant d'avoir un rôle définit : Container services, container lib, container components, etc. et le tout supervisé
   par un container parent.
+
+- créer des sous-authentication class pour gérer chaque cas d'auth : GoogleAuthentication, FacebookAuthentication, Local, Twitter, Github, etc.
 
 ---  MAYBE ---
 

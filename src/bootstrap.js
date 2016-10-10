@@ -10,10 +10,27 @@ import { indexOf }          from 'lodash'
 import minimist             from 'minimist'
 import passport             from 'passport'
 import Kernel               from './vendor/easy/core/Kernel'
+import Polyfills            from './vendor/easy/core/Polyfills'
 import config               from './config/config'
 import bundlesEnabled       from './config/bundles/enabled'
 
+import passportLocal	from 'passport-local'
+
+const LocalStrategy 	= passportLocal.Strategy
+
 const argv = minimist( process.argv.slice( 2 ) )
+
+/*
+ * First, load all polyfills
+ */
+Polyfills.load()
+
+/*
+ * Create easy namespace
+ */
+global.easy = {
+    passport
+}
 
 /*
  * We force cwd to be the directory where bootstrap.js is running, usefull for Unix os
@@ -23,7 +40,7 @@ process.chdir( __dirname )
 /*
  * API environement
  */
-if ( 'p' === argv._[ 0 ] || 'production' === argv._[ 0 ] || 'prod' === argv._[ 0 ] || argv.p || argv.prod || argv.production ) {
+if ( config.app.production ) {
     process.env.NODE_ENV = 'production'
 } else {
     process.env.NODE_ENV = 'development'
@@ -45,9 +62,7 @@ const logFileManager    = container.getComponent( 'LogFileManager' )
 /*
  * Expose as global the container
  */
-global.easy = {
-    container
-}
+global.easy.container = container
 
 /*
  * Define database connector (default: ~/config/database/connectors/bookshelf)
@@ -91,11 +106,6 @@ app.use( bodyParser.json() ) // support json encoded bodies
 app.use( bodyParser.urlencoded({ extended: true }) ) // support encoded bodies
 
 /*
- * Initialize Passport
- */
-app.use( passport.initialize() )
-
-/*
  * Permit to retrieve rawBody into PATCH method
  */
 app.use( ( req, res, next ) => {
@@ -132,6 +142,12 @@ if ( 'l' === argv._[ 0 ] || 'log' === argv._[ 0 ] || argv.log ) {
  * Loads all the app routes
  */
 router.init( bundleManager )
+
+/*
+ * Initialize Passport
+ */
+app.use( passport.initialize() )
+
 
 /*
  * Auto call to gc

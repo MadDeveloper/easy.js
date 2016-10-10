@@ -3,7 +3,7 @@ export default {
      * First place your tables with primaries keys
      * then tables with foreign keys
      * because when you will generate database with migrate command
-     * if you do inverse, SQL will generate FK ERROR
+     * if you do inverse, SQL will generate FK_ERROR
      */
     roles: {
         id: {type: 'increments', nullable: false, primary: true},
