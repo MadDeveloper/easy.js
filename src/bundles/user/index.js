@@ -42,9 +42,12 @@ export default function routing( router ) {
     * Routes definitions
     */
     router
+        .route( '/signup' )
+            .post( () => userController.createUser() )
+
+    router
 		.route( '/roles/:role_id/users' )
 	        .get( () => userController.getUsers() )
-	        .post( () => userController.createUser() )
 	        .all( () => userController.response.methodNotAllowed() )
 
     router

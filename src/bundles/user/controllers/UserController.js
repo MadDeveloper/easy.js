@@ -1,5 +1,6 @@
 import { indexOf }  from 'lodash'
 import Controller   from '~/vendor/easy/core/Controller'
+import TokenManager from '~/vendor/easy/authentication/TokenManager'
 
 /**
  * @class UserController
@@ -56,9 +57,10 @@ export default class UserController extends Controller {
      * getUsers - get all users from specific role
      */
     getUsers() {
-        this.userRepository.findAll( this.request.find( 'role' ) )
-        .then( users => this.response.ok( users ) )
-        .catch( error => this.response.internalServerError( error ) )
+        this.userRepository
+            .findAll( this.request.find( 'role' ) )
+            .then( users => this.response.ok( users ) )
+            .catch( error => this.response.internalServerError( error ) )
     }
 
     /**
@@ -66,11 +68,13 @@ export default class UserController extends Controller {
      */
     createUser() {
         if ( this.isRequestWellParameterized() ) {
-            this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'role_id' ) )
-
-            this.userRepository.save( new this.user(), this.request.getBody() )
-            .then( user => this.response.created( user ) )
-            .catch( error => this.response.internalServerError( error ) )
+            this.userRepository
+                .save( new this.user(), this.request.getBody() )
+                .then( user => {
+                    user.unset( 'password' )
+                    this.response.created({ user: user.toJSON(), token: TokenManager.sign( user.toJSON() ) })
+                })
+                .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
         }
@@ -88,13 +92,14 @@ export default class UserController extends Controller {
      */
     updateUser() {
         if ( this.isRequestWellParameterized() ) {
-            if ( typeof this.request.getBodyParameter( 'role_id' ) === "undefined" ) {
-                this.request.setBodyParameter( 'role_id', this.request.getRouteParameter( 'role_id' ) )
+            if ( typeof this.request.getAppParameter( 'role_id' ) === "undefined" ) {
+                this.request.setAppParameter( 'role_id', this.request.getRouteParameter( 'role_id' ) )
             }
 
-            this.userRepository.save( this.request.find( 'user' ), this.request.getBody() )
-            .then( user => this.response.ok( user ) )
-            .catch( error => this.response.internalServerError( error ) )
+            this.userRepository
+                .save( this.request.find( 'user' ), this.request.getBody() )
+                .then( user => this.response.ok( user ) )
+                .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
         }
@@ -137,8 +142,8 @@ export default class UserController extends Controller {
 
             if ( patchRequestCorrectlyFormed ) {
                 patchUser
-                .then( user => this.response.ok( user ) )
-                .catch( error => this.response.internalServerError( error ) )
+                    .then( user => this.response.ok( user ) )
+                    .catch( error => this.response.internalServerError( error ) )
             } else {
                 this.response.badRequest()
             }
@@ -151,9 +156,10 @@ export default class UserController extends Controller {
      * deleteUser - delete user
      */
     deleteUser() {
-        this.userRepository.delete( this.request.find( 'user' ) )
-        .then( () => this.response.noContent() )
-        .catch( error => this.response.internalServerError( error ) )
+        this.userRepository
+            .delete( this.request.find( 'user' ) )
+            .then( () => this.response.noContent() )
+            .catch( error => this.response.internalServerError( error ) )
     }
 
     /**

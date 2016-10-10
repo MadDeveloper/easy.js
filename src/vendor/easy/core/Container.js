@@ -322,7 +322,7 @@ export default class Container {
         } else {
             this.getComponent( 'Console' ).error({
                 title: "Impossible to call library",
-                message: `Library ${name} not found, path: ${path.resolve( `${this.librariesMapping[ name ]}.js` )}\n${error}`,
+                message: `Library ${name} not found, path: ${path.resolve( `${this.librariesMapping[ name ]}.js` )}`,
                 type: 'error',
                 exit: 0
             })

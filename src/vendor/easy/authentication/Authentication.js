@@ -26,52 +26,7 @@ export default class Authentication {
 	 * init - init auth strategies
 	 */
 	init() {
-		if ( this.config.strategies.local ) {
-			this.initLocalStrategy()
-		}
-	}
-
-	/**
-	 * login - login user and provide new token
-	 *
-	 * @param  {express.Request} req
-	 * @param  {express.Response} res
-	 * @param  {Function} next
-	 */
-	login( req, res, next ) {
-		const controller		= this.buildController( req, res )
-		const request			= controller.request
-		const userRepository 	= controller.entityManager.getRepository( 'user' )
-		const token = {}
-
-		next()
-	}
-
-	/**
-	 * isLogged - check if user is logged with his token
-	 *
-	 * @param  {express.Request} req
-	 * @param  {express.Response} res
-	 * @param  {Function} next
-	 */
-	isLogged( req, res, next ) {
-		const controller	= this.buildController( req, res )
-		const request		= controller.request
-		const response		= controller.response
-		const token			= request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.scope.headers[ 'x-access-token' ]
-
-		if ( token ) {
-			return
-				TokenManager
-					.verify( token )
-					.then( decoded => {
-						request.setBodyParameter( 'token', decoded )
-						next()
-					})
-					.catch( error => response.unauthorized() )
-		} else {
-			response.unauthorized()
-		}
+		this.initLocalStrategy()
 	}
 
 	/**
@@ -94,13 +49,15 @@ export default class Authentication {
 			passwordField: this.config.passwordField
 		}, ( username, password, done ) => {
 			let findBy = {}
-			findBy[ localConfig.usernameField ] = username
+			findBy[ this.config.usernameField ] = username
 
 			this._userRepository
 				.find( findBy )
 				.then( user => {
-					if ( user && password === user.get( localConfig.passwordField ) ) {
-						return done( null, { user, token: TokenManager.sign( user ) } )
+					if ( user && password === user.get( this.config.passwordField ) ) {
+						user.unset( this.config.passwordField )
+
+						return done( null, { user: user.attributes, token: TokenManager.sign( user.attributes ) } )
 					} else {
 						return done( null, false )
 					}
@@ -110,7 +67,7 @@ export default class Authentication {
 	}
 
 	/**
-	 * buildController - build controller to access
+	 * buildController - build anonymous controller
 	 *
 	 * @param  {express.Request} req
 	 * @param  {express.Response} res

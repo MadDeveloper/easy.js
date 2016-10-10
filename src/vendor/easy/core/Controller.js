@@ -39,7 +39,7 @@ export default class Controller {
      */
     authorize({ restrictions = {}, focus = 'role_id', next }) {
         if ( this.isProdEnv() ) {
-            const token = this.request.getBodyParameter( 'token' )
+            const token = this.request.getAppParameter( 'token' )
 
             this.access.restrict( restrictions )
 

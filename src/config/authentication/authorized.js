@@ -27,7 +27,7 @@ export default function authorized( container, secret, router ) {
             if ( token ) {
                 jwt.verify( token, secret, ( error, decoded ) => {
                     if ( !error ) {
-                        request.setBodyParameter( 'token', decoded )
+                        request.setAppParameter( 'token', decoded )
                         next()
                     } else {
                         /*

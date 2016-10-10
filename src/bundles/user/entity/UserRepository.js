@@ -55,14 +55,14 @@ export default class UserRepository extends Repository {
                 options.transacting = t
 
                 user.save({ username, email, password, role_id }, options )
-                .then( user => {
-                    t.commit()
-                    resolve( user )
-                })
-                .catch( error => {
-                    t.rollback()
-                    reject( error )
-                })
+                    .then( user => {
+                        t.commit()
+                        resolve( user )
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
             })
         })
     }

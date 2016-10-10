@@ -14,7 +14,7 @@ export default class TokenManager {
 	static sign( content ) {
 		const config = TokenManager.getConfig()
 
-		return jwt.sign( content, config.jwt.secret, { expiresIn: config.jwt.duration } )
+		return jwt.sign( content, config.secret, { expiresIn: config.duration } )
 	}
 
 	/**
@@ -26,9 +26,11 @@ export default class TokenManager {
 	static verify( token ) {
 		const config = TokenManager.getConfig()
 
-		return new Promise( ( resolve, reject ) =>
-			jwt.verify( token, config.jwt.secret, ( error, decoded ) =>
-				!error ? resolve( decoded ) : reject( error )))
+		return new Promise( ( resolve, reject ) => {
+			jwt.verify( token, config.secret, ( error, decoded ) => {
+				!error ? resolve( decoded ) : reject( error )
+			})
+		})
 	}
 
 	/**
@@ -37,6 +39,6 @@ export default class TokenManager {
 	 * @returns {Object}
 	 */
 	static getConfig() {
-		return ConfigLoader.loadFromGlobal( 'config' )
+		return ConfigLoader.loadFromGlobal( 'config' ).jwt
 	}
 }

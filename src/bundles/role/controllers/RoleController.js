@@ -52,9 +52,11 @@ export default class RoleController extends Controller {
      * getRoles - get all roles
      */
     getRoles() {
-        this.roleRepository.findAll()
-        .then( roles => this.response.ok( roles ) )
-        .catch( error => this.response.internalServerError( error ) )
+        console.log( 'ici', this.request.getAppParameters() )
+        this.roleRepository
+            .findAll()
+            .then( roles => this.response.ok( roles ) )
+            .catch( error => this.response.internalServerError( error ) )
     }
 
     /**

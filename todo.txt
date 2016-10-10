@@ -1,11 +1,6 @@
 - rename test as tests
-- rename file as: user.controller.js with class UserController, idem for repository and doc
 - regroup some config ?
 - finir les tests
-
-- virer les config avec de la logique et mettre ça dans le vendor (auth, routing)
-- voir pour virer ou enlever plus facilement roles/users
-- virer access ou laisser ?
 
 - changer les export const ... = en export default
 
@@ -14,6 +9,8 @@
 - revoir la partie database dans config
 
 - custom middleware pour gérer l'auth (via facebook)
+
+- revoir les méthodes controlleurs (isRequestWellParameterized, doesRequiredElementExists) et migrer authorize à une entité tiers (easy ou pas ?)
 
 - REDIGER LA DOC
 

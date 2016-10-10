@@ -23,6 +23,10 @@ export default class Request extends Http {
         return this.scope.method
     }
 
+    getHeader( header ) {
+        return this.scope.headers[ header ]
+    }
+
     getBody() {
         return this.scope.body
     }
@@ -45,6 +49,18 @@ export default class Request extends Http {
 
     getRouteParameter( param ) {
         return this.getParams()[ param ]
+    }
+
+    getAppParameter( key ) {
+        return this.getAppParameters()[ key ]
+    }
+
+    getAppParameters() {
+        return this.scope[ this.appName ]
+    }
+
+    setAppParameter( key, value ) {
+        this.scope[ this.appName ][ key ] = value
     }
 
     urlContains( paths ) {

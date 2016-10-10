@@ -1,5 +1,6 @@
 import Component        from './Component'
 import Authentication	from './../authentication/Authentication'
+import Authorization    from './../authentication/Authorization'
 import ConfigLoader     from './ConfigLoader'
 import { find }    		from 'lodash'
 
@@ -33,7 +34,8 @@ export default class Router extends Component {
 		/*
 		 * Authentication management
 		 */
-		const authentication = new Authentication( router )
+		const authentication  = new Authentication( router )
+        const authorization   = new Authorization()
 
 		if ( authentication.config.enabled ) {
             /*
@@ -46,12 +48,12 @@ export default class Router extends Component {
 			 */
 			router.use( ( req, res, next ) => {
                 /*
-                 * Apply authentication only for protected routes
+                 * Apply authotization only for not publics routes
                  */
-                if ( find( this.config.protected, pattern => req.originalUrl.match( new RegExp( pattern, 'i' ) ) ) ) {
-                    authentication.isLogged( req, res, next )
-                } else {
+                if ( find( this.config.public, pattern => req.originalUrl.match( new RegExp( pattern, 'i' ) ) ) ) {
                     next()
+                } else {
+                    authorization.authorized( req, res, next )
                 }
 
 			})
