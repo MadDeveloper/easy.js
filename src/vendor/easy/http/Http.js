@@ -36,6 +36,14 @@ export default class Http {
             // server error
             internalServerError: 500
         }
+
+        this.methods = [
+            'get',
+            'post',
+            'put',
+            'patch',
+            'delete'
+        ]
     }
 
     /**

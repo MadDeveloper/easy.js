@@ -29,11 +29,11 @@ export class RoleController extends Controller {
         }
 
         this.doesRequiredElementExists( 'role', requireOptions )
-        .then( role => {
-            this.request.define( 'role', role )
-            next()
-        })
-        .catch( () => this.response.notFound() )
+            .then( role => {
+                this.request.define( 'role', role )
+                next()
+            })
+            .catch( () => this.response.notFound() )
     }
 
     /**
@@ -52,9 +52,10 @@ export class RoleController extends Controller {
      */
     createRole() {
         if ( this.isRequestWellParameterized() ) {
-            this.roleRepository.save( new this.roleModel(), this.request.getBody() )
-            .then( role => this.response.created( role ) )
-            .catch( error => this.response.internalServerError( error ) )
+            this.roleRepository
+                .save( new this.roleModel(), this.request.getBody() )
+                .then( role => this.response.created( role ) )
+                .catch( error => this.response.internalServerError( error ) )
         } else {
             this.response.badRequest()
         }

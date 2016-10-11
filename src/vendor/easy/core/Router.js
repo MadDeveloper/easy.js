@@ -2,7 +2,8 @@ import ConfigLoader     from './ConfigLoader'
 import Configurable     from './Configurable'
 import Request          from './../http/Request'
 import Response         from './../http/Response'
-import { find }    		from 'lodash'
+import Http             from './../http/Http'
+import { indexOf }      from 'lodash'
 
 /**
  * @class Router
@@ -18,6 +19,7 @@ export default class Router extends Configurable {
         this._scope         = null
         this._config        = ConfigLoader.loadFromGlobal( 'bundles' )
         this.application    = null
+        this.http           = new Http()
     }
 
     configure( application ) {
@@ -70,42 +72,28 @@ export default class Router extends Configurable {
             Object.keys( routesConfig ).forEach( config => {
                 configValue = routesConfig[ config ]
 
-                if ( "get" === config ) {
-                    this.defineRoute( routeName, 'get', controller, configValue )
+                if ( -1 !== indexOf( this.http.methods, config ) ) {
+                    this.defineRoute({
+                        route: routeName,
+                        method: config,
+                        controller,
+                        controllerMethod: configValue
+                    })
                 }
             })
         }
     }
 
-    defineRoute( route, method, controller, controllerMethod ) {
+    defineRoute({ route, method, controller, controllerMethod }) {
         const router = this.scope
-        let request, response
 
-        router.use( ( req, res, next ) => {
-            request = this.buildRequest( req )
-            response = this.buildResponse( res, request )
-            next()
+        method = method.toLowerCase()
+
+        router.route( route )[ method ]( ( req, res ) => {
+            const request = this.buildRequest( req )
+            const response = this.buildResponse( res, request )
+            controller[ controllerMethod ]( request, response )
         })
-
-        route = router.route( route )
-
-        switch( method ) {
-            case 'get':
-                route.get( ( req, res ) => controller[ controllerMethod ]( request, response ) )
-                break;
-            case 'post':
-
-                break;
-            case 'put':
-
-                break;
-            case 'patch':
-
-                break;
-            case 'delete':
-
-                break;
-        }
     }
 
     buildRequest( req ) {
