@@ -7,17 +7,15 @@ export default {
     app: {
         name: 'myapp',
 		production: false,
-        log: false
+        log: false,
+        memory: false
     },
 
     /*
      * Server configurations
      */
     server: {
-        protocol: {
-            http: 'http',
-            https: 'https'
-        },
+        protocol: 'http',
         domain: 'localhost',
         port: {
             http: 80,

@@ -1,24 +1,27 @@
-import Injectable from './../core/Injectable'
+import Configurable from './../core/Configurable'
 
 /**
  * @class EntityManager
- * @extends Injectable
+ * @extends Configurable
  */
-export default class EntityManager extends Injectable {
+export default class EntityManager extends Configurable {
     /**
      * @constructor
-     * @param  {Container} container
      */
-    constructor( container ) {
+    constructor() {
         super()
 
-        this._container     = container
-        this._bundlesPath   = container.kernel.path.bundles
+        this._database       = null
+        this._bundlesPath   = ''
         this._cached        = {
             models: {},
-            repositories: {},
-            collections: {}
+            repositories: {}
         }
+    }
+
+    configure( bundlesPath, database ) {
+        this._bundlesPath = bundlesPath
+        this._database = database
     }
 
     /**
@@ -33,7 +36,7 @@ export default class EntityManager extends Injectable {
                 return this.getCache( repository, 'repositories' )
             }
 
-            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
+            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` ).default
 
             return this.cache( new repositoryClass( this ), repository, 'repositories' )
         }
@@ -50,21 +53,9 @@ export default class EntityManager extends Injectable {
             return this.getCache( model, 'models' )
         }
 
-        const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
+        const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` ).default
 
         return this.cache( new modelClass( this ), model, 'models' )
-    }
-
-    /**
-     * getCollection - returns collection of Model (cf. Bookshelf.js)
-     *
-     * @param {string} model
-     * @returns {Collection}
-     */
-    getCollection( model ) {
-        return this.database.Collection.extend({
-            model: this.getModel( model )
-        })
     }
 
     /**
@@ -129,20 +120,29 @@ export default class EntityManager extends Injectable {
     }
 
     /**
-     * get - ORM (Bookshelf)
-     *
-     * @returns {Bookshelf}
-     */
-    get database() {
-        return this._container.getComponent( 'Database' ).instance
-    }
-
-    /**
      * get - get cached objects
      *
      * @returns {object}
      */
     get cached() {
         return this._cached
+    }
+
+    /**
+     * get - database instance
+     *
+     * @returns {Object}
+     */
+    get databaseConnection() {
+        return this.database.instance
+    }
+
+    /**
+     * get - database
+     *
+     * @returns {Database}
+     */
+    get database() {
+        return this._database
     }
 }

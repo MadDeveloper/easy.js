@@ -8,6 +8,7 @@
 - migrer authorize du controller à une entité tiers (easy ou pas ?)
 - voir pour faciliter le passage de Request et Response aux controllers
 - changer les paths des fichiers test dans kernel
+- pouvoir avoir deux acls sur un patch d'une même route
 - REDIGER LA DOC
 
 
@@ -27,6 +28,8 @@ génériques
 - créer des sous-container permettant d'avoir un rôle définit : Container services, container lib, container components, etc. et le tout supervisé
   par un container parent.
 - créer des sous-authentication class pour gérer chaque cas d'auth : GoogleAuthentication, FacebookAuthentication, Local, Twitter, Github, etc.
+- créer une classe Cache qui permet de mettre en cache pour n'importe quelle entité (possédant une clé de cache, par exemple la classe EntityManager
+aurait comme clé 'entitymanager', et pourra gérer son cache interne dans cette clé)
 
 ---  MAYBE ---
 

@@ -4,19 +4,7 @@ import Controller from '~/vendor/easy/core/Controller'
  * @class RoleController
  * @extends Controller
  */
-export default class RoleController extends Controller {
-    /**
-     * @constructor
-     * @param {express.Request} req
-     * @param {express.Response} res
-     */
-    constructor( req, res ) {
-        super( req, res )
-
-        this._roleRepository    = this.entityManager.getRepository( 'role' )
-        this._role              = this.entityManager.getModel( 'role' )
-    }
-
+export class RoleController extends Controller {
     /**
      * isRequestWellParameterized - verify if request contains valid params
      *
@@ -51,8 +39,9 @@ export default class RoleController extends Controller {
     /**
      * getRoles - get all roles
      */
-    getRoles() {
-        this.roleRepository
+    getRoles( request, response ) {
+        this.entityManager
+            .getRepository( 'role' )
             .findAll()
             .then( roles => this.response.ok( roles ) )
             .catch( error => this.response.internalServerError( error ) )

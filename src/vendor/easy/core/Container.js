@@ -28,10 +28,6 @@ export default class Container {
         this._librariesDirectoryPath = this._kernel.path.lib
 
         this._componentsMapping = {
-            'bundlemanager': `${this._kernel.path.vendor.easy}/core/BundleManager`,
-            'router': `${this._kernel.path.vendor.easy}/core/Router`,
-            'database': `${this._kernel.path.vendor.easy}/database/Database`,
-            'entitymanager': `${this._kernel.path.vendor.easy}/database/EntityManager`,
             'logger': `${this._kernel.path.vendor.easy}/log/Logger`,
             'logfilemanager':   `${this._kernel.path.vendor.easy}/log/LogFileManager`,
             'logwriter': `${this._kernel.path.vendor.easy}/log/LogWriter`
@@ -60,7 +56,7 @@ export default class Container {
                         delete require.cache[ require.resolve( pathComponent ) ]
                     }
 
-                    const component = require( pathComponent ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
+                    const component = require( pathComponent ).default
                     this.componentsLoaded[ name ] = new component( this )
                 }
             }
@@ -164,7 +160,7 @@ export default class Container {
      * @param  {string} path
      */
     storeService( name, path ) {
-        const serviceClass  = require( path ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
+        const serviceClass  = require( path ).default
         this.shared[ name ] = new serviceClass( this.injectDependencies( name ) )
     }
 

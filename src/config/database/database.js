@@ -8,5 +8,5 @@ export default function database( clearCache ) {
         delete require.cache[ require.resolve( connectorPath ) ]
     }
 
-    return require( connectorPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
+    return require( connectorPath ).default 
 }

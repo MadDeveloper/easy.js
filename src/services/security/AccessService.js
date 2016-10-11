@@ -2,13 +2,19 @@ import { indexOf }  from 'lodash'
 import roles        from './../../config/roles'
 
 /**
- * @class AccessSecurityService
+ * @class AccessService
  */
-export default class AccessSecurityService {
+export default class AccessService {
+    /**
+     * constructor
+     */
     constructor() {
         this.loadRoles()
     }
 
+    /**
+     * loadRoles - load roles config
+     */
     loadRoles() {
         for ( let role in roles ) {
             this[ role ] = roles[ role ]
@@ -21,7 +27,7 @@ export default class AccessSecurityService {
      * focusOn - specify the role to focus on
      *
      * @param  {string|number} role
-     * @returns {AccessSecurityService}
+     * @returns {AccessService}
      */
     focusOn( role ) {
         this.focus = role
@@ -37,7 +43,7 @@ export default class AccessSecurityService {
      * @param  {Array} canRead = []
      * @param  {Array} canUpdate = []
      * @param  {Array} canDelete = [] }
-     * @returns {AccessSecurityService}
+     * @returns {AccessService}
      */
     restrict({ mustBe = [], canCreate = [], canRead = [], canUpdate = [], canDelete = [] }) {
         if ( !mustBe || mustBe.length === 0 ) {
@@ -135,7 +141,7 @@ export default class AccessSecurityService {
      * set - restrictions
      *
      * @param  {Object} restrictions
-     * @returns {AccessSecurityService}
+     * @returns {AccessService}
      */
     set restrictions( restrictions ) {
         this._restrictions = restrictions

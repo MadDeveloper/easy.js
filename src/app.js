@@ -1,30 +1,26 @@
-import https                        from 'https'
-import http                         from 'http'
-import net                          from 'net'
-import minimist                     from 'minimist'
-import { app, config, container }   from './bootstrap'
-import Console                      from './vendor/easy/core/Console'
+import https            from 'https'
+import http             from 'http'
+import net              from 'net'
+import { application }  from './bootstrap'
+import Console          from './vendor/easy/core/Console'
 
-const argv = minimist( process.argv.slice( 2 ) )
+let server  = null
+let port    = 0
 
-let server      = null
-let port        = 0
-let protocol    = ''
+const protocol = application.config.app.protocol
 
-if ( argv._[ 'http' ] || argv.http || false === config.credentials.found ) {
+if ( 'https' === protocol && false !== application.config.credentials.found ) {
     /*
-     * If specified into options or if https credentials are not found (keys and cert), we create an HTTP server
+     * Start HTTPS server
      */
-    port        = config.server.port.http
-    server      = http.createServer( app )
-    protocol    = config.server.protocol.http
+    port        = application.config.server.port.https
+    server      = https.createServer( config.credentials, application.app )
 } else {
     /*
-     * By default, easy framework create an HTTPS server or if https credentials are not found (keys and cert)
+     * If specified or if https credentials are not found (keys and cert), we create an HTTP server
      */
-    server      = https.createServer( config.credentials, app )
-    port        = config.server.port.https
-    protocol    = config.server.protocol.https
+    port        = application.config.server.port.http
+    server      = http.createServer( application.app )
 }
 
 let freePort = ( port ) => {
@@ -48,27 +44,27 @@ let freePort = ( port ) => {
 }
 
 freePort( port )
-.then( () => {
-    /*
-     * Everything is ok, starting server
-     */
-    server.listen( port, () => {
-        Console.info( "-----------------------------" )
-        Console.info( "    Server listening..." )
-        Console.info( "-----------------------------" )
-        Console.info( `    ${protocol}://${config.server.domain}:${port}` )
-        Console.info( "-----------------------------" )
-        Console.info( `    Mode:   ${app.get( 'env' )}` )
-        Console.info( "-----------------------------" )
+    .then( () => {
+        /*
+         * Everything is ok, starting server
+         */
+        server.listen( port, () => {
+            Console.info( "-----------------------------" )
+            Console.info( "    Server listening..." )
+            Console.info( "-----------------------------" )
+            Console.info( `    ${protocol}://${application.config.server.domain}:${port}` )
+            Console.info( "-----------------------------" )
+            Console.info( `    Mode:   ${application.app.get( 'env' )}` )
+            Console.info( "-----------------------------" )
+        })
     })
-})
-.catch( () => {
-    /*
-     * Port ${port} is used
-     */
-    Console.error({
-        title: 'Impossible to start server',
-        message: `Port ${port} is already used or you have no rights to launch server (try as root)`,
-        exit: 0
+    .catch( () => {
+        /*
+         * Port ${port} is used
+         */
+        Console.error({
+            title: 'Impossible to start server',
+            message: `Port ${port} is already used or you have no rights to launch server (try as root)`,
+            exit: 0
+        })
     })
-})

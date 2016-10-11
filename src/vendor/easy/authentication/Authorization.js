@@ -3,13 +3,13 @@ import Controller   from './../core/Controller'
 
 export default class Authorization {
 	/**
-	 * authorized - check if user is logged with his token
+	 * checkToken - check if user is logged with his token
 	 *
 	 * @param  {express.Request} req
 	 * @param  {express.Response} res
 	 * @param  {Function} next
 	 */
-	authorized( req, res, next ) {
+	checkToken( req, res, next ) {
 		const controller	= Controller.buildAnonymous( req, res )
 		const request		= controller.request
 		const response		= controller.response
@@ -27,5 +27,26 @@ export default class Authorization {
 		} else {
 			response.unauthorized()
 		}
+	}
+
+	/**
+	 * authorized - authorize user only if he has access for route
+	 *
+	 * @param  {Controller} { controller
+	 * @param  {Object} restrictions
+	 * @param  {string} focus
+	 * @param  {Function} next }
+	 */
+	authorized({ controller, restrictions, focus, next }) {
+        const user = controller.request.getAppParameter( 'user' )
+		const access = controller.container.getService( 'security.access' )
+
+        access.restrict( restrictions )
+
+        if ( access.focusOn( user[ focus ] ).canReach( controller.request.getMethod() ) ) {
+            next()
+        } else {
+            controller.response.forbidden()
+        }
 	}
 }

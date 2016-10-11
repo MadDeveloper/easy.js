@@ -1,5 +1,5 @@
 export default {
-	enabled: true,
+	enabled: false,
 	repository: 'user',
 	model: 'user',
 	register: true,

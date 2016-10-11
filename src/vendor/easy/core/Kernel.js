@@ -17,10 +17,9 @@ export default class Kernel {
      * init - init kernel and components
      *
      * @param  {string} root
-     * @param  {object} config
      * @returns {Kernel}
      */
-    init( root, config ) {
+    init( root ) {
         /*
          * paths
          */
@@ -36,11 +35,6 @@ export default class Kernel {
         this.path.test.services = `${this.path.test.root}/services`
         this.path.vendor        = { root: `${this.path.root}/vendor` }
         this.path.vendor.easy   = `${this.path.vendor.root}/easy`
-
-        /*
-         * Usefull to store app data with namespace into the request
-         */
-        this._appName = config.app.name
 
         /*
          * Starting and initializing container
@@ -83,15 +77,6 @@ export default class Kernel {
      */
     isProdEnv() {
         return !this.isDevEnv()
-    }
-
-    /**
-     * get - app name
-     *
-     * @returns {string}
-     */
-    get appName() {
-        return this._appName
     }
 
     /**

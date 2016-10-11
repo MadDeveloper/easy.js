@@ -1,20 +1,24 @@
-import Injectable from './../core/Injectable'
+import Configurable from './../core/Configurable'
 
 /**
  * @class Database
- * @extends Injectable
+ * @extends Configurable
  */
-export default class Database extends Injectable {
+export default class Database extends Configurable {
     constructor( container ) {
         super()
 
-        this._databasePath  = `${container.kernel.path.config}/database/database`
+        this._databasePath  = ''
         this._instance      = null
         this._connected     = false
     }
 
+    configure( configPath ) {
+        this._databasePath = `${configPath}/database/database`
+    }
+
     connect() {
-        this.instance = ( require( this._databasePath ) ).default() /* .default is needed to patch babel exports.default build, require doesn't work, import does */
+        this.instance = require( this._databasePath ).default()
     }
 
     /*

@@ -8,49 +8,10 @@ import ConfigLoader from './ConfigLoader'
 export default class Controller {
     /**
      * @constructor
-     * @param  {express.Request} request
-     * @param  {express.Response} response
      */
-    constructor( req, res ) {
-        this._container     = global.easy.container
-        this._request       = new Request( req, this.container.kernel.appName )
-        this._response      = new Response( res, this.request, this.container.getComponent( 'Logger' ) )
-        this._entityManager = this._container.getComponent( 'EntityManager' )
-        this._access        = this.getService( 'security.access' )
-    }
-
-    /**
-     * getService - get service by name (alias from container)
-     *
-     * @param  {string} service
-     * @param  {boolean} clearCache = false
-     * @returns {Service}
-     */
-    getService( service, clearCache = false ) {
-        return this.container.getService( service, clearCache )
-    }
-
-    /**
-     * authorize - determine is current user can access to bundle routes
-     *
-     * @param  {Object} { restrictions = {}
-     * @param  {string} focus
-     * @param  {Function} next }
-     */
-    authorize({ restrictions = {}, focus, next }) {
-        if ( this.isProdEnv() ) {
-            const token = this.request.getAppParameter( 'token' )
-
-            this.access.restrict( restrictions )
-
-            if ( this.access.focusOn( token[ focus ] ).canReach( this.request.getMethod() ) ) {
-                next()
-            } else {
-                this.response.forbidden()
-            }
-        } else {
-            next()
-        }
+    constructor( application ) {
+        this._entityManager = application.entityManager
+        this._container     = application.container
     }
 
     /**
@@ -170,7 +131,7 @@ export default class Controller {
      * @returns {boolean}
      */
     isDevEnv() {
-        return 'development' === process.env.NODE_ENV
+        return 'development' === process.env.NODE_ENV.toLowerCase()
     }
 
     /**
@@ -227,14 +188,5 @@ export default class Controller {
      */
     get entityManager() {
         return this._entityManager
-    }
-
-    /**
-     * get - access service
-     *
-     * @returns {AccessSecurityService}
-     */
-    get access() {
-        return this._access
     }
 }

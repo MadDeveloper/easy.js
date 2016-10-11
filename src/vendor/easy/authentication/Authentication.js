@@ -12,14 +12,14 @@ export default class Authentication {
 	/**
 	 * constructor
 	 */
-	constructor( router ) {
+	constructor( application, passport ) {
 		this._config 			= ConfigLoader.loadFromGlobal( 'authentication' )
-		this._container 		= global.easy.container
-		this._passport			= global.easy.passport
-		this._entityManager		= this._container.getComponent( 'EntityManager' )
-		this._userRepository	= this._entityManager.getRepository( this.config.repository )
-		this._user				= this._entityManager.getModel( this.config.model )
-		this._router			= router
+		this._container 		= application.container
+		this._passport			= passport
+		// this._entityManager		= this._container.getComponent( 'EntityManager' )
+		// this._userRepository	= this._entityManager.getRepository( this.config.repository )
+		// this._user				= this._entityManager.getModel( this.config.model )
+		this._router			= application.expressRouter
 	}
 
 	/**

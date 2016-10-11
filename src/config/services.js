@@ -19,6 +19,6 @@ export default {
 
     /* security */
     'security.access': {
-        path: 'security/AccessSecurityService'
+        path: 'security/AccessService'
     }
 }

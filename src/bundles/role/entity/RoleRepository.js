@@ -13,7 +13,6 @@ export default class RoleRepository extends Repository {
     constructor( entityManager ) {
         super( entityManager )
 
-        this._roleCollection    = this.entityManager.getCollection( 'role' )
         this._role              = this.entityManager.getModel( 'role' )
     }
 
