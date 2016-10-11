@@ -1,10 +1,10 @@
-import Component    from './../core/Component'
+import Injectable from './../core/Injectable'
 
 /**
  * @class Database
- * @extends Component
+ * @extends Injectable
  */
-export default class Database extends Component {
+export default class Database extends Injectable {
     constructor( container ) {
         super()
 

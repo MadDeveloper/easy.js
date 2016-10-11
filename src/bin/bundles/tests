@@ -1,13 +1,14 @@
 #!/usr/bin/env node
-import fs                                   from 'fs'
-import Mocha                                from 'mocha'
-import path                                 from 'path'
-import minimist                             from 'minimist'
-import { kernel, bundleManager, container } from '~/bootstrap'
+import fs               from 'fs'
+import Mocha            from 'mocha'
+import path             from 'path'
+import minimist         from 'minimist'
+import Console          from '~/vendor/easy/core/Console'
+import { kernel,
+         bundleManager,
+         container }    from '~/bootstrap'
 
-const argv = minimist( process.argv.slice( 2 ) )
-
-const cli                   = container.getComponent( 'Console' )
+const argv                  = minimist( process.argv.slice( 2 ) )
 const bundlesTestsDirectory = kernel.path.test.bundles
 /*
  * Instantiate a Mocha instance
@@ -35,8 +36,8 @@ fs.readdir( bundlesTestsDirectory, ( err, files ) => {
                     }
                 }
             } catch( e ) {
-                cli.warn( `No unit tests found for ${bundle} bundle.` )
-                cli.line()
+                Console.warn( `No unit tests found for ${bundle} bundle.` )
+                Console.line()
             }
         })
 
@@ -45,8 +46,8 @@ fs.readdir( bundlesTestsDirectory, ( err, files ) => {
          */
         mocha.run( failures => {
             if ( failures ) {
-                cli.warn( `${failures} failures occurs during tests.` )
-                cli.line()
+                Console.warn( `${failures} failures occurs during tests.` )
+                Console.line()
             }
             process.exit()
         })

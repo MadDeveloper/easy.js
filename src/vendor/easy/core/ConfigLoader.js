@@ -1,9 +1,9 @@
 export default class ConfigLoader {
 	/**
-	 * loadFromGlobal - description
+	 * loadFromGlobal - load file from global configurations directory
 	 *
-	 * @param  {type} file description
-	 * @returns {type}      description
+	 * @param  {string} file
+	 * @returns {Object}
 	 */
 	static loadFromGlobal( file ) {
 		return require( `./../../../config/${file}.js` ).default

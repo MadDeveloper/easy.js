@@ -6,7 +6,8 @@ export default {
      */
     app: {
         name: 'myapp',
-		production: false
+		production: false,
+        log: false
     },
 
     /*

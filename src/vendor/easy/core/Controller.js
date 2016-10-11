@@ -34,10 +34,10 @@ export default class Controller {
      * authorize - determine is current user can access to bundle routes
      *
      * @param  {Object} { restrictions = {}
-     * @param  {string} focus = 'role_id'
+     * @param  {string} focus
      * @param  {Function} next }
      */
-    authorize({ restrictions = {}, focus = 'role_id', next }) {
+    authorize({ restrictions = {}, focus, next }) {
         if ( this.isProdEnv() ) {
             const token = this.request.getAppParameter( 'token' )
 
@@ -165,13 +165,6 @@ export default class Controller {
     }
 
     /**
-     * methodNotAllowed - when a method is used on a route which not provide that method for this route
-     */
-    methodNotAllowed() {
-        this.reponse.methodNotAllowed()
-    }
-
-    /**
      * isDevEnv - check if we are in dev environment
      *
      * @returns {boolean}
@@ -188,6 +181,17 @@ export default class Controller {
     isProdEnv() {
         return !this.isDevEnv()
     }
+
+	/**
+	 * buildController - build anonymous controller
+	 *
+	 * @param  {express.Request} req
+	 * @param  {express.Response} res
+	 * @returns {Controller}
+	 */
+	static buildAnonymous( req, res ) {
+		return new Controller( req, res )
+	}
 
     /**
      * get - request instance

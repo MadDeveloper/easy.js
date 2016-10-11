@@ -10,7 +10,7 @@ export default class Authorization {
 	 * @param  {Function} next
 	 */
 	authorized( req, res, next ) {
-		const controller	= this.buildController( req, res )
+		const controller	= Controller.buildAnonymous( req, res )
 		const request		= controller.request
 		const response		= controller.response
 		const token			= request.getAppParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.getHeader( 'x-access-token' )
@@ -27,16 +27,5 @@ export default class Authorization {
 		} else {
 			response.unauthorized()
 		}
-	}
-
-	/**
-	 * buildController - build anonymous controller
-	 *
-	 * @param  {express.Request} req
-	 * @param  {express.Response} res
-	 * @returns {Controller}
-	 */
-	buildController( req, res ) {
-		return new Controller( req, res )
 	}
 }

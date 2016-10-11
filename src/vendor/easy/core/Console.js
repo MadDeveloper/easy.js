@@ -1,20 +1,9 @@
-import colors       from 'colors'
-import Component    from './Component'
+import colors from 'colors'
 
 /**
  * @class Console
- * @extends Component
  */
-export default class Console extends Component {
-    /**
-     * @constructor
-     */
-    constructor() {
-        super()
-
-        this._leftSpaces = '  '
-    }
-
+export default class Console {
     /**
      * error - display error in console
      *
@@ -23,28 +12,28 @@ export default class Console extends Component {
      * @param  {string} consequence = ''
      * @param  {number} exit = null }
      */
-    error({ title, message = '', consequence = '', exit = null }) {
+    static error({ title, message = '', consequence = '', exit = null }) {
         if ( undefined !== title ) {
 
-            this.line()
-            console.log( this.leftSpaces + colors.bgRed( colors.white( `Error: ${title}` ) ) )
+            Console.line()
+            console.log( `${Console.leftSpaces}${colors.bgRed( colors.white( `Error: ${title}` ) )}` )
 
             if ( undefined !== typeof message && message.length > 0 ) {
-                console.log( this.leftSpaces + colors.bgRed( colors.white( `    ->  ${message}` ) ) )
+                console.log( `${Console.leftSpaces}${colors.bgRed( colors.white( `    ->  ${message}` ) )}` )
             }
 
             if ( undefined !== typeof consequence && consequence.length > 0 ) {
-                console.log( this.leftSpaces + colors.bgRed( colors.white( consequence ) ) )
+                console.log( `${Console.leftSpaces}${colors.bgRed( colors.white( consequence ) )}` )
             }
 
-            this.line()
+            Console.line()
 
-            if ( "undefined" !== typeof exit || !isNaN( exit ) ) {
+            if ( Number.isInteger( exit ) ) {
                 process.exit( exit )
             }
 
         } else {
-            this.error({
+            Console.error({
                 title: "Invalid arguments",
                 message: "Missing arguments to error from Console class"
             })
@@ -56,8 +45,8 @@ export default class Console extends Component {
      *
      * @param  {string} message = ""
      */
-    warn( message = "" ) {
-        console.log( this.leftSpaces + colors.bgYellow( colors.black( `WARN: ${message}` ) ) )
+    static warn( message = "" ) {
+        console.log( `${Console.leftSpaces}${colors.bgYellow( colors.black( `WARN: ${message}` ) )}` )
     }
 
     /**
@@ -65,8 +54,8 @@ export default class Console extends Component {
      *
      * @param  {string} message = ""
      */
-    info( message = "" ) {
-        console.log( this.leftSpaces + colors.cyan( message ) )
+    static info( message = "" ) {
+        console.log( `${Console.leftSpaces}${colors.cyan( message )}` )
     }
 
     /**
@@ -75,8 +64,8 @@ export default class Console extends Component {
      * @param  {string} message = ""
      * @param  {number} exit
      */
-    success( message = "", exit = null ) {
-        console.log( this.leftSpaces + colors.green( message ) )
+    static success( message = "", exit = null ) {
+        console.log( `${Console.leftSpaces}${colors.green( message )}` )
 
         if ( exit ) {
             process.exit()
@@ -88,14 +77,14 @@ export default class Console extends Component {
      *
      * @param  {string} message = ""
      */
-    log( message = "" ) {
+    static log( message = "" ) {
         console.log( message )
     }
 
     /**
      * line - insert new line in console
      */
-    line() {
+    static line() {
         console.log( '\n' )
     }
 
@@ -104,7 +93,7 @@ export default class Console extends Component {
      *
      * @returns {string}
      */
-    get leftSpaces() {
-        return this._leftSpaces
+    static get leftSpaces() {
+        return '  '
     }
 }

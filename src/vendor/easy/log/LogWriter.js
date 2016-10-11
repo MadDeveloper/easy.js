@@ -1,11 +1,12 @@
 import fs           from 'fs'
-import Component    from './../core/Component'
+import Injectable   from './../core/Injectable'
+import Console      from './../core/Console'
 
 /**
  * @class LogWriter
- * @extends Component
+ * @extends Injectable
  */
-export default class LogWriter extends Component {
+export default class LogWriter extends Injectable {
     /**
      * @constructor
      * @param  {Container} container
@@ -14,7 +15,6 @@ export default class LogWriter extends Component {
         super()
 
         this._logFileManager    = container.getComponent( 'LogFileManager' )
-        this._cli               = container.getComponent( 'Console' )
         this._string            = container.getLibrary( 'string' )
     }
 
@@ -26,17 +26,16 @@ export default class LogWriter extends Component {
      * @param {string} context
      */
     write( file, message, context ) {
-        this.logFileManager.openLogFile( file )
-        .then( fd => {
-            fs.write( fd, this.string.strtr( message, context ), null, 'utf8' )
-        })
-        .catch( error => {
-            this.cli.error({
-                title: `Impossible to open/create ${file}.log at: ${this.logDirectoryPath}/${file}.log`,
-                message: error,
-                type: 'error'
+        this.logFileManager
+            .openLogFile( file )
+            .then( fd => fs.write( fd, this.string.strtr( message, context ), null, 'utf8' ) )
+            .catch( error => {
+                Console.error({
+                    title: `Impossible to open/create ${file}.log at: ${this.logDirectoryPath}/${file}.log`,
+                    message: error,
+                    type: 'error'
+                })
             })
-        })
     }
 
     /**
@@ -46,15 +45,6 @@ export default class LogWriter extends Component {
      */
     get logFileManager() {
         return this._logFileManager
-    }
-
-    /**
-     * get console instance
-     *
-     * @returns {Console}
-     */
-    get cli() {
-        return this._cli
     }
 
     /**

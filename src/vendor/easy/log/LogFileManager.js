@@ -1,12 +1,12 @@
 import fs           from 'fs'
 import path         from 'path'
-import Component    from './../core/Component'
+import Injectable   from './../core/Injectable'
 
 /**
  * @class LogFileManager
- * @extends Component
+ * @extends Injectable
  */
-export default class LogFileManager extends Component {
+export default class LogFileManager extends Injectable {
     /**
      * @constructor
      */

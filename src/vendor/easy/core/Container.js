@@ -1,7 +1,10 @@
-import fs                   from 'fs'
-import path                 from 'path'
-import servicesMapping      from './../../../config/services'
-import librariesMapping     from './../../../config/lib'
+import fs           from 'fs'
+import path         from 'path'
+import Console      from './Console'
+import ConfigLoader from './ConfigLoader'
+
+const servicesMapping   = ConfigLoader.loadFromGlobal( 'services' )
+const librariesMapping  = ConfigLoader.loadFromGlobal( 'lib' )
 
 /**
  * @class Container
@@ -17,17 +20,15 @@ export default class Container {
         /*
          * Dependencies shared
          */
-        this._componentsLoaded      = {}
-        this._librariesLoaded       = {}
-        this._shared                = {}
+        this._componentsLoaded  = {}
+        this._librariesLoaded   = {}
+        this._shared            = {}
 
         this._servicesDirectoryPath = this._kernel.path.services
         this._librariesDirectoryPath = this._kernel.path.lib
 
         this._componentsMapping = {
             'bundlemanager': `${this._kernel.path.vendor.easy}/core/BundleManager`,
-            'console': `${this._kernel.path.vendor.easy}/core/Console`,
-            'factory': `${this._kernel.path.vendor.easy}/core/Factory`,
             'router': `${this._kernel.path.vendor.easy}/core/Router`,
             'database': `${this._kernel.path.vendor.easy}/database/Database`,
             'entitymanager': `${this._kernel.path.vendor.easy}/database/EntityManager`,
@@ -135,11 +136,6 @@ export default class Container {
     isComponentMapped( name ) {
         return this.componentsMapping.hasOwnProperty( name )
     }
-
-    /*
-     * Services
-     */
-
 
     /**
      * isServiceMapped - check if service is mapped
@@ -251,7 +247,7 @@ export default class Container {
                     throw new Error()
                 }
             } catch ( error ) {
-                this.getComponent( 'Console' ).error({
+                Console.error({
                     title: "Impossible to call service",
                     message: `Service ${name} not found, path: ${path.resolve( serviceFile )}\n${error}`,
                     type: 'error',
@@ -262,10 +258,6 @@ export default class Container {
             return undefined
         }
     }
-
-    /*
-     * Libraries
-     */
 
     /**
      * isLibraryMapped - check if library is mapped
@@ -290,7 +282,7 @@ export default class Container {
     /**
      * reloadLibrary - reload a new instance of the service in the cache
      *
-     * @param  {string} name description
+     * @param  {string} name
      */
     reloadLibrary( name ) {
         if ( this.isLibraryMapped( name ) && this.isLibraryLoaded( name ) ) {
@@ -320,7 +312,7 @@ export default class Container {
 
             return this.librariesLoaded[ name ]
         } else {
-            this.getComponent( 'Console' ).error({
+            Console.error({
                 title: "Impossible to call library",
                 message: `Library ${name} not found, path: ${path.resolve( `${this.librariesMapping[ name ]}.js` )}`,
                 type: 'error',

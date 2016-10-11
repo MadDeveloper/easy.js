@@ -1,4 +1,4 @@
-import Component        from './Component'
+import Injectable       from './Injectable'
 import Authentication	from './../authentication/Authentication'
 import Authorization    from './../authentication/Authorization'
 import ConfigLoader     from './ConfigLoader'
@@ -6,9 +6,9 @@ import { find }    		from 'lodash'
 
 /**
  * @class Router
- * @extends Component
+ * @extends Injectable
  */
-export default class Router extends Component {
+export default class Router extends Injectable {
     /**
      * @constructor
      */
@@ -17,7 +17,7 @@ export default class Router extends Component {
 
         this._scope       = null
 		this._container   = container
-        this._config      = ConfigLoader.loadFromGlobal( 'routing' )
+        this._config      = ConfigLoader.loadFromGlobal( 'routes' )
     }
 
 	/**
@@ -62,7 +62,7 @@ export default class Router extends Component {
 	    /*
 	     * Bundles routes definitions
 	     */
-	    bundleManager.getBundlesDefinitionRouting( router )
+	    bundleManager.getBundlesRoutes( router )
 
 	    /*
 	     * Final middleware: No route found
@@ -95,7 +95,7 @@ export default class Router extends Component {
     }
 
     /**
-     * get - routing config
+     * get - routes config
      *
      * @returns {Array}
      */

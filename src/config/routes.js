@@ -7,6 +7,6 @@ export default {
      */
 	public: [
 		'/login',
-		'/signup'
+		'/signup',
 	]
 }

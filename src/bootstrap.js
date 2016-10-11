@@ -1,18 +1,19 @@
-import fs                   from 'fs'
-import express              from 'express'
-import bodyParser           from 'body-parser'
-import morgan               from 'morgan'
-import helmet               from 'helmet'
-import cors                 from 'cors'
-import compression          from 'compression'
-import numeral              from 'numeral'
-import { indexOf }          from 'lodash'
-import minimist             from 'minimist'
-import passport             from 'passport'
-import Kernel               from './vendor/easy/core/Kernel'
-import Polyfills            from './vendor/easy/core/Polyfills'
-import config               from './config/config'
-import bundlesEnabled       from './config/bundles/enabled'
+import fs               from 'fs'
+import express          from 'express'
+import bodyParser       from 'body-parser'
+import morgan           from 'morgan'
+import helmet           from 'helmet'
+import cors             from 'cors'
+import compression      from 'compression'
+import numeral          from 'numeral'
+import { indexOf }      from 'lodash'
+import minimist         from 'minimist'
+import passport         from 'passport'
+import Kernel           from './vendor/easy/core/Kernel'
+import Console          from './vendor/easy/core/Console'
+import Polyfills        from './vendor/easy/core/Polyfills'
+import config           from './config/config'
+import bundlesEnabled   from './config/bundles/enabled'
 
 const argv = minimist( process.argv.slice( 2 ) )
 
@@ -49,7 +50,6 @@ const app = express()
  */
 const kernel            = new Kernel().init( __dirname, config )
 const container         = kernel.container
-const cli               = container.getComponent( 'Console' )
 const database          = container.getComponent( 'Database' )
 const router            = container.getComponent( 'Router' )
 const bundleManager     = container.getComponent( 'BundleManager' )
@@ -73,7 +73,7 @@ router.scope = express.Router()
 /*
  * Load all bundles enabled
  */
-bundleManager.loadBundlesEnabledConfiguration( bundlesEnabled )
+bundleManager.loadBundlesEnabled()
 
 /*
  * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
@@ -129,7 +129,7 @@ app.use( ( req, res, next ) => {
 /*
  * Trace everything that happens on the server
  */
-if ( 'l' === argv._[ 0 ] || 'log' === argv._[ 0 ] || argv.log ) {
+if ( config.app.log ) {
     logFileManager.openLogFileSync( 'traffic' )
     app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${__dirname}/../logs/traffic.log`, { flags: 'a' } ) } ) )
 }
@@ -154,7 +154,7 @@ app.use( ( req, res, next ) => {
     if ( global.gc ) {
         global.gc()
     } else if ( false === warnDisplayed ) {
-        cli.warn( "You should launch node server with npm start command in order to enable gc.\n" )
+        Console.warn( "You should launch node server with npm start command in order to enable gc.\n" )
         warnDisplayed = true
     }
 
@@ -168,11 +168,11 @@ if ( argv.memory ) {
     app.use( ( req, res, next ) => {
         const memory = process.memoryUsage()
 
-        cli.info( "---- Memory usage ----" )
-        cli.info( `RSS:        ${numeral( memory.rss ).format( 'bytes' )}` )
-        cli.info( `Heap total: ${numeral( memory.heapTotal ).format( 'bytes' )}` )
-        cli.info( `Heap used:  ${numeral( memory.heapUsed ).format( 'bytes' )}` )
-        cli.info( "----------------------" )
+        Console.info( "---- Memory usage ----" )
+        Console.info( `RSS:        ${numeral( memory.rss ).format( 'bytes' )}` )
+        Console.info( `Heap total: ${numeral( memory.heapTotal ).format( 'bytes' )}` )
+        Console.info( `Heap used:  ${numeral( memory.heapUsed ).format( 'bytes' )}` )
+        Console.info( "----------------------" )
 
         next()
     })

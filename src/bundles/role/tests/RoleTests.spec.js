@@ -21,9 +21,7 @@ class RoleTests extends Tests {
         /*
          * Local dependencies
          */
-        this._roleRoutingController = this._roleFactory.getController()
-        this._roleRepository        = this._roleFactory.getRepository()
-        this._role                  = this._roleFactory.getModel()
+
     }
 
     /*
@@ -70,25 +68,6 @@ class RoleTests extends Tests {
             // other tests ...
           })
         })
-    }
-
-    /*
-     * Getters and setters
-     */
-    get roleFactory() {
-        return this._roleFactory
-    }
-
-    get roleRoutingController() {
-        return this._roleRoutingController
-    }
-
-    get roleRepository() {
-        return this._roleRepository
-    }
-
-    get role() {
-        return this._role
     }
 }
 

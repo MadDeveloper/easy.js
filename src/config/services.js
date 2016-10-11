@@ -3,8 +3,6 @@ export default {
      * component.* can be used in dependencies to inject easy component
 	 * List of all components availables:
 	 * bundlemanager
-	 * console
-	 * factory
 	 * router
 	 * database
 	 * entitymanager

@@ -1,4 +1,4 @@
-import Component from './../core/Component'
+import Injectable from './../core/Injectable'
 
 /**
  * Describes a logger instance
@@ -16,9 +16,9 @@ import Component from './../core/Component'
  * for the full specification.
  *
  * @class Logger
- * @extends Component
+ * @extends Injectable
  */
-export default class Logger extends Component {
+export default class Logger extends Injectable {
     /**
      * @constructor
      * @param  {Container} container

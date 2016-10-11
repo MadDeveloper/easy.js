@@ -1,49 +1,34 @@
+- revoir complètement le controller vendor (virer dans des services tiers la gestion des paramètres, etc.)
 - rename test as tests
-- regroup some config ?
+- regroup some config?
 - finir les tests
-
-- changer les export const ... = en export default
-
-- mettre les confs de dev/prod dans config app
-
 - revoir la partie database dans config
-
 - custom middleware pour gérer l'auth (via facebook)
-
-- revoir les méthodes controlleurs (isRequestWellParameterized, doesRequiredElementExists) et migrer authorize à une entité tiers (easy ou pas ?)
-
+- revoir les méthodes controlleurs (isRequestWellParameterized, doesRequiredElementExists)
+- migrer authorize du controller à une entité tiers (easy ou pas ?)
+- voir pour faciliter le passage de Request et Response aux controllers
+- changer les paths des fichiers test dans kernel
 - REDIGER LA DOC
 
 
 --- LATER ---
 
 - pouvoir reset le skeleton (dans bundles et test)
-
 - appliquer le logger aux endroits utiles
-
 - faire les interfaces easy et adapter le code (typé)
-
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
 tout lier en promise pour les patchs
-
 - revoir le système de droit, il faut sync les roles, un meilleur système de gestion, lier avec la db
-
 - bin permettant de sync roles from db into config file, and reverse
-
 - créer une classe CacheManager ? dans laquelle on peut déclarer des namespaces (entitymanager par exemple) et y travailler dedans avec des méthodes
 génériques
-
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
-
 - ConfigLoader dans vendor
-
 - créer des sous-container permettant d'avoir un rôle définit : Container services, container lib, container components, etc. et le tout supervisé
   par un container parent.
-
 - créer des sous-authentication class pour gérer chaque cas d'auth : GoogleAuthentication, FacebookAuthentication, Local, Twitter, Github, etc.
 
 ---  MAYBE ---
 
 - ? Utiliser CarminteJS (cross-db ORM)
-
 - translate project to ts ?

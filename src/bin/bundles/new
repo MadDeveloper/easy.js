@@ -1,15 +1,16 @@
 #!/usr/bin/env node
-import fs                                   from 'fs'
-import walk                                 from 'walk'
-import path                                 from 'path'
-import minimist                             from 'minimist'
-import { question }                         from 'readline-sync'
-import { indexOf }                          from 'lodash'
-import { kernel, bundleManager, container } from '~/bootstrap'
+import fs               from 'fs'
+import walk             from 'walk'
+import path             from 'path'
+import minimist         from 'minimist'
+import { question }     from 'readline-sync'
+import { indexOf }      from 'lodash'
+import Console          from '~/vendor/easy/core/Console'
+import { kernel,
+         bundleManager,
+         container }    from '~/bootstrap'
 
-const argv = minimist( process.argv.slice( 2 ) )
-
-const cli                   = container.getComponent( 'Console' )
+const argv                  = minimist( process.argv.slice( 2 ) )
 const schemaDatabaseService = container.getService( 'database.schema' )
 const stringLibrary         = container.getLibrary( 'string' )
 
@@ -41,7 +42,7 @@ if ( nameBundleFromArgv.length > 0 ) {
      */
     fs.lstat( `${bundlesPath}/${nameBundleDecapitalized}`, ( err, stats ) => {
         if ( !err && stats.isDirectory() ) {
-            cli.error({
+            Console.error({
                 title: "Impossible to create bundle",
                 message: `${nameBundleCapitalized} bundle already exists.`,
                 consequence: "Creation aborted.",
@@ -58,7 +59,7 @@ if ( nameBundleFromArgv.length > 0 ) {
          */
         fs.lstat( skeletonBundlePath, ( err, stats ) => {
             if ( err || !stats.isDirectory() ) {
-                cli.error({
+                Console.error({
                     title: "Impossible to create bundle",
                     message: "Skeleton bundle isn't defined.",
                     consequence: "Creation aborted.",
@@ -92,7 +93,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForTableName() {
-        cli.line()
+        Console.line()
 
         const defaultTableName  = `${stringLibrary.asSnakeCase( nameBundleDecapitalized )}s`
         const answerTableName   = stringLibrary.asSnakeCase( question( `Table name (default: ${defaultTableName}): ` ) )
@@ -103,7 +104,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function askForProperties() {
-        cli.line()
+        Console.line()
 
         /*
          * We ask for properties
@@ -134,7 +135,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
                 askForProperties()
             } else {
-                cli.error({
+                Console.error({
                     title: "Column type not valid",
                     message: `Column type can be: ${availablesColumnType.join( ', ' )}`
                 })
@@ -211,7 +212,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                          * Wrong reference
                          */
                         delete property.unsigned
-                        cli.error({
+                        Console.error({
                             title: "Wrong reference",
                             message: `Reference -> ${answerReference} is not a valid reference.`
                         })
@@ -340,7 +341,7 @@ if ( nameBundleFromArgv.length > 0 ) {
             updateSchema()
         })
         .catch( error => {
-            cli.error({
+            Console.error({
                 title: "Error when creating table",
                 message: error,
                 consequence: "Bundle creation aborted.",
@@ -374,7 +375,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         })
 
         function errorEditingSchema( error ) {
-            cli.error({
+            Console.error({
                 title: "Impossible to update schema",
                 message: `Error when editing schema.js file: ${error}`,
                 consequence: "Bundle creation aborted.",
@@ -389,7 +390,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                 if ( !error & stat.isFile() ) {
                     resolve()
                 } else {
-                    cli.error({
+                    Console.error({
                         title: "Impossible to update schema",
                         message: `schema.js not found at: ${pathDatabaseSchema}`,
                         consequence: "Bundle creation aborted.",
@@ -406,7 +407,7 @@ if ( nameBundleFromArgv.length > 0 ) {
          */
         fs.mkdir( bundleCreatingPath, err => {
             if ( err ) {
-                cli.error({
+                Console.error({
                     title: "Impossible to create bundle",
                     message: "Error when trying create bundle directory.",
                     consequence: "Creation aborted.",
@@ -414,12 +415,12 @@ if ( nameBundleFromArgv.length > 0 ) {
                 })
             } else {
                 fs.chmodSync( bundleCreatingPath, parseInt( 777, 8 ) )
-                registerBundleRouting()
+                registerBundleRoutes()
             }
         })
     }
 
-    function registerBundleRouting() {
+    function registerBundleRoutes() {
         const answerRegisterRouting = question( 'Do you want to expose bundle routes? (y/n) ' ).trim().toLowerCase()
 
         if ( -1 !== indexOf( positiveAnswers, answerRegisterRouting ) ) {
@@ -444,7 +445,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         }
 
         function errorEditingBundlesDefinition( error ) {
-            cli.error({
+            Console.error({
                 title: "Impossible to expose bundle routing",
                 message: `Error when editing ~/src/bundles/enabled.js file: ${error}`,
                 consequence: "Bundle creation incomplete.",
@@ -476,7 +477,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
                 fs.mkdir( `${bundleCreatingPath}/${newDirName}`, err => {
                     if ( err ) {
-                        cli.error({
+                        Console.error({
                             title: "Impossible to create bundle",
                             message: `Error when trying create bundle sub-directory <${newDirName}>.`,
                             consequence: "Creation aborted.",
@@ -510,7 +511,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
                 next()
             } catch( error ) {
-                cli.error({
+                Console.error({
                     title: "Impossible to create bundle",
                     message: `Error: ${JSON.stringify( error )}`,
                     consequence: "Creation aborted.",
@@ -535,7 +536,7 @@ if ( nameBundleFromArgv.length > 0 ) {
                     exitProgram()
                 })
                 .catch( error => {
-                    cli.error({
+                    Console.error({
                         title: "Error when creating bundle tests file",
                         message: error,
                         consequence: "Bundle tests file creation aborted, however previous operations are completed.",
@@ -594,11 +595,11 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function exitProgram() {
-        cli.success( `\nBundle ${nameBundleCapitalized} created.\nYou should (re)start build command with "npm run build".\n`, true )
-        cli.line()
+        Console.success( `\nBundle ${nameBundleCapitalized} created.\nYou should (re)start build command with "npm run build".\n`, true )
+        Console.line()
     }
 
 } else {
-    cli.info( "\nCommand: \n[node] createBundle nameOfBundle\n" )
+    Console.info( "\nCommand: \n[node] createBundle nameOfBundle\n" )
     process.exit()
 }

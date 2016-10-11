@@ -1,12 +1,17 @@
 #!/usr/bin/env node
-import execsql          					from 'execsql'
-import minimist     						from 'minimist'
-import schema								from '~/config/database/schema'
-import sequence 							from 'when/sequence'
-import { indexOf, has, keys, map }			from 'lodash'
-import { bundleManager, config, container }	from '~/bootstrap'
+import execsql          from 'execsql'
+import minimist     	from 'minimist'
+import schema			from '~/config/database/schema'
+import sequence 		from 'when/sequence'
+import Console          from '~/vendor/easy/core/Console'
+import { indexOf,
+		 has,
+		 keys,
+		 map }			from 'lodash'
+import { bundleManager,
+		 config,
+		 container }	from '~/bootstrap'
 
-const cli               	= container.getComponent( 'Console' )
 const schemaDatabaseService	= container.getService( 'database.schema' )
 const knex					= schemaDatabaseService.knex
 
@@ -19,12 +24,10 @@ const dbConfig = {
 const titleError		= "Error when initializing roles and users"
 const consequenceError	= "Initialization aborted."
 
-migrate()
-.then( startup )
-.catch( raiseError )
+migrate().then( startup ).catch( raiseError )
 
 function raiseError( error ) {
-	cli.error({
+	Console.error({
 		title: titleError,
 		message: error,
 		consequence: consequenceError,
@@ -67,49 +70,38 @@ function startup() {
 		}
 	}
 
-	knex.table( 'roles' ).insert( rolesToAppend.admin )
-	.then( () => knex.table( 'roles' ).insert( rolesToAppend.user ) )
-	.then( () => knex.table( 'users' ).insert( usersToAppend.admin ) )
-	.then( () => knex.table( 'users' ).insert( usersToAppend.john ) )
-	.then( () => cli.success( 'Database initialized.', true ) )
+	knex.table( 'roles' )
+		.insert( rolesToAppend.admin )
+		.then( () => knex.table( 'roles' ).insert( rolesToAppend.user ) )
+		.then( () => knex.table( 'users' ).insert( usersToAppend.admin ) )
+		.then( () => knex.table( 'users' ).insert( usersToAppend.john ) )
+		.then( () => Console.success( 'Database initialized.', true ) )
 }
 
 function dropTables() {
-    let tables = []
-    let tableNames = keys( schema )
+    let tables 		= []
+    let tableNames	= keys( schema )
 
     // we need to reverse tables schema, to delete in first table which contains fk and not the parents, otherwise error will occur because of fk.
     tableNames.reverse()
-    tables = map( tableNames, tableName => {
-      return function () {
-        return schemaDatabaseService.dropTable( tableName )
-      }
-    })
+    tables = map( tableNames, tableName => () => schemaDatabaseService.dropTable( tableName ) )
 
     return sequence( tables )
 }
 
 function createTables () {
-  let tables = []
-  const tableNames = keys( schema )
+	let tables = []
+	const tableNames = keys( schema )
 
-  tables = map( tableNames, tableName => {
-    return () => {
-      return schemaDatabaseService.createTable( tableName, schema[ tableName ] )
-    }
-  })
+	tables = map( tableNames, tableName => () => schemaDatabaseService.createTable( tableName, schema[ tableName ] ) )
 
   return sequence( tables )
 }
 
 function migrate( standalone ) {
-	return new Promise( ( resolve, reject ) => {
+	return
 		dropTables()
-		.then( createTables )
-		.then( () => {
-			cli.success( "Schema updated." )
-			resolve()
-		})
-		.catch( reject )
-	})
+			.then( createTables )
+			.then( () => Console.success( "Schema updated." ) )
+			.catch( reject )
 }

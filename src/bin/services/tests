@@ -1,15 +1,17 @@
 #!/usr/bin/env node
-import fs                                   from 'fs'
-import walk                                 from 'walk'
-import Mocha                                from 'mocha'
-import path                                 from 'path'
-import minimist                             from 'minimist'
-import { kernel, bundleManager, container } from '~/bootstrap'
+import fs               from 'fs'
+import walk             from 'walk'
+import Mocha            from 'mocha'
+import path             from 'path'
+import minimist         from 'minimist'
+import Console          from '~/vendor/easy/core/Console'
+import { kernel,
+         bundleManager,
+         container }    from '~/bootstrap'
 
 let argv = minimist( process.argv.slice( 2 ) )
 
-const cli                       = container.getComponent( 'Console' )
-const servicesTestsDirectory    = kernel.path.test.services
+const servicesTestsDirectory = kernel.path.test.services
 
 /*
  * Instantiate a Mocha instance
@@ -29,9 +31,7 @@ walker.on( "names", ( root, nodeNamesArray ) => {
     })
 })
 
-walker.on( "directories", ( root, dirStatsArray, next ) => {
-    next()
-})
+walker.on( "directories", ( root, dirStatsArray, next ) => next() )
 
  walker.on( "file", ( root, fileStats, next ) => {
     mocha.addFile(
@@ -41,9 +41,7 @@ walker.on( "directories", ( root, dirStatsArray, next ) => {
     next()
 })
 
-walker.on( "errors", ( root, nodeStatsArray, next ) => {
-    next()
-})
+walker.on( "errors", ( root, nodeStatsArray, next ) => next() )
 
 walker.on( "end", () => {
     /*
@@ -51,8 +49,8 @@ walker.on( "end", () => {
      */
     mocha.run( failures => {
         if ( failures ) {
-            cli.warn( `${failures} failures occurs during tests.` )
-            cli.line()
+            Console.warn( `${failures} failures occurs during tests.` )
+            Console.line()
         }
         process.exit()
     })

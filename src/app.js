@@ -3,9 +3,9 @@ import http                         from 'http'
 import net                          from 'net'
 import minimist                     from 'minimist'
 import { app, config, container }   from './bootstrap'
+import Console                      from './vendor/easy/core/Console'
 
-const argv  = minimist( process.argv.slice( 2 ) )
-const cli   = container.getComponent( 'Console' )
+const argv = minimist( process.argv.slice( 2 ) )
 
 let server      = null
 let port        = 0
@@ -53,20 +53,20 @@ freePort( port )
      * Everything is ok, starting server
      */
     server.listen( port, () => {
-        cli.info( "-----------------------------" )
-        cli.info( "    Server listening..." )
-        cli.info( "-----------------------------" )
-        cli.info( `    ${protocol}://${config.server.domain}:${port}` )
-        cli.info( "-----------------------------" )
-        cli.info( `    Mode:   ${app.get( 'env' )}` )
-        cli.info( "-----------------------------" )
+        Console.info( "-----------------------------" )
+        Console.info( "    Server listening..." )
+        Console.info( "-----------------------------" )
+        Console.info( `    ${protocol}://${config.server.domain}:${port}` )
+        Console.info( "-----------------------------" )
+        Console.info( `    Mode:   ${app.get( 'env' )}` )
+        Console.info( "-----------------------------" )
     })
 })
 .catch( () => {
     /*
      * Port ${port} is used
      */
-    cli.error({
+    Console.error({
         title: 'Impossible to start server',
         message: `Port ${port} is already used or you have no rights to launch server (try as root)`,
         exit: 0

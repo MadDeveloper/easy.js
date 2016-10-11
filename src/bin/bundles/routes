@@ -1,12 +1,14 @@
 #!/usr/bin/env node
-import fs                                   from 'fs'
-import path                                 from 'path'
-import pad                                  from 'pad-right'
-import minimist                             from 'minimist'
-import { kernel, bundleManager, container } from '~/bootstrap'
+import fs               from 'fs'
+import path             from 'path'
+import pad              from 'pad-right'
+import minimist         from 'minimist'
+import Console          from '~/vendor/easy/core/Console'
+import { kernel,
+         bundleManager,
+         container }    from '~/bootstrap'
 
 const argv      = minimist( process.argv.slice( 2 ) )
-const cli       = container.getComponent( 'Console' )
 const router    = container.getComponent( 'Router' )
 const save      = argv.s || 's' === argv._[ 0 ] || argv.save || 'save' === argv._[ 0 ]
 
@@ -27,7 +29,7 @@ for ( let stack in routesStack ) {
                    if ( save ) {
                        routes += `${currentDisplayRoute}\n`
                    } else {
-                       cli.log( currentDisplayRoute )
+                       Console.log( currentDisplayRoute )
                    }
                }
            })
@@ -38,8 +40,8 @@ for ( let stack in routesStack ) {
 if ( save ) {
     const routesFilePath = path.resolve( `${kernel.path.root}/../routes.txt` )
     fs.writeFileSync( routesFilePath, routes, { encoding: 'utf8' } )
-    cli.success( `Routes saved into ${routesFilePath}` )
+    Console.success( `Routes saved into ${routesFilePath}` )
 }
 
-cli.line()
+Console.line()
 process.exit()

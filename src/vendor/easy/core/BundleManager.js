@@ -1,11 +1,12 @@
 import fs           from 'fs'
-import Component    from './Component'
+import Injectable   from './Injectable'
+import ConfigLoader from './ConfigLoader'
 
 /**
  * @class BundleManager
- * @extends Component
+ * @extends Injectable
  */
-export default class BundleManager extends Component {
+export default class BundleManager extends Injectable {
     /**
      * @constructor
      * @param  {Container} container
@@ -13,20 +14,16 @@ export default class BundleManager extends Component {
     constructor( container ) {
         super()
 
-        this._container         = container
-        this._bundlesPath       = container.kernel.path.bundles
-        this._bundlesDefinition = []
+        this._container     = container
+        this._bundlesPath   = container.kernel.path.bundles
+        this._bundles       = []
     }
 
     /**
-     * loadBundlesEnabledConfiguration - load all bundles enabled into ~/config/bundles/enabled.js
-     *
-     * @param {Array} bundlesEnabled
+     * loadBundlesEnabled - load all bundles enabled into ~/config/bundles.js
      */
-    loadBundlesEnabledConfiguration( bundlesEnabled ) {
-        bundlesEnabled.forEach( element => {
-            this.enable( element )
-        })
+    loadBundlesEnabled() {
+        ConfigLoader.loadFromGlobal( 'bundles' ).forEach( element => this.enable( element ) )
     }
 
     /**
@@ -38,37 +35,37 @@ export default class BundleManager extends Component {
         const bundleDirPath = `${this.bundlesPath}/${bundle}`
 
         if ( fs.statSync( bundleDirPath ).isDirectory() ) {
-            this.bundlesDefinition.push( bundle )
+            this.bundles.push( bundle )
         }
     }
 
     /**
-     * getRouting - retrieve defined bundle routing
+     * getBundleRoutes - retrieve defined bundle routes
      *
      * @param  {string} bundle
      * @param  {express.Router} router
      */
-    getRouting( bundle, router ) {
-        const routingPath = `${this.bundlesPath}/${bundle}/index.js`
+    getBundleRoutes( bundle, router ) {
+        const routesPath = `${this.bundlesPath}/${bundle}/index.js`
 
-        if ( fs.statSync( routingPath ).isFile() ) {
-            const routingBundle = require( routingPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
-            routingBundle( router )
+        if ( fs.statSync( routesPath ).isFile() ) {
+            const bundleRoutes = require( routesPath ).default /* .default is needed to patch babel exports.default build, require doesn't work, import does */
+            bundleRoutes( router )
         }
     }
 
 
     /**
-     * getBundlesDefinitionRouting - will register bundles routing into express router stack
+     * getBundlesRoutes - will register bundles routes into express router stack
      *
      * @param  {express.Router} router
      */
-    getBundlesDefinitionRouting( router ) {
+    getBundlesRoutes( router ) {
         let bundle
 
-        for ( var i in this.bundlesDefinition ) {
-            bundle = this.bundlesDefinition[ i ]
-            this.getRouting( bundle, router )
+        for ( var i in this.bundles ) {
+            bundle = this.bundles[ i ]
+            this.getBundleRoutes( bundle, router )
         }
     }
 
@@ -86,7 +83,7 @@ export default class BundleManager extends Component {
      *
      * @returns {Array}
      */
-    get bundlesDefinition() {
-        return this._bundlesDefinition
+    get bundles() {
+        return this._bundles
     }
 }

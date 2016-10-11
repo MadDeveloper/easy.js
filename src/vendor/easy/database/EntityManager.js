@@ -1,10 +1,10 @@
-import Component from './../core/Component'
+import Injectable from './../core/Injectable'
 
 /**
  * @class EntityManager
- * @extends Component
+ * @extends Injectable
  */
-export default class EntityManager extends Component {
+export default class EntityManager extends Injectable {
     /**
      * @constructor
      * @param  {Container} container

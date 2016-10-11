@@ -8,7 +8,6 @@ export default class Tests {
      */
     constructor() {
         this._container     = global.easy.container
-        this._factory       = this.container.getComponent( 'Factory' )
         this._entityManager = this.container.getComponent( 'EntityManager' )
         this._request       = this.container.getComponent( 'Request' )
         this._response      = this.container.getComponent( 'Response' )
@@ -21,15 +20,6 @@ export default class Tests {
      * run - automatically called
      */
     run() {}
-
-    /**
-     * get - factory instance
-     *
-     * @returns {Factory}
-     */
-    get factory() {
-        return this._factory
-    }
 
     /**
      * get - entity manager instance

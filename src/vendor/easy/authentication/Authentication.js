@@ -37,7 +37,7 @@ export default class Authentication {
 			this.config.route,
 			this._passport.authenticate( 'local', { session: false }),
 			( req, res ) => {
-				const controller = this.buildController( req, res )
+				const controller = Controller.buildAnonymous( req, res )
 				controller.response.ok({
 					user: req.user.user,
 					token: req.user.token
@@ -64,17 +64,6 @@ export default class Authentication {
 				})
 				.catch( error => done( error ) )
 		}))
-	}
-
-	/**
-	 * buildController - build anonymous controller
-	 *
-	 * @param  {express.Request} req
-	 * @param  {express.Response} res
-	 * @returns {Controller}
-	 */
-	buildController( req, res ) {
-		return new Controller( req, res )
 	}
 
 	/**
