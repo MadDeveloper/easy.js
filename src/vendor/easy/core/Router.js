@@ -87,7 +87,7 @@ export default class Router extends Configurable {
      * @returns {type}        description
      */
     parseBundleRoutes( bundle ) {
-        const controller = new bundle.controller( this.application.entityManager, this.application.container )
+        const controller = new bundle.controller( this.application.container )
 
         let routesConfig = {}, configValue = ''
 

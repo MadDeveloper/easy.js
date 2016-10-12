@@ -2,13 +2,9 @@
 - rename test as tests
 - regroup some config?
 - finir les tests
-- revoir la partie database dans config
 - custom middleware pour gérer l'auth (via facebook)
-- revoir les méthodes controlleurs (isRequestWellParameterized, doesRequiredElementExists)
-- migrer authorize du controller à une entité tiers (easy ou pas ?)
-- voir pour faciliter le passage de Request et Response aux controllers
 - changer les paths des fichiers test dans kernel
-- pouvoir avoir deux acls sur un patch d'une même route
+- pouvoir reset le skeleton
 - REDIGER LA DOC
 
 
@@ -19,17 +15,17 @@
 - faire les interfaces easy et adapter le code (typé)
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
 tout lier en promise pour les patchs
-- revoir le système de droit, il faut sync les roles, un meilleur système de gestion, lier avec la db
-- bin permettant de sync roles from db into config file, and reverse
-- créer une classe CacheManager ? dans laquelle on peut déclarer des namespaces (entitymanager par exemple) et y travailler dedans avec des méthodes
-génériques
+- ? bin permettant de sync roles from db into config file, and reverse
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
 - ConfigLoader dans vendor
 - créer des sous-container permettant d'avoir un rôle définit : Container services, container lib, container components, etc. et le tout supervisé
   par un container parent.
-- créer des sous-authentication class pour gérer chaque cas d'auth : GoogleAuthentication, FacebookAuthentication, Local, Twitter, Github, etc.
 - créer une classe Cache qui permet de mettre en cache pour n'importe quelle entité (possédant une clé de cache, par exemple la classe EntityManager
 aurait comme clé 'entitymanager', et pourra gérer son cache interne dans cette clé)
+- faire des snapshot du bundle Skeleton pour être restauré par la suite, les snapshots sont effectuées par le dev, la restoration à l'état initial reste
+toujours possible.
+
+
 
 ---  MAYBE ---
 

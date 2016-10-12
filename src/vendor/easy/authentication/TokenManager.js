@@ -39,6 +39,6 @@ export default class TokenManager {
 	 * @returns {Object}
 	 */
 	static getConfig() {
-		return ConfigLoader.loadFromGlobal( 'config' ).jwt
+		return ConfigLoader.loadFromGlobal( 'app' ).jwt
 	}
 }

@@ -1,4 +1,4 @@
-import Injectable from './../core/Injectable'
+import Injectable from './../interfaces/Injectable'
 
 /**
  * Describes a logger instance

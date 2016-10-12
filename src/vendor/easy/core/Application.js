@@ -39,13 +39,9 @@ export default class Application extends Configurable {
         Polyfills.load()
 
         this.kernel         = kernel
-        this.container      = new Container( kernel.path )
+        this.container      = new Container( this, kernel.path )
         this.config         = ConfigLoader.loadFromGlobal( 'app' )
         this.app            = express()
-        this.database       = new Database()
-        this.router         = new Router()
-        this.bundleManager  = new BundleManager()
-        this.entityManager  = new EntityManager()
     }
 
     /**
@@ -67,40 +63,20 @@ export default class Application extends Configurable {
          * Load container components
          */
         this.container.loadComponents()
+        this.database       = this.container.getComponent( 'database' )
+        this.router         = this.container.getComponent( 'router' )
+        this.bundleManager  = this.container.getComponent( 'bundlemanager' )
+        this.entityManager  = this.container.getComponent( 'entitymanager' )
 
         /*
-         * Configure log file manager
+         * Configure components
          */
         this.logFileManager = this.container.getComponent( 'LogFileManager' )
-
-        /*
-         * Usefull to store app data with namespace into the request
-         */
         this.appName = this.config.app.name
-
-        /*
-         * Configure database
-         */
         this.database.configure( this.kernel.path.config )
-
-        /*
-         * Configure entity manager
-         */
         this.entityManager.configure( this.kernel.path.bundles, this.database )
-
-        /*
-         * Configure bundle manager
-         */
         this.bundleManager.configure( this.kernel.path.bundles )
-
-        /*
-         * Configure Router
-         */
         this.router.configure( this, express.Router() )
-
-        /*
-         * Load all bundles enabled
-         */
         this.bundleManager.loadBundles()
     }
 

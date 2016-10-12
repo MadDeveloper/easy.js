@@ -13,7 +13,7 @@ export const routes = {
     },
 
     '/roles/:role_id': {
-        get: 'getRoles',
+        get: 'getRole',
         put: 'updateRole',
         delete: 'deleteRole',
         security: {

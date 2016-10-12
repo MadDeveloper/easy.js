@@ -1,6 +1,6 @@
 import fs           from 'fs'
 import path         from 'path'
-import Injectable   from './../core/Injectable'
+import Injectable   from './../interfaces/Injectable'
 
 /**
  * @class LogFileManager

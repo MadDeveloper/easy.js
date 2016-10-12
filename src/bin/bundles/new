@@ -6,13 +6,15 @@ import minimist         from 'minimist'
 import { question }     from 'readline-sync'
 import { indexOf }      from 'lodash'
 import Console          from '~/vendor/easy/core/Console'
+import { cleanSpaces,
+         asSnakeCase,
+         cleanAccents } from '~/vendor/easy/lib/string'
 import { kernel,
          bundleManager,
          container }    from '~/bootstrap'
 
 const argv                  = minimist( process.argv.slice( 2 ) )
 const schemaDatabaseService = container.getService( 'database.schema' )
-const stringLibrary         = container.getLibrary( 'string' )
 
 const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
 
@@ -25,7 +27,7 @@ if ( nameBundleFromArgv.length > 0 ) {
     const skeletonBundlePath    = `${bundlesPath}/skeleton`
     const bundlesDefinitionPath = `${kernel.path.root}/../src/config/bundles/enabled.js`
 
-    let nameBundle              = stringLibrary.cleanSpaces( nameBundleFromArgv )
+    let nameBundle              = cleanSpaces( nameBundleFromArgv )
     let nameBundleCapitalized   = nameBundle.capitalizeFirstLetter()
     let nameBundleDecapitalized = nameBundle.decapitalizeFirstLetter()
     let bundleCreatingPath      = `${bundlesPath}/${nameBundleDecapitalized}`
@@ -95,8 +97,8 @@ if ( nameBundleFromArgv.length > 0 ) {
     function askForTableName() {
         Console.line()
 
-        const defaultTableName  = `${stringLibrary.asSnakeCase( nameBundleDecapitalized )}s`
-        const answerTableName   = stringLibrary.asSnakeCase( question( `Table name (default: ${defaultTableName}): ` ) )
+        const defaultTableName  = `${asSnakeCase( nameBundleDecapitalized )}s`
+        const answerTableName   = asSnakeCase( question( `Table name (default: ${defaultTableName}): ` ) )
 
         tableName = ( answerTableName.length > 0 ) ? answerTableName : defaultTableName
 
@@ -109,7 +111,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         /*
          * We ask for properties
          */
-        const columnName        = stringLibrary.asSnakeCase( question( 'Column name (let empty if the table is complete): ' ) )
+        const columnName        = asSnakeCase( question( 'Column name (let empty if the table is complete): ' ) )
         const propertiesLength  = Object.keys( properties ).length
 
         if ( columnName.length === 0 && propertiesLength === 0 ) {
@@ -117,7 +119,7 @@ if ( nameBundleFromArgv.length > 0 ) {
         } else if ( columnName.length === 0 && propertiesLength > 0 ) {
             createTable()
         } else {
-            const columnType = stringLibrary.cleanAccents( question( `Column type: (availables: ${availablesColumnType.join( ', ' )}): ` ).toLowerCase().trim() )
+            const columnType = cleanAccents( question( `Column type: (availables: ${availablesColumnType.join( ', ' )}): ` ).toLowerCase().trim() )
 
             if ( indexOf( availablesColumnType, columnType ) !== -1 ) {
                 /*

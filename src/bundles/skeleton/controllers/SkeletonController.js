@@ -5,7 +5,7 @@ import Controller   from '~/vendor/easy/core/Controller'
  * @class SkeletonController
  * @extends Controller
  */
-export default class SkeletonController extends Controller {
+export class SkeletonController extends Controller {
 
     /**
      * isRequestWellParameterized - verify if request contains valid params
@@ -21,24 +21,34 @@ export default class SkeletonController extends Controller {
     /**
      * skeletonExists - check if skeleton exists (with id)
      *
-     * @param {function} next
+     * @param  {Request} request
+     * @param  {Response} response
+     * @returns  {Promise}
      */
-    skeletonExists( next ) {
-        const requireOptions = {
-            requireBy: this.request.getRouteParameter( 'skeleton_id' ),
-            options: {}
-        }
-
-        this.doesRequiredElementExists( 'skeleton', requireOptions )
-        .then( skeleton => {
-            this.request.store( 'skeleton', skeleton )
-            next()
-        })
-        .catch( () => this.response.notFound() )
+    skeletonExists( request, response ) {
+        return this.entityManager
+            .getRepository( 'skeleton' )
+            .find( request.getRouteParameter( 'skeleton_id' ) )
+            .then( skeleton => {
+                if ( skeleton ) {
+                    request.store( 'skeleton', skeleton )
+                    return Promise.resolve()
+                } else {
+                    response.notFound()
+                    return Promise.reject()
+                }
+            })
+            .catch( error => {
+                response.badRequest()
+                return Promise.reject()
+            })
     }
 
     /**
      * getSkeletons - get all skeletons
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
     getSkeletons( request, response ) {
         this.entityManager
@@ -50,6 +60,9 @@ export default class SkeletonController extends Controller {
 
     /**
      * createSkeleton - create new skeleton
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
     createSkeleton( request, response ) {
         if ( this.isRequestWellParameterized() ) {
@@ -65,6 +78,9 @@ export default class SkeletonController extends Controller {
 
     /**
      * getSkeleton - get skeleton by id
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
     getSkeleton( request, response ) {
         response.ok( request.retrieve( 'skeleton' ) )
@@ -72,6 +88,9 @@ export default class SkeletonController extends Controller {
 
     /**
      * updateSkeleton - update skeleton by id
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
     updateSkeleton( request, response ) {
         if ( this.isRequestWellParameterized() ) {
@@ -87,6 +106,9 @@ export default class SkeletonController extends Controller {
 
     /**
      * patchSkeleton - patch skeleton by id (following RFC)
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
     patchSkeleton( request, response ) {
         if ( this.isPatchRequestWellParameterized() ) {
@@ -136,6 +158,9 @@ export default class SkeletonController extends Controller {
 
     /**
      * deleteSkeleton - delete skeleton by id
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
     deleteSkeleton( request, response ) {
         this.entityManager

@@ -22,21 +22,25 @@ export class RoleController extends Controller {
      *
      * @param  {Request} request
      * @param  {Response} response
-     * @returns {Promise}
+     * @param  {Function} next
      */
     roleExists( request, response ) {
-        return Promise.resolve()
-        // const requireOptions = {
-        //     requireBy: this.request.getRouteParameter( 'role_id' ),
-        //     options: {}
-        // }
-        //
-        // return this.doesRequiredElementExists( 'role', requireOptions )
-        //     .then( role => {
-        //         request.store( 'role', role )
-        //         next()
-        //     })
-        //     .catch( () => this.response.notFound() )
+        return this.entityManager
+            .getRepository( 'role' )
+            .find( request.getRouteParameter( 'role_id' ) )
+            .then( role => {
+                if ( role ) {
+                    request.store( 'role', role )
+                    return Promise.resolve()
+                } else {
+                    response.notFound()
+                    return Promise.reject()
+                }
+            })
+            .catch( error => {
+                response.badRequest()
+                return Promise.reject()
+            })
     }
 
     /**
@@ -78,7 +82,7 @@ export class RoleController extends Controller {
      * @param  {Response} response
      */
     getRole( request, response ) {
-        response.ok( request.find( 'role' ) )
+        response.ok( request.retrieve( 'role' ) )
     }
 
     /**
@@ -91,7 +95,7 @@ export class RoleController extends Controller {
         if ( this.isRequestWellParameterized() ) {
             this.entityManager
                 .getRepository( 'role' )
-                .save( request.find( 'role' ), request.getBody() )
+                .save( request.retrieve( 'role' ), request.getBody() )
                 .then( role => response.ok( role ) )
                 .catch( error => response.internalServerError( error ) )
         } else {
@@ -107,7 +111,7 @@ export class RoleController extends Controller {
      */
     deleteRole( request, response ) {
         this.roleRepository
-            .delete( request.find( 'role' ) )
+            .delete( request.retrieve( 'role' ) )
             .then( () => response.noContent() )
             .catch( error => response.internalServerError( error ) )
     }

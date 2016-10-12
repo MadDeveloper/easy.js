@@ -7,9 +7,10 @@ export default class Controller {
     /**
      * @constructor
      */
-    constructor( entityManager, container ) {
-        this._entityManager = entityManager
-        this._container     = container
+    constructor( container ) {
+        this.container      = container
+        this.entityManager  = container.getComponent( 'entitymanager' )
+        this.router         = container.getComponent( 'router' )
     }
 
     /**
@@ -51,16 +52,6 @@ export default class Controller {
     }
 
     /**
-     * isNumber - check if object is a number
-     *
-     * @param  {object} number
-     * @returns {boolean}
-     */
-    isNumber( number ) {
-        return typeof number === "number" || ( typeof number === 'string' && number.isNumber() )
-    }
-
-    /**
      * parsePatchParams - parse body from patch http request
      *
      * @returns {object}
@@ -72,7 +63,7 @@ export default class Controller {
     }
 
     /**
-     * isPatchRequestWellParameterized - check if patch request are correct
+     * isPatchRequestWellParameterized - check if patch request is correct
      *
      * @returns {boolean}
      */
@@ -81,63 +72,22 @@ export default class Controller {
     }
 
     /**
-     * doesRequiredElementExists - check if element exists and return it
+     * getComponent - description
      *
-     * @param  {string} element
-     * @param  {object} options
-     * @returns {Promise}
+     * @param  {type} component description
+     * @returns {type}           description
      */
-    doesRequiredElementExists( element, options ) {
-        return new Promise( ( resolve, reject ) => {
-            let requireBy       = null
-            let optionsFetch    = null
-            let respond         = true
-
-            if ( options instanceof Object && !Array.isArray( options ) ) {
-                requireBy       = options.requireBy
-                optionsFetch    = options.options
-                respond         = options.respond || respond
-
-                const elementRepository = this.entityManager.getRepository( element )
-
-                elementRepository.find( requireBy, optionsFetch )
-                .then( element => {
-                    if ( element ) {
-                        resolve( element )
-                    } else {
-                        if ( respond ) {
-                            this.response.notFound()
-                        }
-                        reject( "Element not found" )
-                    }
-                })
-                .catch( error => {
-                    if ( respond ) {
-                        this.response.internalServerError( error )
-                    }
-                    reject( error )
-                })
-            } else {
-                reject( 'Missing parameter "requireBy" in doesRequiredElementExists()' )
-            }
-        })
+    getComponent( component ) {
+        return this.container.getComponent( component )
     }
 
     /**
-     * get - container instance
+     * getService - description
      *
-     * @returns {Container}
+     * @param  {type} service description
+     * @returns {type}         description
      */
-    get container() {
-        return this._container
-    }
-
-    /**
-     * get - entity manager instance
-     *
-     * @returns {EntityManager}
-     */
-    get entityManager() {
-        return this._entityManager
+    getService( service ) {
+        return this.container.getService( service )
     }
 }

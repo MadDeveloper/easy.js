@@ -1,4 +1,4 @@
-import config from './../config'
+import config from './../app'
 
 export default function database( clearCache ) {
     const connector     = config.database.connector
@@ -8,5 +8,5 @@ export default function database( clearCache ) {
         delete require.cache[ require.resolve( connectorPath ) ]
     }
 
-    return require( connectorPath ).default 
+    return require( connectorPath ).default
 }

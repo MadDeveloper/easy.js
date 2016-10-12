@@ -1,40 +1,37 @@
 import { indexOf }  from 'lodash'
 import Controller   from '~/vendor/easy/core/Controller'
-import TokenManager from '~/vendor/easy/authentication/TokenManager'
 
 /**
- * @class UserController
+ * @class SkeletonController
  * @extends Controller
  */
-export class UserController extends Controller {
+export default class SkeletonController extends Controller {
+
     /**
-     * isRequestWellParameterized - verify if request contains valids params
+     * isRequestWellParameterized - verify if request contains valid params
      *
      * @returns {boolean}
      */
     isRequestWellParameterized() {
         return this.verifyParams([
-            { property: 'username', typeExpected: 'string' },
-            { property: 'email', typeExpected: 'string' },
-            { property: 'password', typeExpected: 'string' },
-            { property: 'role_id', typeExpected: 'number', optional: true }
+            { property: 'property', typeExpected: 'string' }
         ])
     }
 
     /**
-     * userExists
+     * skeletonExists - check if skeleton exists (with id)
      *
      * @param  {Request} request
      * @param  {Response} response
      * @returns  {Promise}
      */
-    userExists( request, response ) {
+    skeletonExists( request, response ) {
         return this.entityManager
-            .getRepository( 'user' )
-            .find( request.getRouteParameter( 'user_id' ) )
-            .then( user => {
-                if ( user ) {
-                    request.store( 'user', user )
+            .getRepository( 'skeleton' )
+            .find( request.getRouteParameter( 'skeleton_id' ) )
+            .then( skeleton => {
+                if ( skeleton ) {
+                    request.store( 'skeleton', skeleton )
                     return Promise.resolve()
                 } else {
                     response.notFound()
@@ -48,34 +45,31 @@ export class UserController extends Controller {
     }
 
     /**
-     * getUsers - get all users from specific role
+     * getSkeletons - get all skeletons
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    getUsers( request, response ) {
+    getSkeletons( request, response ) {
         this.entityManager
-            .getRepository( 'user' )
-            .findAll( request.retrieve( 'role' ) )
-            .then( users => response.ok( users ) )
+            .getRepository( 'skeleton' )
+            .findAll()
+            .then( skeletons => response.ok( skeletons ) )
             .catch( error => response.internalServerError( error ) )
     }
 
     /**
-     * createUser - create new user
+     * createSkeleton - create new skeleton
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    createUser( request, response ) {
+    createSkeleton( request, response ) {
         if ( this.isRequestWellParameterized() ) {
             this.entityManager
-                .getRepository( 'user' )
-                .save( new this.user(), request.getBody() )
-                .then( user => {
-                    user.unset( 'password' )
-                    response.created({ user: user.toJSON(), token: TokenManager.sign( user.toJSON() ) })
-                })
+                .getRepository( 'skeleton' )
+                .save( new this.skeleton(), request.getBody() )
+                .then( skeleton => response.created( skeleton ) )
                 .catch( error => response.internalServerError( error ) )
         } else {
             response.badRequest()
@@ -83,31 +77,27 @@ export class UserController extends Controller {
     }
 
     /**
-     * getUser - get user by id
+     * getSkeleton - get skeleton by id
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    getUser( request, response ) {
-        response.ok( request.retrieve( 'user' ) )
+    getSkeleton( request, response ) {
+        response.ok( request.retrieve( 'skeleton' ) )
     }
 
     /**
-     * updateUser - update user
+     * updateSkeleton - update skeleton by id
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    updateUser( request, response ) {
+    updateSkeleton( request, response ) {
         if ( this.isRequestWellParameterized() ) {
-            if ( typeof request.getAppParameter( 'role_id' ) === "undefined" ) {
-                request.setAppParameter( 'role_id', request.getRouteParameter( 'role_id' ) )
-            }
-
             this.entityManager
-                .getRepository( 'user' )
-                .save( request.retrieve( 'user' ), request.getBody() )
-                .then( user => response.ok( user ) )
+                .getRepository( 'skeleton' )
+                .save( request.retrieve( 'skeleton' ), request.getBody() )
+                .then( skeleton => response.ok( skeleton ) )
                 .catch( error => response.internalServerError( error ) )
         } else {
             response.badRequest()
@@ -115,17 +105,17 @@ export class UserController extends Controller {
     }
 
     /**
-     * patchUser - patch user from specific properties
+     * patchSkeleton - patch skeleton by id (following RFC)
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    patchUser( request, response ) {
+    patchSkeleton( request, response ) {
         if ( this.isPatchRequestWellParameterized() ) {
             let patchRequestCorrectlyFormed = false
 
-            let patchUser = new Promise( ( resolve, reject ) => {
-                const validPaths = [ '/email', '/username', '/password', '/role_id' ]
+            let patchSkeleton = new Promise( ( resolve, reject ) => {
+                const validPaths = [ '/property' ]
                 const ops = this.parsePatchParams()
 
                 if ( ops ) {
@@ -138,12 +128,12 @@ export class UserController extends Controller {
                             case 'replace':
                                 if ( indexOf( validPaths, patch.path ) >= 0 ) {
                                     this.entityManager
-                                        .getRepository( 'user' )
-                                        .patch( request.retrieve( 'user' ), patch )
-                                        .then( user => {
+                                        .getRepository( 'skeleton' )
+                                        .patch( request.retrieve( 'skeleton' ), patch )
+                                        .then( skeleton => {
                                             if ( ++currentPatch >= opsLength ) {
                                                 // It's ok
-                                                resolve( user )
+                                                resolve( skeleton )
                                             }
                                         })
                                         .catch( reject )
@@ -155,8 +145,8 @@ export class UserController extends Controller {
             })
 
             if ( patchRequestCorrectlyFormed ) {
-                patchUser
-                    .then( user => response.ok( user ) )
+                patchSkeleton
+                    .then( skeleton => response.ok( skeleton ) )
                     .catch( error => response.internalServerError( error ) )
             } else {
                 response.badRequest()
@@ -167,15 +157,15 @@ export class UserController extends Controller {
     }
 
     /**
-     * deleteUser - delete user
+     * deleteSkeleton - delete skeleton by id
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    deleteUser( request, response ) {
+    deleteSkeleton( request, response ) {
         this.entityManager
-            .getRepository( 'user' )
-            .delete( request.retrieve( 'user' ) )
+            .getRepository( 'skeleton' )
+            .delete( request.retrieve( 'skeleton' ) )
             .then( () => response.noContent() )
             .catch( error => response.internalServerError( error ) )
     }

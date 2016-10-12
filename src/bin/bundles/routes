@@ -5,11 +5,10 @@ import pad              from 'pad-right'
 import minimist         from 'minimist'
 import Console          from '~/vendor/easy/core/Console'
 import { kernel,
-         bundleManager,
-         container }    from '~/bootstrap'
+         application }  from '~/bootstrap'
 
 const argv      = minimist( process.argv.slice( 2 ) )
-const router    = container.getComponent( 'Router' )
+const router    = application.container.getComponent( 'Router' )
 const save      = argv.s || 's' === argv._[ 0 ] || argv.save || 'save' === argv._[ 0 ]
 
 let route               = ''

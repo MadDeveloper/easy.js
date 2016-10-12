@@ -3,8 +3,7 @@ import path         from 'path'
 import Console      from './Console'
 import ConfigLoader from './ConfigLoader'
 
-const servicesMapping   = ConfigLoader.loadFromGlobal( 'services' )
-const librariesMapping  = ConfigLoader.loadFromGlobal( 'lib' )
+const servicesMapping = ConfigLoader.loadFromGlobal( 'services' )
 
 /**
  * @class Container
@@ -14,25 +13,27 @@ export default class Container {
      * @constructor
      * @param  {Object} path
      */
-    constructor( path ) {
+    constructor( application, path ) {
+        this.application = application
         this.path = path
-        
+
         /*
          * Dependencies shared
          */
         this._componentsLoaded  = {}
-        this._librariesLoaded   = {}
         this._shared            = {}
 
         this._servicesDirectoryPath = path.services
-        this._librariesDirectoryPath = path.lib
 
         this._componentsMapping = {
+            'router': `${path.vendor.easy}/core/Router`,
+            'bundlemanager':   `${path.vendor.easy}/core/BundleManager`,
+            'entitymanager': `${path.vendor.easy}/database/EntityManager`,
+            'database': `${path.vendor.easy}/database/Database`,
             'logger': `${path.vendor.easy}/log/Logger`,
             'logfilemanager':   `${path.vendor.easy}/log/LogFileManager`,
             'logwriter': `${path.vendor.easy}/log/LogWriter`
         }
-        this._librariesMapping = librariesMapping
         this._servicesMapping = servicesMapping
     }
 
@@ -252,85 +253,12 @@ export default class Container {
     }
 
     /**
-     * isLibraryMapped - check if library is mapped
-     *
-     * @param  {string} name
-     * @returns {boolean}
-     */
-    isLibraryMapped( name ) {
-        return this.librariesMapping.hasOwnProperty( name )
-    }
-
-    /**
-     * isLibraryLoaded - check if library is already loaded
-     *
-     * @param  {string} name
-     * @returns {boolean}
-     */
-    isLibraryLoaded( name ) {
-        return this.librariesLoaded.hasOwnProperty( name )
-    }
-
-    /**
-     * reloadLibrary - reload a new instance of the service in the cache
-     *
-     * @param  {string} name
-     */
-    reloadLibrary( name ) {
-        if ( this.isLibraryMapped( name ) && this.isLibraryLoaded( name ) ) {
-            delete this.librariesLoaded[ name ]
-            this.getLibrary( name )
-        }
-    }
-
-    /**
-     * getLibrary - get library by name
-     *
-     * @param  {string} name
-     * @returns {Object|undefined}
-     */
-    getLibrary( name ) {
-        name = name.toLowerCase()
-
-        if ( this.isLibraryMapped( name ) ) {
-            if ( this.isLibraryLoaded( name ) ) {
-                return this.librariesLoaded[ name ]
-            }
-
-            const pathLibrary   = `${this.librariesDirectoryPath}/${this.librariesMapping[ name ]}.js`
-            const library       = require( pathLibrary )
-
-            this.librariesLoaded[ name ] = library
-
-            return this.librariesLoaded[ name ]
-        } else {
-            Console.error({
-                title: "Impossible to call library",
-                message: `Library ${name} not found, path: ${path.resolve( `${this.librariesMapping[ name ]}.js` )}`,
-                type: 'error',
-                exit: 0
-            })
-
-            return undefined
-        }
-    }
-
-    /**
      * get - services directory path
      *
      * @returns {string}
      */
     get servicesDirectoryPath() {
         return this._servicesDirectoryPath
-    }
-
-    /**
-     * get - libraries directory path
-     *
-     * @returns {string}
-     */
-    get librariesDirectoryPath() {
-        return this._librariesDirectoryPath
     }
 
     /**
@@ -352,30 +280,12 @@ export default class Container {
     }
 
     /**
-     * get - libraries loaded
-     *
-     * @returns {Object}
-     */
-    get librariesLoaded() {
-        return this._librariesLoaded
-    }
-
-    /**
      * get - components mapping
      *
      * @returns {Object}
      */
     get componentsMapping() {
         return this._componentsMapping
-    }
-
-    /**
-     * get - libraries mapping
-     *
-     * @returns {Object}
-     */
-    get librariesMapping() {
-        return this._librariesMapping
     }
 
     /**

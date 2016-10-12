@@ -1,5 +1,5 @@
 import fs           from 'fs'
-import Injectable   from './../core/Injectable'
+import Injectable   from './../interfaces/Injectable'
 import Console      from './../core/Console'
 import { strtr }    from './../lib/string'
 
