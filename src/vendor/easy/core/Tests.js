@@ -4,14 +4,10 @@
 export default class Tests {
     /**
      * @constructor
-     * @param  {Container} container
      */
     constructor() {
-        this._container     = global.easy.container
-        this._entityManager = this.container.getComponent( 'EntityManager' )
-        this._request       = this.container.getComponent( 'Request' )
-        this._response      = this.container.getComponent( 'Response' )
-        this._database      = this.container.getComponent( 'Database' ).instance
+        this.application = global.easy.application
+        this.container = this.application.container
 
         this.run()
     }
@@ -20,49 +16,4 @@ export default class Tests {
      * run - automatically called
      */
     run() {}
-
-    /**
-     * get - entity manager instance
-     *
-     * @returns {EntityManager}
-     */
-    get entityManager() {
-        return this._entityManager
-    }
-
-    /**
-     * get Container
-     *
-     * @returns {Container}
-     */
-    get container() {
-        return this._container
-    }
-
-    /**
-     * get Request
-     *
-     * @returns {Request}
-     */
-    get request() {
-        return this._request
-    }
-
-    /**
-     * get Response
-     *
-     * @returns {Response}
-     */
-    get response() {
-        return this._response
-    }
-
-    /**
-     * get Database
-     *
-     * @returns {Database}
-     */
-    get database() {
-        return this._database
-    }
 }

@@ -139,7 +139,7 @@ export default class Access extends SecurityAccess {
 
         }
 
-        return Promise.resolve( isAuthorizedToAccess )
+        return isAuthorizedToAccess ? Promise.resolve() : Promise.reject()
     }
 
     /**

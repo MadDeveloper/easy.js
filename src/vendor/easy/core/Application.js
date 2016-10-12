@@ -13,7 +13,6 @@ import Console          from './Console'
 import Polyfills        from './Polyfills'
 import ConfigLoader     from './ConfigLoader'
 import Authentication	from './../authentication/Authentication'
-import Authorization    from './../authentication/Authorization'
 import Router           from './Router'
 import BundleManager    from './BundleManager'
 import Configurable     from './../interfaces/Configurable'
@@ -213,27 +212,13 @@ export default class Application extends Configurable {
         /*
 		 * Authentication management
 		 */
-		const authentication  = new Authentication( this.router, this.entityManager, passport )
-        const authorization   = new Authorization()
+		const authentication  = new Authentication( this.container, passport )
 
 		if ( authentication.config.enabled ) {
             /*
              * Configure authentication
              */
             authentication.configure()
-
-			/*
-			 * Verify token
-			 */
-			this.router.scope.use( ( req, res, next ) => {
-                const request   = this.router.buildRequest( req )
-                const response  = this.router.buildResponse( res, request )
-
-                authorization
-                    .checkToken( request, response )
-                    .then( next )
-                    .catch( () => response.unauthorized() )
-            })
 		}
     }
 

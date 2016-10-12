@@ -6,8 +6,6 @@ import { kernel,
 		 config,
 		 container }	from '~/bootstrap'
 
-const argv = minimist( process.argv.slice( 2 ) )
-
 const dbConfig = {
 	host: config.database.connection.host,
 	user: config.database.connection.user,

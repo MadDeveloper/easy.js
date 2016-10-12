@@ -19,13 +19,11 @@ const schemaDatabaseService = container.getService( 'database.schema' )
 const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {
-    const bundlesTestPath       = `${kernel.path.root}/../src/test/bundles`
-
     const positiveAnswers       = [ 'y', 'ye', 'yes' ]
     const negativeAnswers       = [ 'n', 'no' ]
     const bundlesPath           = `${kernel.path.root}/../src/bundles`
     const skeletonBundlePath    = `${bundlesPath}/skeleton`
-    const bundlesDefinitionPath = `${kernel.path.root}/../src/config/bundles/enabled.js`
+    const bundlesDefinitionPath = `${kernel.path.root}/../src/config/bundles.js`
 
     let nameBundle              = cleanSpaces( nameBundleFromArgv )
     let nameBundleCapitalized   = nameBundle.capitalizeFirstLetter()
@@ -526,78 +524,12 @@ if ( nameBundleFromArgv.length > 0 ) {
             next()
         })
 
-        walker.on( "end", () => {
-            const answerCreateBundleTests = question( 'Do you want to create tests file? (y/n) ' ).trim().toLowerCase()
+        walker.on( "end", () => exitProgram() )
 
-            if ( indexOf( positiveAnswers, answerCreateBundleTests ) !== -1 ) {
-                /*
-                 * Create bundle tests path and file
-                 */
-                createBundleTestPath()
-                .then( () => {
-                    exitProgram()
-                })
-                .catch( error => {
-                    Console.error({
-                        title: "Error when creating bundle tests file",
-                        message: error,
-                        consequence: "Bundle tests file creation aborted, however previous operations are completed.",
-                        exit: 0
-                    })
-                })
-            } else {
-                exitProgram()
-            }
-
-        })
-
-    }
-
-    function createBundleTestPath() {
-        const newBundleTestsPath = `${bundlesTestPath}/${nameBundleDecapitalized}`
-
-        return new Promise( ( resolve, reject ) => {
-            fs.mkdir( newBundleTestsPath, error => {
-                if ( error ) {
-                    reject( error )
-                } else {
-                    fs.chmodSync( newBundleTestsPath, parseInt( 777, 8 ) )
-
-                    /*
-                     * Now we create test file modeled on that of skeleton
-                     */
-                    const skeletonBundleTestsFile = `${bundlesTestPath}/skeleton/SkeletonTests.js`
-
-                    fs.readFile( skeletonBundleTestsFile, { encoding: 'utf8' }, ( error, data ) => {
-                        if ( error ) {
-                            reject( error )
-                        } else {
-                            /*
-                             * Finally we create the file
-                             */
-                            const newBundleTestsFile = `${newBundleTestsPath}/${nameBundleCapitalized}Tests.js`
-
-                            fs.writeFile( newBundleTestsFile, data.replace( /Skeleton/g, nameBundleCapitalized ).replace( /skeleton/g, nameBundleDecapitalized ), { encoding: 'utf8' }, error => {
-                                if ( error ) {
-                                    reject( error )
-                                } else {
-                                    /*
-                                     * All is ok!
-                                     */
-                                    fs.chmodSync( newBundleTestsFile, parseInt( 777, 8 ) )
-
-                                    resolve()
-                                }
-                            })
-                        }
-                    })
-                }
-            })
-        })
     }
 
     function exitProgram() {
-        Console.success( `\nBundle ${nameBundleCapitalized} created.\nYou should (re)start build command with "npm run build".\n`, true )
+        Console.success( `\nBundle ${nameBundleCapitalized} created.\n`, true )
         Console.line()
     }
 

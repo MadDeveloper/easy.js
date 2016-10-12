@@ -15,6 +15,7 @@ export default class BundleManager extends Configurable {
 
         this._bundlesPath   = ''
         this._bundles       = {}
+        this.configurations = ConfigLoader.loadFromGlobal( 'bundles' )
     }
 
     /**
@@ -31,7 +32,7 @@ export default class BundleManager extends Configurable {
      * loadBundles - load all bundles defined into ~/config/bundles.js
      */
     loadBundles() {
-        ConfigLoader.loadFromGlobal( 'bundles' ).forEach( element => this.loadBundle( element ) )
+        this.configurations.forEach( element => this.loadBundle( element ) )
     }
 
     /**

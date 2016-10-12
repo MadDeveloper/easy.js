@@ -4,12 +4,16 @@ const path      = require( 'path' )
 
 createBinDirectory( 'bundles' )
     .then( () => createBinDirectory( 'database' ) )
-    .then( () => createBinDirectory( 'lib' ) )
-    .then( () => createBinDirectory( 'services' ) )
+    .then( success )
     .catch( raiseError )
 
 function raiseError( error ) {
     console.log( `Error when creating build binaries directories: ${error}` )
+    process.exit()
+}
+
+function success() {
+    console.log( '\nMade with success. Compiling binaries...\n' )
     process.exit()
 }
 

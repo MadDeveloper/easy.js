@@ -1,21 +1,17 @@
 #!/usr/bin/env node
-import execsql          from 'execsql'
-import minimist     	from 'minimist'
-import schema			from '~/config/database/schema'
-import sequence 		from 'when/sequence'
-import Console          from '~/vendor/easy/core/Console'
+import execsql          		from 'execsql'
+import schema					from '~/config/database/schema'
+import sequence 				from 'when/sequence'
+import Console          		from '~/vendor/easy/core/Console'
 import { indexOf,
 		 has,
 		 keys,
-		 map }			from 'lodash'
-import { bundleManager,
-		 config,
-		 container }	from '~/bootstrap'
+		 map }					from 'lodash'
+import { kernel, application }	from '~/bootstrap'
 
 const schemaDatabaseService	= container.getService( 'database.schema' )
 const knex					= schemaDatabaseService.knex
-
-const dbConfig = {
+const dbConfig 				= {
 	host: config.database.connection.host,
 	user: config.database.connection.user,
 	password: config.database.connection.password
@@ -24,8 +20,6 @@ const dbConfig = {
 const titleError		= "Error when initializing roles and users"
 const consequenceError	= "Initialization aborted."
 
-migrate().then( startup ).catch( raiseError )
-
 function raiseError( error ) {
 	Console.error({
 		title: titleError,
@@ -33,49 +27,6 @@ function raiseError( error ) {
 		consequence: consequenceError,
 		exit: 0
 	})
-}
-
-function startup() {
-	const rolesTable 	= schema.roles
-	const rolesToAppend	= {
-		admin: {
-			id: 1,
-			name: 'Administrator',
-			slug: 'administrator'
-		},
-
-		user: {
-			id: 2,
-			name: 'User',
-			slug: 'user'
-		}
-	}
-
-	const usersTable 	= schema.users
-	const usersToAppend	= {
-		admin: {
-			id: 1,
-			username: 'admin',
-			email: 'admin@easy.com',
-			password: 'K18necxhS4G;ur4', // http://randomkeygen.com/ -> Strong passwords
-			role_id: rolesToAppend.admin.id
-		},
-
-		john: {
-			id: 2,
-			username: 'johndoe',
-			email: 'john.doe@easy.com',
-			password: '2Z7P97Y3o829gnr',
-			role_id: rolesToAppend.user.id
-		}
-	}
-
-	knex.table( 'roles' )
-		.insert( rolesToAppend.admin )
-		.then( () => knex.table( 'roles' ).insert( rolesToAppend.user ) )
-		.then( () => knex.table( 'users' ).insert( usersToAppend.admin ) )
-		.then( () => knex.table( 'users' ).insert( usersToAppend.john ) )
-		.then( () => Console.success( 'Database initialized.', true ) )
 }
 
 function dropTables() {
@@ -90,17 +41,15 @@ function dropTables() {
 }
 
 function createTables () {
-	let tables = []
-	const tableNames = keys( schema )
+	let tables 			= []
+	const tableNames 	= keys( schema )
 
 	tables = map( tableNames, tableName => () => schemaDatabaseService.createTable( tableName, schema[ tableName ] ) )
 
-  return sequence( tables )
+  	return sequence( tables )
 }
 
-function migrate( standalone ) {
-	return dropTables()
-		.then( createTables )
-		.then( () => Console.success( "Schema updated." ) )
-		.catch( reject )
-}
+dropTables()
+	.then( createTables )
+	.then( () => Console.success( "Schema updated." ) )
+	.catch( raiseError )

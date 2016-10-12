@@ -1,33 +1,25 @@
-- revoir complètement le controller vendor (virer dans des services tiers la gestion des paramètres, etc.)
-- rename test as tests
-- regroup some config?
-- finir les tests
-- custom middleware pour gérer l'auth (via facebook)
-- changer les paths des fichiers test dans kernel
 - pouvoir reset le skeleton
 - REDIGER LA DOC
 
 
 --- LATER ---
 
-- pouvoir reset le skeleton (dans bundles et test)
 - appliquer le logger aux endroits utiles
 - faire les interfaces easy et adapter le code (typé)
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
 tout lier en promise pour les patchs
 - ? bin permettant de sync roles from db into config file, and reverse
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
-- ConfigLoader dans vendor
 - créer des sous-container permettant d'avoir un rôle définit : Container services, container lib, container components, etc. et le tout supervisé
   par un container parent.
 - créer une classe Cache qui permet de mettre en cache pour n'importe quelle entité (possédant une clé de cache, par exemple la classe EntityManager
 aurait comme clé 'entitymanager', et pourra gérer son cache interne dans cette clé)
 - faire des snapshot du bundle Skeleton pour être restauré par la suite, les snapshots sont effectuées par le dev, la restoration à l'état initial reste
 toujours possible.
-
+- faire les tests du vendor
 
 
 ---  MAYBE ---
 
 - ? Utiliser CarminteJS (cross-db ORM)
-- translate project to ts ?
+- ? translate project to ts

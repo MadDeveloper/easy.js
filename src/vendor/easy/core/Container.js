@@ -242,7 +242,7 @@ export default class Container {
             } catch ( error ) {
                 Console.error({
                     title: "Impossible to call service",
-                    message: `Service ${name} not found, path: ${path.resolve( serviceFile )}\n${error}`,
+                    message: `Path: ${path.resolve( serviceFile )}\n${error}`,
                     type: 'error',
                     exit: 0
                 })

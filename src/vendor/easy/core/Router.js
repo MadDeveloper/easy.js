@@ -146,8 +146,8 @@ export default class Router extends Configurable {
             middlewareInfos = this.analyzerMiddlewaresConfig.extractMiddlewareInfos( config )
 
             router[ middlewareInfos.type ]( middlewareInfos.param, ( req, res, next ) => {
-                const request   = this.buildRequest( req )
-                const response  = this.buildResponse( res, request )
+                const request   = this.getRequest( req )
+                const response  = this.getResponse( res, request )
 
                 controller[ middlewareInfos.middleware ]( request, response )
                     .then( () => next() )
@@ -168,8 +168,8 @@ export default class Router extends Configurable {
 
         router.use( route, ( req, res, next ) => {
             const securityConfig    = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
-            const request           = this.buildRequest( req )
-            const response          = this.buildResponse( res, request )
+            const request           = this.getRequest( req )
+            const response          = this.getResponse( res, request )
             const handler           = this.access.getAccessHandler( securityConfig )
 
             handler
@@ -199,8 +199,8 @@ export default class Router extends Configurable {
         method = method.toLowerCase()
 
         router.route( route )[ method ]( ( req, res ) => {
-            const request   = this.buildRequest( req )
-            const response  = this.buildResponse( res, request )
+            const request   = this.getRequest( req )
+            const response  = this.getResponse( res, request )
 
             controller[ controllerMethod ]( request, response )
         })
@@ -216,31 +216,31 @@ export default class Router extends Configurable {
         const router = this.scope
 
         router.route( route ).all( ( req, res ) => {
-            const request   = this.buildRequest( req )
-            const response  = this.buildResponse( res, request )
+            const request   = this.getRequest( req )
+            const response  = this.getResponse( res, request )
 
             response.methodNotAllowed()
         })
     }
 
     /**
-     * buildRequest - description
+     * getRequest - description
      *
      * @param  {type} req description
      * @returns {type}     description
      */
-    buildRequest( req ) {
+    getRequest( req ) {
         return new Request( req, this.application.appName )
     }
 
     /**
-     * buildResponse - description
+     * getResponse - description
      *
      * @param  {type} res     description
      * @param  {type} request description
      * @returns {type}         description
      */
-    buildResponse( res, request ) {
+    getResponse( res, request ) {
         return new Response( res, request, this.application.container.getComponent( 'Logger' ) )
     }
 

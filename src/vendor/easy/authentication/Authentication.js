@@ -2,6 +2,7 @@ import passportLocal	from 'passport-local'
 import ConfigLoader		from './../core/ConfigLoader'
 import Controller   	from './../core/Controller'
 import Configurable		from './../interfaces/Configurable'
+import Authorization    from './Authorization'
 import TokenManager		from './TokenManager'
 
 const LocalStrategy = passportLocal.Strategy
@@ -14,24 +15,46 @@ export default class Authentication extends Configurable {
 	/**
 	 * constructor
 	 *
-	 * @param  {type} router        description
-	 * @param  {type} entityManager description
-	 * @param  {type} passport      description
+	 * @param  {Container} router
+	 * @param  {Passport} passport
 	 */
-	constructor( router, entityManager, passport ) {
+	constructor( container, passport ) {
 		super()
 
 		this._config 			= ConfigLoader.loadFromGlobal( 'authentication' )
+		this._container			= container
 		this._passport			= passport
-		this._userRepository	= entityManager.getRepository( this.config.repository )
-		this._router			= router
+		this._router			= container.getComponent( 'router' )
+		this._authorization		= new Authorization()
 	}
 
 	/**
 	 * configure - init auth strategies
 	 */
 	configure() {
-		this.initLocalStrategy()
+		if ( this.useCustom() ) {
+			const customProvider = this._container.getService( this.config.service )
+			customProvider.configure()
+		} else {
+			/*
+			 * Default authentication process
+			 */
+			this._userRepository = this._container.getComponent( 'entityManager' ).getRepository( this.config.repository )
+			this.initLocalStrategy()
+
+			/*
+			 * Verify token
+			 */
+			this._router.scope.use( ( req, res, next ) => {
+				const request   = this._router.getRequest( req )
+				const response  = this._router.getResponse( res, request )
+
+				this._authorization
+					.checkToken( request, response )
+					.then( next )
+					.catch( () => response.unauthorized() )
+			})
+		}
 	}
 
 	/**
@@ -42,8 +65,8 @@ export default class Authentication extends Configurable {
 			this.config.route,
 			this._passport.authenticate( 'local', { session: false }),
 			( req, res ) => {
-				const request   = this._router.buildRequest( req )
-	            const response  = this._router.buildResponse( res, request )
+				const request   = this._router.getRequest( req )
+	            const response  = this._router.getResponse( res, request )
 
 				response.ok({
 					user: request.getProperty( 'user' ).user,
@@ -71,6 +94,15 @@ export default class Authentication extends Configurable {
 				})
 				.catch( error => done( error ) )
 		}))
+	}
+
+	/**
+	 * useCustom - description
+	 *
+	 * @returns {boolean}
+	 */
+	useCustom() {
+		return this.config.custom && this.config.service
 	}
 
 	/**

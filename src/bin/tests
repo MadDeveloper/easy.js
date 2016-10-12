@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+import Jasmine                  from 'jasmine'
+import { kernel, application }  from '~/bootstrap'
+
+global.easy = {
+    application
+}
+
+const jasmine = new Jasmine()
+
+jasmine.loadConfigFile( './../jasmine.json' )
+jasmine.execute()
