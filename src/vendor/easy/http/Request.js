@@ -26,7 +26,9 @@ export default class Request extends Http {
             this.scope[ this.appName ] = {}
         }
 
-        this.scope[ this.appName ][ this._applicationCacheScope ] = {}
+        if ( !this.scope[ this.appName ].hasOwnProperty( this._applicationCacheScope ) ) {
+            this.scope[ this.appName ][ this._applicationCacheScope ] = {}
+        }
     }
 
     /**

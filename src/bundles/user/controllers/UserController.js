@@ -31,6 +31,7 @@ export default class UserController extends Controller {
             requireBy: this.request.getRouteParameter( 'user_id' ),
             options: {}
         }
+        // response.ok( request.getAppParameter( 'user' ) )
 
         this.doesRequiredElementExists( 'user', requireOptions )
             .then( user => {

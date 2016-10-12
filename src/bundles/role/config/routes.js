@@ -1,4 +1,5 @@
-import security from './security'
+import security     from './security'
+import middlewares  from './middlewares'
 
 export const routes = {
     '/roles': {
@@ -12,13 +13,14 @@ export const routes = {
     },
 
     '/roles/:role_id': {
-        get: 'getRole',
+        get: 'getRoles',
         put: 'updateRole',
         delete: 'deleteRole',
         security: {
             strategy: 'default',
             rules: security[ '/roles' ],
             focus: 'role_id'
-        }
+        },
+        middlewares: middlewares[ '/roles/:role_id' ]
     }
 }

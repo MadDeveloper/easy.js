@@ -20,20 +20,23 @@ export class RoleController extends Controller {
     /**
      * roleExists
      *
-     * @param {function} next
+     * @param  {Request} request
+     * @param  {Response} response
+     * @returns {Promise}
      */
-    roleExists( next ) {
-        const requireOptions = {
-            requireBy: this.request.getRouteParameter( 'role_id' ),
-            options: {}
-        }
-
-        this.doesRequiredElementExists( 'role', requireOptions )
-            .then( role => {
-                request.store( 'role', role )
-                next()
-            })
-            .catch( () => this.response.notFound() )
+    roleExists( request, response ) {
+        return Promise.resolve()
+        // const requireOptions = {
+        //     requireBy: this.request.getRouteParameter( 'role_id' ),
+        //     options: {}
+        // }
+        //
+        // return this.doesRequiredElementExists( 'role', requireOptions )
+        //     .then( role => {
+        //         request.store( 'role', role )
+        //         next()
+        //     })
+        //     .catch( () => this.response.notFound() )
     }
 
     /**

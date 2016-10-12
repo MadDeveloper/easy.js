@@ -1,11 +1,12 @@
-import ConfigLoader             from './ConfigLoader'
-import Configurable             from './../interfaces/Configurable'
-import Request                  from './../http/Request'
-import Response                 from './../http/Response'
-import Http                     from './../http/Http'
-import AnalyzerSecurityConfig   from './../security/AnalyzerSecurityConfig'
-import Access                   from './../security/Access'
-import { indexOf }              from 'lodash'
+import ConfigLoader                 from './ConfigLoader'
+import Configurable                 from './../interfaces/Configurable'
+import Request                      from './../http/Request'
+import Response                     from './../http/Response'
+import Http                         from './../http/Http'
+import AnalyzerSecurityConfig       from './../security/AnalyzerSecurityConfig'
+import AnalyzerMiddlewaresConfig    from './../middlewares/AnalyzerMiddlewaresConfig'
+import Access                       from './../security/Access'
+import { indexOf }                  from 'lodash'
 
 /**
  * @class Router
@@ -18,11 +19,12 @@ export default class Router extends Configurable {
     constructor() {
         super()
 
-        this._scope                 = null
-        this._config                = ConfigLoader.loadFromGlobal( 'bundles' )
-        this.application            = null
-        this.http                   = new Http()
-        this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
+        this._scope                     = null
+        this._config                    = ConfigLoader.loadFromGlobal( 'bundles' )
+        this.application                = null
+        this.http                       = new Http()
+        this.analyzerSecurityConfig     = new AnalyzerSecurityConfig()
+        this.analyzerMiddlewaresConfig  = new AnalyzerMiddlewaresConfig()
     }
 
     /**
@@ -100,9 +102,16 @@ export default class Router extends Configurable {
             }
 
             /*
+             * Middlewares
+             */
+            if ( this.analyzerMiddlewaresConfig.analyze( routesConfig ) ) {
+                this.defineMiddlewaresRoutes( routeName, routesConfig, controller )
+            }
+
+            /*
              * Methods
              */
-            Object.keys( routesConfig ).forEach( config => {
+            for ( let config in routesConfig ) {
                 configValue = routesConfig[ config ]
 
                 if ( -1 !== indexOf( this.http.methods, config ) ) {
@@ -113,9 +122,37 @@ export default class Router extends Configurable {
                         controllerMethod: configValue
                     })
                 }
-            })
+            }
 
             this.defineMethodNotAllowed( routeName )
+        }
+    }
+
+    /**
+     * defineMiddlewaresRoutes - description
+     *
+     * @param  {type} route          description
+     * @param  {type} configurations description
+     * @returns {type}                description
+     */
+    defineMiddlewaresRoutes( route, configurations, controller ) {
+        const router            = this.scope
+        const middlewaresConfig = this.analyzerMiddlewaresConfig.extractMiddlewaresConfig( configurations )
+        let middleware          = ''
+        let middlewareInfos     = {}
+
+        for ( let config in middlewaresConfig ) {
+            config = middlewaresConfig[ config ]
+            middlewareInfos = this.analyzerMiddlewaresConfig.extractMiddlewareInfos( config )
+
+            router[ middlewareInfos.type ]( middlewareInfos.param, ( req, res, next ) => {
+                const request   = this.buildRequest( req )
+                const response  = this.buildResponse( res, request )
+
+                controller[ middlewareInfos.middleware ]( request, response )
+                    .then( () => next() )
+                    .catch( () => {} )
+            })
         }
     }
 
