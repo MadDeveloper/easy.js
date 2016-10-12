@@ -8,6 +8,7 @@ import compression      from 'compression'
 import numeral          from 'numeral'
 import { indexOf }      from 'lodash'
 import passport         from 'passport'
+import Container        from './Container'
 import Console          from './Console'
 import Polyfills        from './Polyfills'
 import ConfigLoader     from './ConfigLoader'
@@ -15,31 +16,43 @@ import Authentication	from './../authentication/Authentication'
 import Authorization    from './../authentication/Authorization'
 import Router           from './Router'
 import BundleManager    from './BundleManager'
-import Configurable     from './Configurable'
+import Configurable     from './../interfaces/Configurable'
 import Database         from './../database/Database'
 import EntityManager    from './../database/EntityManager'
 
+/**
+ * @class Application
+ */
 export default class Application extends Configurable {
+    /**
+     * constructor - description
+     *
+     * @param  {type} kernel description
+     * @returns {type}        description
+     */
     constructor( kernel ) {
         super()
-        
+
         /*
          * First, load all polyfills
          */
         Polyfills.load()
 
         this.kernel         = kernel
-        this.container      = kernel.container
+        this.container      = new Container( kernel.path )
         this.config         = ConfigLoader.loadFromGlobal( 'app' )
         this.app            = express()
-        this.expressRouter  = express.Router()
         this.database       = new Database()
         this.router         = new Router()
         this.bundleManager  = new BundleManager()
         this.entityManager  = new EntityManager()
-        this.logFileManager = this.container.getComponent( 'LogFileManager' )
     }
 
+    /**
+     * configure - description
+     *
+     * @returns {type}  description
+     */
     configure() {
         /*
          * API environement
@@ -49,6 +62,16 @@ export default class Application extends Configurable {
         } else {
             process.env.NODE_ENV = 'development'
         }
+
+        /*
+         * Load container components
+         */
+        this.container.loadComponents()
+
+        /*
+         * Configure log file manager
+         */
+        this.logFileManager = this.container.getComponent( 'LogFileManager' )
 
         /*
          * Usefull to store app data with namespace into the request
@@ -73,7 +96,7 @@ export default class Application extends Configurable {
         /*
          * Configure Router
          */
-        this.router.configure( this )
+        this.router.configure( this, express.Router() )
 
         /*
          * Load all bundles enabled
@@ -81,6 +104,11 @@ export default class Application extends Configurable {
         this.bundleManager.loadBundles()
     }
 
+    /**
+     * start - description
+     *
+     * @returns {type}  description
+     */
     start() {
         /*
          * Connect database following configurations
@@ -197,26 +225,66 @@ export default class Application extends Configurable {
         /*
          * Registration router routes
          */
-        this.app.use( '/', this.expressRouter )
+        this.app.use( '/', this.router.scope )
     }
 
+    /**
+     * plugAuthentication - description
+     *
+     * @returns {type}  description
+     */
     plugAuthentication() {
         /*
 		 * Authentication management
 		 */
-		const authentication  = new Authentication( this, passport )
+		const authentication  = new Authentication( this.router, this.entityManager, passport )
         const authorization   = new Authorization()
 
 		if ( authentication.config.enabled ) {
             /*
-             * Init authentication
+             * Configure authentication
              */
-            authentication.init()
+            authentication.configure()
 
 			/*
 			 * Verify token
 			 */
-			this.expressRouter.use( ( req, res, next ) => authorization.checkToken( req, res, next ) )
+			this.router.scope.use( ( req, res, next ) => {
+                const request   = this.router.buildRequest( req )
+                const response  = this.router.buildResponse( res, request )
+
+                authorization
+                    .checkToken( request, response )
+                    .then( next )
+                    .catch( () => response.unauthorized() )
+            })
 		}
+    }
+
+    /**
+     * getEnv - get node environment
+     *
+     * @returns {string}
+     */
+    getEnv() {
+        return process.env.NODE_ENV
+    }
+
+    /**
+     * isDevEnv - check if we are in dev environment
+     *
+     * @returns {boolean}
+     */
+    isDevEnv() {
+        return 'development' === this.getEnv().toLowerCase()
+    }
+
+    /**
+     * isDevEnv - check if we are in dev environment
+     *
+     * @returns {boolean}
+     */
+    isProdEnv() {
+        return !this.isDevEnv()
     }
 }

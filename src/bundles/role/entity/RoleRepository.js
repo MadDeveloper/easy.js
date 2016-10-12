@@ -14,6 +14,7 @@ export default class RoleRepository extends Repository {
         super( entityManager )
 
         this._role              = this.entityManager.getModel( 'role' )
+        this._roleCollection    = this.entityManager.getCollection( this._role )
     }
 
     /**
@@ -51,14 +52,14 @@ export default class RoleRepository extends Repository {
                 options.transacting = t
 
                 role.save({ name, slug }, options )
-                .then( role => {
-                    t.commit()
-                    resolve( role )
-                })
-                .catch( error => {
-                    t.rollback()
-                    reject( error )
-                })
+                    .then( role => {
+                        t.commit()
+                        resolve( role )
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
             })
         })
     }
@@ -76,14 +77,14 @@ export default class RoleRepository extends Repository {
                 options.transacting = t
 
                 role.destroy( options )
-                .then( () => {
-                    t.commit()
-                    resolve()
-                })
-                .catch( error => {
-                    t.rollback()
-                    reject( error )
-                })
+                    .then( () => {
+                        t.commit()
+                        resolve()
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
             })
         })
     }

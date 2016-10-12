@@ -12,7 +12,7 @@ export default class Role extends Entity {
     constructor( entityManager ) {
         super( entityManager )
 
-        return this.database.Model.extend({
+        return this.orm.Model.extend({
             tableName: 'roles',
 
             users() {

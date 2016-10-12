@@ -1,5 +1,3 @@
-import Request      from './../http/Request'
-import Response     from './../http/Response'
 import ConfigLoader from './ConfigLoader'
 
 /**
@@ -9,9 +7,9 @@ export default class Controller {
     /**
      * @constructor
      */
-    constructor( application ) {
-        this._entityManager = application.entityManager
-        this._container     = application.container
+    constructor( entityManager, container ) {
+        this._entityManager = entityManager
+        this._container     = container
     }
 
     /**
@@ -123,53 +121,6 @@ export default class Controller {
                 reject( 'Missing parameter "requireBy" in doesRequiredElementExists()' )
             }
         })
-    }
-
-    /**
-     * isDevEnv - check if we are in dev environment
-     *
-     * @returns {boolean}
-     */
-    isDevEnv() {
-        return 'development' === process.env.NODE_ENV.toLowerCase()
-    }
-
-    /**
-     * isProdEnv - check if we are in prod environment
-     *
-     * @returns {boolean}
-     */
-    isProdEnv() {
-        return !this.isDevEnv()
-    }
-
-	/**
-	 * buildController - build anonymous controller
-	 *
-	 * @param  {express.Request} req
-	 * @param  {express.Response} res
-	 * @returns {Controller}
-	 */
-	static buildAnonymous( req, res ) {
-		return new Controller( req, res )
-	}
-
-    /**
-     * get - request instance
-     *
-     * @returns {Request}
-     */
-    get request() {
-        return this._request
-    }
-
-    /**
-     * get - response instance
-     *
-     * @returns {Response}
-     */
-    get response() {
-        return this._response
     }
 
     /**

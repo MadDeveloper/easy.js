@@ -1,5 +1,5 @@
 import fs           from 'fs'
-import Configurable from './Configurable'
+import Configurable from './../interfaces/Configurable'
 import ConfigLoader from './ConfigLoader'
 
 /**
@@ -9,15 +9,20 @@ import ConfigLoader from './ConfigLoader'
 export default class BundleManager extends Configurable {
     /**
      * @constructor
-     * @param  {Container} container
      */
-    constructor( container ) {
+    constructor() {
         super()
 
         this._bundlesPath   = ''
         this._bundles       = {}
     }
 
+    /**
+     * configure - description
+     *
+     * @param  {type} bundlesPath description
+     * @returns {type}             description
+     */
     configure( bundlesPath ) {
         this._bundlesPath = bundlesPath
     }

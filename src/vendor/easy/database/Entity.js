@@ -18,4 +18,8 @@ export default class Entity {
     get database() {
         return this._database
     }
+
+    get orm() {
+        return this.database.orm
+    }
 }

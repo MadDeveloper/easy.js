@@ -1,6 +1,6 @@
 export default {
     /*
-     * Id roles mapped with database, used by AccessService
+     * Id roles mapped with database
      */
     any: 0,
     admin: 1,

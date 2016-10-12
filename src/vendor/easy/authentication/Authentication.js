@@ -1,31 +1,36 @@
 import passportLocal	from 'passport-local'
 import ConfigLoader		from './../core/ConfigLoader'
 import Controller   	from './../core/Controller'
+import Configurable		from './../interfaces/Configurable'
 import TokenManager		from './TokenManager'
 
 const LocalStrategy = passportLocal.Strategy
 
 /**
  * @class Authentication
+ * @extends Configurable
  */
-export default class Authentication {
+export default class Authentication extends Configurable {
 	/**
 	 * constructor
+	 *
+	 * @param  {type} router        description
+	 * @param  {type} entityManager description
+	 * @param  {type} passport      description
 	 */
-	constructor( application, passport ) {
+	constructor( router, entityManager, passport ) {
+		super()
+
 		this._config 			= ConfigLoader.loadFromGlobal( 'authentication' )
-		this._container 		= application.container
 		this._passport			= passport
-		// this._entityManager		= this._container.getComponent( 'EntityManager' )
-		// this._userRepository	= this._entityManager.getRepository( this.config.repository )
-		// this._user				= this._entityManager.getModel( this.config.model )
-		this._router			= application.expressRouter
+		this._userRepository	= entityManager.getRepository( this.config.repository )
+		this._router			= router
 	}
 
 	/**
-	 * init - init auth strategies
+	 * configure - init auth strategies
 	 */
-	init() {
+	configure() {
 		this.initLocalStrategy()
 	}
 
@@ -33,14 +38,16 @@ export default class Authentication {
 	 * initLocalStrategy - init local strategy
 	 */
 	initLocalStrategy() {
-		this._router.post(
+		this._router.scope.post(
 			this.config.route,
 			this._passport.authenticate( 'local', { session: false }),
 			( req, res ) => {
-				const controller = Controller.buildAnonymous( req, res )
-				controller.response.ok({
-					user: req.user.user,
-					token: req.user.token
+				const request   = this._router.buildRequest( req )
+	            const response  = this._router.buildResponse( res, request )
+
+				response.ok({
+					user: request.getProperty( 'user' ).user,
+					token: request.getProperty( 'user' ).token
 				})
 		})
 

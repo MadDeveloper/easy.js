@@ -99,9 +99,8 @@ function createTables () {
 }
 
 function migrate( standalone ) {
-	return
-		dropTables()
-			.then( createTables )
-			.then( () => Console.success( "Schema updated." ) )
-			.catch( reject )
+	return dropTables()
+		.then( createTables )
+		.then( () => Console.success( "Schema updated." ) )
+		.catch( reject )
 }

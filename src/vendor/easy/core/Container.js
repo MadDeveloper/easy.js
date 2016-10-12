@@ -12,11 +12,11 @@ const librariesMapping  = ConfigLoader.loadFromGlobal( 'lib' )
 export default class Container {
     /**
      * @constructor
-     * @param  {Kernel} kernel
+     * @param  {Object} path
      */
-    constructor( kernel ) {
-        this._kernel = kernel
-
+    constructor( path ) {
+        this.path = path
+        
         /*
          * Dependencies shared
          */
@@ -24,21 +24,17 @@ export default class Container {
         this._librariesLoaded   = {}
         this._shared            = {}
 
-        this._servicesDirectoryPath = this._kernel.path.services
-        this._librariesDirectoryPath = this._kernel.path.lib
+        this._servicesDirectoryPath = path.services
+        this._librariesDirectoryPath = path.lib
 
         this._componentsMapping = {
-            'logger': `${this._kernel.path.vendor.easy}/log/Logger`,
-            'logfilemanager':   `${this._kernel.path.vendor.easy}/log/LogFileManager`,
-            'logwriter': `${this._kernel.path.vendor.easy}/log/LogWriter`
+            'logger': `${path.vendor.easy}/log/Logger`,
+            'logfilemanager':   `${path.vendor.easy}/log/LogFileManager`,
+            'logwriter': `${path.vendor.easy}/log/LogWriter`
         }
         this._librariesMapping = librariesMapping
         this._servicesMapping = servicesMapping
     }
-
-    /*
-     * Components
-     */
 
     /**
      * loadComponent - load specific component
@@ -317,15 +313,6 @@ export default class Container {
 
             return undefined
         }
-    }
-
-    /**
-     * get - kernel instance
-     *
-     * @returns {Kernel}
-     */
-    get kernel() {
-        return this._kernel
     }
 
     /**

@@ -1,5 +1,3 @@
-import Container from './Container'
-
 /**
  * @class Kernel
  */
@@ -8,9 +6,7 @@ export default class Kernel {
      * @constructor
      */
     constructor() {
-        this._appName   = ''
-        this._container = null
-        this._path      = {}
+        this._path = {}
     }
 
     /**
@@ -36,56 +32,7 @@ export default class Kernel {
         this.path.vendor        = { root: `${this.path.root}/vendor` }
         this.path.vendor.easy   = `${this.path.vendor.root}/easy`
 
-        /*
-         * Starting and initializing container
-         */
-        this.initContainer()
-
         return this
-    }
-
-    /**
-     * initContainer - init container component
-     */
-    initContainer() {
-        this._container = new Container( this )
-        this.container.loadComponents()
-    }
-
-    /**
-     * getEnv - get node environment
-     *
-     * @returns {string}
-     */
-    getEnv() {
-        return process.env.NODE_ENV
-    }
-
-    /**
-     * isDevEnv - check if we are in dev environment
-     *
-     * @returns {boolean}
-     */
-    isDevEnv() {
-        return "development" === this.getEnv().toLowerCase()
-    }
-
-    /**
-     * isDevEnv - check if we are in dev environment
-     *
-     * @returns {boolean}
-     */
-    isProdEnv() {
-        return !this.isDevEnv()
-    }
-
-    /**
-     * get - container instance
-     *
-     * @returns {Container}
-     */
-    get container() {
-        return this._container
     }
 
     /**

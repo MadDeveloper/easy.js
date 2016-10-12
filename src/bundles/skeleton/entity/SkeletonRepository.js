@@ -12,8 +12,8 @@ export default class SkeletonRepository extends Repository {
     constructor( entityManager ) {
         super( entityManager )
 
-        this._skeletonCollection    = this.entityManager.getCollection( 'skeleton' )
         this._skeleton              = this.entityManager.getModel( 'skeleton' )
+        this._skeletonCollection    = this.entityManager.getCollection( this._skeleton )
     }
 
     /**
@@ -51,14 +51,14 @@ export default class SkeletonRepository extends Repository {
                 options.transacting = t
 
                 skeleton.save( params, options )
-                .then( skeleton => {
-                    t.commit()
-                    resolve( skeleton )
-                })
-                .catch( error => {
-                    t.rollback()
-                    reject( error )
-                })
+                    .then( skeleton => {
+                        t.commit()
+                        resolve( skeleton )
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
             })
         })
     }
@@ -81,14 +81,14 @@ export default class SkeletonRepository extends Repository {
                 options.patch = true
 
                 this.save( skeleton, patchToApply, options )
-                .then( skeleton => {
-                    t.commit()
-                    resolve( skeleton )
-                })
-                .catch( error => {
-                    t.rollback()
-                    reject( error )
-                })
+                    .then( skeleton => {
+                        t.commit()
+                        resolve( skeleton )
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
             })
         })
     }
@@ -106,14 +106,14 @@ export default class SkeletonRepository extends Repository {
                 options.transacting = t
 
                 skeleton.destroy( options )
-                .then( () => {
-                    t.commit()
-                    resolve()
-                })
-                .catch( error => {
-                    t.rollback()
-                    reject( error )
-                })
+                    .then( () => {
+                        t.commit()
+                        resolve()
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
             })
         })
     }

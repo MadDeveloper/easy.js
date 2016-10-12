@@ -1,4 +1,4 @@
-import Configurable from './../core/Configurable'
+import Configurable from './../interfaces/Configurable'
 
 /**
  * @class EntityManager
@@ -11,7 +11,7 @@ export default class EntityManager extends Configurable {
     constructor() {
         super()
 
-        this._database       = null
+        this._database      = null
         this._bundlesPath   = ''
         this._cached        = {
             models: {},
@@ -19,6 +19,13 @@ export default class EntityManager extends Configurable {
         }
     }
 
+    /**
+     * configure - description
+     *
+     * @param  {type} bundlesPath description
+     * @param  {type} database    description
+     * @returns {type}             description
+     */
     configure( bundlesPath, database ) {
         this._bundlesPath = bundlesPath
         this._database = database
@@ -46,7 +53,7 @@ export default class EntityManager extends Configurable {
      * getModel - returns entity
      *
      * @param {string} model
-     * @returns {Entity}
+     * @returns {bookshelf.Model}
      */
     getModel( model ) {
         if ( this.isCached( model ) ) {
@@ -56,6 +63,18 @@ export default class EntityManager extends Configurable {
         const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` ).default
 
         return this.cache( new modelClass( this ), model, 'models' )
+    }
+
+    /**
+     * getCollection - returns collection of Model (cf. Bookshelf.js)
+     *
+     * @param {Model} model
+     * @returns {bookshelf.Collection}
+     */
+    getCollection( model ) {
+        return this.database.orm.Collection.extend({
+            model
+        })
     }
 
     /**

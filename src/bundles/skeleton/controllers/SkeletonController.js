@@ -6,17 +6,6 @@ import Controller   from '~/vendor/easy/core/Controller'
  * @extends Controller
  */
 export default class SkeletonController extends Controller {
-    /**
-     * @constructor
-     * @param {express.Request} req
-     * @param {express.Response} res
-     */
-    constructor( req, res ) {
-        super( req, res )
-
-        this._skeletonRepository    = this.entityManager.getRepository( 'skeleton' )
-        this._skeleton              = this.entityManager.getModel( 'skeleton' )
-    }
 
     /**
      * isRequestWellParameterized - verify if request contains valid params
@@ -42,7 +31,7 @@ export default class SkeletonController extends Controller {
 
         this.doesRequiredElementExists( 'skeleton', requireOptions )
         .then( skeleton => {
-            this.request.define( 'skeleton', skeleton )
+            this.request.store( 'skeleton', skeleton )
             next()
         })
         .catch( () => this.response.notFound() )
@@ -51,52 +40,55 @@ export default class SkeletonController extends Controller {
     /**
      * getSkeletons - get all skeletons
      */
-    getSkeletons() {
-        this.skeletonRepository
+    getSkeletons( request, response ) {
+        this.entityManager
+            .getRepository( 'skeleton' )
             .findAll()
-            .then( skeletons => this.response.ok( skeletons ) )
-            .catch( error => this.response.internalServerError( error ) )
+            .then( skeletons => response.ok( skeletons ) )
+            .catch( error => response.internalServerError( error ) )
     }
 
     /**
      * createSkeleton - create new skeleton
      */
-    createSkeleton() {
+    createSkeleton( request, response ) {
         if ( this.isRequestWellParameterized() ) {
-            this.skeletonRepository
-                .save( new this.skeleton(), this.request.getBody() )
-                .then( skeleton => this.response.created( skeleton ) )
-                .catch( error => this.response.internalServerError( error ) )
+            this.entityManager
+                .getRepository( 'skeleton' )
+                .save( new this.skeleton(), request.getBody() )
+                .then( skeleton => response.created( skeleton ) )
+                .catch( error => response.internalServerError( error ) )
         } else {
-            this.response.badRequest()
+            response.badRequest()
         }
     }
 
     /**
      * getSkeleton - get skeleton by id
      */
-    getSkeleton() {
-        this.response.ok( this.request.find( 'skeleton' ) )
+    getSkeleton( request, response ) {
+        response.ok( request.retrieve( 'skeleton' ) )
     }
 
     /**
      * updateSkeleton - update skeleton by id
      */
-    updateSkeleton() {
+    updateSkeleton( request, response ) {
         if ( this.isRequestWellParameterized() ) {
-            this.skeletonRepository
-                .save( this.request.find( 'skeleton' ), this.request.getBody() )
-                .then( skeleton => this.response.ok( skeleton ) )
-                .catch( error => this.response.internalServerError( error ) )
+            this.entityManager
+                .getRepository( 'skeleton' )
+                .save( request.retrieve( 'skeleton' ), request.getBody() )
+                .then( skeleton => response.ok( skeleton ) )
+                .catch( error => response.internalServerError( error ) )
         } else {
-            this.response.badRequest()
+            response.badRequest()
         }
     }
 
     /**
      * patchSkeleton - patch skeleton by id (following RFC)
      */
-    patchSkeleton() {
+    patchSkeleton( request, response ) {
         if ( this.isPatchRequestWellParameterized() ) {
             let patchRequestCorrectlyFormed = false
 
@@ -113,8 +105,9 @@ export default class SkeletonController extends Controller {
                         switch ( patch.op ) {
                             case 'replace':
                                 if ( indexOf( validPaths, patch.path ) >= 0 ) {
-                                    this.skeletonRepository
-                                        .patch( this.request.find( 'skeleton' ), patch )
+                                    this.entityManager
+                                        .getRepository( 'skeleton' )
+                                        .patch( request.retrieve( 'skeleton' ), patch )
                                         .then( skeleton => {
                                             if ( ++currentPatch >= opsLength ) {
                                                 // It's ok
@@ -131,41 +124,24 @@ export default class SkeletonController extends Controller {
 
             if ( patchRequestCorrectlyFormed ) {
                 patchSkeleton
-                    .then( skeleton => this.response.ok( skeleton ) )
-                    .catch( error => this.response.internalServerError( error ) )
+                    .then( skeleton => response.ok( skeleton ) )
+                    .catch( error => response.internalServerError( error ) )
             } else {
-                this.response.badRequest()
+                response.badRequest()
             }
         } else {
-            this.response.badRequest()
+            response.badRequest()
         }
     }
 
     /**
      * deleteSkeleton - delete skeleton by id
      */
-    deleteSkeleton() {
-        this.skeletonRepository
-            .delete( this.request.find( 'skeleton' ) )
-            .then( () => this.response.noContent() )
-            .catch( error => this.response.internalServerError( error ) )
-    }
-
-    /**
-     * get - skeleton repository
-     *
-     * @returns {SkeletonRepository}
-     */
-    get skeletonRepository() {
-        return this._skeletonRepository
-    }
-
-    /**
-     * get - skeleton model
-     *
-     * @returns {Skeleton}
-     */
-    get skeleton() {
-        return this._skeleton
+    deleteSkeleton( request, response ) {
+        this.entityManager
+            .getRepository( 'skeleton' )
+            .delete( request.retrieve( 'skeleton' ) )
+            .then( () => response.noContent() )
+            .catch( error => response.internalServerError( error ) )
     }
 }

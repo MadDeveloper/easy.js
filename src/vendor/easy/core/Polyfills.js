@@ -1,7 +1,7 @@
 /*
  * Not recommended to change this file if you do not know the consequences.
  * Some classes in easy vendor use these functions.
- * /!\ Never add a polyfill on Object (can cause problems with ORM or librairies which are based on objects).
+ * /!\ Never add a polyfill on Object prototype (can cause problems with ORM or librairies which are based on objects).
  */
 
 /**
@@ -9,7 +9,9 @@
  */
 export default class Polyfills {
     /**
-     * constructor
+     * load - description
+     *
+     * @returns {type}  description
      */
     static load() {
         Polyfills.stringPolyfills()

@@ -8,19 +8,6 @@ import TokenManager from '~/vendor/easy/authentication/TokenManager'
  */
 export default class UserController extends Controller {
     /**
-     * @constructor
-     * @param {express.Request} req
-     * @param {express.Response} res
-     */
-    constructor( req, res ) {
-        super( req, res )
-
-        this._userRepository    = this.entityManager.getRepository( 'user' )
-        this._user              = this.entityManager.getModel( 'user' )
-        this._roleRepository    = this.entityManager.getRepository( 'role' )
-    }
-
-    /**
      * isRequestWellParameterized - verify if request contains valids params
      *
      * @returns {boolean}
@@ -46,69 +33,87 @@ export default class UserController extends Controller {
         }
 
         this.doesRequiredElementExists( 'user', requireOptions )
-        .then( user => {
-            this.request.define( 'user', user )
-            next()
-        })
-        .catch( () => this.response.notFound() )
+            .then( user => {
+                this.request.store( 'user', user )
+                next()
+            })
+            .catch( () => this.response.notFound() )
     }
 
     /**
      * getUsers - get all users from specific role
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
-    getUsers() {
-        this.userRepository
-            .findAll( this.request.find( 'role' ) )
-            .then( users => this.response.ok( users ) )
-            .catch( error => this.response.internalServerError( error ) )
+    getUsers( request, response ) {
+        this.entityManager
+            .getRepository( 'user' )
+            .findAll( request.retrieve( 'role' ) )
+            .then( users => response.ok( users ) )
+            .catch( error => response.internalServerError( error ) )
     }
 
     /**
      * createUser - create new user
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
-    createUser() {
+    createUser( request, response ) {
         if ( this.isRequestWellParameterized() ) {
-            this.userRepository
-                .save( new this.user(), this.request.getBody() )
+            this.entityManager
+                .getRepository( 'user' )
+                .save( new this.user(), request.getBody() )
                 .then( user => {
                     user.unset( 'password' )
-                    this.response.created({ user: user.toJSON(), token: TokenManager.sign( user.toJSON() ) })
+                    response.created({ user: user.toJSON(), token: TokenManager.sign( user.toJSON() ) })
                 })
-                .catch( error => this.response.internalServerError( error ) )
+                .catch( error => response.internalServerError( error ) )
         } else {
-            this.response.badRequest()
+            response.badRequest()
         }
     }
 
     /**
      * getUser - get user by id
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
-    getUser() {
-        this.response.ok( this.request.find( 'user' ) )
+    getUser( request, response ) {
+        response.ok( request.retrieve( 'user' ) )
     }
 
     /**
      * updateUser - update user
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
-    updateUser() {
+    updateUser( request, response ) {
         if ( this.isRequestWellParameterized() ) {
-            if ( typeof this.request.getAppParameter( 'role_id' ) === "undefined" ) {
-                this.request.setAppParameter( 'role_id', this.request.getRouteParameter( 'role_id' ) )
+            if ( typeof request.getAppParameter( 'role_id' ) === "undefined" ) {
+                request.setAppParameter( 'role_id', request.getRouteParameter( 'role_id' ) )
             }
 
-            this.userRepository
-                .save( this.request.find( 'user' ), this.request.getBody() )
-                .then( user => this.response.ok( user ) )
-                .catch( error => this.response.internalServerError( error ) )
+            this.entityManager
+                .getRepository( 'user' )
+                .save( request.retrieve( 'user' ), request.getBody() )
+                .then( user => response.ok( user ) )
+                .catch( error => response.internalServerError( error ) )
         } else {
-            this.response.badRequest()
+            response.badRequest()
         }
     }
 
     /**
      * patchUser - patch user from specific properties
+     *
+     * @param  {Request} request
+     * @param  {Response} response
      */
-    patchUser() {
+    patchUser( request, response ) {
         if ( this.isPatchRequestWellParameterized() ) {
             let patchRequestCorrectlyFormed = false
 
@@ -125,14 +130,16 @@ export default class UserController extends Controller {
                         switch ( patch.op ) {
                             case 'replace':
                                 if ( indexOf( validPaths, patch.path ) >= 0 ) {
-                                    this.userRepository.patch( this.request.find( 'user' ), patch )
-                                    .then( user => {
-                                        if ( ++currentPatch >= opsLength ) {
-                                            // It's ok
-                                            resolve( user )
-                                        }
-                                    })
-                                    .catch( reject )
+                                    this.entityManager
+                                        .getRepository( 'user' )
+                                        .patch( request.retrieve( 'user' ), patch )
+                                        .then( user => {
+                                            if ( ++currentPatch >= opsLength ) {
+                                                // It's ok
+                                                resolve( user )
+                                            }
+                                        })
+                                        .catch( reject )
                                 }
                                 break
                         }
@@ -142,50 +149,27 @@ export default class UserController extends Controller {
 
             if ( patchRequestCorrectlyFormed ) {
                 patchUser
-                    .then( user => this.response.ok( user ) )
-                    .catch( error => this.response.internalServerError( error ) )
+                    .then( user => response.ok( user ) )
+                    .catch( error => response.internalServerError( error ) )
             } else {
-                this.response.badRequest()
+                response.badRequest()
             }
         } else {
-            this.response.badRequest()
+            response.badRequest()
         }
     }
 
     /**
      * deleteUser - delete user
-     */
-    deleteUser() {
-        this.userRepository
-            .delete( this.request.find( 'user' ) )
-            .then( () => this.response.noContent() )
-            .catch( error => this.response.internalServerError( error ) )
-    }
-
-    /**
-     * get - role repository
      *
-     * @returns {RoleRepository}
+     * @param  {Request} request
+     * @param  {Response} response
      */
-    get roleRepository() {
-        return this._roleRepository
-    }
-
-    /**
-     * get - user repository
-     *
-     * @returns {UserRepository}
-     */
-    get userRepository() {
-        return this._userRepository
-    }
-
-    /**
-     * get - user model
-     *
-     * @returns {User}
-     */
-    get user() {
-        return this._user
+    deleteUser( request, response ) {
+        this.entityManager
+            .getRepository( 'user' )
+            .delete( request.retrieve( 'user' ) )
+            .then( () => response.noContent() )
+            .catch( error => response.internalServerError( error ) )
     }
 }

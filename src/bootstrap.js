@@ -9,7 +9,7 @@ process.chdir( __dirname )
 /*
  * Easy.js dependencies
  */
-const kernel      = new Kernel().init( __dirname )
+const kernel      = new Kernel().init( process.cwd() )
 const application = new Application( kernel )
 
 application.configure()

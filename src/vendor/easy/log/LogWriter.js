@@ -1,6 +1,7 @@
 import fs           from 'fs'
 import Injectable   from './../core/Injectable'
 import Console      from './../core/Console'
+import { strtr }    from './../lib/string'
 
 /**
  * @class LogWriter
@@ -14,8 +15,7 @@ export default class LogWriter extends Injectable {
     constructor( container ) {
         super()
 
-        this._logFileManager    = container.getComponent( 'LogFileManager' )
-        this._string            = container.getLibrary( 'string' )
+        this._logFileManager = container.getComponent( 'LogFileManager' )
     }
 
     /**
@@ -28,7 +28,7 @@ export default class LogWriter extends Injectable {
     write( file, message, context ) {
         this.logFileManager
             .openLogFile( file )
-            .then( fd => fs.write( fd, this.string.strtr( message, context ), null, 'utf8' ) )
+            .then( fd => fs.write( fd, strtr( message, context ), null, 'utf8' ) )
             .catch( error => {
                 Console.error({
                     title: `Impossible to open/create ${file}.log at: ${this.logDirectoryPath}/${file}.log`,
@@ -45,14 +45,5 @@ export default class LogWriter extends Injectable {
      */
     get logFileManager() {
         return this._logFileManager
-    }
-
-    /**
-     * get string vendor library
-     *
-     * @returns {object}
-     */
-    get string() {
-        return this._string
     }
 }

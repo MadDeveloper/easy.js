@@ -15,10 +15,5 @@ export default {
     'database.schema': {
         path: 'database/SchemaDatabaseService',
         dependencies: [ 'component.database' ]
-    },
-
-    /* security */
-    'security.access': {
-        path: 'security/AccessService'
     }
 }

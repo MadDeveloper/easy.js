@@ -4,13 +4,21 @@ export const routes = {
     '/roles': {
         get: 'getRoles',
         post: 'createRole',
-        security: security[ '/roles' ]
+        security: {
+            strategy: 'default',
+            rules: security[ '/roles' ],
+            focus: 'role_id'
+        }
     },
 
     '/roles/:role_id': {
         get: 'getRole',
         put: 'updateRole',
         delete: 'deleteRole',
-        security: security[ '/roles' ]
+        security: {
+            strategy: 'default',
+            rules: security[ '/roles' ],
+            focus: 'role_id'
+        }
     }
 }
