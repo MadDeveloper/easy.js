@@ -1,5 +1,6 @@
-# Table of content
+# Summary
 
+* [Introduction](README.md)
 * [Configurations](configurations.md)
 * [Database](database.md)
 * [Bundles](bundles.md)
@@ -15,8 +16,7 @@
     * [Entities](entities.md)
 * [Authentication](authentiation.md)
 * [Console](console.md)
-* [Logger](logger.md)
+* [Logging](logging.md)
 * [API Doc](apidoc.md)
 * [Tests](tests.md)
-
 
