@@ -3,6 +3,6 @@ export default {
      * Id roles mapped with database
      */
     any: 0,
-    admin: 1,
+    admin: 6,
     user: 2
 }

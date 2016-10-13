@@ -10,15 +10,16 @@ export class UserController extends Controller {
     /**
      * isRequestWellParameterized - verify if request contains valids params
      *
+     * @param  {Request} request
      * @returns {boolean}
      */
-    isRequestWellParameterized() {
+    isRequestWellParameterized( request ) {
         return this.verifyParams([
             { property: 'username', typeExpected: 'string' },
             { property: 'email', typeExpected: 'string' },
             { property: 'password', typeExpected: 'string' },
             { property: 'role_id', typeExpected: 'number', optional: true }
-        ])
+        ], request.getBody() )
     }
 
     /**
@@ -29,7 +30,8 @@ export class UserController extends Controller {
      * @returns  {Promise}
      */
     userExists( request, response ) {
-        return this.entityManager
+        return this
+            .em
             .getRepository( 'user' )
             .find( request.getRouteParameter( 'user_id' ) )
             .then( user => {
@@ -54,7 +56,7 @@ export class UserController extends Controller {
      * @param  {Response} response
      */
     getUsers( request, response ) {
-        this.entityManager
+        this.em
             .getRepository( 'user' )
             .findAll( request.retrieve( 'role' ) )
             .then( users => response.ok( users ) )
@@ -68,10 +70,10 @@ export class UserController extends Controller {
      * @param  {Response} response
      */
     createUser( request, response ) {
-        if ( this.isRequestWellParameterized() ) {
-            this.entityManager
+        if ( this.isRequestWellParameterized( request ) ) {
+            this.em
                 .getRepository( 'user' )
-                .save( new this.user(), request.getBody() )
+                .save( this.em.getNewModel( 'user' ), request.getBody() )
                 .then( user => {
                     user.unset( 'password' )
                     response.created({ user: user.toJSON(), token: TokenManager.sign( user.toJSON() ) })
@@ -99,12 +101,12 @@ export class UserController extends Controller {
      * @param  {Response} response
      */
     updateUser( request, response ) {
-        if ( this.isRequestWellParameterized() ) {
+        if ( this.isRequestWellParameterized( request ) ) {
             if ( typeof request.getAppParameter( 'role_id' ) === "undefined" ) {
                 request.setAppParameter( 'role_id', request.getRouteParameter( 'role_id' ) )
             }
 
-            this.entityManager
+            this.em
                 .getRepository( 'user' )
                 .save( request.retrieve( 'user' ), request.getBody() )
                 .then( user => response.ok( user ) )
@@ -137,7 +139,7 @@ export class UserController extends Controller {
                         switch ( patch.op ) {
                             case 'replace':
                                 if ( indexOf( validPaths, patch.path ) >= 0 ) {
-                                    this.entityManager
+                                    this.em
                                         .getRepository( 'user' )
                                         .patch( request.retrieve( 'user' ), patch )
                                         .then( user => {
@@ -173,7 +175,7 @@ export class UserController extends Controller {
      * @param  {Response} response
      */
     deleteUser( request, response ) {
-        this.entityManager
+        this.em
             .getRepository( 'user' )
             .delete( request.retrieve( 'user' ) )
             .then( () => response.noContent() )

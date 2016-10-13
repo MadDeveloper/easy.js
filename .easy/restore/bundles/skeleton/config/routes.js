@@ -1,4 +1,5 @@
-import security from './security'
+import security     from './security'
+import middlewares  from './middlewares'
 
 export const routes = {
     '/skeletons': {
@@ -19,6 +20,7 @@ export const routes = {
             strategy: 'default',
             rules: security[ '/skeletons' ],
             focus: 'role_id'
-        }
+        },
+        middlewares: middlewares[ '/skeletons/:skeleton_id' ]
     }
 }

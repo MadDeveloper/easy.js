@@ -45,15 +45,6 @@ export default class Database extends Configurable {
     }
 
     /**
-     * get - description    
-     *
-     * @returns {type}  description
-     */
-    get orm() {
-        return this.instance
-    }
-
-    /**
      * set - description
      *
      * @param  {type} instance description

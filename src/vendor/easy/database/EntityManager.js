@@ -11,9 +11,9 @@ export default class EntityManager extends Configurable {
     constructor() {
         super()
 
-        this._database      = null
-        this._bundlesPath   = ''
-        this._cached        = {
+        this._database = null
+        this._bundlesPath = ''
+        this._cached = {
             models: {},
             repositories: {}
         }
@@ -45,7 +45,7 @@ export default class EntityManager extends Configurable {
 
             const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` ).default
 
-            return this.cache( new repositoryClass( this ), repository, 'repositories' )
+            return this.cache( new repositoryClass( this.getModel( repository ), this ), repository, 'repositories' )
         }
     }
 
@@ -66,13 +66,24 @@ export default class EntityManager extends Configurable {
     }
 
     /**
+     * getNewModel - description
+     *
+     * @param  {type} model description
+     * @returns {type}       description
+     */
+    getNewModel( model ) {
+        const Model = this.getModel( model )
+        return new Model()
+    }
+
+    /**
      * getCollection - returns collection of Model (cf. Bookshelf.js)
      *
      * @param {Model} model
      * @returns {bookshelf.Collection}
      */
     getCollection( model ) {
-        return this.database.orm.Collection.extend({
+        return this.orm.Collection.extend({
             model
         })
     }
@@ -152,7 +163,7 @@ export default class EntityManager extends Configurable {
      *
      * @returns {Object}
      */
-    get databaseConnection() {
+    get orm() {
         return this.database.instance
     }
 

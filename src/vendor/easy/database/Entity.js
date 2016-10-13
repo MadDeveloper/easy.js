@@ -7,19 +7,8 @@ export default class Entity {
      * @param {EntityManager} entityManager
      */
     constructor( entityManager ) {
-        this._database = entityManager.database
-    }
-
-    /**
-     * get - ORM (Bookshelf)
-     *
-     * @returns {Bookshelf}
-     */
-    get database() {
-        return this._database
-    }
-
-    get orm() {
-        return this.database.orm
+        this.em = this.entityManager = entityManager
+        this.database = this.db = entityManager.database
+        this.orm = this.database.instance
     }
 }

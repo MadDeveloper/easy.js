@@ -8,9 +8,9 @@ export default class Controller {
      * @constructor
      */
     constructor( container ) {
-        this.container      = container
-        this.entityManager  = container.getComponent( 'entitymanager' )
-        this.router         = container.getComponent( 'router' )
+        this.container = container
+        this.entityManager = this.em = container.getComponent( 'entitymanager' )
+        this.router = container.getComponent( 'router' )
     }
 
     /**
@@ -22,10 +22,6 @@ export default class Controller {
      */
     verifyParams( required, params = {} ) {
         let verified = true
-
-        if ( !params || JSON.stringify({}) === JSON.stringify( params ) ) {
-            params = this.request.getBody()
-        }
 
         for ( let requiredParam in required ) {
             const optional = required[ requiredParam ].optional

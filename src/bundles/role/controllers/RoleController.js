@@ -8,13 +8,14 @@ export class RoleController extends Controller {
     /**
      * isRequestWellParameterized - verify if request contains valid params
      *
+     * @param  {Request} request
      * @returns {boolean}
      */
-    isRequestWellParameterized() {
+    isRequestWellParameterized( request ) {
         return this.verifyParams([
             { property: 'name', typeExpected: 'string' },
             { property: 'slug', typeExpected: 'string' }
-        ])
+        ], request.getBody() )
     }
 
     /**
@@ -25,9 +26,9 @@ export class RoleController extends Controller {
      * @param  {Function} next
      */
     roleExists( request, response ) {
-        return this.entityManager
+        return this.em
             .getRepository( 'role' )
-            .find( request.getRouteParameter( 'role_id' ) )
+            .find( request.getRouteParameter( 'role_id' ), this.em.getModel( 'role' ) )
             .then( role => {
                 if ( role ) {
                     request.store( 'role', role )
@@ -50,7 +51,7 @@ export class RoleController extends Controller {
      * @param  {Response} response
      */
     getRoles( request, response ) {
-        this.entityManager
+        this.em
             .getRepository( 'role' )
             .findAll()
             .then( roles => response.ok( roles ) )
@@ -64,10 +65,10 @@ export class RoleController extends Controller {
      * @param  {Response} response
      */
     createRole( request, response ) {
-        if ( this.isRequestWellParameterized() ) {
-            this.entityManager
+        if ( this.isRequestWellParameterized( request ) ) {
+            this.em
                 .getRepository( 'role' )
-                .save( new this.roleModel(), request.getBody() )
+                .save( this.em.getNewModel( 'role' ), request.getBody() )
                 .then( role => response.created( role ) )
                 .catch( error => response.internalServerError( error ) )
         } else {
@@ -92,8 +93,8 @@ export class RoleController extends Controller {
      * @param  {Response} response
      */
     updateRole( request, response ) {
-        if ( this.isRequestWellParameterized() ) {
-            this.entityManager
+        if ( this.isRequestWellParameterized( request ) ) {
+            this.em
                 .getRepository( 'role' )
                 .save( request.retrieve( 'role' ), request.getBody() )
                 .then( role => response.ok( role ) )

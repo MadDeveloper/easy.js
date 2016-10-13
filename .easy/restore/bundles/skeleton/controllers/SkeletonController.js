@@ -5,17 +5,17 @@ import Controller   from '~/vendor/easy/core/Controller'
  * @class SkeletonController
  * @extends Controller
  */
-export default class SkeletonController extends Controller {
-
+export class SkeletonController extends Controller {
     /**
      * isRequestWellParameterized - verify if request contains valid params
      *
+     * @param  {Request} request
      * @returns {boolean}
      */
-    isRequestWellParameterized() {
+    isRequestWellParameterized( request ) {
         return this.verifyParams([
             { property: 'property', typeExpected: 'string' }
-        ])
+        ], request )
     }
 
     /**
@@ -26,7 +26,8 @@ export default class SkeletonController extends Controller {
      * @returns  {Promise}
      */
     skeletonExists( request, response ) {
-        return this.entityManager
+        return this
+            .em
             .getRepository( 'skeleton' )
             .find( request.getRouteParameter( 'skeleton_id' ) )
             .then( skeleton => {
@@ -51,7 +52,7 @@ export default class SkeletonController extends Controller {
      * @param  {Response} response
      */
     getSkeletons( request, response ) {
-        this.entityManager
+        this.em
             .getRepository( 'skeleton' )
             .findAll()
             .then( skeletons => response.ok( skeletons ) )
@@ -65,10 +66,10 @@ export default class SkeletonController extends Controller {
      * @param  {Response} response
      */
     createSkeleton( request, response ) {
-        if ( this.isRequestWellParameterized() ) {
-            this.entityManager
+        if ( this.isRequestWellParameterized( request ) ) {
+            this.em
                 .getRepository( 'skeleton' )
-                .save( new this.skeleton(), request.getBody() )
+                .save( this.em.getNewModel( 'skeleton' ), request.getBody() )
                 .then( skeleton => response.created( skeleton ) )
                 .catch( error => response.internalServerError( error ) )
         } else {
@@ -93,64 +94,12 @@ export default class SkeletonController extends Controller {
      * @param  {Response} response
      */
     updateSkeleton( request, response ) {
-        if ( this.isRequestWellParameterized() ) {
-            this.entityManager
+        if ( this.isRequestWellParameterized( request ) ) {
+            this.em
                 .getRepository( 'skeleton' )
                 .save( request.retrieve( 'skeleton' ), request.getBody() )
                 .then( skeleton => response.ok( skeleton ) )
                 .catch( error => response.internalServerError( error ) )
-        } else {
-            response.badRequest()
-        }
-    }
-
-    /**
-     * patchSkeleton - patch skeleton by id (following RFC)
-     *
-     * @param  {Request} request
-     * @param  {Response} response
-     */
-    patchSkeleton( request, response ) {
-        if ( this.isPatchRequestWellParameterized() ) {
-            let patchRequestCorrectlyFormed = false
-
-            let patchSkeleton = new Promise( ( resolve, reject ) => {
-                const validPaths = [ '/property' ]
-                const ops = this.parsePatchParams()
-
-                if ( ops ) {
-                    patchRequestCorrectlyFormed = true
-                    const opsLength = ops.length
-                    let currentPatch = 0
-
-                    ops.forEach( patch => {
-                        switch ( patch.op ) {
-                            case 'replace':
-                                if ( indexOf( validPaths, patch.path ) >= 0 ) {
-                                    this.entityManager
-                                        .getRepository( 'skeleton' )
-                                        .patch( request.retrieve( 'skeleton' ), patch )
-                                        .then( skeleton => {
-                                            if ( ++currentPatch >= opsLength ) {
-                                                // It's ok
-                                                resolve( skeleton )
-                                            }
-                                        })
-                                        .catch( reject )
-                                }
-                                break
-                        }
-                    })
-                }
-            })
-
-            if ( patchRequestCorrectlyFormed ) {
-                patchSkeleton
-                    .then( skeleton => response.ok( skeleton ) )
-                    .catch( error => response.internalServerError( error ) )
-            } else {
-                response.badRequest()
-            }
         } else {
             response.badRequest()
         }
@@ -163,7 +112,7 @@ export default class SkeletonController extends Controller {
      * @param  {Response} response
      */
     deleteSkeleton( request, response ) {
-        this.entityManager
+        this.em
             .getRepository( 'skeleton' )
             .delete( request.retrieve( 'skeleton' ) )
             .then( () => response.noContent() )

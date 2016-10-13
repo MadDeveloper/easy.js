@@ -4,28 +4,116 @@
 export default class Repository {
     /**
      * @constructor
-     * @param  {EntityManager} entityManager
+     * @param  {bookshelf.Model} model
+     * @param  {EntityManager} em
      */
-    constructor( entityManager ) {
-        this._entityManager = entityManager
-        this._database      = entityManager.database
+    constructor( model, em ) {
+        this.model = model
+        this.collection = em.getCollection( model )
+        this.entityManager = this.em = em
+        this.database = this.db = em.database
+        this.orm = this.database.instance
     }
 
     /**
-     * get - returns database connection (ORM)
+     * findAll - fetch all models
      *
-     * @returns {Bookshelf}
+     * @param  {Object} options = {}
+     * @returns {Promise}
      */
-    get database() {
-        return this._database
+    findAll( options = {} ) {
+        return this.collection.forge().fetch( options )
     }
 
     /**
-     * get - entity manager instance
+     * find - fetch model by id
      *
-     * @returns {EntityManager}
+     * @param  {Number} id
+     * @param  {Object} options = {}
+     * @returns {Promise}
      */
-    get entityManager() {
-        return this._entityManager
+    find( id, options = {} ) {
+        return this.model.forge({ id }).fetch( options )
+    }
+
+    /**
+     * save - save or update model if already exists
+     *
+     * @param  {bookshelf.Model} model
+     * @param  {Object} params
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
+    save( model, params, options = {} ) {
+        return new Promise( ( resolve, reject ) => {
+            this.orm.transaction( t => {
+                options.transacting = t
+
+                model.save( params, options )
+                    .then( model => {
+                        t.commit()
+                        resolve( model )
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
+            })
+        })
+    }
+
+    /**
+     * patch - patch model
+     *
+     * @param  {bookshelf.Model} model
+     * @param  {Object} patch
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
+    patch( model, patch, options = {} ) {
+        return new Promise( ( resolve, reject ) => {
+            let patchToApply = {}
+            patchToApply[ patch.path.substring( 1 ) ] = patch.value
+
+            this.orm.transaction( t => {
+                options.transacting = t
+                options.patch = true
+
+                this.save( model, patchToApply, options )
+                    .then( model => {
+                        t.commit()
+                        resolve( model )
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
+            })
+        })
+    }
+
+    /**
+     * delete - delete model
+     *
+     * @param  {bookshelf.Model} model
+     * @param  {Object} options = {}
+     * @returns {Promise}
+     */
+    delete( model, options = {} ) {
+        return new Promise( ( resolve, reject ) => {
+            this.orm.transaction( t => {
+                options.transacting = t
+
+                model.destroy( options )
+                    .then( () => {
+                        t.commit()
+                        resolve()
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
+            })
+        })
     }
 }

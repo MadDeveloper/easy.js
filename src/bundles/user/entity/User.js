@@ -7,16 +7,16 @@ import Entity from '~/vendor/easy/database/Entity'
 export default class User extends Entity {
     /**
      * @constructor
-     * @param  {object} dependencies
+     * @param  {EntityManager} em
      */
-    constructor( entityManager ) {
-        super( entityManager )
+    constructor( em ) {
+        super( em )
 
-        return this.orm.Model.extend({
+        return em.orm.Model.extend({
             tableName: 'users',
 
             role() {
-                return this.belongsTo( entityManager.getModel( 'role' ) )
+                return this.belongsTo( em.getModel( 'role' ) )
             }
         })
     }

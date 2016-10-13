@@ -7,12 +7,12 @@ import Entity from '~/vendor/easy/database/Entity'
 export default class Skeleton extends Entity {
     /**
      * @constructor
-     * @param  {EntityManager} entityManager
+     * @param  {EntityManager} em
      */
-    constructor( entityManager ) {
-        super( entityManager )
+    constructor( em ) {
+        super( em )
 
-        return this.database.Model.extend({
+        return this.orm.Model.extend({
             tableName: 'skeletons'
         })
     }
