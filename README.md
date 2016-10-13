@@ -1,7 +1,12 @@
 # Easy.js framework
 
 Easy.js est un framework pour NodeJS, amenant de la conception objet côté serveur basé sur ES2015.
+
 Le framework met à disposition des composants devenus incoutournables pour le développement actuel : L'injection de dépendances, le design pattern Strategy, structure MVC et des commandes console permettant de gérer la structure du projet.
+
+Easy.js est, pour le moment, uniquement conçu pour des API Rest avec des réponses JSON, par conséquent il n'intègre aucun moteur de template et n'est pas conçu pour renvoyer des vues.
+
+Le but de Easy.js est de se concentrer uniquement sur la partie métier d'un serveur (backend) : L'architecture, la base de données, gestion des requêtes, authentification, sécurité, etc.. Les parties clientes (frontend) sont aujourd'hui mieux gérées par des frameworks adéquats (Angular, React, Vue.js, Backbone.js, etc.).
 
 
 ## Requirements
@@ -17,7 +22,7 @@ Utilisant quelques fonctionnalités non supportés par le moteur V8 (les import 
 ### Requirements
 
 ```
-npm install babel-cli --global
+npm install babel-cli apidoc nodemon --global
 ```
 
 ### Installation & start
