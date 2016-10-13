@@ -1,8 +1,6 @@
-import mongoose from 'mongoose'
-import config   from './../../app'
+import mongoose     from 'mongoose'
+import { config }   from 'knex'
 
-const params = config.database
-
-mongoose.connect( `mongodb://${params.connection.host}/${params.connection.database}` )
+mongoose.connect( `mongodb://${config.host}/${config.database}` )
 
 export default mongoose

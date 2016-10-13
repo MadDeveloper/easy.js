@@ -1,29 +1,17 @@
-import Configurable from './../interfaces/Configurable'
+import ConfigLoader from './../core/ConfigLoader'
 
 /**
  * @class Database
- * @extends Configurable
  */
-export default class Database extends Configurable {
+export default class Database {
     /**
      * constructor
      */
     constructor() {
-        super()
-
         this._databasePath  = ''
         this._instance      = null
         this._connected     = false
-    }
-
-    /**
-     * configure - description
-     *
-     * @param  {type} configPath description
-     * @returns {type}            description
-     */
-    configure( configPath ) {
-        this._databasePath = `${configPath}/database/database`
+        this.config         = ConfigLoader.loadFromGlobal( 'database/database' )
     }
 
     /**
@@ -32,7 +20,7 @@ export default class Database extends Configurable {
      * @returns {type}  description
      */
     connect() {
-        this.instance = require( this._databasePath ).default()
+        this.instance = this.config.connector
     }
 
     /**

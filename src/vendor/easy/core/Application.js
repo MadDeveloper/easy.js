@@ -72,7 +72,6 @@ export default class Application extends Configurable {
          */
         this.logFileManager = this.container.getComponent( 'LogFileManager' )
         this.appName = this.config.app.name
-        this.database.configure( this.kernel.path.config )
         this.entityManager.configure( this.kernel.path.bundles, this.database )
         this.bundleManager.configure( this.kernel.path.bundles )
         this.router.configure( this, express.Router() )

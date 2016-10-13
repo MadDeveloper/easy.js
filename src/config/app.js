@@ -24,21 +24,6 @@ export default {
     },
 
     /*
-     * Database credentials
-     */
-    database: {
-        client: 'mysql',
-        connector: 'bookshelf',
-        connection: {
-            host: 'localhost',
-            user: 'root',
-            password: 'root',
-            database: 'prepapp',
-            charset: 'utf8'
-        }
-    },
-
-    /*
      * SSL/TLS security keys
      */
     credentials: getCredentials(),

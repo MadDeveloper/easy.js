@@ -1,12 +1,7 @@
-import config from './../app'
+import Bookshelf from './connectors/Bookshelf'
+import { config } from './connectors/knex'
 
-export default function database( clearCache ) {
-    const connector     = config.database.connector
-    const connectorPath = `${__dirname}/connectors/${connector}`
-
-    if ( clearCache ) {
-        delete require.cache[ require.resolve( connectorPath ) ]
-    }
-
-    return require( connectorPath ).default
+export default {
+    connector: Bookshelf,
+    connection: config
 }

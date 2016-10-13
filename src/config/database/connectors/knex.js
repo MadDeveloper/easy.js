@@ -1,17 +1,23 @@
-import Knex     from 'knex'
-import config   from './../../app'
+import Knex from 'knex'
 
-const params = config.database
+export const config = {
+    client: 'mysql',
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'prepapp',
+    charset: 'utf8'
+}
 
-export default Knex({
-    client: params.client,
+export const knex = Knex({
+    client: config.client,
 
     connection: {
-        host     : params.connection.host,
-        user     : params.connection.user,
-        password : params.connection.password,
-        database : params.connection.database,
-        charset  : params.connection.charset
+        host     : config.host,
+        user     : config.user,
+        password : config.password,
+        database : config.database,
+        charset  : config.charset
     },
 
     pool: {

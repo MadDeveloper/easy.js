@@ -11,11 +11,6 @@ import { kernel, application }	from '~/bootstrap'
 
 const schemaDatabaseService	= container.getService( 'database.schema' )
 const knex					= schemaDatabaseService.knex
-const dbConfig 				= {
-	host: config.database.connection.host,
-	user: config.database.connection.user,
-	password: config.database.connection.password
-}
 
 const titleError		= "Error when initializing roles and users"
 const consequenceError	= "Initialization aborted."
