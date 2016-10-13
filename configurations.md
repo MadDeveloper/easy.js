@@ -33,3 +33,4 @@ Quelques explications à propos de ces fichiers/dossiers :
 * `roles.js` Associe les roles à leur identifiant (par défaut liés avec ceux en base de données)
 * `services.js` Fichier contenant les définitions de services, leur chemin et leurs dépendances
 
+Nous rentrerons dans les détails de chacun des fichiers dans les prochains chapitres.
