@@ -1,5 +1,4 @@
-- pouvoir reset le skeleton
-- REDIGER LA DOC
+- DOC
 
 
 --- LATER ---
