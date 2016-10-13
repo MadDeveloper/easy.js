@@ -7,9 +7,9 @@ export default class SchemaDatabaseService {
     /**
      * constructor
      *
-     * @param  {Database} { database }
+     * @param  {Database} database
      */
-    constructor({ database }) {
+    constructor( database ) {
         this._knex = database.instance.knex
     }
 

@@ -158,7 +158,12 @@ export default class Container {
      */
     storeService( name, path ) {
         const serviceClass  = require( path ).default
-        this.shared[ name ] = new serviceClass( this.injectDependencies( name ) )
+        this.shared[ name ] = newService( this.injectDependencies( name ) )
+
+        function newService() {
+            arguments[ 0 ].unshift( undefined )
+            return new ( serviceClass.bind.apply( serviceClass, arguments[ 0 ] ) )()
+        }
     }
 
     /**
@@ -177,15 +182,15 @@ export default class Container {
      * injectDependencies - inject dependencies into the service requested
      *
      * @param  {string} service
-     * @returns {Object}
+     * @returns {Array}
      */
     injectDependencies( service ) {
-        let dependencies = {}
+        let dependencies = []
         const serviceRequestedDependencies = this.servicesMapping[ service ].dependencies
 
         if ( serviceRequestedDependencies ) {
-            let nameDependency
             let currentDependency
+            let nameDependency
 
             for ( const dependency in serviceRequestedDependencies ) {
                 if ( serviceRequestedDependencies.hasOwnProperty( dependency ) ) {
@@ -196,12 +201,12 @@ export default class Container {
                         /*
                          * Component dependency
                          */
-                        dependencies[ nameDependency ] = this.getComponent( nameDependency )
+                        dependencies.push( this.getComponent( nameDependency ) )
                     } else {
                         /*
                          * Service dependency
                          */
-                        dependencies[ nameDependency ] = this.getService( currentDependency )
+                        dependencies.push( this.getService( currentDependency ) )
                     }
                 }
             }

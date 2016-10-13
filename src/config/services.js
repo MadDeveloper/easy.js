@@ -15,13 +15,5 @@ export default {
     'database.schema': {
         path: 'database/SchemaDatabaseService',
         dependencies: [ 'component.database' ]
-    },
-
-    'authentication': {
-        path: 'Authentication',
-        dependencies: [
-            'component.router',
-            'component.entityManager'
-        ]
     }
 }
