@@ -15,6 +15,7 @@
 * [Entities](entities.md)
 * [Authentication](authentiation.md)
 * [Console](console.md)
+* [Logger](logger.md)
 * [API Doc](apidoc.md)
 * [Tests](tests.md)
 
