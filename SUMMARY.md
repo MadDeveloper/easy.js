@@ -19,4 +19,5 @@
 * [Logging](logging.md)
 * [API Doc](apidoc.md)
 * [Tests](tests.md)
+* [Binaries](bonaries.md)
 
