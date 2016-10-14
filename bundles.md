@@ -10,4 +10,6 @@ Les bundles role et user sont intégrés par défaut car ils sont utilisés pour
 
 En ce qui concerne le bundle skeleton, c'est un cas particulier innovant dans le monde du framework. Le skeleton permet d'avoir une base pour la création de nos bundles puisque la création d'un bundle se fait via la commande `npm run bundles:new myBundle` qui vous guidera pour la création de ce dernier. L'implication du skeleton est donc qu'il va servir de support, son code sera duppliqué en remplaçant toutes les occurences de `Skeleton` par `MyBundle` et `skeleton` par `myBundle` dans le code. Il vous est possible de modifier le skeleton afin de pouvoir retrouver des mêmes fonctionnalités dans tous vos bundles. En cas d'erreur de votre part, il vous est possible de pouvoir reset le skeleton avec la commande `npm run bundles:restore:skeleton`. Prochainement, il vous sera possible de pouvoir gérer des snapshots de votre skeleton.
 
+Pour rendre un bundle actif, il suffit d'écrire son nom dans le fichier de configuration `~/src/config/bundles.js`. Si vous utilisez la commande ci-dessus, il vous sera demandé automatiquement si vous voulez qu'il soit ajouté pour vous.
+
 Il est temps maintenant de commencer la configuration de notre nouveau bundle, en commençant par le [routing](routing.md).
