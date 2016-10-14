@@ -15,4 +15,4 @@ Attention si :
 - Si vous décidez d'utiliser autre connecteur, il faudra penser à adapter votre code Repository.
 - Vous décidez de supprimer un ou des connecteurs, de ne pas enlever Knex.js si vous utilisez encore Bookshelf, car en effet Bookshelf est basé sur Knex pour construire ses requêtes.
 
-Pour faciliter la construction et l'exportation de la base de données, il vous est mis à disposition le fichier `schema.js` qui contient une représentation en objet Javascript de vos tables
+Pour faciliter la construction et l'exportation de la base de données, il vous est mis à disposition le fichier `schema.js` qui contient une représentation en objet Javascript de vos tables. Une liste exhaustive de toutes les clés/valeurs possibles pour définir une construction de table, de jointure, etc.
