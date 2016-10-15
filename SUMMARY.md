@@ -22,5 +22,4 @@
 * [API Doc](apidoc.md)
 * [Tests](tests.md)
 * [Binaries](binaries.md)
-* [Contributors](contributors.md)
 
