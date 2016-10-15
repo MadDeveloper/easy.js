@@ -4,6 +4,7 @@
 * [Configurations](configurations.md)
 * [Database](database.md)
 * [Bundle](bundles.md)
+    * [Index file](bundle-index.md)
     * [Routing](bundle-routing.md)
     * [Middlewares](bundle-middlewares.md)
     * [Security](bundle-security.md)
