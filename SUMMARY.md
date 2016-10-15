@@ -3,7 +3,7 @@
 * [Introduction](README.md)
 * [Configurations](configurations.md)
 * [Database](database.md)
-* [Bundle](bundles.md)
+* [Bundle](bundle.md)
     * [Index file](bundle-index.md)
     * [Routing](bundle-routing.md)
     * [Middlewares](bundle-middlewares.md)
