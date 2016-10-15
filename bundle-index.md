@@ -12,4 +12,4 @@ export { MyBundleController as controller } from './controllers/MyBundleControll
 
 Généralement, vous ne ferez pas de traitement dans ce fichier, il servira uniquement à exposer les fonctionnalités et configurations et notre bundle.
 
-Suite à cette courte introduction, nous allons maintenant voir comment configurer notre [routing](routing.md) de bundle.
+Suite à cette courte introduction, nous allons maintenant voir comment configurer notre [routing](bundle-routing.md) de bundle.
