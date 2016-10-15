@@ -38,3 +38,26 @@ Nous venons de créer notre première route ! Il n'y a rien de plus simple pour 
 * put
 * patch
 * delete
+* etc.
+
+Lors de l'écriture de vos routes, vous serez souvent amenés à devoir y intégrer des paramètres de route, un ID, un nom, etc.
+Comme Easy.js se sert du router de Express, vous pouvez définir les paramètres de route avec deux points suivi du nom du paramètre, par example : `/myroute/:my_param`, définir un paramètre `:my_param` récupérable via l'objet `Request` que l'on verra plus tard.
+
+Voici un exemple de configuration de routes :
+
+```javascript
+export const routes = {
+    '/roles': {
+        get: 'getRoles',
+        post: 'createRole'
+    },
+
+    '/roles/:role_id': {
+        get: 'getRole',
+        put: 'updateRole',
+        delete: 'deleteRole'
+    }
+}
+```
+
+Vous venez de voir comment définir des routes, cependant cela ne suffit pas pour faire un projet complet et sécurisé, en effet vous allez vouloir définir des accès à certaines routes, effectuer des contrôles sur les paramètres, etc. Nous verrons tout ceci dans les prochains chapitre, et notamment le suivant portant sur les [middlewares](bundle-middlewares.md).
