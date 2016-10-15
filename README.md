@@ -39,3 +39,6 @@ npm start
 Now, you are ready yet to begin development under Easy.js!
 Continue reading to next chapter on [Configurations](configurations.md).
 
+# Contributors
+
+
