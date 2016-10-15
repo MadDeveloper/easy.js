@@ -13,6 +13,7 @@
         * [Response](response.md)
     * [Repository](repository.md)
         * [Entity](entity.md)
+* [Services](services.md)
 * [Router](router.md)
 * [EntityManager](entitymanager.md)
 * [Authentication](authentiation.md)
