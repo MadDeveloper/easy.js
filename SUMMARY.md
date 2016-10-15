@@ -12,7 +12,7 @@
         * [Request](request.md)
         * [Response](response.md)
     * [Repository](repository.md)
-    * [Entity](entity.md)
+        * [Entity](entity.md)
 * [Router](router.md)
 * [EntityManager](entitymanager.md)
 * [Authentication](authentiation.md)
