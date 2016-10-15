@@ -29,4 +29,4 @@ export const route = {
 
 C'est à ce moment que vous allez vous demander à quoi sert et correspond ce 'isAlive'. Et bien c'est ici que toute la magie du framework Easy.js opère, en effet lorsque vous allez démarrer votre serveur, Easy.js va lire tous vos fichiers de configurations, donc vos routes, et dans le cas présent, il va associer la route `/mybundle` avec la méthode http `GET` à la méthode de notre contrôleur que nous avons exposé dans notre fichier [index.js](bundle-index.md).
 
-N'ayant pas encore défini la méthode `isAlive()` dans notre contrôleur inutile de tester cette route pour le moment, nous y viendrons lors du chapitre traitant le [Controller](
+N'ayant pas encore défini la méthode `isAlive()` dans notre contrôleur inutile de tester cette route pour le moment, nous y viendrons lors du chapitre traitant le [Controller](controller.md)
