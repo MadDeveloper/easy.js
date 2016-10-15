@@ -15,4 +15,8 @@ Attention si :
 - Si vous décidez d'utiliser autre connecteur, il faudra penser à adapter votre code Repository.
 - Vous décidez de supprimer un ou des connecteurs, de ne pas enlever Knex.js si vous utilisez encore Bookshelf, car en effet Bookshelf est basé sur Knex pour construire ses requêtes.
 
-Pour faciliter la construction et l'exportation de la base de données, il vous est mis à disposition le fichier `schema.js` qui contient une représentation en objet Javascript de vos tables. Une liste exhaustive de toutes les clés/valeurs possibles pour définir une construction de table, de jointure, etc.
+Pour faciliter la construction et l'exportation de la base de données, il vous est mis à disposition le fichier `schema.js` qui contient une représentation en objet Javascript de vos tables. Une liste exhaustive de toutes les clés/valeurs possibles pour définir les champs de la table, des jointures, etc.
+
+Une fois le fichier `schema.js`, il faut suffit de lancer la commande `npm run database:migrate` pour construire les tables et les relations que vous avez défini dans ce dernier.
+
+Une dernière possibilité de construction de la base de données est l'utilisation d'un fichier `.sql` contenant votre architecture et vos données. Le fichier doit être nommé selon la valeur de la clé `database` définie dans vos configurations (par défaut située dans le fichier `knex.js`. Votre fichier `myproject.sql` doit se situer à la racine du dossier de configurations de la base de données : `~/src/config/database/myproject.sql` . Et pour finir, lancez la commande `npm run database:import` pour importer toutes vos données de votre fichier sql dans votre base de données.
