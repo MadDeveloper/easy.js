@@ -21,4 +21,4 @@ Une fois le fichier `schema.js`, il faut suffit de lancer la commande `npm run d
 
 Une dernière possibilité de construction de la base de données est l'utilisation d'un fichier `.sql` contenant votre architecture et vos données. Le fichier doit être nommé selon la valeur de la clé `database` définie dans vos configurations (par défaut située dans le fichier `knex.js`. Votre fichier `myproject.sql` doit se situer à la racine du dossier de configurations de la base de données : `~/src/config/database/myproject.sql` . Et pour finir, lancez la commande `npm run database:import` pour importer toutes vos données de votre fichier sql dans votre base de données.
 
-La base de données étant configurée et/ou construite, nous pouvons désormais commencez le développement de notre projet en continuant notre lecture avec le prochains chapitre qui traite les [Bundles](bundles.md).
+La base de données étant configurée et/ou construite, nous pouvons désormais commencez le développement de notre projet en continuant notre lecture avec le prochains chapitre qui traite les [Bundles](bundle.md).
