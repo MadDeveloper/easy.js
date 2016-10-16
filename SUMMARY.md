@@ -22,5 +22,5 @@
 * [Logging](logging.md)
 * [API Doc](apidoc.md)
 * [Tests](tests.md)
-* [Binaries](binaries.md)
+* [Scripts NPM](scripts.md)
 
