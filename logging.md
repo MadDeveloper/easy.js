@@ -18,12 +18,12 @@ Vous pouvez directement définir la classe `Logger` en tant que dépendance d'un
 
 | Method | File | Description |
 |--------|------|-------------|
-| log | std | 
-| debug | debugs |
-| info | events |
-| notice | events |
-| warning | warn |
-| error | errors |
+| log | std | Logs message |
+| debug | debugs | Detailed debug informations |
+| info | events | Interesting events |
+| notice | events | Normal but significating events |
+| warning | warn | Exceptionnal occurrences that are not errors |
+| error | errors | 
 | critical | errors |
 | alert | fatals |
 | emergency | fatals |
