@@ -24,6 +24,6 @@ Vous pouvez directement définir la classe `Logger` en tant que dépendance d'un
 | notice | events | Normal but significating events |
 | warning | warn | Exceptionnal occurrences that are not errors |
 | error | errors | 
-| critical | errors |
+| critical | errors | Criticals conditions |
 | alert | fatals | Action must be taken immediately |
-| emergency | fatals |
+| emergency | fatals | System is unusable |
