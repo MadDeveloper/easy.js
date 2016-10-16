@@ -16,14 +16,14 @@ const logger = container.getComponent( 'logger' )
 
 Vous pouvez directement définir la classe `Logger` en tant que dépendance d'un service : `component.logger`.
 
-| Method | Description |
-|--------|-------------|
-| log
-| debug
-| info
-| notice
-| warning
-| error
-| critical
-| alert
-| emergency
+| Method | File | Description |
+|--------|------|-------------|
+| log | std | 
+| debug | debugs |
+| info | events |
+| notice | events |
+| warning | warn |
+| error | errors |
+| critical | errors |
+| alert | fatals |
+| emergency | fatals |
