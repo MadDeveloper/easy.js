@@ -60,5 +60,5 @@ export const routes = {
 
 Pour finaliser notre middleware il suffit maintenant d'écrire la méthode dans notre contrôleur. Nous verrons plus en détails ce dernier dans le chapitre traitant justement du [Controller](controller.md).
 
-Maintenant que nous savons comment définir des middlewares, il devient tout aussi important de savoir comment définir des accès à une ou des routes de manière plus généraliste, passons donc au chapitre suivant sur la [sécurité](bundle-security.md)
+Maintenant que nous savons comment définir des middlewares, il devient tout aussi important de savoir comment définir des accès à une ou des routes de manière plus généraliste, passons donc au chapitre suivant sur la [sécurité](bundle-security.md).
 
