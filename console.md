@@ -25,7 +25,7 @@ Example :
 /* src/bundles/myBundle/controllers/MyBundleController.js */
 import Console from '~/vendor/easy/core/Console'
 
-class MyBundleController extends ... {
+class MyBundleController extends Controller {
     myMethod() {
         try {
             ...
