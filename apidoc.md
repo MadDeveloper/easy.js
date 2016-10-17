@@ -9,5 +9,25 @@ Vos fichiers de documentation d'API doivent se situer dans le dossier `doc/` de 
 Example :
 
 ```javascript
-/** * getRoles - get all roles * * @api {get} /roles Get all roles * @apiName GetRoles * @apiGroup Role * * * @apiSuccess {Array[Role]} raw Return table of roles * @apiSuccessExample {json} Success-Response: * HTTP/1.1 200 OK * [ * { * "id": 1, * "name": "Administrator", * "slug": "administrator" * } * ] * * @apiUse InternalServerError */
+/** 
+ * getRoles - get all roles 
+ * 
+ * @api {get} /roles Get all roles 
+ * @apiName GetRoles 
+ * @apiGroup Role 
+ * 
+ * 
+ * @apiSuccess {Array[Role]} raw Return table of roles 
+ * @apiSuccessExample {json} Success-Response: 
+ * HTTP/1.1 200 OK 
+ * [ 
+ *   { 
+ *     "id": 1, 
+ *     "name": "Administrator", 
+ *     "slug": "administrator" 
+ *   } 
+ * ] 
+ * 
+ * @apiUse InternalServerError 
+ */
 ```
