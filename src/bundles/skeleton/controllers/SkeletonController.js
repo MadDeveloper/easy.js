@@ -67,9 +67,11 @@ export class SkeletonController extends Controller {
      */
     createSkeleton( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
+            const Skeleton = this.em.getModel( 'skeleton' )
+
             this.em
                 .getRepository( 'skeleton' )
-                .save( this.em.getNewModel( 'skeleton' ), request.getBody() )
+                .save( new Skeleton(), request.getBody() )
                 .then( skeleton => response.created( skeleton ) )
                 .catch( error => response.internalServerError( error ) )
         } else {

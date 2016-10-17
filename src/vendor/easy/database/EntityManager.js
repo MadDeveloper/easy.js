@@ -66,17 +66,6 @@ export default class EntityManager extends Configurable {
     }
 
     /**
-     * getNewModel - description
-     *
-     * @param  {type} model description
-     * @returns {type}       description
-     */
-    getNewModel( model ) {
-        const Model = this.getModel( model )
-        return new Model()
-    }
-
-    /**
      * getCollection - returns collection of Model (cf. Bookshelf.js)
      *
      * @param {Model} model

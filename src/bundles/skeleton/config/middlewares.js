@@ -1,8 +1,6 @@
 export default {
-    '/skeleton/:skeleton_id': {
-        roleExists: {
-            param: 'skeleton_id',
-            middleware: 'skeletonExists'
-        }
+    skeletonExists: {
+        param: 'skeleton_id',
+        middleware: 'skeletonExists'
     }
 }

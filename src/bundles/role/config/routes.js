@@ -21,6 +21,6 @@ export const routes = {
             rules: security[ '/roles' ],
             focus: 'role_id'
         },
-        middlewares: middlewares[ '/roles/:role_id' ]
+        middlewares
     }
 }

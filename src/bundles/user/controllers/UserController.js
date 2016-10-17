@@ -71,9 +71,11 @@ export class UserController extends Controller {
      */
     createUser( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
+            const User = this.em.getModel( 'user' )
+
             this.em
                 .getRepository( 'user' )
-                .save( this.em.getNewModel( 'user' ), request.getBody() )
+                .save( new User(), request.getBody() )
                 .then( user => {
                     user.unset( 'password' )
                     response.created({ user: user.toJSON(), token: TokenManager.sign( user.toJSON() ) })

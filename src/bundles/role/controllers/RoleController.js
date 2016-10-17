@@ -66,9 +66,11 @@ export class RoleController extends Controller {
      */
     createRole( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
+            const Role = thie.em.getModel( 'role' )
+
             this.em
                 .getRepository( 'role' )
-                .save( this.em.getNewModel( 'role' ), request.getBody() )
+                .save( new Role(), request.getBody() )
                 .then( role => response.created( role ) )
                 .catch( error => response.internalServerError( error ) )
         } else {
@@ -111,7 +113,8 @@ export class RoleController extends Controller {
      * @param  {Response} response
      */
     deleteRole( request, response ) {
-        this.roleRepository
+        this.em
+            .getRepository( 'role' )
             .delete( request.retrieve( 'role' ) )
             .then( () => response.noContent() )
             .catch( error => response.internalServerError( error ) )

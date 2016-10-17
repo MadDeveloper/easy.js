@@ -7,7 +7,7 @@ import Console          from './vendor/easy/core/Console'
 let server  = null
 let port    = 0
 
-const protocol = application.config.app.protocol
+const protocol = application.config.server.protocol
 
 if ( 'https' === protocol && false !== application.config.credentials.found ) {
     /*
@@ -23,7 +23,7 @@ if ( 'https' === protocol && false !== application.config.credentials.found ) {
     server      = http.createServer( application.app )
 }
 
-let freePort = ( port ) => {
+let freePort = port => {
     return new Promise( (resolve, reject) => {
         const serverTest = net.createServer( socket => {
             socket.write( 'Echo server\r\n' )
@@ -52,7 +52,7 @@ freePort( port )
             Console.info( "-----------------------------" )
             Console.info( "    Server listening..." )
             Console.info( "-----------------------------" )
-            Console.info( `    ${protocol}://${application.config.server.domain}:${port}` )
+            Console.info( `    ${protocol}://${application.config.server.domain}${( 80 !== port && 443 !== port ) ? port : ''}` )
             Console.info( "-----------------------------" )
             Console.info( `    Mode:   ${application.app.get( 'env' )}` )
             Console.info( "-----------------------------" )

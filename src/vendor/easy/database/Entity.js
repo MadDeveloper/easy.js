@@ -4,11 +4,11 @@
 export default class Entity {
     /**
      * @constructor
-     * @param {EntityManager} entityManager
+     * @param {EntityManager} em
      */
-    constructor( entityManager ) {
-        this.em = this.entityManager = entityManager
-        this.database = this.db = entityManager.database
+    constructor( em ) {
+        this.em = this.entityManager = em
+        this.database = this.db = em.database
         this.orm = this.database.instance
     }
 }

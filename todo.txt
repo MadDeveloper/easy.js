@@ -1,3 +1,6 @@
+- ajouter la route patch pour skeleton et user
+- clean index.js et tous les autres fichier contenant des commentaires de code
+- finir la js doc
 - DOC
 
 

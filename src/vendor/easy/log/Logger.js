@@ -89,7 +89,7 @@ export default class Logger extends Injectable {
      * @param {string} message
      * @param {object} context
      */
-    warning( message, context) {
+    warning( message, context ) {
         this.logWriter.write( 'warn', message, context )
     }
 
@@ -100,8 +100,8 @@ export default class Logger extends Injectable {
      * @param {string} message
      * @param {object} context
      */
-    notice( message, context) {
-        this.write( 'events', message, context )
+    notice( message, context ) {
+        this.logWriter.write( 'events', message, context )
     }
 
     /**
@@ -118,7 +118,7 @@ export default class Logger extends Injectable {
     }
 
     /**
-     * Detailed debug information.
+     * Detailed debug informationso.
      * Use debugs.log
      *
      * @param {string} message
@@ -129,7 +129,7 @@ export default class Logger extends Injectable {
     }
 
     /**
-     * Logs message
+     * Logs standard message.
      * Use std.log
      *
      * @param {string} message
