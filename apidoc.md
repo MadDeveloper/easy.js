@@ -32,3 +32,4 @@ Example :
  */
 ```
 
+Parler du fichier config de apidoc : src/config/apidoc.js
