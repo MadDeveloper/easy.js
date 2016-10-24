@@ -2,6 +2,7 @@
 
 * [Introduction](README.md)
 * [Configurations](configurations.md)
+* [Built-in middlewares](built-in-middlewares.md)
 * [Database](database.md)
 * [Bundle](bundle.md)
     * [Index file](bundle-index.md)
