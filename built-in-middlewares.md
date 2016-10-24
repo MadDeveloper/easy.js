@@ -5,5 +5,4 @@
 * trust proxy
 * compression
 * expose rawBody
-* 
 * bodyParser
