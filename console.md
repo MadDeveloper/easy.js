@@ -40,4 +40,4 @@ class MyBundleController extends Controller {
 }
 ```
 
-Afin d'améliorer la gestion des erreurs avec un système de sauvegardes selon leur niveau de sévérité, il est conseillé d'utiliser le [Logging](logging.md).
+Afin d'améliorer la gestion des erreurs avec un système de sauvegardes selon leur niveau de sévérité, il est conseillé d'utiliser le sysème de [logging](logging.md).
