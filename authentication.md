@@ -59,3 +59,4 @@ export default class MyAuthenticationService extends Configurable {
     }
 }
 ```
+
