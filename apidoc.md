@@ -33,3 +33,4 @@ Example :
 ```
 
 Vous disposez d'un fichier de configuration, `~/src/config/apidoc.js`, permettant de définir des scénarios préconstruits, utilisable dans les documentations api des bundles.
+Quelques scénarios ont déjà été définis par le framework.
