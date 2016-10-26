@@ -32,4 +32,4 @@ Example :
  */
 ```
 
-Parler du fichier config de apidoc : src/config/apidoc.js
+Vous disposez d'un fichier de configuration, `~/src/config/apidoc.js`, permettant de définir des scénarios préconstruits, utilisable dans les documentations api des bundles.
