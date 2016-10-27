@@ -28,4 +28,4 @@ Vous pouvez directement définir la classe `Logger` en tant que dépendance d'un
 | alert | fatals | Action must be taken immediately |
 | emergency | fatals | System is unusable |
 
-Pour faciliter le debuggage, toutes les erreurs `500` sont loggées dans le fichier `~/logs/fatals.log` par défaut.
+Pour faciliter le debuggage, toutes les erreurs `500 Internal Server Error` sont loggées dans le fichier `~/logs/fatals.log` par défaut.
