@@ -15,6 +15,7 @@ export const routes = {
     '/skeletons/:skeleton_id': {
         get: 'getSkeleton',
         put: 'updateSkeleton',
+        patch: 'patchSkeleton',
         delete: 'deleteSkeleton',
         security: {
             strategy: 'default',

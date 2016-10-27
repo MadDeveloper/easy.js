@@ -15,6 +15,7 @@ export const routes = {
     '/roles/:role_id/users/:user_id': {
         get: 'getUser',
         put: 'updateUser',
+        patch: 'patchUser',
         delete: 'deleteUser',
         security: {
             strategy: 'default',

@@ -10,7 +10,7 @@ export default class Authorization {
 	 * @returns {Promise}
 	 */
 	checkToken( request, response ) {
-		const token	= request.getAppParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.getHeader( 'x-access-token' )
+		const token	= request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.getHeader( 'x-access-token' )
 
 		if ( token ) {
 			return TokenManager

@@ -41,7 +41,7 @@ export default class Application extends Configurable {
         this.container      = new Container( this, kernel.path )
         this.config         = ConfigLoader.loadFromGlobal( 'app' )
         this.app            = express()
-    }
+    }c
 
     /**
      * configure - description
@@ -119,21 +119,13 @@ export default class Application extends Configurable {
          * Permit to retrieve rawBody
          */
         this.app.use( ( req, res, next ) => {
-            const method        = req.method.toLowerCase()
-            const enableMethods = [ 'patch' ]
-
+            const method = req.method.toLowerCase()
             let data = ''
 
-            if ( indexOf( enableMethods, method ) < 0 ) {
-                return next()
-            }
-
             req.setEncoding( 'utf8' )
-
             req.on( 'data', chunk => {
                 data += chunk
             })
-
             req.on( 'end', () => {
                 req.rawBody = data
                 next()

@@ -1,27 +1,26 @@
-- ajouter la route patch pour skeleton et user
+- pouvoir générer un service, un controller, un repository, une entity
 - clean index.js et tous les autres fichier contenant des commentaires de code
 - finir la js doc
+- faire les tests du vendor
 - DOC
 
 
 --- LATER ---
 
+- intégrer babel async
 - appliquer le logger aux endroits utiles
-- faire les interfaces easy et adapter le code (typé)
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
 tout lier en promise pour les patchs
-- ? bin permettant de sync roles from db into config file, and reverse
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
-- créer des sous-container permettant d'avoir un rôle définit : Container services, container lib, container components, etc. et le tout supervisé
-  par un container parent.
 - créer une classe Cache qui permet de mettre en cache pour n'importe quelle entité (possédant une clé de cache, par exemple la classe EntityManager
 aurait comme clé 'entitymanager', et pourra gérer son cache interne dans cette clé)
 - faire des snapshot du bundle Skeleton pour être restauré par la suite, les snapshots sont effectuées par le dev, la restoration à l'état initial reste
 toujours possible.
-- faire les tests du vendor
 
 
 ---  MAYBE ---
 
 - ? Utiliser CarminteJS (cross-db ORM)
 - ? translate project to ts
+- ? bin permettant de sync roles from db into config file, and reverse
+- faire les interfaces easy et adapter le code (typé)

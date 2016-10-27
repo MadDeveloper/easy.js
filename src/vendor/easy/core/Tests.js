@@ -6,7 +6,7 @@ export default class Tests {
      * @constructor
      */
     constructor() {
-        this.application = global.easy.application
+        this.application = easy.application
         this.container = this.application.container
 
         this.run()
