@@ -8,3 +8,4 @@ Si vous décidez d'utiliser une authentification personnalisée, alors vous deve
 
 Le système d'authorisation intégré par défaut utilise un middleware afin de pouvoir vérifier l'intégrité du token utilisateur. Si ce token est valide alors on passe au middleware suivant, dans le cas échant une erreur `401 Unauthorized` sera retournée.
 
+Afin de générer et vérifier les tokens, la librairie `jsonwebtoken` est utilisé. Cette librarie est suffisamment fiable contre les failles potentielles d'un token.
