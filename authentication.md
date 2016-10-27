@@ -34,6 +34,7 @@ Comme vous le remarquez, il vous faudra passer par votre service pour gérer l'a
 
 Votre service devra étendre de la classe `Configurable` (`~/src/vendor/easy/interfaces/Configurable.js`) faisant office d'interface (à défaut de ne pas en avoir encore en Javascript), afin d'implémenter la méthode `configure()`, ayant comme paramètre `router, container`, qui sera appelée par défaut dans votre service. Vous aurez donc accès au router de Easy.js, et au container, afin de pouvoir accéder au router Express et aux différents composants et services du projet.
 
+Dans le système d'authentification intégré par défaut, la librairie `jsonwebtoken` est utilisée afin de prévenir contre les failles des tokens. Le payload du token contient les données de l'utilisateur connecté.
 
 Attention quand vous utilisez un système custom, aucune route n'est implémentée par défaut pour accéder à votre authentification, vous devrez donc le faire vous-même via le router Express.
 
