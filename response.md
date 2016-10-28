@@ -13,16 +13,31 @@ Les paramètres de chaque réponse sont retournés au format json.
 
 ### ok( params )
 
-Retourne une réponse `200 OK`
+Retourne une réponse `200 OK` avec le contenu fourni en paramètre
 
 ```javascript
 response.ok()
-response.ok(
+response.ok( 1 )
+response.ok( false )
+response.ok( "Hello World!" )
+response.ok([ 'Hello', 'World' ])
+response.ok({ data: [] })
 ```
 
- /** * created - description * * @param {type} params description * @returns {type} description */ created( params ) { const res = this.scope res.status( this.status.created ).json( params ) }
+### created( params )
 
- /** * notFound - description * * @param {type} params description * @returns {type} description */ notFound( params ) { const res = this.scope res.status( this.status.notFound ).json( params ) }
+Retourne une réponse `201 Created` avec le contenu fourni en paramètre
+
+```javascript
+response.created()
+response.created( "User created" )
+...
+```
+
+
+### notFound( params )
+
+Retourne une réponse `404 Not Found` 
 
  /** * notModified - description * * @param {type} params description * @returns {type} description */ notModified( params ) { const res = this.scope res.status( this.status.notModified ).json( params ) }
 
