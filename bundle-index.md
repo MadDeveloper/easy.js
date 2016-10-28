@@ -1,4 +1,4 @@
-# Index.js
+# Index file
 
 Ce fichier est le point d'entrée de n'importe quel bundle. Son rôle est d'exposer le contrôleur principal et les routes pour le framework.
 Les routes doivent être exportées sous le nom de `routes` et le contrôleur principal sous le nom de `controller` (veillez à respecter la casse).
