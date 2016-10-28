@@ -64,21 +64,63 @@ const params = request.getParams()
 const userId = params.userId
 ```
 
- /** * getParams - description * * @returns {type} description */ getParams() { return this.scope.params }
+### getBodyParameter( param )
 
- /** * getBodyParameter - description * * @param {type} key description * @returns {type} description */ getBodyParameter( key ) { return this.getBody()[ key ] }
+Permet de récupérer un paramètre spécifique dans le body.
 
- /** * setBodyParameter - description * * @param {type} key description * @param {type} value description * @returns {type} description */ setBodyParameter( key, value ) { this.getBody()[ key ] = value }
+```javascript
+const userId = request.getBodyParameter( 'userId' )
+```
 
- /** * getRouteParameter - description * * @param {type} param description * @returns {type} description */ getRouteParameter( param ) { return this.getParams()[ param ] }
+### setBodyParameter( key, value )
 
- /** * getAppParameter - description * * @param {type} key description * @returns {type} description */ getAppParameter( key ) { return this.getAppParameters()[ key ] }
+Permet de définir un paramètre dans le body pour une valeur donnée.
 
- /** * getAppParameters - description * * @returns {type} description */ getAppParameters() { return this.scope[ this._appName ] }
+```javascript
+request.setBodyParameter( 'userId', userId )
+```
 
- /** * setAppParameter - description * * @param {type} key description * @param {type} value description * @returns {type} description */ setAppParameter( key, value ) { this.scope[ this._appName ][ key ] = value }
+### getRouteParameter( param )
 
- /** * getProperty - returns direct property on express request object * * @param {string} property * @returns {any} */ getProperty( property ) { return this.scope[ property ] }
+Récupère un paramètre de routing selon un nom. Utilise en arrière-plan la méthode `getParams()`.
+
+```javascript
+const userId = request.getRouteParameter( 'userId' )
+```
+
+### getAppParameters()
+
+Récupère tous les paramètres d'application.
+
+```javascript
+const params = request.getAppParameters()
+const userId = params.userId
+```
+
+### getAppParameter( key )
+
+Récupère un paramètre d'application.
+
+```javascript
+const userId = request.getAppParameter( 'userId' )
+```
+
+### setAppParameter( key, value )
+
+Défini un paramètre d'application. Les paramètres d'application sont stockés dans l'objet `req` Express, dans un namespace ayant pour valeur le nom de votre projet.
+
+```javascript
+request.setAppParameter( 'userId', userId )
+```
+
+### getProperty( key )
+
+Récupère une propriété directe de l'objet `req` Express.
+
+```javascript
+const myAppScope = request.getProperty( 'myApp' )
+```
+
 
  /** * getProperty - set direct property on express request object * * @param {string} property * @param {any} value */ setProperty( property, value ) { this.scope[ property ] = value }
 
