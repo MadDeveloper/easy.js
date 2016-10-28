@@ -41,7 +41,7 @@ export default class Application extends Configurable {
         this.container      = new Container( this, kernel.path )
         this.config         = ConfigLoader.loadFromGlobal( 'app' )
         this.app            = express()
-    }c
+    }
 
     /**
      * configure - description
@@ -120,7 +120,13 @@ export default class Application extends Configurable {
          */
         this.app.use( ( req, res, next ) => {
             const method = req.method.toLowerCase()
+            const contentType = req.headers[ 'content-type' ] || ''
+            const mime = contentType.split( ';' )[ 0 ]
             let data = ''
+
+            if ( 'text/plain' !== mime ) {
+                return next()
+            }
 
             req.setEncoding( 'utf8' )
             req.on( 'data', chunk => {
@@ -151,8 +157,7 @@ export default class Application extends Configurable {
          * Trace everything that happens on the server
          */
         if ( this.config.app.log ) {
-            this.logFileManager.openLogFileSync( 'traffic' )
-            this.app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${__dirname}/../logs/traffic.log`, { flags: 'a' } ) } ) )
+            this.app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${__dirname}/../../../../logs/traffic.log`, { flags: 'a' } ) } ) )
         }
 
         /*

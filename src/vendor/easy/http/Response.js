@@ -45,8 +45,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     ok( params ) {
-        const res = this.scope
-        res.status( this.status.ok ).json( params )
+        this.scope.status( this.status.ok ).json( params )
     }
 
     /**
@@ -56,8 +55,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     created( params ) {
-        const res = this.scope
-        res.status( this.status.created ).json( params )
+        this.scope.status( this.status.created ).json( params )
     }
 
     /**
@@ -67,8 +65,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     notFound( params ) {
-        const res = this.scope
-        res.status( this.status.notFound ).json( params )
+        this.scope.status( this.status.notFound ).json( params )
     }
 
     /**
@@ -78,8 +75,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     notModified( params ) {
-        const res = this.scope
-        res.status( this.status.notModified ).json( params )
+        this.scope.status( this.status.notModified ).json( params )
     }
 
     /**
@@ -89,8 +85,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     gone( params ) {
-        const res = this.scope
-        res.status( this.status.gone ).json( params )
+        this.scope.status( this.status.gone ).json( params )
     }
 
     /**
@@ -100,8 +95,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     unauthorized( params ) {
-        const res = this.scope
-        res.status( this.status.unauthorized ).json( params )
+        this.scope.status( this.status.unauthorized ).json( params )
     }
 
     /**
@@ -111,8 +105,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     methodNotAllowed( params ) {
-        const res = this.scope
-        res.status( this.status.methodNotAllowed ).json( params )
+        this.scope.status( this.status.methodNotAllowed ).json( params )
     }
 
     /**
@@ -122,8 +115,17 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     unsupportedMediaType( params ) {
-        const res = this.scope
-        res.status( this.status.unsupportedMediaType ).json( params )
+        this.scope.status( this.status.unsupportedMediaType ).json( params )
+    }
+
+    /**
+     * unprocessableEntity - description
+     *
+     * @param  {type} params description
+     * @returns {type}        description
+     */
+    unprocessableEntity( params ) {
+        this.scope.status( this.status.unprocessableEntity ).json( params )
     }
 
     /**
@@ -133,8 +135,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     tooManyRequests( params ) {
-        const res = this.scope
-        res.status( this.status.tooManyRequests ).json( params )
+        this.scope.status( this.status.tooManyRequests ).json( params )
     }
 
     /**
@@ -144,8 +145,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     noContent( params ) {
-        const res = this.scope
-        res.status( this.status.noContent ).json( params )
+        this.scope.status( this.status.noContent ).json( params )
     }
 
     /**
@@ -156,10 +156,9 @@ export default class Response extends Http {
      */
     internalServerError( params ) {
         const req       = this.request.scope
-        const res       = this.scope
         const alertLog  = `[{currentDate}] -- {remoteHostIp} -- {method} {originalUrl} {statusCode} -- ${params}\n`
 
-        this.logger.alert( alertLog, {
+        this._logger.alert( alertLog, {
             '{currentDate}': new Date().toUTCString(),
             '{remoteHostIp}': req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for'],
             '{method}': req.method,
@@ -167,7 +166,7 @@ export default class Response extends Http {
             '{statusCode}': this.status.internalServerError
         })
 
-        res.status( this.status.internalServerError ).json( params )
+        this.scope.status( this.status.internalServerError ).json( params )
     }
 
     /**
@@ -177,8 +176,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     badRequest( params ) {
-        const res = this.scope
-        res.status( this.status.badRequest ).json( params )
+        this.scope.status( this.status.badRequest ).json( params )
     }
 
     /**
@@ -188,8 +186,7 @@ export default class Response extends Http {
      * @returns {type}        description
      */
     forbidden( params ) {
-        const res = this.scope
-        res.status( this.status.forbidden ).json( params )
+        this.scope.status( this.status.forbidden ).json( params )
     }
 
     /**
@@ -200,13 +197,15 @@ export default class Response extends Http {
      * @returns {type}          description
      */
     attachment( filePath, options ) {
-        const res = this.scope
-        // res.attachment( filePath )
-        res.sendFile( filePath, options, error => {
-            if ( error ) {
-                res.status( error.status ).end()
-            }
-        })
+        if ( options ) {
+            this.scope.sendFile( filePath, options, error => {
+                if ( error ) {
+                    this.scope.status( error.status ).end()
+                }
+            })
+        } else {
+            this.scope.attachment( filePath )
+        }
     }
 
     /**
@@ -227,15 +226,6 @@ export default class Response extends Http {
     set scope( scope ) {
         this._scope = scope
         return this
-    }
-
-    /**
-     * get - description
-     *
-     * @returns {type}  description
-     */
-    get logger() {
-        return this._logger
     }
 
     /**

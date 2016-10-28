@@ -7,7 +7,7 @@ export default {
     app: {
         name: 'myapp',
 		production: false,
-        log: false,
+        log: true,
         memory: false
     },
 
