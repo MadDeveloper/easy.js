@@ -121,19 +121,45 @@ Récupère une propriété directe de l'objet `req` Express.
 const myAppScope = request.getProperty( 'myApp' )
 ```
 
+### setProperty( key, value )
 
- /** * getProperty - set direct property on express request object * * @param {string} property * @param {any} value */ setProperty( property, value ) { this.scope[ property ] = value }
 
- /** * urlContains - description * * @param {type} paths description * @returns {type} description */ urlContains( paths ) { let contains = false
 
- if ( 'string' === typeof paths ) { contains = -1 !== this.scope.originalUrl.indexOf( paths ) } else if ( Array.isArray( paths ) ) { paths.forEach( path => { contains = contains || -1 !== this.scope.originalUrl.indexOf( path ) }) }
+Défini une propriété sur l'objet `req` Express. Attention, à utiliser avec précautions afin de ne pas effacer les composantes nécessaires au bon fonctionnement du framework Easy.js et Express.
 
- return contains }
 
- /** * store - description * * @param {type} property description * @param {type} value description * @returns {type} description */ store( property, value ) { /* * Defining or redefine property in app cache scope, stored in request */ const applicationCache = this.getAppParameter( this._applicationCacheScope )
+```javascript
+request.setProperty( 'something', '...' )
 
- applicationCache[ property ] = value this.setAppParameter( this._applicationCacheScope, applicationCache )
+const something = request.scope.something
+/* alias */
+const something = request.getProperty( 'something' )
+```
 
- return this }
+### urlContains( paths )
 
- /** * find - description * * @param {type} property description * @returns {type} description */ retrieve( property ) { return this.getAppParameters()[ this._applicationCacheScope ][ property ] }
+Permet de savoir si l'url de la requête contient les segments définis dans le paramètre path.
+
+```javascript
+if ( request.urlContains([ '/user/friends', '/user/relations' ]) {
+    /* code */
+}
+```
+
+### store( property, value )
+
+Permet de stocker un élément dans un namespace dédié du namespace application dans l'objet `req`.
+
+```javascript
+request.store( 'user', { id: 1 } )
+```
+
+### find( property )
+
+Récupère un élément stocké avec la méthode `store()`.
+
+```javascript
+const user = request.find( 'user' )
+
+console.log( user.id )
+```
