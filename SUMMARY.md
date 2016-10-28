@@ -11,7 +11,7 @@
     * [Security](bundle-security.md)
     * [Controller](controller.md)
     * [Repository](repository.md)
-        * [Entity](entity.md)
+    * [Entity](entity.md)
 * [Services](services.md)
 * [Container](container.md)
 * [Router](router.md)
