@@ -34,33 +34,110 @@ response.created( "User created" )
 ...
 ```
 
-
 ### notFound( params )
 
-Retourne une réponse `404 Not Found` 
+Retourne une réponse `404 Not Found` avec le contenu fourni en paramètre
 
- /** * notModified - description * * @param {type} params description * @returns {type} description */ notModified( params ) { const res = this.scope res.status( this.status.notModified ).json( params ) }
+```javascript
+response.notFound()
+response.notFound( "Username doesn't exists" )
+...
+```
 
- /** * gone - description * * @param {type} params description * @returns {type} description */ gone( params ) { const res = this.scope res.status( this.status.gone ).json( params ) }
+### notModified( params )
 
- /** * unauthorized - description * * @param {type} params description * @returns {type} description */ unauthorized( params ) { const res = this.scope res.status( this.status.unauthorized ).json( params ) }
+Retourne une réponse `304 Not Modified` avec le contenu fourni en paramètre
 
- /** * methodNotAllowed - description * * @param {type} params description * @returns {type} description */ methodNotAllowed( params ) { const res = this.scope res.status( this.status.methodNotAllowed ).json( params ) }
+```javascript
+response.notModified()
+...
+```
 
- /** * unsupportedMediaType - description * * @param {type} params description * @returns {type} description */ unsupportedMediaType( params ) { const res = this.scope res.status( this.status.unsupportedMediaType ).json( params ) }
+### gone( params )
 
- /** * tooManyRequests - description * * @param {type} params description * @returns {type} description */ tooManyRequests( params ) { const res = this.scope res.status( this.status.tooManyRequests ).json( params ) }
+Retourne une réponse `410 Gone` avec le contenu fourni en paramètre
 
- /** * noContent - description * * @param {type} params description * @returns {type} description */ noContent( params ) { const res = this.scope res.status( this.status.noContent ).json( params ) }
+```javascript
+response.gone()
+...
+```
 
- /** * internalServerError - description * * @param {type} params description * @returns {type} description */ internalServerError( params ) { const req = this.request.scope const res = this.scope const alertLog = `[{currentDate}] -- {remoteHostIp} -- {method} {originalUrl} {statusCode} -- ${params}\n`
+### unauthorized( params )
 
- this._logger.alert( alertLog, { '{currentDate}': new Date().toUTCString(), '{remoteHostIp}': req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for'], '{method}': req.method, '{originalUrl}': req.originalUrl, '{statusCode}': this.status.internalServerError })
+Retourne une réponse `401 Unauthorized` avec le contenu fourni en paramètre
 
- res.status( this.status.internalServerError ).json( params ) }
+```javascript
+response.unauthorized()
+...
+```
 
- /** * badRequest - description * * @param {type} params description * @returns {type} description */ badRequest( params ) { const res = this.scope res.status( this.status.badRequest ).json( params ) }
+### methodNotAllowed( params )
 
- /** * forbidden - description * * @param {type} params description * @returns {type} description */ forbidden( params ) { const res = this.scope res.status( this.status.forbidden ).json( params ) }
+Retourne une réponse `405 Method Not Allowed` avec le contenu fourni en paramètre
 
- /** * attachment - description * * @param {type} filePath description * @param {type} options description * @returns {type} description */ attachment( filePath, options ) { const res = this.scope // res.attachment( filePath ) res.sendFile( filePath, options, error => { if ( error ) { res.status( error.status ).end() } }) }
+```javascript
+response.methodNotAllowed()
+...
+```
+
+### unsupportedMediaType( params )
+
+Retourne une réponse `415 Unsupported Media Type` avec le contenu fourni en paramètre
+
+```javascript
+response.unsupportedMediaType()
+...
+```
+
+### unprocessableEntity( params )
+
+Retourne une réponse `422 Unprocessable Entity` avec le contenu fourni en paramètre
+
+```javascript
+response.unprocessableEntity()
+...
+```
+
+### tooManyRequests( params )
+
+Retourne une réponse `429 Too Many Requests` avec le contenu fourni en paramètre
+
+```javascript
+response.tooManyRequests()
+...
+```
+
+### noContent( params )
+
+Retourne une réponse `204 No Content` avec le contenu fourni en paramètre
+
+```javascript
+response.noContent()
+...
+```
+
+### internalServerError( params )
+
+Retourne une réponse `500 Internal Server Error` avec le contenu fourni en paramètre
+
+```javascript
+response.internalServerError()
+...
+```
+
+### forbidden( params )
+
+Retourne une réponse `403 Forbidden` avec le contenu fourni en paramètre
+
+```javascript
+response.forbidden()
+...
+```
+
+### attachment( filePath, options )
+
+Retourne un média selon son chemin d'accès `filePath`. Des options peuvent être fournies (cf. [res.sendFile](http://expressjs.com/en/api.html#res.sendFile) and [res.attachment](http://expressjs.com/en/api.html#res.attachment))
+
+```javascript
+response.attachment( 'path/to/file' )
+```
