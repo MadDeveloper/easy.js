@@ -12,9 +12,9 @@ Afin d'optimiser les chargements à la volée, la classe Entity Manager possède
 
 ```javascript
 /* em = Entity Manager */
-const myBundleRepository = em.getRepository( 'myBundleRespository' )
+const myRepository = em.getRepository( 'myRespository' )
 
-myBundleRepository
+myRepository
     .findAll()
     .then( ... )
     .catch( ... )
@@ -23,4 +23,12 @@ myBundleRepository
 **Model**
 
 ```javascript
-/
+/* em = Entity Manager */
+const MyModel = em.getModel( 'myModel' )
+const bookshelfModel = new MyModel()
+const bookshelfCollection = MyModel.collection()
+/* alias for collection */
+const bookshelfCollection = em.getCollection( 'myModel' )
+```
+
+Remarquez que nous avons utilisé le mot clé `new` pour instancier un model alors que Entity Manager nous retourne déjà une instance. En réalité c'est bel et bien le cas, mais nos classe entity retourne un model Bookshelf, l'instance de notre entity n'existe plus après la fin du constructeur de celle-ci puisqu'en effet nous allons travailler sur les models Bookshelf et non nos entities directement.
