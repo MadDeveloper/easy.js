@@ -13,7 +13,7 @@ Voici les fichiers de configurations après une nouvelle installation :
 ```
 |- config/
 |--- database/
-|--- keys/
+|--- ssl/
 |--- apidoc.js
 |--- app.js
 |--- authentication.js
