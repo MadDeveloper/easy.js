@@ -1,4 +1,9 @@
 # Application
 
 * les configurations
-* les middlewares
+* cors
+* helmet
+* trust proxy
+* compression
+* expose rawBody
+* bodyParser
