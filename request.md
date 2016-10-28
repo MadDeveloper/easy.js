@@ -39,7 +39,7 @@ const token = request.getHeader( 'x-access-token' )
 
 ### getBody()
 
-Récupère l'intégralité du body de la requête (ne récupère pas le raw body pour les requêtes de type mime `text/plain`, utilisez plutôt `getRawBody()`)
+Récupère l'intégralité du body de la requête (ne récupère pas le raw body pour les requêtes de type mime `text/plain`, utilisez plutôt `getRawBody()`).
 
 ```javascript
 const body = request.getBody()
@@ -49,13 +49,20 @@ const password = body.password
 
 ### getRawBody()
 
-Récupère le raw body (fonctionne uniquement pour les requêtes de type mime `text/plain`)
+Récupère le raw body (fonctionne uniquement pour les requêtes de type mime `text/plain`).
 
 ```javascript
-const token = request.getHeader( 'x-access-token' )
+const rawBody = request.getRawBody()
 ```
 
- /** * getRawbody - description * * @returns {type} description */ getRawbody() { return this.scope.rawBody }
+### getParams()
+
+Récupère les paramètres `GET` selon les paramètres définis dans les noms de routes (cf. [req.params](http://expressjs.com/en/api.html#req.params)).
+
+```javascript
+const params = request.getParams()
+const userId = params.userId
+```
 
  /** * getParams - description * * @returns {type} description */ getParams() { return this.scope.params }
 
