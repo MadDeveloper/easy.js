@@ -1,2 +1,5 @@
-export * from './config/routes'
-export { SkeletonController as controller } from './controllers/SkeletonController'
+const { routes }                = require( './config/routes' )
+const { SkeletonController }    = require( './controllers/SkeletonController' )
+
+module.exports.routes = routes
+module.exports.controller = SkeletonController

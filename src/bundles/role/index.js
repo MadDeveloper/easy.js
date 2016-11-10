@@ -1,2 +1,5 @@
-export * from './config/routes'
-export { RoleController as controller } from './controllers/RoleController'
+const { routes }            = require( './config/routes' )
+const { RoleController }    = require( './controllers/RoleController' )
+
+module.exports.routes = routes
+module.exports.controller = RoleController

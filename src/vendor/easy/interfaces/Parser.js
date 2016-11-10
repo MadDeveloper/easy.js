@@ -3,7 +3,7 @@
  *
  * Acts as en interface
  */
-export default class Parser {
+module.exports = class Parser {
     /**
      * parse - description
      *

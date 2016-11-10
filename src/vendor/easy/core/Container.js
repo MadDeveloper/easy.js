@@ -1,14 +1,14 @@
-import fs           from 'fs'
-import path         from 'path'
-import Console      from './Console'
-import ConfigLoader from './ConfigLoader'
+const fs            = require( 'fs' )
+const path          = require( 'path' )
+const Console       = require( './Console' )
+const ConfigLoader  = require( './ConfigLoader' )
 
 const servicesMapping = ConfigLoader.loadFromGlobal( 'services' )
 
 /**
  * @class Container
  */
-export default class Container {
+module.exports = class Container {
     /**
      * @constructor
      * @param  {Object} path
@@ -53,7 +53,7 @@ export default class Container {
                         delete require.cache[ require.resolve( pathComponent ) ]
                     }
 
-                    const component = require( pathComponent ).default
+                    const component = require( pathComponent )
                     this.componentsLoaded[ name ] = new component( this )
                 }
             }
@@ -157,7 +157,7 @@ export default class Container {
      * @param  {string} path
      */
     storeService( name, path ) {
-        const serviceClass  = require( path ).default
+        const serviceClass  = require( path )
         this.shared[ name ] = newService( this.injectDependencies( name ) )
 
         function newService() {

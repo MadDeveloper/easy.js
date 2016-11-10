@@ -1,7 +1,7 @@
 /**
  * @class Tests
  */
-export default class Tests {
+module.exports = class Tests {
     /**
      * @constructor
      */

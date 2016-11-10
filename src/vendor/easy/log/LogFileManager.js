@@ -1,12 +1,12 @@
-import fs           from 'fs'
-import path         from 'path'
-import Injectable   from './../interfaces/Injectable'
+const fs            = require( 'fs' )
+const path          = require( 'path' )
+const Injectable    = require( './../interfaces/Injectable' )
 
 /**
  * @class LogFileManager
  * @extends Injectable
  */
-export default class LogFileManager extends Injectable {
+module.exports = class LogFileManager extends Injectable {
     /**
      * @constructor
      */

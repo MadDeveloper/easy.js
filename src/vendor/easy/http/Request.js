@@ -1,10 +1,10 @@
-import Http from './Http'
+const Http  = require( './Http' )
 
 /**
  * @class Request
  * @extends Http
  */
-export default class Request extends Http {
+module.exports = class Request extends Http {
     /**
      * constructor - description
      *
@@ -22,12 +22,12 @@ export default class Request extends Http {
         /*
          * Defining global app scope in request
          */
-        if ( !this.scope.hasOwnProperty( this.appName ) ) {
-            this.scope[ this.appName ] = {}
+        if ( !this.scope.hasOwnProperty( this._appName ) ) {
+            this.scope[ this._appName ] = {}
         }
 
-        if ( !this.scope[ this.appName ].hasOwnProperty( this._applicationCacheScope ) ) {
-            this.scope[ this.appName ][ this._applicationCacheScope ] = {}
+        if ( !this.scope[ this._appName ].hasOwnProperty( this._applicationCacheScope ) ) {
+            this.scope[ this._appName ][ this._applicationCacheScope ] = {}
         }
     }
 
@@ -134,7 +134,7 @@ export default class Request extends Http {
      * @returns {type}  description
      */
     getAppParameters() {
-        return this.scope[ this.appName ]
+        return this.scope[ this._appName ]
     }
 
     /**
@@ -145,7 +145,7 @@ export default class Request extends Http {
      * @returns {type}       description
      */
     setAppParameter( key, value ) {
-        this.scope[ this.appName ][ key ] = value
+        this.scope[ this._appName ][ key ] = value
     }
 
     /**
@@ -215,15 +215,6 @@ export default class Request extends Http {
      */
     retrieve( property ) {
         return this.getAppParameters()[ this._applicationCacheScope ][ property ]
-    }
-
-    /**
-     * get - description
-     *
-     * @returns {type}  description
-     */
-    get appName() {
-        return this._appName
     }
 
     /**

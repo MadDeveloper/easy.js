@@ -1,10 +1,10 @@
-import Entity from '~/vendor/easy/database/Entity'
+const Entity = require( 'vendor/easy/database/Entity' )
 
 /**
  * @class Role
  * @extends Entity
  */
-export default class Role extends Entity {
+module.exports = class Role extends Entity {
     /**
      * @constructor
      * @param  {EntityManager} em

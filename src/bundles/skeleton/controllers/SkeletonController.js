@@ -1,11 +1,11 @@
-import { indexOf }  from 'lodash'
-import Controller   from '~/vendor/easy/core/Controller'
+const { indexOf }   = require( 'lodash' )
+const Controller    = require( 'vendor/easy/core/Controller' )
 
 /**
  * @class SkeletonController
  * @extends Controller
  */
-export class SkeletonController extends Controller {
+class SkeletonController extends Controller {
     /**
      * isRequestWellParameterized - verify if request contains valid params
      *
@@ -121,3 +121,5 @@ export class SkeletonController extends Controller {
             .catch( error => response.internalServerError( error ) )
     }
 }
+
+module.exports.SkeletonController = SkeletonController

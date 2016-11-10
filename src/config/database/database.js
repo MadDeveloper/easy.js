@@ -1,7 +1,7 @@
-import Bookshelf from './connectors/Bookshelf'
-import { config } from './connectors/knex'
+const Bookshelf  = require( './connectors/Bookshelf' )
+const { config }  = require( './connectors/knex' )
 
-export default {
+module.exports = {
     connector: Bookshelf,
     connection: config
 }

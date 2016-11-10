@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     /*
      * Id roles mapped with database
      */

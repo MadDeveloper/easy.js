@@ -1,7 +1,7 @@
 /**
  * @class Http
  */
-export default class Http {
+module.exports = class Http {
     /**
      * @constructor
      */

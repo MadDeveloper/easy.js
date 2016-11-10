@@ -1,4 +1,4 @@
-import { knex }     from './knex'
-import Bookshelf    from 'bookshelf'
+const { knex }      = require( './knex' )
+const Bookshelf     = require( 'bookshelf' )
 
-export default Bookshelf( knex )
+module.exports = Bookshelf( knex )

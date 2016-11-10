@@ -1,10 +1,10 @@
-import Configurable from './../interfaces/Configurable'
+const Configurable  = require( './../interfaces/Configurable' )
 
 /**
  * @class EntityManager
  * @extends Configurable
  */
-export default class EntityManager extends Configurable {
+module.exports = class EntityManager extends Configurable {
     /**
      * @constructor
      */
@@ -43,7 +43,7 @@ export default class EntityManager extends Configurable {
                 return this.getCache( repository, 'repositories' )
             }
 
-            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` ).default
+            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` )
 
             return this.cache( new repositoryClass( this.getModel( repository ), this ), repository, 'repositories' )
         }
@@ -60,7 +60,7 @@ export default class EntityManager extends Configurable {
             return this.getCache( model, 'models' )
         }
 
-        const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` ).default
+        const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` )
 
         return this.cache( new modelClass( this ), model, 'models' )
     }

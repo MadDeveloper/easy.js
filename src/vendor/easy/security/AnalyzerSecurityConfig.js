@@ -1,11 +1,11 @@
-import Access       from './Access'
-import Analyzer     from './../interfaces/Analyzer'
+const Access        = require( './Access' )
+const Analyzer      = require( './../interfaces/Analyzer' )
 
 /**
  * @class AnalyzerSecurityConfig
  * @extends Analyzer
  */
-export default class AnalyzerSecurityConfig extends Analyzer {
+module.exports = class AnalyzerSecurityConfig extends Analyzer {
     /**
      * analyze - description
      *

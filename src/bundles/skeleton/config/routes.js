@@ -1,7 +1,7 @@
-import security     from './security'
-import middlewares  from './middlewares'
+const security      = require( './security' )
+const middlewares   = require( './middlewares' )
 
-export const routes = {
+module.exports.routes = {
     '/skeletons': {
         get: 'getSkeletons',
         post: 'createSkeletons',

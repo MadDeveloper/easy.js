@@ -1,10 +1,10 @@
-import Controller from '~/vendor/easy/core/Controller'
+const Controller = require( 'vendor/easy/core/Controller' )
 
 /**
  * @class RoleController
  * @extends Controller
  */
-export class RoleController extends Controller {
+class RoleController extends Controller {
     /**
      * isRequestWellParameterized - verify if request contains valid params
      *
@@ -120,3 +120,5 @@ export class RoleController extends Controller {
             .catch( error => response.internalServerError( error ) )
     }
 }
+
+module.exports.RoleController = RoleController

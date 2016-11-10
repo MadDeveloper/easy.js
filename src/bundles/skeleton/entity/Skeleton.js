@@ -1,10 +1,10 @@
-import Entity from '~/vendor/easy/database/Entity'
+const Entity = require( 'vendor/easy/database/Entity' )
 
 /**
  * @class Skeleton
  * @extends Entity
  */
-export default class Skeleton extends Entity {
+module.exports = class Skeleton extends Entity {
     /**
      * @constructor
      * @param  {EntityManager} em

@@ -7,7 +7,7 @@
 /**
  * @class Polyfills
  */
-export default class Polyfills {
+module.exports = class Polyfills {
     /**
      * load - description
      *

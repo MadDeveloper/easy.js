@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     /*
      * First place your tables with primaries keys
      * then tables with foreign keys

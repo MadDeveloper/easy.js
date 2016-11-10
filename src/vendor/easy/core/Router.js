@@ -1,18 +1,18 @@
-import ConfigLoader                 from './ConfigLoader'
-import Configurable                 from './../interfaces/Configurable'
-import Request                      from './../http/Request'
-import Response                     from './../http/Response'
-import Http                         from './../http/Http'
-import AnalyzerSecurityConfig       from './../security/AnalyzerSecurityConfig'
-import AnalyzerMiddlewaresConfig    from './../middlewares/AnalyzerMiddlewaresConfig'
-import Access                       from './../security/Access'
-import { indexOf }                  from 'lodash'
+const ConfigLoader                  = require( './ConfigLoader' )
+const Configurable                  = require( './../interfaces/Configurable' )
+const Request                       = require( './../http/Request' )
+const Response                      = require( './../http/Response' )
+const Http                          = require( './../http/Http' )
+const AnalyzerSecurityConfig        = require( './../security/AnalyzerSecurityConfig' )
+const AnalyzerMiddlewaresConfig     = require( './../middlewares/AnalyzerMiddlewaresConfig' )
+const Access                        = require( './../security/Access' )
+const { indexOf }                   = require( 'lodash' )
 
 /**
  * @class Router
  * @extends Configurable
  */
-export default class Router extends Configurable {
+module.exports = class Router extends Configurable {
     /**
      * @constructor
      */

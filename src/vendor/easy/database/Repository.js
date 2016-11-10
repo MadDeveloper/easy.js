@@ -1,7 +1,7 @@
 /**
  * @class Repository
  */
-export default class Repository {
+module.exports = class Repository {
     /**
      * @constructor
      * @param  {bookshelf.Model} model

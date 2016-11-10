@@ -1,9 +1,9 @@
-import { keys, each } from 'lodash'
+const { keys, each } = require( 'lodash' )
 
 /**
  * @class SchemaDatabaseService
  */
-export default class SchemaDatabaseService {
+module.exports = class SchemaDatabaseService {
     /**
      * constructor
      *

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import copydir  from 'copy-dir'
-import { exec } from 'child_process'
-import Console  from '~/vendor/easy/core/Console'
-import path     from 'path'
+const copydir   = require( 'copy-dir' )
+const { exec }  = require( 'child_process' )
+const Console   = require( `${__dirname}/../../src/vendor/easy/core/Console` )
+const path      = require( 'path' )
 
-const bundleSkeletonPath = path.resolve( './src/bundles/skeleton' )
-const restoreBundleSkeletonPath = path.resolve( './.easy/restore/bundles/skeleton' )
+const bundleSkeletonPath = path.resolve( `${__dirname}/../../src/bundles/skeleton` )
+const restoreBundleSkeletonPath = path.resolve( `${__dirname}/../../.easy/restore/bundles/skeleton` )
 
 exec( `rm -r ${bundleSkeletonPath}`, error => {
     copydir( restoreBundleSkeletonPath, bundleSkeletonPath, error => {

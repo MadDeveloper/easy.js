@@ -1,9 +1,9 @@
-import ConfigLoader from './ConfigLoader'
+const ConfigLoader  = require( './ConfigLoader' )
 
 /**
  * @class Controller
  */
-export default class Controller {
+module.exports = class Controller {
     /**
      * @constructor
      */

@@ -1,6 +1,6 @@
-import mongoose     from 'mongoose'
-import { config }   from 'knex'
+const mongoose      = require( 'mongoose' )
+const { config }    = require( 'knex' )
 
 mongoose.connect( `mongodb://${config.host}/${config.database}` )
 
-export default mongoose
+module.exports = mongoose

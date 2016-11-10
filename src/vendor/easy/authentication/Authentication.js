@@ -1,9 +1,9 @@
-import passportLocal	from 'passport-local'
-import ConfigLoader		from './../core/ConfigLoader'
-import Controller   	from './../core/Controller'
-import Configurable		from './../interfaces/Configurable'
-import Authorization    from './Authorization'
-import TokenManager		from './TokenManager'
+const passportLocal = require( 'passport-local' )
+const ConfigLoader	= require( './../core/ConfigLoader' )
+const Controller   	= require( './../core/Controller' )
+const Configurable  = require( './../interfaces/Configurable' )
+const Authorization = require( './Authorization' )
+const TokenManager	= require( './TokenManager' )
 
 const LocalStrategy = passportLocal.Strategy
 
@@ -11,7 +11,7 @@ const LocalStrategy = passportLocal.Strategy
  * @class Authentication
  * @extends Configurable
  */
-export default class Authentication extends Configurable {
+module.exports = class Authentication extends Configurable {
 	/**
 	 * constructor
 	 *

@@ -3,7 +3,7 @@
  *
  * Act as an interface
  */
-export default class Configurable {
+module.exports = class Configurable {
     /**
      * configure - configure component
      */

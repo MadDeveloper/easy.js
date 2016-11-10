@@ -1,6 +1,6 @@
-import roles from '~/config/roles'
+const roles = require( 'config/roles' )
 
-export default {
+module.exports = {
 	'/skeletons': {
 		mustBe: [ roles.any ],
 		canCreate: [],

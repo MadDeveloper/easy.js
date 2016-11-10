@@ -1,28 +1,28 @@
-import fs               from 'fs'
-import express          from 'express'
-import bodyParser       from 'body-parser'
-import morgan           from 'morgan'
-import helmet           from 'helmet'
-import cors             from 'cors'
-import compression      from 'compression'
-import numeral          from 'numeral'
-import { indexOf }      from 'lodash'
-import passport         from 'passport'
-import Container        from './Container'
-import Console          from './Console'
-import Polyfills        from './Polyfills'
-import ConfigLoader     from './ConfigLoader'
-import Authentication	from './../authentication/Authentication'
-import Router           from './Router'
-import BundleManager    from './BundleManager'
-import Configurable     from './../interfaces/Configurable'
-import Database         from './../database/Database'
-import EntityManager    from './../database/EntityManager'
+const fs                = require( 'fs' )
+const express           = require( 'express' )
+const bodyParser        = require( 'body-parser' )
+const morgan            = require( 'morgan' )
+const helmet            = require( 'helmet' )
+const cors              = require( 'cors' )
+const compression       = require( 'compression' )
+const numeral           = require( 'numeral' )
+const { indexOf }       = require( 'lodash' )
+const passport          = require( 'passport' )
+const Container         = require( './Container' )
+const Console           = require( './Console' )
+const Polyfills         = require( './Polyfills' )
+const ConfigLoader      = require( './ConfigLoader' )
+const Authentication	 = require( './../authentication/Authentication' )
+const Router            = require( './Router' )
+const BundleManager     = require( './BundleManager' )
+const Configurable      = require( './../interfaces/Configurable' )
+const Database          = require( './../database/Database' )
+const EntityManager     = require( './../database/EntityManager' )
 
 /**
  * @class Application
  */
-export default class Application extends Configurable {
+module.exports = class Application extends Configurable {
     /**
      * constructor - description
      *

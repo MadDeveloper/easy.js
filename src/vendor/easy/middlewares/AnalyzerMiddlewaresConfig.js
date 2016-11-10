@@ -1,10 +1,10 @@
-import Analyzer from './../interfaces/Analyzer'
+const Analyzer  = require( './../interfaces/Analyzer' )
 
 /**
  * @class AnalyzerMiddlewaresConfig
  * @extends Analyzer
  */
-export default class AnalyzerMiddlewaresConfig extends Analyzer {
+module.exports = class AnalyzerMiddlewaresConfig extends Analyzer {
     /**
      * analyze - description
      *

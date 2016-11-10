@@ -1,4 +1,4 @@
-export default [
+module.exports = [
     /*
      * Register bundles to implements their routing
      */

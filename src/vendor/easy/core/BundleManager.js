@@ -1,12 +1,12 @@
-import fs           from 'fs'
-import Configurable from './../interfaces/Configurable'
-import ConfigLoader from './ConfigLoader'
+const fs            = require( 'fs' )
+const Configurable  = require( './../interfaces/Configurable' )
+const ConfigLoader  = require( './ConfigLoader' )
 
 /**
  * @class BundleManager
  * @extends Configurable
  */
-export default class BundleManager extends Configurable {
+module.exports = class BundleManager extends Configurable {
     /**
      * @constructor
      */

@@ -1,7 +1,7 @@
 /**
  * @class Kernel
  */
-export default class Kernel {
+module.exports = class Kernel {
     /**
      * @constructor
      */
@@ -20,7 +20,7 @@ export default class Kernel {
          * paths
          */
         this.path.root          = root
-        this.path.bin           = `${this.path.root}/bin`
+        this.path.bin           = `${this.path.root}/../bin`
         this.path.bundles       = `${this.path.root}/bundles`
         this.path.config        = `${this.path.root}/config`
         this.path.services      = `${this.path.root}/services`

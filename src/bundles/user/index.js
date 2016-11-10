@@ -1,2 +1,5 @@
-export * from './config/routes'
-export { UserController as controller } from './controllers/UserController'
+const { routes }            = require( './config/routes' )
+const { UserController }    = require( './controllers/UserController' )
+
+module.exports.routes = routes
+module.exports.controller = UserController

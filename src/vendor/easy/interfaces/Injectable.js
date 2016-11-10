@@ -3,4 +3,4 @@
  *
  * @class Injectable
  */
-export default class Injectable {}
+module.exports = class Injectable {}

@@ -1,22 +1,22 @@
 #!/usr/bin/env node
-import fs               from 'fs'
-import walk             from 'walk'
-import path             from 'path'
-import minimist         from 'minimist'
-import { question }     from 'readline-sync'
-import { indexOf }      from 'lodash'
-import Console          from '~/vendor/easy/core/Console'
-import { cleanSpaces,
-         asSnakeCase,
-         cleanAccents } from '~/vendor/easy/lib/string'
-import { kernel,
-         bundleManager,
-         container }    from '~/bootstrap'
+const fs                = require( 'fs' )
+const walk              = require( 'walk' )
+const path              = require( 'path' )
+const minimist          = require( 'minimist' )
+const { question }      = require( 'readline-sync' )
+const { indexOf }       = require( 'lodash' )
+const Console           = require( `${__dirname}/../../src/vendor/easy/core/Console` )
+const { cleanSpaces,
+        asSnakeCase,
+        cleanAccents }  = require( `${__dirname}/../../src/vendor/easy/lib/string` )
+const { kernel,
+        bundleManager,
+        container }     = require( `${__dirname}/../../src/bootstrap` )
 
 const argv                  = minimist( process.argv.slice( 2 ) )
 const schemaDatabaseService = container.getService( 'database.schema' )
 
-const nameBundleFromArgv    = argv._[ 0 ] || argv.name || argv.n || ""
+const nameBundleFromArgv = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {
     const positiveAnswers       = [ 'y', 'ye', 'yes' ]
@@ -358,8 +358,8 @@ if ( nameBundleFromArgv.length > 0 ) {
         .then( () => {
             fs.readFile( pathDatabaseSchema, { encoding: 'utf8' }, ( error, data ) => {
                 if ( !error ) {
-                    const stringToWrite = `export default {\n\t${tableName}: ${JSON.stringify( properties )},\n`
-                    const dataUpdated = data.replace( /export default {/i, stringToWrite )
+                    const stringToWrite = `module.exports = {\n\t${tableName}: ${JSON.stringify( properties )},\n`
+                    const dataUpdated = data.replace( /module\.exports = \{/i, stringToWrite )
 
                     fs.writeFile( pathDatabaseSchema, dataUpdated, { encoding: 'utf8' }, error => {
                         if ( !error ) {

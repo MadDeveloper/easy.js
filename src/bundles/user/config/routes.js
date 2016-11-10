@@ -1,7 +1,7 @@
-import security     from './security'
-import middlewares  from './middlewares'
+const security      = require( './security' )
+const middlewares   = require( './middlewares' )
 
-export const routes = {
+const routes = {
     '/roles/:role_id/users': {
         get: 'getUsers',
         post: 'createUser',
@@ -25,3 +25,5 @@ export const routes = {
         middlewares
     }
 }
+
+module.exports.routes = routes

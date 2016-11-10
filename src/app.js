@@ -1,8 +1,11 @@
-import https            from 'https'
-import http             from 'http'
-import net              from 'net'
-import { application }  from './bootstrap'
-import Console          from './vendor/easy/core/Console'
+require( 'app-module-path' ).addPath( __dirname )
+
+const https             = require( 'https' )
+const http              = require( 'http' )
+const net               = require( 'net' )
+const pad               = require( 'pad-right' )
+const { application }   = require( './bootstrap' )
+const Console           = require( 'vendor/easy/core/Console' )
 
 let server  = null
 let port    = 0
@@ -49,13 +52,15 @@ freePort( port )
          * Everything is ok, starting server
          */
         server.listen( port, () => {
+            Console.line()
             Console.info( "-----------------------------" )
-            Console.info( "    Server listening..." )
+            Console.info( `    ${pad( 'State:', 'Environment'.length + 1, ' ')} Listening` )
             Console.info( "-----------------------------" )
-            Console.info( `    ${protocol}://${application.config.server.domain}${( 80 !== port && 443 !== port ) ? port : ''}` )
+            Console.info( `    ${pad( 'Address:', 'Environment'.length + 1, ' ')} ${protocol}://${application.config.server.domain}${( 80 !== port && 443 !== port ) ? port : ''}` )
             Console.info( "-----------------------------" )
-            Console.info( `    Environment:   ${application.app.get( 'env' )}` )
+            Console.info( `    Environment: ${application.app.get( 'env' ).capitalizeFirstLetter()}` )
             Console.info( "-----------------------------" )
+            Console.line()
         })
     })
     .catch( () => {

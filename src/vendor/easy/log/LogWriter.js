@@ -1,13 +1,13 @@
-import fs           from 'fs'
-import Injectable   from './../interfaces/Injectable'
-import Console      from './../core/Console'
-import { strtr }    from './../lib/string'
+const fs            = require( 'fs' )
+const Injectable    = require( './../interfaces/Injectable' )
+const Console       = require( './../core/Console' )
+const { strtr }     = require( './../lib/string' )
 
 /**
  * @class LogWriter
  * @extends Injectable
  */
-export default class LogWriter extends Injectable {
+module.exports = class LogWriter extends Injectable {
     /**
      * @constructor
      * @param  {Container} container

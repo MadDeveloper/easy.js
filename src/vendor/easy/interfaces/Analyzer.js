@@ -3,7 +3,7 @@
  *
  * Acts as en interface
  */
-export default class Analyzer {
+module.exports = class Analyzer {
     /**
      * analyze - description
      *

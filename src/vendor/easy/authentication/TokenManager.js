@@ -1,10 +1,10 @@
-import jwt 			from 'jsonwebtoken'
-import ConfigLoader	from './../core/ConfigLoader'
+const jwt 			 = require( 'jsonwebtoken' )
+const ConfigLoader	 = require( './../core/ConfigLoader' )
 
 /**
  * @class TokenManager
  */
-export default class TokenManager {
+module.exports = class TokenManager {
 	/**
 	 * sign - sign new token
 	 *

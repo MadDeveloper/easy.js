@@ -1,10 +1,10 @@
-import Repository from '~/vendor/easy/database/Repository'
+const Repository = require( 'vendor/easy/database/Repository' )
 
 /**
  * @class UserRepository
  * @extends Repository
  */
-export default class UserRepository extends Repository {
+module.exports = class UserRepository extends Repository {
     /**
      * findAll - fetch all users from role
      *

@@ -1,7 +1,7 @@
-import TokenManager	from './TokenManager'
-import Controller   from './../core/Controller'
+const TokenManager	 = require( './TokenManager' )
+const Controller    = require( './../core/Controller' )
 
-export default class Authorization {
+module.exports = class Authorization {
 	/**
 	 * checkToken - check if user is logged with his token
 	 *

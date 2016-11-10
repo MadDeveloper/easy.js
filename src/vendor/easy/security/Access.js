@@ -1,12 +1,12 @@
-import { indexOf }      from 'lodash'
-import roles            from '~/config/roles'
-import SecurityAccess   from './../interfaces/SecurityAccess'
+const { indexOf }       = require( 'lodash' )
+const roles            = require( 'config/roles' )
+const SecurityAccess    = require( './../interfaces/SecurityAccess' )
 
 /**
  * @class Access
  * @extends SecurityAccess
  */
-export default class Access extends SecurityAccess {
+module.exports = class Access extends SecurityAccess {
     /**
      * constructor
      *

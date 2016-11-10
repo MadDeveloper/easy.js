@@ -1,4 +1,4 @@
-export default {
+module.exports = {
 	enabled: true,
 	// custom: true,
 	// service: 'authentication'

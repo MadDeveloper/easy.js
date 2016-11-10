@@ -1,12 +1,12 @@
-import { indexOf }  from 'lodash'
-import Controller   from '~/vendor/easy/core/Controller'
-import TokenManager from '~/vendor/easy/authentication/TokenManager'
+const { indexOf }   = require( 'lodash' )
+const Controller   = require( 'vendor/easy/core/Controller' )
+const TokenManager = require( 'vendor/easy/authentication/TokenManager' )
 
 /**
  * @class UserController
  * @extends Controller
  */
-export class UserController extends Controller {
+class UserController extends Controller {
     /**
      * isRequestWellParameterized - verify if request contains valids params
      *
@@ -184,3 +184,5 @@ export class UserController extends Controller {
             .catch( error => response.internalServerError( error ) )
     }
 }
+
+module.exports.UserController = UserController

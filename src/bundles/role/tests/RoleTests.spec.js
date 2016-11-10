@@ -1,4 +1,4 @@
-import Tests from '~/vendor/easy/core/Tests'
+const Tests = require( 'vendor/easy/core/Tests' )
 
 /**
  * @class RoleTests

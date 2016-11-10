@@ -1,9 +1,9 @@
-import ConfigLoader from './../core/ConfigLoader'
+const ConfigLoader  = require( './../core/ConfigLoader' )
 
 /**
  * @class Database
  */
-export default class Database {
+module.exports = class Database {
     /**
      * constructor
      */

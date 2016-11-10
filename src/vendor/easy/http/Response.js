@@ -1,10 +1,10 @@
-import Http from './Http'
+const Http  = require( './Http' )
 
 /**
  * @class Response
  * @extends Http
  */
-export default class Response extends Http {
+module.exports = class Response extends Http {
     /**
      * constructor - description
      *

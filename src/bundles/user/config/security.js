@@ -1,6 +1,6 @@
-import roles from '~/config/roles'
+const roles = require( 'config/roles' )
 
-export default {
+module.exports = {
 	'/roles/:role_id/users': {
 		mustBe: [ roles.any ],
 		canCreate: [ roles.user ],

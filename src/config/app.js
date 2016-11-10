@@ -1,6 +1,6 @@
-import fs from 'fs'
+const fs  = require( 'fs' )
 
-export default {
+module.exports = {
     /*
      * App configurations
      */

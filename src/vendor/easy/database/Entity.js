@@ -1,7 +1,7 @@
 /**
  * @class Entity
  */
-export default class Entity {
+module.exports = class Entity {
     /**
      * @constructor
      * @param {EntityManager} em

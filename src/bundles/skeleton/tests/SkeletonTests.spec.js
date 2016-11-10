@@ -1,4 +1,4 @@
-import Tests from '~/vendor/easy/core/Tests'
+const Tests = require( 'vendor/easy/core/Tests' )
 
 /**
  * @class SkeletonTests
@@ -12,6 +12,6 @@ class SkeletonTests extends Tests {
 }
 
 /*
- * Permit mocha to access to run() method called implicitely and run unit tests
+ * Permit Jasmine to access to run() method called implicitely and run unit tests
  */
 new SkeletonTests()

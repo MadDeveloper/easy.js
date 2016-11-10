@@ -3,7 +3,7 @@
  *
  * Act as en interface
  */
-export default class Pluggable {
+module.exports = class Pluggable {
     /**
      * plug - description
      *

@@ -1,9 +1,9 @@
-import colors from 'colors'
+const colors  = require( 'colors' )
 
 /**
  * @class Console
  */
-export default class Console {
+module.exports = class Console {
     /**
      * error - display error in console
      *

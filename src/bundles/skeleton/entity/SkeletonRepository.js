@@ -1,7 +1,7 @@
-import Repository from '~/vendor/easy/database/Repository'
+const Repository = require( 'vendor/easy/database/Repository' )
 
 /**
  * @class SkeletonRepository
  * @extends Repository
  */
-export default class SkeletonRepository extends Repository {}
+module.exports = class SkeletonRepository extends Repository {}

@@ -1,6 +1,6 @@
-import Knex from 'knex'
+const Knex = require( 'knex' )
 
-export const config = {
+const config = {
     client: 'mysql',
     host: 'localhost',
     user: 'root',
@@ -9,7 +9,9 @@ export const config = {
     charset: 'utf8'
 }
 
-export const knex = Knex({
+module.exports.config = config
+
+module.exports.knex = Knex({
     client: config.client,
 
     connection: {

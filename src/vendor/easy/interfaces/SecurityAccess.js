@@ -3,7 +3,7 @@
  *
  * Act as en interface
  */
-export default class SecurityAccess {
+module.exports = class SecurityAccess {
     /**
      * authorized - description
      *

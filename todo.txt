@@ -1,7 +1,9 @@
 - pouvoir générer un service, un controller, un repository, une entity
 - clean index.js et tous les autres fichier contenant des commentaires de code
+- enlever babel
 - finir la js doc
 - faire les tests du vendor
+- clean useless packages
 - DOC
 
 

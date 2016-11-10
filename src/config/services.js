@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     /*
      * component.* can be used in dependencies to inject easy component
 	 * List of all components availables:

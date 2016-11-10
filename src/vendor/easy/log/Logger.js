@@ -1,4 +1,4 @@
-import Injectable from './../interfaces/Injectable'
+const Injectable  = require( './../interfaces/Injectable' )
 
 /**
  * Describes a logger instance
@@ -18,7 +18,7 @@ import Injectable from './../interfaces/Injectable'
  * @class Logger
  * @extends Injectable
  */
-export default class Logger extends Injectable {
+module.exports = class Logger extends Injectable {
     /**
      * @constructor
      * @param  {Container} container
