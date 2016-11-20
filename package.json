@@ -1,9 +1,9 @@
 {
-  "name": "Easy",
+  "name": "Easy.js",
   "version": "0.1.0",
-  "description": "Easy.js Rest API framework",
+  "description": "Easy.js Restful API framework",
   "main": "src/app.js",
-  "repository": "https://jsergent-prepapp@bitbucket.org/prepapp/easy.js.git",
+  "repository": "https://github.com/MadDeveloper/easy.js.git",
   "scripts": {
     "bundles:new": "node bin/bundles/new",
     "bundles:restore:skeleton": "node bin/bundles/restore",
@@ -54,6 +54,7 @@
     "morgan": "~1.7.0",
     "mysql": "^2.12.0",
     "numeral": "^1.5.3",
+    "pad-right": "^0.2.2",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "readline-sync": "^1.4.4",
@@ -63,7 +64,6 @@
     "copy-dir": "^0.3.0",
     "execsql": "0.0.3",
     "jasmine": "^2.5.2",
-    "pad-right": "^0.2.2",
     "walk": "^2.3.9"
   }
 }

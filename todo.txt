@@ -1,15 +1,17 @@
-- pouvoir générer un service, un controller, un repository, une entity
-- clean index.js et tous les autres fichier contenant des commentaires de code
-- enlever babel
-- finir la js doc
+-----------------------------
+----------|  NOW  |----------
+-----------------------------
+
+- clean tous les autres fichier contenant des commentaires de code
+- finir la js doc des classes et fonctions
 - faire les tests du vendor
-- clean useless packages
-- DOC
+- rédiger DOC
 
+-----------------------------
+---------|  LATER  |---------
+-----------------------------
 
---- LATER ---
-
-- intégrer babel async
+- pouvoir générer un service, un controller, un repository, une entity
 - appliquer le logger aux endroits utiles
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
 tout lier en promise pour les patchs
@@ -20,7 +22,9 @@ aurait comme clé 'entitymanager', et pourra gérer son cache interne dans cette
 toujours possible.
 
 
----  MAYBE ---
+-----------------------------
+---------|  MAYBE  |---------
+-----------------------------
 
 - ? Utiliser CarminteJS (cross-db ORM)
 - ? translate project to ts
