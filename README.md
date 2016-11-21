@@ -11,8 +11,7 @@ Le but de Easy.js est de se concentrer uniquement sur la partie métier d'un ser
 
 ## Requirements
 
-Easy.js est construit sur la base de ES2015, il permet donc de pouvoir utiliser toutes les conceptions objets de ce dernier.
-Utilisant quelques fonctionnalités non supportés par le moteur V8 (les import par exemple), le framework a donc besoin du transpileur Babel pour fonctionner.
+Easy.js est construit sur la base de ES2015, et permet donc de pouvoir utiliser les dernières fonctionnalités fournies pas NodeJS, et ne nécessite aucun transpileur pour fonctionner.
 
 ## Maintainers
 * Julien Sergent ([juliensergent.com](http://juliensergent.com) - <a href="mailto:sergent.julien@icloud.com">sergent.julien@icloud.com</a>)
