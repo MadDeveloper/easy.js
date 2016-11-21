@@ -13,7 +13,6 @@ const kernel      = new Kernel().init( __dirname )
 const application = new Application( kernel )
 
 application.configure()
-application.start()
 
 /*
  * Returns the application elements configured

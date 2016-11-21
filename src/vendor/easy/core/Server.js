@@ -18,6 +18,11 @@ class Server {
         this.application = application
     }
 
+    /**
+     * start - description
+     *
+     * @returns {type}  description
+     */
     start() {
         let server  = null
         let port    = 0
