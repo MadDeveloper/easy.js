@@ -21,7 +21,7 @@ Easy.js est construit sur la base de ES2015, et permet donc de pouvoir utiliser 
 ### Requirements
 
 ```
-npm install babel-cli apidoc nodemon --global
+npm install apidoc nodemon --global
 ```
 
 ### Installation & start
