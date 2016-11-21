@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- ajouter cookie-parser
 - clean tous les autres fichier contenant des commentaires de code
 - finir la js doc des classes et fonctions
 - faire les tests du vendor

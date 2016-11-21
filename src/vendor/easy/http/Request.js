@@ -218,6 +218,15 @@ module.exports = class Request extends Http {
     }
 
     /**
+     * getCookies - description
+     *
+     * @returns {type}  description
+     */
+    getCookies() {
+        return this.scope.cookies
+    }
+
+    /**
      * get - description
      *
      * @returns {type}  description

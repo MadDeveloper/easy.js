@@ -5,6 +5,7 @@ const morgan            = require( 'morgan' )
 const helmet            = require( 'helmet' )
 const cors              = require( 'cors' )
 const compression       = require( 'compression' )
+const cookieParser      = require( 'cookie-parser' )
 const numeral           = require( 'numeral' )
 const { indexOf }       = require( 'lodash' )
 const passport          = require( 'passport' )
@@ -93,6 +94,11 @@ module.exports = class Application extends Configurable {
          * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
          */
         this.app.enable( 'trust proxy' )
+
+        /*
+         * Parse cookies
+         */
+        this.app.use( cookieParser() )
 
         /*
          * Enable CORS: https://www.w3.org/TR/cors/
