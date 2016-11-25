@@ -1,7 +1,7 @@
 /**
  * @class Tests
  */
-module.exports = class Tests {
+class Tests {
     /**
      * @constructor
      */
@@ -17,3 +17,5 @@ module.exports = class Tests {
      */
     run() {}
 }
+
+module.exports = Tests

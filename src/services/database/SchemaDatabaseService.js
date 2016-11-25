@@ -3,7 +3,7 @@ const { keys, each } = require( 'lodash' )
 /**
  * @class SchemaDatabaseService
  */
-module.exports = class SchemaDatabaseService {
+class SchemaDatabaseService {
     /**
      * constructor
      *
@@ -148,3 +148,5 @@ module.exports = class SchemaDatabaseService {
         return this._knex
     }
 }
+
+module.exports = SchemaDatabaseService

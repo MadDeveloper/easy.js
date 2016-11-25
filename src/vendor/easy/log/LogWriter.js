@@ -7,7 +7,7 @@ const { strtr }     = require( './../lib/string' )
  * @class LogWriter
  * @extends Injectable
  */
-module.exports = class LogWriter extends Injectable {
+class LogWriter extends Injectable {
     /**
      * @constructor
      * @param  {Container} container
@@ -47,3 +47,5 @@ module.exports = class LogWriter extends Injectable {
         return this._logFileManager
     }
 }
+
+module.exports = LogWriter

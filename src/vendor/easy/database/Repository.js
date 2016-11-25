@@ -1,7 +1,7 @@
 /**
  * @class Repository
  */
-module.exports = class Repository {
+class Repository {
     /**
      * @constructor
      * @param  {bookshelf.Model} model
@@ -117,3 +117,5 @@ module.exports = class Repository {
         })
     }
 }
+
+module.exports = Repository

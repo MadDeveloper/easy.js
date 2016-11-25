@@ -6,7 +6,7 @@ const Injectable    = require( './../interfaces/Injectable' )
  * @class LogFileManager
  * @extends Injectable
  */
-module.exports = class LogFileManager extends Injectable {
+class LogFileManager extends Injectable {
     /**
      * @constructor
      */
@@ -47,3 +47,5 @@ module.exports = class LogFileManager extends Injectable {
         return this._logDirectoryPath
     }
 }
+
+module.exports = LogFileManager

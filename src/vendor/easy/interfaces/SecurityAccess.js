@@ -3,7 +3,7 @@
  *
  * Act as en interface
  */
-module.exports = class SecurityAccess {
+class SecurityAccess {
     /**
      * authorized - description
      *
@@ -15,3 +15,5 @@ module.exports = class SecurityAccess {
      */
     authorized({ configurations, request, response, container }) {}
 }
+
+module.exports = SecurityAccess

@@ -5,7 +5,7 @@ const Analyzer      = require( './../interfaces/Analyzer' )
  * @class AnalyzerSecurityConfig
  * @extends Analyzer
  */
-module.exports = class AnalyzerSecurityConfig extends Analyzer {
+class AnalyzerSecurityConfig extends Analyzer {
     /**
      * analyze - description
      *
@@ -36,3 +36,5 @@ module.exports = class AnalyzerSecurityConfig extends Analyzer {
         return configurations.security
     }
 }
+
+module.exports = AnalyzerSecurityConfig

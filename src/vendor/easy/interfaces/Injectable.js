@@ -3,4 +3,6 @@
  *
  * @class Injectable
  */
-module.exports = class Injectable {}
+class Injectable {}
+
+module.exports = Injectable

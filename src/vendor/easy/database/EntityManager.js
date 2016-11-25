@@ -4,7 +4,7 @@ const Configurable  = require( './../interfaces/Configurable' )
  * @class EntityManager
  * @extends Configurable
  */
-module.exports = class EntityManager extends Configurable {
+class EntityManager extends Configurable {
     /**
      * @constructor
      */
@@ -165,3 +165,5 @@ module.exports = class EntityManager extends Configurable {
         return this._database
     }
 }
+
+module.exports = EntityManager

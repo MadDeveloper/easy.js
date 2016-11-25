@@ -3,7 +3,7 @@ const ConfigLoader  = require( './../core/ConfigLoader' )
 /**
  * @class Database
  */
-module.exports = class Database {
+class Database {
     /**
      * constructor
      */
@@ -63,3 +63,5 @@ module.exports = class Database {
         return this
     }
 }
+
+module.exports = Database

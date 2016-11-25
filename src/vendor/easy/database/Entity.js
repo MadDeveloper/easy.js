@@ -1,7 +1,7 @@
 /**
  * @class Entity
  */
-module.exports = class Entity {
+class Entity {
     /**
      * @constructor
      * @param {EntityManager} em
@@ -12,3 +12,5 @@ module.exports = class Entity {
         this.orm = this.database.instance
     }
 }
+
+module.exports = Entity

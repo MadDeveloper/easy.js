@@ -1,7 +1,7 @@
 /**
  * @class Kernel
  */
-module.exports = class Kernel {
+class Kernel {
     /**
      * @constructor
      */
@@ -39,3 +39,5 @@ module.exports = class Kernel {
         return this._path
     }
 }
+
+module.exports = Kernel

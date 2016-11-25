@@ -23,7 +23,7 @@ const EntityManager     = require( './../database/EntityManager' )
 /**
  * @class Application
  */
-module.exports = class Application extends Configurable {
+class Application extends Configurable {
     /**
      * constructor - description
      *
@@ -251,3 +251,5 @@ module.exports = class Application extends Configurable {
         return !this.isDevEnv()
     }
 }
+
+module.exports = Application

@@ -6,7 +6,7 @@ const SecurityAccess    = require( './../interfaces/SecurityAccess' )
  * @class Access
  * @extends SecurityAccess
  */
-module.exports = class Access extends SecurityAccess {
+class Access extends SecurityAccess {
     /**
      * constructor
      *
@@ -171,3 +171,5 @@ module.exports = class Access extends SecurityAccess {
         return this
     }
 }
+
+module.exports = Access

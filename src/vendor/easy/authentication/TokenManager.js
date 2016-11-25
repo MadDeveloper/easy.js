@@ -4,7 +4,7 @@ const ConfigLoader	 = require( './../core/ConfigLoader' )
 /**
  * @class TokenManager
  */
-module.exports = class TokenManager {
+class TokenManager {
 	/**
 	 * sign - sign new token
 	 *
@@ -42,3 +42,5 @@ module.exports = class TokenManager {
 		return ConfigLoader.loadFromGlobal( 'app' ).jwt
 	}
 }
+
+module.exports = TokenManager

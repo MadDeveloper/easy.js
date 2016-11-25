@@ -4,7 +4,7 @@ const Http  = require( './Http' )
  * @class Response
  * @extends Http
  */
-module.exports = class Response extends Http {
+class Response extends Http {
     /**
      * constructor - description
      *
@@ -237,3 +237,5 @@ module.exports = class Response extends Http {
         return this._request
     }
 }
+
+module.exports = Response

@@ -3,9 +3,11 @@
  *
  * Act as an interface
  */
-module.exports = class Configurable {
+class Configurable {
     /**
      * configure - configure component
      */
     configure() {}
 }
+
+module.exports = Configurable

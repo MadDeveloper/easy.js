@@ -3,7 +3,7 @@
  *
  * Act as en interface
  */
-module.exports = class Pluggable {
+class Pluggable {
     /**
      * plug - description
      *
@@ -13,9 +13,11 @@ module.exports = class Pluggable {
     plug( configurations ) {}
 
     /**
-     * execute - description    
+     * execute - description
      *
      * @returns {type}  description
      */
     execute() {}
 }
+
+module.exports = Pluggable

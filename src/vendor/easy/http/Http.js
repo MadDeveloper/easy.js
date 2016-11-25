@@ -1,7 +1,7 @@
 /**
  * @class Http
  */
-module.exports = class Http {
+class Http {
     /**
      * @constructor
      */
@@ -55,3 +55,5 @@ module.exports = class Http {
         return this._status
     }
 }
+
+module.exports = Http

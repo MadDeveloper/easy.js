@@ -4,7 +4,7 @@ const Analyzer  = require( './../interfaces/Analyzer' )
  * @class AnalyzerMiddlewaresConfig
  * @extends Analyzer
  */
-module.exports = class AnalyzerMiddlewaresConfig extends Analyzer {
+class AnalyzerMiddlewaresConfig extends Analyzer {
     /**
      * analyze - description
      *
@@ -49,3 +49,5 @@ module.exports = class AnalyzerMiddlewaresConfig extends Analyzer {
         }
     }
 }
+
+module.exports = AnalyzerMiddlewaresConfig

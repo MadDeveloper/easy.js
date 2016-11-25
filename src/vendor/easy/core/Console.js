@@ -3,7 +3,7 @@ const colors  = require( 'colors' )
 /**
  * @class Console
  */
-module.exports = class Console {
+class Console {
     /**
      * error - display error in console
      *
@@ -97,3 +97,5 @@ module.exports = class Console {
         return '  '
     }
 }
+
+module.exports = Console

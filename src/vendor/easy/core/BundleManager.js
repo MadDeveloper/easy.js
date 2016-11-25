@@ -6,7 +6,7 @@ const ConfigLoader  = require( './ConfigLoader' )
  * @class BundleManager
  * @extends Configurable
  */
-module.exports = class BundleManager extends Configurable {
+class BundleManager extends Configurable {
     /**
      * @constructor
      */
@@ -66,3 +66,5 @@ module.exports = class BundleManager extends Configurable {
         return this._bundles
     }
 }
+
+module.exports = BundleManager

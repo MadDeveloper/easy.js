@@ -3,7 +3,7 @@
  *
  * Acts as en interface
  */
-module.exports = class Parser {
+class Parser {
     /**
      * parse - description
      *
@@ -12,3 +12,5 @@ module.exports = class Parser {
      */
     parse( configurations ) {}
 }
+
+module.exports = Parser

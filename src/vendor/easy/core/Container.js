@@ -8,7 +8,7 @@ const servicesMapping = ConfigLoader.loadFromGlobal( 'services' )
 /**
  * @class Container
  */
-module.exports = class Container {
+class Container {
     /**
      * @constructor
      * @param  {Object} path
@@ -302,3 +302,5 @@ module.exports = class Container {
         return this._servicesMapping
     }
 }
+
+module.exports = Container

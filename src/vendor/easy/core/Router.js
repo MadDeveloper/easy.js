@@ -12,7 +12,7 @@ const { indexOf }                   = require( 'lodash' )
  * @class Router
  * @extends Configurable
  */
-module.exports = class Router extends Configurable {
+class Router extends Configurable {
     /**
      * @constructor
      */
@@ -262,3 +262,5 @@ module.exports = class Router extends Configurable {
         return this._config
     }
 }
+
+module.exports = Router

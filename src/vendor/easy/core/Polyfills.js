@@ -7,7 +7,7 @@
 /**
  * @class Polyfills
  */
-module.exports = class Polyfills {
+class Polyfills {
     /**
      * load - description
      *
@@ -46,3 +46,5 @@ module.exports = class Polyfills {
         }
     }
 }
+
+module.exports = Polyfills

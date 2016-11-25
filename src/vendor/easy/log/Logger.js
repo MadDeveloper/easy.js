@@ -18,7 +18,7 @@ const Injectable  = require( './../interfaces/Injectable' )
  * @class Logger
  * @extends Injectable
  */
-module.exports = class Logger extends Injectable {
+class Logger extends Injectable {
     /**
      * @constructor
      * @param  {Container} container
@@ -148,3 +148,5 @@ module.exports = class Logger extends Injectable {
         return this._logWriter
     }
 }
+
+module.exports = Logger

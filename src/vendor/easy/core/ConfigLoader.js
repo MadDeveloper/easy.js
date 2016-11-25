@@ -1,4 +1,4 @@
-module.exports = class ConfigLoader {
+class ConfigLoader {
 	/**
 	 * loadFromGlobal - load file from global configurations directory
 	 *
@@ -9,3 +9,5 @@ module.exports = class ConfigLoader {
 		return require( `${__dirname}/../../../config/${file}.js` )
 	}
 }
+
+module.exports = ConfigLoader

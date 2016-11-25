@@ -11,7 +11,7 @@ const LocalStrategy = passportLocal.Strategy
  * @class Authentication
  * @extends Configurable
  */
-module.exports = class Authentication extends Configurable {
+class Authentication extends Configurable {
 	/**
 	 * constructor
 	 *
@@ -114,3 +114,5 @@ module.exports = class Authentication extends Configurable {
 		return this._config
 	}
 }
+
+module.exports = Authentication

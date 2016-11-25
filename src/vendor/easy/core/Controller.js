@@ -3,7 +3,7 @@ const ConfigLoader  = require( './ConfigLoader' )
 /**
  * @class Controller
  */
-module.exports = class Controller {
+class Controller {
     /**
      * @constructor
      */
@@ -87,3 +87,5 @@ module.exports = class Controller {
         return this.container.getService( service )
     }
 }
+
+module.exports = Controller

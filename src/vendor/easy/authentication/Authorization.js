@@ -1,7 +1,7 @@
 const TokenManager	 = require( './TokenManager' )
 const Controller    = require( './../core/Controller' )
 
-module.exports = class Authorization {
+class Authorization {
 	/**
 	 * checkToken - check if user is logged with his token
 	 *
@@ -24,3 +24,5 @@ module.exports = class Authorization {
 		}
 	}
 }
+
+module.exports = Authorization

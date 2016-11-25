@@ -3,7 +3,7 @@
  *
  * Acts as en interface
  */
-module.exports = class Analyzer {
+class Analyzer {
     /**
      * analyze - description
      *
@@ -12,3 +12,5 @@ module.exports = class Analyzer {
      */
     analyze( configurations ) {}
 }
+
+module.exports = Analyzer
