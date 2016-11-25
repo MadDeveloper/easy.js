@@ -2,7 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- changer les exports dans le vendor (class {} et après module.exports =)
 - Mettre tous les statuts http
 - clean tous les autres fichier contenant des commentaires de code
 - finir la js doc des classes et fonctions
