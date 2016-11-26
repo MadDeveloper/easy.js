@@ -25,10 +25,9 @@ const EntityManager     = require( './../database/EntityManager' )
  */
 class Application extends Configurable {
     /**
-     * constructor - description
+     * constructor
      *
-     * @param  {type} kernel description
-     * @returns {type}        description
+     * @param  {Kernel} kernel
      */
     constructor( kernel ) {
         super()
@@ -45,9 +44,7 @@ class Application extends Configurable {
     }
 
     /**
-     * configure - description
-     *
-     * @returns {type}  description
+     * configure - configure application
      */
     configure() {
         /*
@@ -80,9 +77,7 @@ class Application extends Configurable {
     }
 
     /**
-     * start - description
-     *
-     * @returns {type}  description
+     * start - start application
      */
     start() {
         /*
@@ -206,9 +201,7 @@ class Application extends Configurable {
     }
 
     /**
-     * plugAuthentication - description
-     *
-     * @returns {type}  description
+     * plugAuthentication - Plug authentication on application
      */
     plugAuthentication() {
         /*

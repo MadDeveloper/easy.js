@@ -5,10 +5,10 @@
  */
 class Analyzer {
     /**
-     * analyze - description
+     * analyze - check if configurations are valids
      *
-     * @param  {type} configurations description
-     * @returns {type}                description
+     * @param  {Object} configurations
+     * @returns {boolean}
      */
     analyze( configurations ) {}
 }

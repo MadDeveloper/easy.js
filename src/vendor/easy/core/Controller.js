@@ -68,20 +68,20 @@ class Controller {
     }
 
     /**
-     * getComponent - description
+     * getComponent - get easy component
      *
-     * @param  {type} component description
-     * @returns {type}           description
+     * @param  {string} component
+     * @returns {Component}
      */
     getComponent( component ) {
         return this.container.getComponent( component )
     }
 
     /**
-     * getService - description
+     * getService - get service
      *
-     * @param  {type} service description
-     * @returns {type}         description
+     * @param  {string} service
+     * @returns {Injectable}
      */
     getService( service ) {
         return this.container.getService( service )

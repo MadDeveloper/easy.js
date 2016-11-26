@@ -9,9 +9,7 @@
  */
 class Polyfills {
     /**
-     * load - description
-     *
-     * @returns {type}  description
+     * load - load all polyfills
      */
     static load() {
         Polyfills.stringPolyfills()

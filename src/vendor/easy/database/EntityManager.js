@@ -20,11 +20,10 @@ class EntityManager extends Configurable {
     }
 
     /**
-     * configure - description
+     * configure - configure entity manager
      *
-     * @param  {type} bundlesPath description
-     * @param  {type} database    description
-     * @returns {type}             description
+     * @param  {string} bundlesPath
+     * @param  {Database} database
      */
     configure( bundlesPath, database ) {
         this._bundlesPath = bundlesPath

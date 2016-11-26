@@ -19,10 +19,9 @@ class BundleManager extends Configurable {
     }
 
     /**
-     * configure - description
+     * configure - configure bundle manager
      *
-     * @param  {type} bundlesPath description
-     * @returns {type}             description
+     * @param  {string} bundlesPath
      */
     configure( bundlesPath ) {
         this._bundlesPath = bundlesPath

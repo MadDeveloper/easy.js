@@ -28,51 +28,51 @@ class SchemaDatabaseService {
     }
 
     /**
-     * dropTable - description
+     * dropTable - remove table
      *
-     * @param  {type} tableName description
-     * @returns {type}           description
+     * @param  {string} tableName
+     * @returns {Promise}
      */
     dropTable( tableName ) {
         return this.knex.schema.dropTableIfExists( tableName )
     }
 
     /**
-     * tableExists - description
+     * tableExists - check if table exists
      *
-     * @param  {type} tableName description
-     * @returns {type}           description
+     * @param  {string} tableName
+     * @returns {Promise}
      */
     tableExists( tableName ) {
         return this.knex.schema.hasTable( tableName )
     }
 
     /**
-     * truncateTable - description
+     * truncateTable - remove all rows from a table
      *
-     * @param  {type} tableName description
-     * @returns {type}           description
+     * @param  {string} tableName
+     * @returns {Promise}
      */
     truncateTable( tableName ) {
         return this.knex.raw( `truncate table ${tableName}` )
     }
 
     /**
-     * clearTable - description
+     * clearTable - delete table
      *
-     * @param  {type} tableName description
-     * @returns {type}           description
+     * @param  {string} tableName
+     * @returns {Promise}
      */
     clearTable( tableName ) {
         return this.knex( tableName ).del()
     }
 
     /**
-     * createTable - description
+     * createTable - create new table
      *
-     * @param  {type} tableName   description
-     * @param  {type} tableSchema description
-     * @returns {type}             description
+     * @param  {string} tableName
+     * @param  {Object} tableSchema
+     * @returns {Promise}
      */
     createTable( tableName, tableSchema ) {
         return this.knex
@@ -140,9 +140,9 @@ class SchemaDatabaseService {
     }
 
     /**
-     * get - description
+     * get - knex instance
      *
-     * @returns {type}  description
+     * @returns {Knex}
      */
     get knex() {
         return this._knex

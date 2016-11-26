@@ -97,7 +97,7 @@ class Authentication extends Configurable {
 	}
 
 	/**
-	 * useCustom - description
+	 * useCustom - check if we use custom authentication
 	 *
 	 * @returns {boolean}
 	 */
