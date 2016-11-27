@@ -6,37 +6,37 @@ const Analyzer  = require( './../interfaces/Analyzer' )
  */
 class AnalyzerMiddlewaresConfig extends Analyzer {
     /**
-     * analyze - description
+     * analyze - check if middlewares configurations are correct
      *
-     * @param  {type} configurations description
-     * @returns {type}                description
+     * @param  {Object} configurations
+     * @returns {boolean}
      */
     analyze( configurations ) {
         return configurations.middlewares ? true : false
     }
 
     /**
-     * extractMiddlewaresConfig - description
+     * extractMiddlewaresConfig - extract middlewares configurations from application configurations
      *
-     * @param  {type} configurations description
-     * @returns {type}                description
+     * @param  {Object} configurations
+     * @returns {Object}
      */
     extractMiddlewaresConfig( configurations ) {
         return configurations.middlewares
     }
 
     /**
-     * extractMiddleware - description
+     * extractMiddleware - extract single middleware configurations
      *
-     * @param  {type} configurations description
-     * @returns {type}                description
+     * @param  {Object} configurations
+     * @returns {Object}
      */
     extractMiddleware( configurations ) {
         return configurations.middleware
     }
 
     /**
-     * extractMiddlewareInfos - description
+     * extractMiddlewareInfos - extract middleware informations necessary for express router
      *
      * @param  {Object} configurations
      * @returns {Object}

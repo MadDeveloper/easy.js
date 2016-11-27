@@ -10,7 +10,7 @@ class Access extends SecurityAccess {
     /**
      * constructor
      *
-     * @param  {type} container description
+     * @param  {Container} container
      */
     constructor( container ) {
         super()
@@ -21,10 +21,10 @@ class Access extends SecurityAccess {
     }
 
     /**
-     * getAccessHandler - description
+     * getAccessHandler - returns access authority handler
      *
-     * @param  {type} configurations description
-     * @returns {type}                description
+     * @param  {type} configurations
+     * @returns {Access|Service}
      */
     getAccessHandler( configurations ) {
         return 'default' === configurations.strategy ? this : this.container.getService( configurations.strategy )
@@ -94,12 +94,12 @@ class Access extends SecurityAccess {
     }
 
     /**
-     * authorized - description
+     * authorized - check if user is authorized to access to the route requested
      *
-     * @param  {type} { configurations description
-     * @param  {type} request          description
-     * @param  {type} response         description
-     * @param  {type} container }    description
+     * @param  {Object} { configurations
+     * @param  {Request} request
+     * @param  {Response} response
+     * @param  {Container} container }
      * @returns {Promise}
      */
     authorized({ configurations, request, response, container }) {

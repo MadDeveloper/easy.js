@@ -4,7 +4,7 @@ const Entity = require( 'vendor/easy/database/Entity' )
  * @class Role
  * @extends Entity
  */
-module.exports = class Role extends Entity {
+class Role extends Entity {
     /**
      * @constructor
      * @param  {EntityManager} em
@@ -21,3 +21,5 @@ module.exports = class Role extends Entity {
         })
     }
 }
+
+module.exports = Role

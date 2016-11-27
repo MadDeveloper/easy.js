@@ -5,13 +5,13 @@
  */
 class SecurityAccess {
     /**
-     * authorized - description
+     * authorized - check if user is authorized to access to the route requested
      *
-     * @param  {type} { configurations description
-     * @param  {type} request          description
-     * @param  {type} response         description
-     * @param  {type} container }    description
-     * @returns {Promise}                  description
+     * @param  {Object} { configurations
+     * @param  {Request} request
+     * @param  {Response} response
+     * @param  {Container} container }
+     * @returns {Promise}
      */
     authorized({ configurations, request, response, container }) {}
 }

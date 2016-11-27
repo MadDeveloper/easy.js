@@ -15,28 +15,26 @@ class Database {
     }
 
     /**
-     * connect - description
-     *
-     * @returns {type}  description
+     * connect - connect database to connector
      */
     connect() {
         this.instance = this.config.connector
     }
 
     /**
-     * get - description
+     * get - get database instance
      *
-     * @returns {type}  description
+     * @returns {Object}
      */
     get instance() {
         return this._instance
     }
 
     /**
-     * set - description
+     * set - set database instance
      *
-     * @param  {type} instance description
-     * @returns {type}          description
+     * @param  {Object} instance
+     * @returns {Object}
      */
     set instance( instance ) {
         this._instance = instance
@@ -44,19 +42,19 @@ class Database {
     }
 
     /**
-     * get - description
+     * get - get database connection state
      *
-     * @returns {type}  description
+     * @returns {Object}
      */
     get connected() {
         return this._connected
     }
 
     /**
-     * set - description
+     * set - set database connection state
      *
-     * @param  {type} connected description
-     * @returns {type}           description
+     * @param  {boolean} connected
+     * @returns {Database}
      */
     set connected( connected ) {
         this._connected = connected

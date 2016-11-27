@@ -28,10 +28,9 @@ class Router extends Configurable {
     }
 
     /**
-     * configure - description
+     * configure - configure easy.js router
      *
-     * @param  {type} application description
-     * @returns {type}             description
+     * @param  {Application} application
      */
     configure( application, router ) {
         this.application = application
@@ -66,10 +65,9 @@ class Router extends Configurable {
 	}
 
     /**
-     * loadBundlesRoutes - description
+     * loadBundlesRoutes - load all enabled bundles routes
      *
-     * @param  {type} bundles description
-     * @returns {type}         description
+     * @param  {Array} bundles
      */
     loadBundlesRoutes( bundles ) {
         let bundle = {}
@@ -81,10 +79,9 @@ class Router extends Configurable {
     }
 
     /**
-     * parseBundleRoutes - description
+     * parseBundleRoutes - parse bundles routes and implement all middlewares and routes into express router
      *
-     * @param  {type} bundle description
-     * @returns {type}        description
+     * @param  {Object} bundle
      */
     parseBundleRoutes( bundle ) {
         const controller = new bundle.controller( this.application.container )
@@ -105,7 +102,7 @@ class Router extends Configurable {
              * Middlewares
              */
             if ( this.analyzerMiddlewaresConfig.analyze( routesConfig ) ) {
-                this.defineMiddlewaresRoutes( routeName, routesConfig, controller )
+                this.defineMiddlewaresRoutes( routesConfig, controller )
             }
 
             /*
@@ -129,13 +126,12 @@ class Router extends Configurable {
     }
 
     /**
-     * defineMiddlewaresRoutes - description
+     * defineMiddlewaresRoutes - define all middlewares into express router
      *
-     * @param  {type} route          description
-     * @param  {type} configurations description
-     * @returns {type}                description
+     * @param  {Object} configurations
+     * @param  {Controller} controller
      */
-    defineMiddlewaresRoutes( route, configurations, controller ) {
+    defineMiddlewaresRoutes( configurations, controller ) {
         const router            = this.scope
         const middlewaresConfig = this.analyzerMiddlewaresConfig.extractMiddlewaresConfig( configurations )
         let middleware          = ''
@@ -157,11 +153,10 @@ class Router extends Configurable {
     }
 
     /**
-     * defineAccessRoute - description
+     * defineAccessRoute - define access rules for specific route
      *
-     * @param  {type} route          description
-     * @param  {type} configurations description
-     * @returns {type}                description
+     * @param  {string} route
+     * @param  {Object} configurations
      */
     defineAccessRoute( route, configurations ) {
         const router = this.scope
@@ -185,13 +180,12 @@ class Router extends Configurable {
     }
 
     /**
-     * defineRoute - description
+     * defineRoute - define route into express router
      *
-     * @param  {type} { route            description
-     * @param  {type} method             description
-     * @param  {type} controller         description
-     * @param  {type} controllerMethod } description
-     * @returns {type}                    description
+     * @param  {string} { route
+     * @param  {string} method
+     * @param  {Controller} controller
+     * @param  {Function} controllerMethod }
      */
     defineRoute({ route, method, controller, controllerMethod }) {
         const router = this.scope
@@ -207,10 +201,9 @@ class Router extends Configurable {
     }
 
     /**
-     * defineMethodNotAllowed - description
+     * defineMethodNotAllowed - define route on all http verbs which returns 405 Method Not Allowed
      *
-     * @param  {type} route description
-     * @returns {type}       description
+     * @param  {string} route
      */
     defineMethodNotAllowed( route ) {
         const router = this.scope
@@ -224,21 +217,21 @@ class Router extends Configurable {
     }
 
     /**
-     * getRequest - description
+     * getRequest - get easy Request instance
      *
-     * @param  {type} req description
-     * @returns {type}     description
+     * @param  {express.Request} req
+     * @returns {Request}
      */
     getRequest( req ) {
         return new Request( req, this.application.appName )
     }
 
     /**
-     * getResponse - description
+     * getResponse - get easy Response instance
      *
-     * @param  {type} res     description
-     * @param  {type} request description
-     * @returns {type}         description
+     * @param  {express.Response} res
+     * @param  {Request} request
+     * @returns {Response}
      */
     getResponse( res, request ) {
         return new Response( res, request, this.application.container.getComponent( 'Logger' ) )

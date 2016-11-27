@@ -1,4 +1,4 @@
-const Http  = require( './Http' )
+const Http = require( './Http' )
 
 /**
  * @class Response

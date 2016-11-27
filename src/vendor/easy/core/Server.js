@@ -1,27 +1,24 @@
-const https   = require( 'https' )
-const http    = require( 'http' )
-const net     = require( 'net' )
-const pad     = require( 'pad-right' )
-const Console = require( 'vendor/easy/core/Console' )
+const https     = require( 'https' )
+const http      = require( 'http' )
+const net       = require( 'net' )
+const pad       = require( 'pad-right' )
+const Console   = require( 'vendor/easy/core/Console' )
 
 /**
  * @class Server
  */
 class Server {
     /**
-     * constructor - description
+     * constructor
      *
-     * @param  {type} application description
-     * @returns {type}             description
+     * @param  {Application} application
      */
     constructor( application ) {
         this.application = application
     }
 
     /**
-     * start - description
-     *
-     * @returns {type}  description
+     * start - start server
      */
     start() {
         let server  = null
@@ -44,7 +41,7 @@ class Server {
         }
 
         let freePort = port => {
-            return new Promise( (resolve, reject) => {
+            return new Promise( ( resolve, reject ) => {
                 const serverTest = net.createServer( socket => {
                     socket.write( 'Echo server\r\n' )
                     socket.pipe( socket )

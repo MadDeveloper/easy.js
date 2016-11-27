@@ -7,10 +7,10 @@ const Analyzer      = require( './../interfaces/Analyzer' )
  */
 class AnalyzerSecurityConfig extends Analyzer {
     /**
-     * analyze - description
+     * analyze - check if configurations are valids
      *
-     * @param  {type} configurations description
-     * @returns {type}                description
+     * @param  {Object} configurations
+     * @returns {boolean}
      */
     analyze( configurations ) {
         let correct = false
@@ -27,10 +27,10 @@ class AnalyzerSecurityConfig extends Analyzer {
     }
 
     /**
-     * extractSecurityConfig - description
+     * extractSecurityConfig - extract security configurations into app configurations
      *
-     * @param  {type} configurations description
-     * @returns {type}                description
+     * @param  {Object} configurations
+     * @returns {Object}
      */
     extractSecurityConfig( configurations ) {
         return configurations.security

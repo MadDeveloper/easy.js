@@ -1,6 +1,6 @@
 const { indexOf }   = require( 'lodash' )
-const Controller   = require( 'vendor/easy/core/Controller' )
-const TokenManager = require( 'vendor/easy/authentication/TokenManager' )
+const Controller    = require( 'vendor/easy/core/Controller' )
+const TokenManager  = require( 'vendor/easy/authentication/TokenManager' )
 
 /**
  * @class UserController

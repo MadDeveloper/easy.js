@@ -4,7 +4,7 @@ const Repository = require( 'vendor/easy/database/Repository' )
  * @class UserRepository
  * @extends Repository
  */
-module.exports = class UserRepository extends Repository {
+class UserRepository extends Repository {
     /**
      * findAll - fetch all users from role
      *
@@ -35,3 +35,5 @@ module.exports = class UserRepository extends Repository {
             .fetch( options )
     }
 }
+
+module.exports = UserRepository
