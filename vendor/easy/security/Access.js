@@ -1,5 +1,5 @@
 const { indexOf }       = require( 'lodash' )
-const roles            = require( 'config/roles' )
+const roles             = require( 'src/config/roles' )
 const SecurityAccess    = require( './../interfaces/SecurityAccess' )
 
 /**

@@ -1,8 +1,7 @@
-require( 'app-module-path' ).addPath( __dirname )
+require( 'app-module-path' ).addPath( `${__dirname}/../` )
 
 const Kernel        = require( 'vendor/easy/core/Kernel' )
 const Application   = require( 'vendor/easy/core/Application' )
-const Server        = require( 'vendor/easy/core/Server' )
 
 /*
  * We force cwd to be the directory where bootstrap.js is running, usefull for Unix os
@@ -12,7 +11,7 @@ process.chdir( __dirname )
 /*
  * Easy.js dependencies
  */
-const kernel      = new Kernel().init( __dirname )
+const kernel      = new Kernel().init()
 const application = new Application( kernel )
 
 application.configure()
@@ -21,4 +20,4 @@ application.configure()
 /*
  * Returns the application elements configured
  */
-module.exports = { kernel, application, server }
+module.exports = { kernel, application }

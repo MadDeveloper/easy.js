@@ -1,13 +1,13 @@
 #!/usr/bin/env node
+const { kernel, application }   = require( './../../src/bootstrap' )
 const execsql                   = require( 'execsql' )
-const schema					= require( 'config/database/schema' )
+const schema					= require( 'src/config/database/schema' )
 const sequence                  = require( 'when/sequence' )
 const Console                   = require( 'vendor/easy/core/Console' )
 const { indexOf,
 		 has,
 		 keys,
 		 map }				    = require( 'lodash' )
-const { kernel, application }   = require( './../src/bootstrap' )
 
 const schemaDatabaseService	= container.getService( 'database.schema' )
 const knex					= schemaDatabaseService.knex

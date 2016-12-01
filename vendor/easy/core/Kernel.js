@@ -1,3 +1,5 @@
+const path = require( 'path' )
+
 /**
  * @class Kernel
  */
@@ -10,20 +12,20 @@ class Kernel {
     }
 
     /**
-     * init - init kernel and components
+     * init - init kernel
      *
-     * @param  {string} root
      * @returns {Kernel}
      */
-    init( root ) {
+    init() {
         /*
          * paths
          */
-        this.path.root          = root
-        this.path.bin           = `${this.path.root}/../bin`
-        this.path.bundles       = `${this.path.root}/bundles`
-        this.path.config        = `${this.path.root}/config`
-        this.path.services      = `${this.path.root}/services`
+        this.path.root          = path.resolve( `${__dirname}/../../../` )
+        this.path.bin           = `${this.path.root}/bin`
+        this.path.src           = `${this.path.root}/src`
+        this.path.bundles       = `${this.path.src}/bundles`
+        this.path.config        = `${this.path.src}/config`
+        this.path.services      = `${this.path.src}/services`
         this.path.vendor        = { root: `${this.path.root}/vendor` }
         this.path.vendor.easy   = `${this.path.vendor.root}/easy`
 

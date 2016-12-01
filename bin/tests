@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const Jasmine                  = require( 'jasmine' )
-const { kernel, application }  = require( `${__dirname}/../src/bootstrap` )
+const { kernel, application }  = require( `./../../src/bootstrap` )
 
 global.easy = {
     application

@@ -158,7 +158,7 @@ class Application extends Configurable {
          * Trace everything that happens on the server
          */
         if ( this.config.app.log ) {
-            this.app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${__dirname}/../../../../logs/traffic.log`, { flags: 'a' } ) } ) )
+            this.app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${this.kernel.path.root}/logs/traffic.log`, { flags: 'a' } ) } ) )
         }
 
         /*
