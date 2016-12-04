@@ -13,8 +13,6 @@ class Kernel {
 
     /**
      * init - init kernel
-     *
-     * @returns {Kernel}
      */
     init() {
         /*
@@ -28,8 +26,6 @@ class Kernel {
         this.path.services      = `${this.path.src}/services`
         this.path.vendor        = { root: `${this.path.root}/vendor` }
         this.path.vendor.easy   = `${this.path.vendor.root}/easy`
-
-        return this
     }
 
     /**

@@ -28,7 +28,7 @@ class BundleManager extends Configurable {
     }
 
     /**
-     * loadBundles - load all bundles defined into ~/config/bundles.js
+     * loadBundles - load all bundles defined into src/config/bundles.js
      */
     loadBundles() {
         this.configurations.forEach( element => this.loadBundle( element ) )

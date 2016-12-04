@@ -9,15 +9,12 @@ const Application   = require( 'vendor/easy/core/Application' )
 process.chdir( __dirname )
 
 /*
- * Easy.js dependencies
+ * Easy.js minimal configurations
  */
-const kernel      = new Kernel().init()
-const application = new Application( kernel )
+const kernel = new Kernel()
+kernel.init()
 
+const application = new Application( kernel )
 application.configure()
 
-
-/*
- * Returns the application elements configured
- */
 module.exports = { kernel, application }

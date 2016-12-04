@@ -334,18 +334,19 @@ if ( nameBundleFromArgv.length > 0 ) {
     }
 
     function createTable() {
-        schemaDatabaseService.createTable( tableName, properties )
-        .then( () => {
-            updateSchema()
-        })
-        .catch( error => {
-            Console.error({
-                title: "Error when creating table",
-                message: error,
-                consequence: "Bundle creation aborted.",
-                exit: 0
+        schemaDatabaseService
+            .createTable( tableName, properties )
+            .then( () => {
+                updateSchema()
             })
-        })
+            .catch( error => {
+                Console.error({
+                    title: "Error when creating table",
+                    message: error,
+                    consequence: "Bundle creation aborted.",
+                    exit: 0
+                })
+            })
     }
 
     function updateSchema() {

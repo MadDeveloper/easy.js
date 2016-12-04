@@ -39,7 +39,7 @@ class LogFileManager extends Injectable {
     }
 
     /**
-     * get - log directory path (default: ~/logs)
+     * get - log directory path (default: logs/)
      *
      * @returns {string}
      */

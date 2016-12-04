@@ -6,11 +6,10 @@ const Http  = require( './Http' )
  */
 class Request extends Http {
     /**
-     * constructor - description
+     * constructor
      *
-     * @param  {type} req     description
-     * @param  {type} appName description
-     * @returns {type}         description
+     * @param  {express.Request} req
+     * @param  {string} appName
      */
     constructor( req, appName ) {
         super()
@@ -32,117 +31,115 @@ class Request extends Http {
     }
 
     /**
-     * methodIs - description
+     * methodIs - compare current http method and mehod argument
      *
-     * @param  {type} method description
-     * @returns {type}        description
+     * @param  {string} method
+     * @returns {boolean}
      */
     methodIs( method ) {
         return method.toLowerCase() === this.getMethod().toLowerCase()
     }
 
     /**
-     * getMethod - description
+     * getMethod - get http method
      *
-     * @returns {type}  description
+     * @returns {string}
      */
     getMethod() {
         return this.scope.method
     }
 
     /**
-     * getHeader - description
+     * getHeader - get specific http header
      *
-     * @param  {type} header description
-     * @returns {type}        description
+     * @param  {string} header
+     * @returns {Object|string}
      */
     getHeader( header ) {
         return this.scope.headers[ header ]
     }
 
     /**
-     * getBody - description
+     * getBody - get http body
      *
-     * @returns {type}  description
+     * @returns {Object}
      */
     getBody() {
         return this.scope.body
     }
 
     /**
-     * getRawbody - description
+     * getRawbody - get raw http body
      *
-     * @returns {type}  description
+     * @returns {string}
      */
     getRawbody() {
         return this.scope.rawBody
     }
 
     /**
-     * getParams - description
+     * getParams - get http GET parameters
      *
-     * @returns {type}  description
+     * @returns {Object}
      */
     getParams() {
         return this.scope.params
     }
 
     /**
-     * getBodyParameter - description
+     * getBodyParameter - get specific body parameter
      *
-     * @param  {type} key description
-     * @returns {type}     description
+     * @param  {string} key
+     * @returns {any}
      */
     getBodyParameter( key ) {
         return this.getBody()[ key ]
     }
 
     /**
-     * setBodyParameter - description
+     * setBodyParameter - set body parameter
      *
-     * @param  {type} key   description
-     * @param  {type} value description
-     * @returns {type}       description
+     * @param  {string} key
+     * @param  {any} value
      */
     setBodyParameter( key, value ) {
         this.getBody()[ key ] = value
     }
 
     /**
-     * getRouteParameter - description
+     * getRouteParameter - get specific http GET parameter
      *
-     * @param  {type} param description
-     * @returns {type}       description
+     * @param  {string} param
+     * @returns {any}
      */
     getRouteParameter( param ) {
         return this.getParams()[ param ]
     }
 
     /**
-     * getAppParameter - description
+     * getAppParameter - get application parameter
      *
-     * @param  {type} key description
-     * @returns {type}     description
+     * @param  {string} key
+     * @returns {any}
      */
     getAppParameter( key ) {
         return this.getAppParameters()[ key ]
     }
 
     /**
-     * getAppParameters - description
+     * getAppParameters - get all application parameters
      *
-     * @returns {type}  description
+     * @returns {any}
      */
     getAppParameters() {
         return this.scope[ this._appName ]
     }
 
     /**
-     * setAppParameter - description
+     * setAppParameter - set application parameter
      *
-     * @param  {type} key   description
-     * @param  {type} value description
-     * @returns {type}       description
+     * @param  {string} key
+     * @param  {any} value
      */
     setAppParameter( key, value ) {
         this.scope[ this._appName ][ key ] = value
@@ -169,10 +166,10 @@ class Request extends Http {
     }
 
     /**
-     * urlContains - description
+     * urlContains - check if current url contains path
      *
-     * @param  {type} paths description
-     * @returns {type}       description
+     * @param  {Array|string} paths
+     * @returns {boolean}
      */
     urlContains( paths ) {
         let contains = false
@@ -189,11 +186,11 @@ class Request extends Http {
     }
 
     /**
-     * store - description
+     * store - store property into application parameters
      *
-     * @param  {type} property description
-     * @param  {type} value    description
-     * @returns {type}          description
+     * @param  {string} property
+     * @param  {any} value
+     * @returns {Request}
      */
     store( property, value ) {
         /*
@@ -208,38 +205,38 @@ class Request extends Http {
     }
 
     /**
-     * find - description
+     * find - find property stored with store() method
      *
-     * @param  {type} property description
-     * @returns {type}          description
+     * @param  {string} property
+     * @returns {any}
      */
     retrieve( property ) {
         return this.getAppParameters()[ this._applicationCacheScope ][ property ]
     }
 
     /**
-     * getCookies - description
+     * getCookies - get cookies
      *
-     * @returns {type}  description
+     * @returns {Object}
      */
     getCookies() {
         return this.scope.cookies
     }
 
     /**
-     * get - description
+     * get - get express request object
      *
-     * @returns {type}  description
+     * @returns {express.Request}
      */
     get scope() {
         return this._scope
     }
 
     /**
-     * set - description
+     * set - set express request object
      *
-     * @param  {type} scope description
-     * @returns {type}       description
+     * @param  {Object} scope
+     * @returns {Request}
      */
     set scope( scope ) {
         this._scope = scope
