@@ -1,0 +1,20 @@
+# installed with npm install
+node_modules/
+
+# IDE directory
+.idea
+
+# git directory
+.git
+
+# mac user
+.DS_Store
+
+# built with npm command
+/build
+
+# log files
+*.log
+
+# doc
+/doc
