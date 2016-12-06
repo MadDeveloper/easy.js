@@ -1,5 +1,5 @@
-const jwt 			 = require( 'jsonwebtoken' )
-const ConfigLoader	 = require( './../core/ConfigLoader' )
+const jwt           = require( 'jsonwebtoken' )
+const ConfigLoader  = require( './../core/ConfigLoader' )
 
 /**
  * @class TokenManager
@@ -39,7 +39,7 @@ class TokenManager {
 	 * @returns {Object}
 	 */
 	static getConfig() {
-		return ConfigLoader.loadFromGlobal( 'app' ).jwt
+		return ConfigLoader.loadFromGlobal( 'authentication' ).jwt
 	}
 }
 

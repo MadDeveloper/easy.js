@@ -1,4 +1,4 @@
-const ConfigLoader  = require( './ConfigLoader' )
+const ConfigLoader = require( './ConfigLoader' )
 
 /**
  * @class Controller

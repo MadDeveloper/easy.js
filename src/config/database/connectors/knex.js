@@ -23,7 +23,7 @@ module.exports.knex = Knex({
     },
 
     pool: {
-        min: 0, // set pool min to 0 avoid to loose connection after idle time, realy usefull when you use binaries with prompts -> https://github.com/tgriesser/knex/issues/503
+        min: 0,
         max: 10
     }
 })
