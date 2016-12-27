@@ -2,6 +2,8 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- mettre le vendor en tant que node_modules
+- si on se trompe sur /login il faut renvoyer autre chose que 401 unauthorized ?
 - faire les tests du vendor
 - rédiger DOC
 

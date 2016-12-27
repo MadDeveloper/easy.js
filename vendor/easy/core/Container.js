@@ -231,13 +231,13 @@ class Container {
                 return this.shared[ name ]
             }
 
-            const serviceFile = `${this.servicesDirectoryPath}/${this.servicesMapping[ name ].path}.js`
+            const serviceFilePath = `${this.servicesDirectoryPath}/${this.servicesMapping[ name ].path}.js`
 
             try {
-                const statsServiceFile = fs.lstatSync( serviceFile )
+                const statsServiceFile = fs.lstatSync( serviceFilePath )
 
                 if ( statsServiceFile.isFile() ) {
-                    this.storeService( name, serviceFile )
+                    this.storeService( name, serviceFilePath )
 
                     return this.shared[ name ]
                 } else {
@@ -246,7 +246,7 @@ class Container {
             } catch ( error ) {
                 Console.error({
                     title: "Impossible to call service",
-                    message: `Path: ${path.resolve( serviceFile )}\n${error}`,
+                    message: `Path: ${path.resolve( serviceFilePath )}\n${error}`,
                     type: 'error',
                     exit: 0
                 })
@@ -254,6 +254,13 @@ class Container {
         } else {
             return undefined
         }
+    }
+
+    /**
+     * loadServices - preload all services
+     */
+    loadServices() {
+        Object.keys( this.servicesMapping ).forEach( service => this.getService( service ) )
     }
 
     /**

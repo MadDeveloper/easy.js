@@ -86,6 +86,11 @@ class Application extends Configurable {
         this.database.connect()
 
         /*
+         * Preload container services
+         */
+        this.container.loadServices()
+
+        /*
          * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
          */
         this.app.enable( 'trust proxy' )
