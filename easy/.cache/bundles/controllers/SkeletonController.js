@@ -1,10 +1,11 @@
-const Controller = require( 'easy/core/Controller' )
+const { indexOf }   = require( 'lodash' )
+const Controller    = require( 'easy/core/Controller' )
 
 /**
- * @class RoleController
+ * @class SkeletonController
  * @extends Controller
  */
-class RoleController extends Controller {
+class SkeletonController extends Controller {
     /**
      * isRequestWellParameterized - verify if request contains valid params
      *
@@ -13,25 +14,25 @@ class RoleController extends Controller {
      */
     isRequestWellParameterized( request ) {
         return this.verifyParams([
-            { property: 'name', typeExpected: 'string' },
-            { property: 'slug', typeExpected: 'string' }
-        ], request.getBody() )
+            { property: 'property', typeExpected: 'string' }
+        ], request )
     }
 
     /**
-     * roleExists
+     * skeletonExists - check if skeleton exists (with id)
      *
      * @param  {Request} request
      * @param  {Response} response
-     * @param  {Function} next
+     * @returns  {Promise}
      */
-    roleExists( request, response ) {
-        return this.em
-            .getRepository( 'role' )
-            .find( request.getRouteParameter( 'role_id' ), this.em.getModel( 'role' ) )
-            .then( role => {
-                if ( role ) {
-                    request.store( 'role', role )
+    skeletonExists( request, response ) {
+        return this
+            .em
+            .getRepository( 'skeleton' )
+            .find( request.getRouteParameter( 'skeleton_id' ) )
+            .then( skeleton => {
+                if ( skeleton ) {
+                    request.store( 'skeleton', skeleton )
                     return Promise.resolve()
                 } else {
                     response.notFound()
@@ -45,33 +46,33 @@ class RoleController extends Controller {
     }
 
     /**
-     * getRoles - get all roles
+     * getSkeletons - get all skeletons
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    getRoles( request, response ) {
+    getSkeletons( request, response ) {
         this.em
-            .getRepository( 'role' )
+            .getRepository( 'skeleton' )
             .findAll()
-            .then( roles => response.ok( roles ) )
+            .then( skeletons => response.ok( skeletons ) )
             .catch( error => response.internalServerError( error ) )
     }
 
     /**
-     * createRole - create new role
+     * createSkeleton - create new skeleton
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    createRole( request, response ) {
+    createSkeleton( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            const Role = thie.em.getModel( 'role' )
+            const Skeleton = this.em.getModel( 'skeleton' )
 
             this.em
-                .getRepository( 'role' )
-                .save( new Role(), request.getBody() )
-                .then( role => response.created( role ) )
+                .getRepository( 'skeleton' )
+                .save( new Skeleton(), request.getBody() )
+                .then( skeleton => response.created( skeleton ) )
                 .catch( error => response.internalServerError( error ) )
         } else {
             response.badRequest()
@@ -79,27 +80,27 @@ class RoleController extends Controller {
     }
 
     /**
-     * getRole - get role by id
+     * getSkeleton - get skeleton by id
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    getRole( request, response ) {
-        response.ok( request.retrieve( 'role' ) )
+    getSkeleton( request, response ) {
+        response.ok( request.retrieve( 'skeleton' ) )
     }
 
     /**
-     * updateRole - update role
+     * updateSkeleton - update skeleton by id
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    updateRole( request, response ) {
+    updateSkeleton( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
             this.em
-                .getRepository( 'role' )
-                .save( request.retrieve( 'role' ), request.getBody() )
-                .then( role => response.ok( role ) )
+                .getRepository( 'skeleton' )
+                .save( request.retrieve( 'skeleton' ), request.getBody() )
+                .then( skeleton => response.ok( skeleton ) )
                 .catch( error => response.internalServerError( error ) )
         } else {
             response.badRequest()
@@ -107,18 +108,18 @@ class RoleController extends Controller {
     }
 
     /**
-     * deleteRole - delete role
+     * deleteSkeleton - delete skeleton by id
      *
      * @param  {Request} request
      * @param  {Response} response
      */
-    deleteRole( request, response ) {
+    deleteSkeleton( request, response ) {
         this.em
-            .getRepository( 'role' )
-            .delete( request.retrieve( 'role' ) )
+            .getRepository( 'skeleton' )
+            .delete( request.retrieve( 'skeleton' ) )
             .then( () => response.noContent() )
             .catch( error => response.internalServerError( error ) )
     }
 }
 
-module.exports.RoleController = RoleController
+module.exports.SkeletonController = SkeletonController

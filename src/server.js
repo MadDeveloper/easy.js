@@ -1,5 +1,5 @@
 const { application }   = require( './bootstrap' )
-const Server            = require( 'vendor/easy/core/Server' )
+const Server            = require( 'easy/core/Server' )
 
 new Server( application ).start()
 

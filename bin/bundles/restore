@@ -2,7 +2,7 @@
 const { kernel, application }   = require( './../../src/bootstrap' )
 const copydir                   = require( 'copy-dir' )
 const { exec }                  = require( 'child_process' )
-const Console                   = require( `vendor/easy/core/Console` )
+const Console                   = require( `easy/core/Console` )
 const path                      = require( 'path' )
 
 const bundleSkeletonPath = path.resolve( `${__dirname}/../../src/bundles/skeleton` )

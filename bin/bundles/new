@@ -6,10 +6,10 @@ const path                      = require( 'path' )
 const minimist                  = require( 'minimist' )
 const { question }              = require( 'readline-sync' )
 const { indexOf }               = require( 'lodash' )
-const Console                   = require( `vendor/easy/core/Console` )
+const Console                   = require( `easy/core/Console` )
 const { cleanSpaces,
         asSnakeCase,
-        cleanAccents }          = require( `vendor/easy/lib/string` )
+        cleanAccents }          = require( `easy/lib/string` )
 
 const argv                  = minimist( process.argv.slice( 2 ) )
 const schemaDatabaseService = container.getService( 'database.schema' )

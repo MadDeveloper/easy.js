@@ -1,4 +1,4 @@
-const Repository = require( 'vendor/easy/database/Repository' )
+const Repository = require( 'easy/database/Repository' )
 
 /**
  * @class RoleRepository

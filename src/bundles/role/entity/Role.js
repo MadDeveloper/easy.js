@@ -1,4 +1,4 @@
-const Entity = require( 'vendor/easy/database/Entity' )
+const Entity = require( 'easy/database/Entity' )
 
 /**
  * @class Role

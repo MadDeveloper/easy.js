@@ -1,4 +1,4 @@
-const Tests = require( 'vendor/easy/core/Tests' )
+const Tests = require( 'easy/core/Tests' )
 
 /**
  * @class UserTests

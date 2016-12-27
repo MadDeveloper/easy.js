@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 const { kernel, application }   = require( './../../src/bootstrap' )
 const execsql			        = require( 'execsql' )
-const Console                   = require( 'vendor/easy/core/Console' )
-const ConfigLoader              = require( 'vendor/easy/core/ConfigLoader' )
+const Console                   = require( 'easy/core/Console' )
+const ConfigLoader              = require( 'easy/core/ConfigLoader' )
 
 const config 	= ConfigLoader.loadFromGlobal( 'database/database' )
 const dbConfig	= {

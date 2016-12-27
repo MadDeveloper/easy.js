@@ -4,7 +4,7 @@ const config = {
     client: 'mysql',
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'root',
     database: 'prepapp',
     charset: 'utf8'
 }
