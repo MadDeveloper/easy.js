@@ -10,7 +10,7 @@ class SchemaDatabaseService {
      * @param  {Database} database
      */
     constructor( database ) {
-        this._knex = database.instance.knex
+        this.database = database.instance
     }
 
     /**
@@ -21,7 +21,7 @@ class SchemaDatabaseService {
      */
     schemaExists( schemaName ) {
         try {
-            return this.knex.schema.withSchema( schemaName )
+            return this.database.knex.schema.withSchema( schemaName )
         } catch( error ) {
             return false
         }
@@ -34,7 +34,7 @@ class SchemaDatabaseService {
      * @returns {Promise}
      */
     dropTable( tableName ) {
-        return this.knex.schema.dropTableIfExists( tableName )
+        return this.database.knex.schema.dropTableIfExists( tableName )
     }
 
     /**
@@ -44,7 +44,7 @@ class SchemaDatabaseService {
      * @returns {Promise}
      */
     tableExists( tableName ) {
-        return this.knex.schema.hasTable( tableName )
+        return this.database.knex.schema.hasTable( tableName )
     }
 
     /**
@@ -54,7 +54,7 @@ class SchemaDatabaseService {
      * @returns {Promise}
      */
     truncateTable( tableName ) {
-        return this.knex.raw( `truncate table ${tableName}` )
+        return this.database.knex.raw( `truncate table ${tableName}` )
     }
 
     /**
@@ -64,7 +64,7 @@ class SchemaDatabaseService {
      * @returns {Promise}
      */
     clearTable( tableName ) {
-        return this.knex( tableName ).del()
+        return this.database.knex( tableName ).del()
     }
 
     /**
@@ -75,7 +75,9 @@ class SchemaDatabaseService {
      * @returns {Promise}
      */
     createTable( tableName, tableSchema ) {
-        return this.knex
+        return this
+            .database
+            .knex
             .schema
             .createTable( tableName, table => {
                 let column
@@ -137,15 +139,6 @@ class SchemaDatabaseService {
                     }
                 })
             })
-    }
-
-    /**
-     * get - knex instance
-     *
-     * @returns {Knex}
-     */
-    get knex() {
-        return this._knex
     }
 }
 

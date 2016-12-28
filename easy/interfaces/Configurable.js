@@ -6,8 +6,10 @@
 class Configurable {
     /**
      * configure - configure component
+     *
+     * @param {any} options = {}
      */
-    configure() {}
+    configure( options = {} ) {}
 }
 
 module.exports = Configurable

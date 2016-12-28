@@ -9,8 +9,8 @@ class Controller {
      */
     constructor( container ) {
         this.container = container
-        this.entityManager = this.em = container.getComponent( 'entitymanager' )
-        this.router = container.getComponent( 'router' )
+        this.entityManager = this.em = container.get( 'component.entitymanager' )
+        this.router = container.get( 'component.router' )
     }
 
     /**
@@ -65,26 +65,6 @@ class Controller {
      */
     isPatchRequestWellParameterized() {
         return this.request.getRawbody().length > 0
-    }
-
-    /**
-     * getComponent - get easy component
-     *
-     * @param  {string} component
-     * @returns {Component}
-     */
-    getComponent( component ) {
-        return this.container.getComponent( component )
-    }
-
-    /**
-     * getService - get service
-     *
-     * @param  {string} service
-     * @returns {Injectable}
-     */
-    getService( service ) {
-        return this.container.getService( service )
     }
 }
 

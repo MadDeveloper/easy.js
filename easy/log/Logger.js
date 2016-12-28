@@ -21,12 +21,12 @@ const Injectable  = require( 'easy/interfaces/Injectable' )
 class Logger extends Injectable {
     /**
      * @constructor
-     * @param  {Container} container
+     * @param  {LogWriter} logWriter
      */
-    constructor( container ) {
+    constructor( logWriter ) {
         super()
 
-        this._logWriter = container.getComponent( 'LogWriter' )
+        this._logWriter = logWriter
     }
 
     /**

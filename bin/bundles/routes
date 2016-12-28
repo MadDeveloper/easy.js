@@ -7,7 +7,7 @@ const minimist                  = require( 'minimist' )
 const Console                   = require( 'easy/core/Console' )
 
 const argv      = minimist( process.argv.slice( 2 ) )
-const router    = application.container.getComponent( 'Router' )
+const router    = application.container.get( 'component.Router' )
 const save      = argv.s || 's' === argv._[ 0 ] || argv.save || 'save' === argv._[ 0 ]
 
 let route               = ''

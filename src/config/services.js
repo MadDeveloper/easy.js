@@ -13,7 +13,7 @@ module.exports = {
 
     /* database */
     'database.schema': {
-        path: 'database/SchemaDatabaseService',
+        path: 'services/database/SchemaDatabaseService',
         dependencies: [ 'component.database' ]
     }
 }

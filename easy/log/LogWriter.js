@@ -10,12 +10,12 @@ const { strtr }     = require( 'easy/lib/string' )
 class LogWriter extends Injectable {
     /**
      * @constructor
-     * @param  {Container} container
+     * @param  {LogFileManager} logFileManager
      */
-    constructor( container ) {
+    constructor( logFileManager ) {
         super()
 
-        this._logFileManager = container.getComponent( 'LogFileManager' )
+        this._logFileManager = logFileManager
     }
 
     /**

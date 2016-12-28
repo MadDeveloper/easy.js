@@ -10,12 +10,12 @@ class LogFileManager extends Injectable {
     /**
      * @constructor
      *
-     * @param {Container} container
+     * @param {Application} application
      */
-    constructor( container ) {
+    constructor( application ) {
         super()
 
-        this._logDirectoryPath = `${container.application.kernel.path.root}/logs`
+        this._logDirectoryPath = `${application.kernel.path.root}/logs`
     }
 
     /**

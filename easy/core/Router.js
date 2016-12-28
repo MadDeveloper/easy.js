@@ -234,7 +234,7 @@ class Router extends Configurable {
      * @returns {Response}
      */
     getResponse( res, request ) {
-        return new Response( res, request, this.application.container.getComponent( 'Logger' ) )
+        return new Response( res, request, this.application.container.get( 'component.logger' ) )
     }
 
     /**

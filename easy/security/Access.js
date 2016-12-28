@@ -27,7 +27,7 @@ class Access extends SecurityAccess {
      * @returns {Access|Service}
      */
     getAccessHandler( configurations ) {
-        return 'default' === configurations.strategy ? this : this.container.getService( configurations.strategy )
+        return 'default' === configurations.strategy ? this : this.container.get( configurations.strategy )
     }
 
     /**

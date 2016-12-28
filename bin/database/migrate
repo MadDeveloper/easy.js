@@ -9,7 +9,7 @@ const { indexOf,
 		 keys,
 		 map }				    = require( 'lodash' )
 
-const schemaDatabaseService	= container.getService( 'database.schema' )
+const schemaDatabaseService	= container.get( 'database.schema' )
 
 const titleError		= "Error when initializing roles and users"
 const consequenceError	= "Initialization aborted."

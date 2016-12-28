@@ -9,7 +9,7 @@ const cookieParser      = require( 'cookie-parser' )
 const numeral           = require( 'numeral' )
 const { indexOf }       = require( 'lodash' )
 const passport          = require( 'passport' )
-const Container         = require( 'easy/core/Container' )
+const ContainerBuilder  = require( 'easy/container/ContainerBuilder' )
 const Console           = require( 'easy/core/Console' )
 const Polyfills         = require( 'easy/core/Polyfills' )
 const ConfigLoader      = require( 'easy/core/ConfigLoader' )
@@ -38,7 +38,7 @@ class Application extends Configurable {
         Polyfills.load()
 
         this.kernel         = kernel
-        this.container      = new Container( this, kernel.path )
+        this.container      = null
         this.config         = ConfigLoader.loadFromGlobal( 'app' )
         this.app            = express()
     }
@@ -57,18 +57,23 @@ class Application extends Configurable {
         }
 
         /*
-         * Load container components
+         * Build container
          */
-        this.container.loadComponents()
-        this.database       = this.container.getComponent( 'database' )
-        this.router         = this.container.getComponent( 'router' )
-        this.bundleManager  = this.container.getComponent( 'bundlemanager' )
-        this.entityManager  = this.container.getComponent( 'entitymanager' )
+        const containerBuilder = new ContainerBuilder( this )
+
+        /*
+         * Get some components
+         */
+        this.container      = containerBuilder.configure({ includeComponents: true }).build()
+        this.database       = this.container.get( 'component.database' )
+        this.router         = this.container.get( 'component.router' )
+        this.bundleManager  = this.container.get( 'component.bundlemanager' )
+        this.entityManager  = this.container.get( 'component.entitymanager' )
+        this.logFileManager = this.container.get( 'component.logfilemanager' )
 
         /*
          * Configure components
          */
-        this.logFileManager = this.container.getComponent( 'LogFileManager' )
         this.appName = this.config.app.name
         this.entityManager.configure( this.kernel.path.bundles, this.database )
         this.bundleManager.configure( this.kernel.path.bundles )
@@ -84,11 +89,6 @@ class Application extends Configurable {
          * Connect database following configurations
          */
         this.database.connect()
-
-        /*
-         * Preload container services
-         */
-        this.container.loadServices()
 
         /*
          * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']

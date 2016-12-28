@@ -24,7 +24,7 @@ class Authentication extends Configurable {
 		this._config 			= ConfigLoader.loadFromGlobal( 'authentication' )
 		this._container			= container
 		this._passport			= passport
-		this._router			= container.getComponent( 'router' )
+		this._router			= container.get( 'component.router' )
 		this._authorization		= new Authorization()
 	}
 
@@ -33,13 +33,13 @@ class Authentication extends Configurable {
 	 */
 	configure() {
 		if ( this.useCustom() ) {
-			const customProvider = this._container.getService( this.config.service )
+			const customProvider = this._container.get( this.config.service )
 			customProvider.configure( this._router, this._container )
 		} else {
 			/*
 			 * Default authentication process
 			 */
-			this._userRepository = this._container.getComponent( 'entitymanager' ).getRepository( this.config.repository )
+			this._userRepository = this._container.get( 'component.entitymanager' ).getRepository( this.config.repository )
 			this.initLocalStrategy()
 
 			/*
