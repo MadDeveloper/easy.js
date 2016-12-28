@@ -2,9 +2,10 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- pouvoir générer une table sur une entité et non sur un bundle en particuliers
-- mettre un timemout de check db connexion, si pas de connexion on essaie de se reconnecter
-- mettre le vendor en tant que node_modules
+- pouvoir générer une table db en fonction d'une entité et non d'un bundle
+- faire en sorte que l'application se reconnecte à la base de données au bout de x seconds si la connexion n'a pas pu être établie ou a été rompue
+- pour le mode production, pouvoir bundler toute l'application en un fichier (optimise les accès fs, etc.)
+- corriger tous les binaires et les mettre en cli
 - si on se trompe sur /login il faut renvoyer autre chose que 401 unauthorized ?
 - faire les tests du vendor
 - rédiger DOC

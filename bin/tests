@@ -8,5 +8,5 @@ global.easy = {
 
 const jasmine = new Jasmine()
 
-jasmine.loadConfigFile( `${__dirname}/../jasmine.json` )
+jasmine.loadConfigFile( `${kernel.path.root}/jasmine.json` )
 jasmine.execute()
