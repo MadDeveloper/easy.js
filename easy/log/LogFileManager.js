@@ -9,11 +9,13 @@ const Injectable    = require( 'easy/interfaces/Injectable' )
 class LogFileManager extends Injectable {
     /**
      * @constructor
+     *
+     * @param {Container} container
      */
-    constructor() {
+    constructor( container ) {
         super()
 
-        this._logDirectoryPath = `${__dirname}/../../../../logs`
+        this._logDirectoryPath = `${container.application.kernel.path.root}/logs`
     }
 
     /**
