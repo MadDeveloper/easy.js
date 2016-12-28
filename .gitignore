@@ -28,3 +28,18 @@ _book/
 book.pdf
 book.epub
 book.mobi
+
+# installed with npm install
+node_modules/
+
+# IDE directory
+.idea/
+
+# mac user
+.DS_Store
+
+# built with npm command
+/build
+
+# doc
+/doc
