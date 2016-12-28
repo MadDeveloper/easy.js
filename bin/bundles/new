@@ -6,22 +6,26 @@ const path                      = require( 'path' )
 const minimist                  = require( 'minimist' )
 const { question }              = require( 'readline-sync' )
 const { indexOf }               = require( 'lodash' )
-const Console                   = require( `easy/core/Console` )
+const Console                   = require( 'easy/core/Console' )
 const { cleanSpaces,
         asSnakeCase,
-        cleanAccents }          = require( `easy/lib/string` )
+        cleanAccents }          = require( 'easy/lib/string' )
+
+
+application.start()
 
 const argv                  = minimist( process.argv.slice( 2 ) )
-const schemaDatabaseService = container.getService( 'database.schema' )
+const schemaDatabaseService = application.container.getService( 'database.schema' )
 
 const nameBundleFromArgv = argv._[ 0 ] || argv.name || argv.n || ""
 
 if ( nameBundleFromArgv.length > 0 ) {
     const positiveAnswers       = [ 'y', 'ye', 'yes' ]
     const negativeAnswers       = [ 'n', 'no' ]
-    const bundlesPath           = `${kernel.path.root}/../src/bundles`
+    const bundlesPath           = `${kernel.path.root}/src/bundles`
+
     const skeletonBundlePath    = `${bundlesPath}/skeleton`
-    const bundlesDefinitionPath = `${kernel.path.root}/../src/config/bundles.js`
+    const bundlesDefinitionPath = `${kernel.path.root}/src/config/bundles.js`
 
     let nameBundle              = cleanSpaces( nameBundleFromArgv )
     let nameBundleCapitalized   = nameBundle.capitalizeFirstLetter()
@@ -33,7 +37,7 @@ if ( nameBundleFromArgv.length > 0 ) {
 
     const availablesColumnType  = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal', 'boolean', 'date', 'datetime', 'time', 'timestamp' ]
     const specialColumnType     = [ 'increments', 'integer', 'bigInteger', 'text', 'string', 'float', 'decimal' ]
-    const pathDatabaseSchema    = `${kernel.path.root}/../src/config/database/schema.js`
+    const pathDatabaseSchema    = `${kernel.path.root}/src/config/database/schema.js`
 
     /*
      * Check if bundle isn't defined yet

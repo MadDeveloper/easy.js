@@ -2,7 +2,8 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- pour le mode production, pouvoir bundler toute l'application en un fichier (optimise les accès fs, etc.)
+- pouvoir générer une table sur une entité et non sur un bundle en particuliers
+- mettre un timemout de check db connexion, si pas de connexion on essaie de se reconnecter
 - mettre le vendor en tant que node_modules
 - si on se trompe sur /login il faut renvoyer autre chose que 401 unauthorized ?
 - faire les tests du vendor
