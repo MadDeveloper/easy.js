@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+const { kernel, application }   = require( './../../src/bootstrap' )
+const copydir                   = require( 'copy-dir' )
+const { exec }                  = require( 'child_process' )
+const Console                   = require( `vendor/easy/core/Console` )
+const path                      = require( 'path' )
+
+const bundleSkeletonPath = path.resolve( `${__dirname}/../../src/bundles/skeleton` )
+const restoreBundleSkeletonPath = path.resolve( `${__dirname}/../../.easy/restore/bundles/skeleton` )
+
+exec( `rm -r ${bundleSkeletonPath}`, error => {
+    copydir( restoreBundleSkeletonPath, bundleSkeletonPath, error => {
+        if ( error ) {
+            Console.error({
+                title: `Error when restoring skeleton bundle from ${restoreBundleSkeletonPath}`,
+                message: error,
+                consequence: `Verify if both path are corrects: ${bundleSkeletonPath} - ${restoreBundleSkeletonPath}`,
+                exit: 0
+            })
+        } else {
+            Console.success( 'Skeleton restored.' )
+            Console.line()
+        }
+    })
+})
