@@ -1,4 +1,5 @@
 const Tests = require( 'easy/core/Tests' )
+const RoleController = require( '../' ).controller
 
 /**
  * @class RoleTests
@@ -8,7 +9,23 @@ class RoleTests extends Tests {
     /*
      * Automatically called
      */
-    run() {}
+    run() {
+        this.roleController = new RoleController( easy.application.container )
+
+        /*
+         * Execute all tests
+         */
+        this.getRolesTest()
+    }
+
+    /**
+     * getRolesTest - description
+     *
+     * @returns {type}  description
+     */
+    getRolesTest() {
+        this.roleController.getRoles( this.request, this.response )
+    }
 }
 
 /*
