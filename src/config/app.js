@@ -17,10 +17,7 @@ module.exports = {
     server: {
         protocol: 'http',
         domain: 'localhost',
-        port: {
-            http: 80,
-            https: 443
-        }
+        port: 8080
     },
 
     /*

@@ -21,26 +21,23 @@ class Server {
      * start - start server
      */
     start() {
-        let server  = null
-        let port    = 0
-
-        const protocol = this.application.config.server.protocol
+        let server      = null
+        const port      = this.application.config.server.port
+        const protocol  = this.application.config.server.protocol
 
         if ( 'https' === protocol && false !== this.application.config.credentials.found ) {
             /*
-             * Start HTTPS server
+             * If specified or if https credentials are found (keys and cert), an HTTPS server is started
              */
-            port        = this.application.config.server.port.https
-            server      = https.createServer( config.credentials, this.application.app )
+            server = https.createServer( config.credentials, this.application.app )
         } else {
             /*
-             * If specified or if https credentials are not found (keys and cert), we create an HTTP server
+             * Default, we create an HTTP server
              */
-            port        = this.application.config.server.port.http
-            server      = http.createServer( this.application.app )
+            server = http.createServer( this.application.app )
         }
 
-        let freePort = port => {
+        let canStartServer = port => {
             return new Promise( ( resolve, reject ) => {
                 const serverTest = net.createServer( socket => {
                     socket.write( 'Echo server\r\n' )
@@ -60,7 +57,7 @@ class Server {
             })
         }
 
-        freePort( port )
+        canStartServer( port )
             .then( () => {
                 /*
                  * Everything is ok, starting server and application
