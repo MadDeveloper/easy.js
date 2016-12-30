@@ -68,6 +68,9 @@
     "copy-dir": "^0.3.0",
     "execsql": "0.0.3",
     "jasmine": "^2.5.2",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.1.0",
     "walk": "^2.3.9"
   }
 }
