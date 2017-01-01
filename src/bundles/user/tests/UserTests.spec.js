@@ -1,17 +1,48 @@
-const Tests = require( 'easy/core/Tests' )
+const UserController = require( '../' ).controller
+const container = easy.application.container
+const { entityManager,
+        response,
+        request,
+        fakeAsync } = require( 'easy/test/mocks' )
 
-/**
- * @class UserTests
- * @extends Tests
- */
-class UserTests extends Tests {
-    /*
-     * Automatically called
-     */
-    run() {}
-}
+describe( 'UserController', () => {
 
-/*
- * Permit Jasmine to access to run() method called implicitely and run units tests
- */
-new UserTests()
+    let userController
+
+    beforeEach( () => userController = new UserController( container ) )
+
+    describe( 'getUsers', () => {
+
+        describe( 'when the repository respond successfully', () => {
+
+            let users = [ { k: 'bar' }, { k: 'foo' } ]
+            let user = users[ 0 ]
+
+            beforeEach( () => {
+                request.retrieve.and.returnValue( user )
+                entityManager.getRepository.and.returnValue({ findAll: role => Promise.resolve( users ) })
+            })
+
+            beforeEach( fakeAsync( () => userController.getUsers( request, response ) ) )
+
+            it( 'should respond with the provided roles', () => {
+                expect( response.ok ).toHaveBeenCalledWith( users )
+            })
+
+        })
+
+        describe( 'when the repository respond with an error', () => {
+
+            beforeEach( () => entityManager.getRepository.and.returnValue({ findAll: role => Promise.reject( 'Something terrible happened!' ) }) )
+
+            beforeEach( fakeAsync( () => userController.getUsers( request, response ) ) )
+
+            it( 'should respond with an error', () => {
+                expect( response.internalServerError ).toHaveBeenCalledWith( 'Something terrible happened!' )
+            })
+
+        })
+
+    })
+
+})
