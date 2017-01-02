@@ -110,7 +110,7 @@ class ContainerBuilder extends Configurable {
                 title: "Impossible to load dependency",
                 message: `Path: ${dependencyFilePath}\n${error}`,
                 type: 'error',
-                exit: 0
+                exit: 1
             })
         }
     }

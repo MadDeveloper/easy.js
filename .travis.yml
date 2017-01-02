@@ -1,7 +1,8 @@
 language: node_js
+sudo: false
 node_js:
-  - "7"
-  - "7.3"
-  - "6"
-  - "6.1"
-  - "5.12"
+  - node
+  - '6.0'
+notifications:
+  slack:
+    secure: QOz3y9zcS38sEChFdntcY3zzwrxrl9jjc7D/LhFbb+MvHJ0EvWf3Px07D5GxWUKDJsABdS1UrFPqV3nMtup8JS+o6hYnRSs6naZuROTX640iB99mrykvBp2p5Ugo/hrs1P2VVWoZK0Ojg94TZ+CnhOWdDcv5/bj/BIOTMfSynpWmP9pVHbSbyvSaIsUe+xvTUM8K+uHu58JCZk8PxpWwH5bwC+TgOfmIEOfgaIA2eqYN5gHYrMaFZrM757iu6gZYxU5yvpAtfBDuQ+KLH1iFg9EHmeTbZv1yMfXRj631JYNoiGmjcgQad1f5f9G+6nLT7LjShXTGHCx/UFJdn0XzpTTN8QET+VhIi3R7/8soW25h6taIEMF8heWnrdC6JA1EE8Xm1zVWu8B+BtvF62DJVvjsnUvQ/P4uVw+XE8gdEwPvZsa3jqFOzuHAnEzk4rtf0/qPV8RRvlQKFuyzr8ekghvloPwuZ68lfTsCFcV6W9j1QreD8CvDEBWIg4858/VXI2OEDPVcFFPxKrXXeWEjYni54Ym7CMq45hh9VeulJhCjaa/J1ASjkmJGitpsaWDrLHnfkn5azQW3FGTiEVPkn7G0G1I1qa2Bfyuqn9P1+tkPZReIdnPrA3PouVorU4RkQ+LfhXLDe7aKljmS4U+LcsA4lOUkZlXtkbLCqFcIv6o=

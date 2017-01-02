@@ -83,7 +83,7 @@ class Server {
                 Console.error({
                     title: 'Impossible to start server',
                     message: `Port ${port} is already used or you have no rights to launch server (try as root)`,
-                    exit: 0
+                    exit: 1
                 })
             })
     }
