@@ -66,7 +66,7 @@ class RoleController extends Controller {
      */
     createRole( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            const Role = thie.em.getModel( 'role' )
+            const Role = this.em.getModel( 'role' )
 
             this.em
                 .getRepository( 'role' )
