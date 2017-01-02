@@ -5,13 +5,13 @@ const ConfigLoader  = require( 'easy/core/ConfigLoader' )
  */
 class Database {
     /**
-     * constructor
+     * @constructor
      */
     constructor() {
-        this._databasePath  = ''
-        this._instance      = null
-        this._connected     = false
-        this.config         = ConfigLoader.loadFromGlobal( 'database/database' )
+        this._databasePath = ''
+        this._instance = null
+        this._connected = false
+        this._config = ConfigLoader.loadFromGlobal( 'database' )
     }
 
     /**
@@ -59,6 +59,15 @@ class Database {
     set connected( connected ) {
         this._connected = connected
         return this
+    }
+
+    /**
+     * get - get database configurations
+     *
+     * @returns {Object}
+     */
+    get config() {
+        return this._config
     }
 }
 

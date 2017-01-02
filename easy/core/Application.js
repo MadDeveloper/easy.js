@@ -171,9 +171,10 @@ class Application extends Configurable {
          */
         let warnDisplayed = false
 
-        this.app.use( ( req, res, next ) => {
+        this.app.get( '/gc', ( req, res, next ) => {
             if ( global.gc ) {
                 global.gc()
+                res.status( 200 ).end()
             } else if ( false === warnDisplayed ) {
                 Console.warn( "You should launch node server with npm start command in order to enable gc.\n" )
                 warnDisplayed = true
