@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-const { kernel, application }   = require( './../../src/bootstrap' )
+const { kernel, application }   = require( '../../src/bootstrap' )
 const execsql			        = require( 'execsql' )
 const Console                   = require( 'easy/core/Console' )
 const ConfigLoader              = require( 'easy/core/ConfigLoader' )
 
-const config 	= ConfigLoader.loadFromGlobal( 'database/database' )
+const config 	= ConfigLoader.loadFromGlobal( 'database' )
 const dbConfig	= {
 	host: config.connection.host,
 	user: config.connection.user,

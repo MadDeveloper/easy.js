@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { kernel, application }   = require( './../../src/bootstrap' )
+const { kernel, application }   = require( '../../src/bootstrap' )
 const copydir                   = require( 'copy-dir' )
 const { exec }                  = require( 'child_process' )
 const Console                   = require( `easy/core/Console` )

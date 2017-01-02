@@ -9,11 +9,11 @@ module.exports = {
 	 * logger
 	 * logfilemanager
 	 * logwriter
+     *
+     * example gmail service
+     * 'mailer.gmail': {
+     *     path: 'services/mailer/GmailService',
+     *     dependencies: [ 'component.logger' ]
+     * }
      */
-
-    /* database */
-    'database.schema': {
-        path: 'services/database/SchemaDatabaseService',
-        dependencies: [ 'component.database' ]
-    }
 }

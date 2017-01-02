@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { kernel, application }   = require( './../../src/bootstrap' )
+const { kernel, application }   = require( '../../src/bootstrap' )
 const fs                        = require( 'fs' )
 const path                      = require( 'path' )
 const pad                       = require( 'pad-right' )
