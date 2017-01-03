@@ -186,7 +186,7 @@ describe( 'RoleController', () => {
             beforeEach( fakeAsync( () => roleController.deleteRole( request, response ) ) )
 
             it( 'should respond with no content', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
+                expect( response.internalServerError ).toHaveBeenCalledWith( null )
             })
 
         })
