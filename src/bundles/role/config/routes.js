@@ -1,7 +1,7 @@
-const security      = require( './security' )
-const middlewares   = require( './middlewares' )
+const security = require( './security' )
+const middlewares = require( './middlewares' )
 
-module.exports.routes = {
+module.exports = {
     '/roles': {
         get: 'getRoles',
         post: 'createRole',

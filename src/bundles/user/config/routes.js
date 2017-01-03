@@ -1,7 +1,7 @@
-const security      = require( './security' )
-const middlewares   = require( './middlewares' )
+const security = require( './security' )
+const middlewares = require( './middlewares' )
 
-const routes = {
+module.exports = {
     '/roles/:role_id/users': {
         get: 'getUsers',
         post: 'createUser',
@@ -25,5 +25,3 @@ const routes = {
         middlewares
     }
 }
-
-module.exports.routes = routes

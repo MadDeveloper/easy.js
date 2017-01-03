@@ -121,4 +121,4 @@ class RoleController extends Controller {
     }
 }
 
-module.exports.RoleController = RoleController
+module.exports = RoleController

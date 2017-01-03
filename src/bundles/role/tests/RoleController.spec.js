@@ -159,6 +159,51 @@ describe( 'RoleController', () => {
 
     })
 
+    describe( 'updateRole', () => {
+
+        beforeEach( () => {
+            request.retrieve.and.returnValue( role )
+            request.getBody.and.returnValue( role )
+        })
+
+        describe( 'when the repository respond successfully', () => {
+
+            beforeEach( () => entityManager.getRepository.and.returnValue({ save: () => Promise.resolve( role ) }) )
+
+            beforeEach( fakeAsync( () => roleController.updateRole( request, response ) ) )
+
+            it( 'should respond with ok and return updated role', () => {
+                expect( response.ok ).toHaveBeenCalledWith( role )
+            })
+
+        })
+
+        describe( 'when the repository respond with an error', () => {
+
+            beforeEach( () => entityManager.getRepository.and.returnValue({ save: () => Promise.reject( somethingTerribleHappened ) }) )
+
+            beforeEach( fakeAsync( () => roleController.updateRole( request, response ) ) )
+
+            it( 'should respond with internal server error', () => {
+                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
+            })
+
+        })
+
+        describe( 'when the repository respond with an error', () => {
+
+            beforeEach( () => request.getBody.and.returnValue({}) )
+
+            beforeEach( fakeAsync( () => roleController.updateRole( request, response ) ) )
+
+            it( 'should respond with bad request', () => {
+                expect( response.badRequest ).toHaveBeenCalledWith()
+            })
+
+        })
+
+    })
+
     describe( 'deleteRole', () => {
 
         describe( 'when the repository respond successfully', () => {

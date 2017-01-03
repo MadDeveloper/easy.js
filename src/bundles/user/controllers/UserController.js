@@ -1,6 +1,6 @@
-const { indexOf }   = require( 'lodash' )
-const Controller    = require( 'easy/core/Controller' )
-const TokenManager  = require( 'easy/authentication/TokenManager' )
+const { indexOf } = require( 'lodash' )
+const Controller = require( 'easy/core/Controller' )
+const TokenManager = require( 'easy/authentication/TokenManager' )
 
 /**
  * @class UserController
@@ -185,4 +185,4 @@ class UserController extends Controller {
     }
 }
 
-module.exports.UserController = UserController
+module.exports = UserController
