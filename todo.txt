@@ -5,6 +5,8 @@
 - finir la JSDoc
 - finir les mocks des classes
 - voir routes.js dans la config pour remplacer bundles.js, supprimer la classe BundleManager
+- rajouter le dossier logs dans le .gitignore et au lancement de l'application, vérifier si le dossier existe, si ce n'est pas le cas on le crée
+sinon on le crée à la volée quand on veut logger
 - pour l'authentification custom, il faut virer l'appel à configure sur le service custom, et laisser la config 'route' dans la config
 - faire la connexion database en dehors du container puis l'injecter dans le container, car sinon ça fou la merde lors de la création des services user, ils peuvent nécessiter
 la db et faire des actions au constructeur
