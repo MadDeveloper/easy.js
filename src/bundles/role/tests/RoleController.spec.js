@@ -55,7 +55,7 @@ describe( 'RoleController', () => {
             beforeEach( fakeAsync( () => roleController.getRole( request, response ) ) )
 
             it( 'should respond with the provided role', () => {
-                expect( response.ok ).toHaveBeenCalledWith( null )
+                expect( response.ok ).toHaveBeenCalledWith( role )
             })
 
         })
