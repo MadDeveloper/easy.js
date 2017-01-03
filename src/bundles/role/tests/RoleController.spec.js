@@ -24,7 +24,7 @@ describe( 'RoleController', () => {
 
             beforeEach( () => entityManager.getRepository.and.returnValue({ findAll: () => Promise.resolve( roles ) }) )
 
-            beforeEach( fakeAsync( () => roleController.getRoles( {}, response ) ) )
+            beforeEach( fakeAsync( () => roleController.getRoles({}, response ) ) )
 
             it( 'should respond with the provided roles', () => {
                 expect( response.ok ).toHaveBeenCalledWith( roles )
@@ -36,7 +36,7 @@ describe( 'RoleController', () => {
 
             beforeEach( () => entityManager.getRepository.and.returnValue({ findAll: () => Promise.reject( 'Something terrible happened!' ) }) )
 
-            beforeEach( fakeAsync( () => roleController.getRoles( {}, response ) ) )
+            beforeEach( fakeAsync( () => roleController.getRoles({}, response ) ) )
 
             it( 'should respond with an error', () => {
                 expect( response.internalServerError ).toHaveBeenCalledWith( 'Something terrible happened!' )
@@ -54,8 +54,8 @@ describe( 'RoleController', () => {
 
             beforeEach( fakeAsync( () => roleController.getRole( request, response ) ) )
 
-            it( 'should respond with the provided role', () =>  {
-                expect( response.ok ).toHaveBeenCalledWith( role )
+            it( 'should respond with the provided role', () => {
+                expect( response.ok ).toHaveBeenCalledWith( null )
             })
 
         })
@@ -134,7 +134,7 @@ describe( 'RoleController', () => {
                 entityManager.getRepository.and.returnValue({ find: () => Promise.resolve( null ) })
             })
 
-            beforeEach( fakeAsync( () => roleController.roleExists( request, response ).catch( () => {} ) ) )
+            beforeEach( fakeAsync( () => roleController.roleExists( request, response ).catch( () => {}) ) )
 
             it( 'should respond with not found', () => {
                 expect( response.notFound ).toHaveBeenCalledWith()
@@ -148,7 +148,7 @@ describe( 'RoleController', () => {
                 entityManager.getRepository.and.returnValue({ find: () => Promise.reject() })
             })
 
-            beforeEach( fakeAsync( () => roleController.roleExists( request, response ).catch( () => {} ) ) )
+            beforeEach( fakeAsync( () => roleController.roleExists( request, response ).catch( () => {}) ) )
 
             it( 'should respond with bad request', () => {
                 expect( response.badRequest ).toHaveBeenCalledWith()
