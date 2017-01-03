@@ -1,5 +1,4 @@
-const TokenManager	 = require( './TokenManager' )
-const Controller    = require( './../core/Controller' )
+const TokenManager = require( './TokenManager' )
 
 class Authorization {
 	/**

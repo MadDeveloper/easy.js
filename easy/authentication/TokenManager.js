@@ -1,5 +1,5 @@
-const jwt           = require( 'jsonwebtoken' )
-const ConfigLoader  = require( './../core/ConfigLoader' )
+const jwt = require( 'jsonwebtoken' )
+const ConfigLoader = require( '../core/ConfigLoader' )
 
 /**
  * @class TokenManager
@@ -14,7 +14,7 @@ class TokenManager {
 	static sign( content ) {
 		const config = TokenManager.getConfig()
 
-		return jwt.sign( content, config.secret, { expiresIn: config.duration } )
+		return jwt.sign( content, config.secret, { expiresIn: config.duration })
 	}
 
 	/**

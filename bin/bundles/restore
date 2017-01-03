@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-const { kernel, application }   = require( '../../src/bootstrap' )
-const copydir                   = require( 'copy-dir' )
-const { exec }                  = require( 'child_process' )
-const Console                   = require( `easy/core/Console` )
-const path                      = require( 'path' )
+const { kernel, application } = require( '../../src/bootstrap' )
+const copydir = require( 'copy-dir' )
+const { exec } = require( 'child_process' )
+const Console = require( `easy/core/Console` )
+const path = require( 'path' )
 
-const bundleSkeletonPath = path.resolve( `${kernal.path.bundles}/skeleton` )
+const bundleSkeletonPath = path.resolve( `${kernal.path.config}/bundles/skeleton` )
 const restoreBundleSkeletonPath = path.resolve( `${kernal.path.root}/node_modules/easy/.cache/bundles/skeleton` )
 
 exec( `rm -r ${bundleSkeletonPath}`, error => {
