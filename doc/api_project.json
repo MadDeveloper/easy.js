@@ -1,0 +1,1 @@
+{  "name": "MyApp API",  "version": "0.1.0",  "description": "Documentation",  "sampleUrl": "http://localhost",  "apidoc": "0.2.0",  "generator": {    "name": "apidoc",    "time": "2016-06-16T12:28:07.776Z",    "url": "http://apidocjs.com",    "version": "0.16.1"  }}
