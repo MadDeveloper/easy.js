@@ -1,24 +1,24 @@
-const fs                = require( 'fs' )
-const express           = require( 'express' )
-const bodyParser        = require( 'body-parser' )
-const morgan            = require( 'morgan' )
-const helmet            = require( 'helmet' )
-const cors              = require( 'cors' )
-const compression       = require( 'compression' )
-const cookieParser      = require( 'cookie-parser' )
-const numeral           = require( 'numeral' )
-const { indexOf }       = require( 'lodash' )
-const passport          = require( 'passport' )
-const ContainerBuilder  = require( 'easy/container/ContainerBuilder' )
-const Console           = require( 'easy/core/Console' )
-const Polyfills         = require( 'easy/core/Polyfills' )
-const ConfigLoader      = require( 'easy/core/ConfigLoader' )
-const Router            = require( 'easy/core/Router' )
-const BundleManager     = require( 'easy/core/BundleManager' )
-const Authentication    = require( 'easy/authentication/Authentication' )
-const Configurable      = require( 'easy/interfaces/Configurable' )
-const Database          = require( 'easy/database/Database' )
-const EntityManager     = require( 'easy/database/EntityManager' )
+const fs = require( 'fs' )
+const express = require( 'express' )
+const bodyParser = require( 'body-parser' )
+const morgan = require( 'morgan' )
+const helmet = require( 'helmet' )
+const cors = require( 'cors' )
+const compression = require( 'compression' )
+const cookieParser = require( 'cookie-parser' )
+const numeral = require( 'numeral' )
+const { indexOf } = require( 'lodash' )
+const passport = require( 'passport' )
+const ContainerBuilder = require( 'easy/container/ContainerBuilder' )
+const Console = require( 'easy/core/Console' )
+const Polyfills = require( 'easy/core/Polyfills' )
+const ConfigLoader = require( 'easy/core/ConfigLoader' )
+const Router = require( 'easy/core/Router' )
+const BundleManager = require( 'easy/core/BundleManager' )
+const Authentication = require( 'easy/authentication/Authentication' )
+const Configurable = require( 'easy/interfaces/Configurable' )
+const Database = require( 'easy/database/Database' )
+const EntityManager = require( 'easy/database/EntityManager' )
 
 /**
  * @class Application
@@ -37,10 +37,10 @@ class Application extends Configurable {
          */
         Polyfills.load()
 
-        this.kernel         = kernel
-        this.container      = null
-        this.config         = ConfigLoader.loadFromGlobal( 'app' )
-        this.app            = express()
+        this.kernel = kernel
+        this.container = null
+        this.config = ConfigLoader.loadFromGlobal( 'app' )
+        this.app = express()
     }
 
     /**
@@ -64,11 +64,11 @@ class Application extends Configurable {
         /*
          * Get some components
          */
-        this.container      = containerBuilder.configure({ includeComponents: true }).build()
-        this.database       = this.container.get( 'component.database' )
-        this.router         = this.container.get( 'component.router' )
-        this.bundleManager  = this.container.get( 'component.bundlemanager' )
-        this.entityManager  = this.container.get( 'component.entitymanager' )
+        this.container = containerBuilder.configure({ includeComponents: true }).build()
+        this.database = this.container.get( 'component.database' )
+        this.router = this.container.get( 'component.router' )
+        this.bundleManager = this.container.get( 'component.bundlemanager' )
+        this.entityManager = this.container.get( 'component.entitymanager' )
         this.logFileManager = this.container.get( 'component.logfilemanager' )
 
         /*
@@ -163,7 +163,7 @@ class Application extends Configurable {
          * Trace everything that happens on the server
          */
         if ( this.config.app.log ) {
-            this.app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${this.kernel.path.root}/logs/traffic.log`, { flags: 'a' } ) } ) )
+            this.app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${this.kernel.path.root}/logs/traffic.log`, { flags: 'a' }) }) )
         }
 
         /*
@@ -213,7 +213,7 @@ class Application extends Configurable {
         /*
 		 * Authentication management
 		 */
-		const authentication  = new Authentication( this.container, passport )
+		const authentication = new Authentication( this.container, passport )
 
 		if ( authentication.config.enabled ) {
             /*

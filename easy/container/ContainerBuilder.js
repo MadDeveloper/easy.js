@@ -97,14 +97,9 @@ class ContainerBuilder extends Configurable {
         const dependencyFilePath = `${isComponent ? 'easy' : this.path.src}/${this.dependenciesMapping[ name ].path}`
 
         try {
-            function newDependency() {
-                arguments[ 0 ].unshift( undefined )
-                return new ( dependencyClass.bind.apply( dependencyClass, arguments[ 0 ] ) )()
-            }
-
             const dependencyClass = require( dependencyFilePath )
 
-            return this.cache( name, newDependency( this.injectDependencies( name ) ) )
+            return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
         } catch ( error ) {
             Console.error({
                 title: "Impossible to load dependency",

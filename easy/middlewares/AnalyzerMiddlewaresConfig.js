@@ -1,4 +1,4 @@
-const Analyzer  = require( 'easy/interfaces/Analyzer' )
+const Analyzer = require( 'easy/interfaces/Analyzer' )
 
 /**
  * @class AnalyzerMiddlewaresConfig
@@ -12,7 +12,7 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
      * @returns {boolean}
      */
     analyze( configurations ) {
-        return configurations.middlewares ? true : false
+        return configurations.hasOwnProperty( 'middlewares' ) && Object.keys( configurations.middlewares ).length > 0
     }
 
     /**
@@ -43,8 +43,8 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
      */
     extractMiddlewareInfos( configurations ) {
         return {
-            type: undefined !== configurations.use ? 'use' : 'param',
-            param: undefined !== configurations.use || configurations.param,
+            type: configurations.hasOwnProperty( 'use' ) ? 'use' : 'param',
+            param: configurations.use || configurations.param,
             middleware: configurations.middleware
         }
     }

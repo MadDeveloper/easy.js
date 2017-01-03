@@ -4,6 +4,8 @@
 
 - finir la JSDoc
 - finir les mocks des classes
+- faire la connexion database en dehors du container puis l'injecter dans le container, car sinon ça fou la merde lors de la création des services user, ils peuvent nécessiter
+la db et faire des actions au constructeur
 - voir où mettre le skeleton accessible et facilement editable
 - pouvoir générer une table db en fonction d'une entité et non d'un bundle
 - faire en sorte que l'application se reconnecte à la base de données au bout de x seconds si la connexion n'a pas pu être établie ou a été rompue

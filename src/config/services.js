@@ -1,7 +1,7 @@
 module.exports = {
     /*
-     * component.* can be used in dependencies to inject easy component
-	 * List of all components availables:
+     * component.* are already available as dependencies
+	 * List of available components:
 	 * bundlemanager
 	 * router
 	 * database
@@ -11,8 +11,8 @@ module.exports = {
 	 * logwriter
      *
      * example gmail service
-     * 'mailer.gmail': {
-     *     path: 'services/mailer/GmailService',
+     * 'auth.facebook': {
+     *     path: 'services/auth/facebook.service',
      *     dependencies: [ 'component.logger' ]
      * }
      */

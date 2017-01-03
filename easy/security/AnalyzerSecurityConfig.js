@@ -13,17 +13,15 @@ class AnalyzerSecurityConfig extends Analyzer {
      * @returns {boolean}
      */
     analyze( configurations ) {
-        let correct = false
-
-        if ( configurations.security ) {
+        if ( configurations.hasOwnProperty( 'security' ) ) {
             const security = configurations.security
 
-            if ( security.strategy ) {
-                correct = security.rules ? true : false
+            if ( security.hasOwnProperty( 'strategy' ) ) {
+                return security.hasOwnProperty( 'rules' )
             }
         }
 
-        return correct
+        return false
     }
 
     /**

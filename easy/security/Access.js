@@ -1,6 +1,6 @@
-const { indexOf }       = require( 'lodash' )
-const roles             = require( 'src/config/roles' )
-const SecurityAccess    = require( 'easy/interfaces/SecurityAccess' )
+const { indexOf } = require( 'lodash' )
+const roles = require( 'src/config/roles' )
+const SecurityAccess = require( 'easy/interfaces/SecurityAccess' )
 
 /**
  * @class Access
@@ -103,21 +103,21 @@ class Access extends SecurityAccess {
      * @returns {Promise}
      */
     authorized({ configurations, request, response, container }) {
-        let isAuthorizedToAccess    = false
-        let authorized              = false
-        const method                = request.getMethod().toLowerCase()
-        const user                  = request.getAppParameter( 'user' )
+        let isAuthorizedToAccess = false
+        let authorized = false
+        const method = request.getMethod().toLowerCase()
+        const user = request.getAppParameter( 'user' )
 
-        this.restrict( configurations.rules ).focusOn( user[ configurations.focus ] )
+        this.restrict( configurations.rules ).focusOn( user[ configurations.focus ])
 
         authorized = indexOf( this.restrictions.mustBe, this.focus ) !== -1 || indexOf( this.restrictions.mustBe, this.any ) !== -1
 
         if ( authorized ) {
 
-            const methodWhenReading   = [ 'get' ]
-            const methodWhenCreating  = [ 'post' ]
-            const methodWhenUpdating  = [ 'put', 'patch' ]
-            const methodWhenDeleting  = [ 'delete' ]
+            const methodWhenReading = [ 'get' ]
+            const methodWhenCreating = [ 'post' ]
+            const methodWhenUpdating = [ 'put', 'patch' ]
+            const methodWhenDeleting = [ 'delete' ]
 
             if ( indexOf( methodWhenReading, method ) !== -1 ) {
 

@@ -1,12 +1,12 @@
-const ConfigLoader                  = require( 'easy/core/ConfigLoader' )
-const Configurable                  = require( 'easy/interfaces/Configurable' )
-const Request                       = require( 'easy/http/Request' )
-const Response                      = require( 'easy/http/Response' )
-const Http                          = require( 'easy/http/Http' )
-const AnalyzerSecurityConfig        = require( 'easy/security/AnalyzerSecurityConfig' )
-const AnalyzerMiddlewaresConfig     = require( 'easy/middlewares/AnalyzerMiddlewaresConfig' )
-const Access                        = require( 'easy/security/Access' )
-const { indexOf }                   = require( 'lodash' )
+const ConfigLoader = require( 'easy/core/ConfigLoader' )
+const Configurable = require( 'easy/interfaces/Configurable' )
+const Request = require( 'easy/http/Request' )
+const Response = require( 'easy/http/Response' )
+const Http = require( 'easy/http/Http' )
+const AnalyzerSecurityConfig = require( 'easy/security/AnalyzerSecurityConfig' )
+const AnalyzerMiddlewaresConfig = require( 'easy/middlewares/AnalyzerMiddlewaresConfig' )
+const Access = require( 'easy/security/Access' )
+const { indexOf } = require( 'lodash' )
 
 /**
  * @class Router
@@ -19,12 +19,12 @@ class Router extends Configurable {
     constructor() {
         super()
 
-        this._scope                     = null
-        this._config                    = ConfigLoader.loadFromGlobal( 'bundles' )
-        this.application                = null
-        this.http                       = new Http()
-        this.analyzerSecurityConfig     = new AnalyzerSecurityConfig()
-        this.analyzerMiddlewaresConfig  = new AnalyzerMiddlewaresConfig()
+        this._scope = null
+        this._config = ConfigLoader.loadFromGlobal( 'bundles' )
+        this.application = null
+        this.http = new Http()
+        this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
+        this.analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
     }
 
     /**
@@ -86,7 +86,8 @@ class Router extends Configurable {
     parseBundleRoutes( bundle ) {
         const controller = new bundle.controller( this.application.container )
 
-        let routesConfig = {}, configValue = ''
+        let routesConfig = {}
+        let configValue = ''
 
         for( let routeName in bundle.routes ) {
             routesConfig = bundle.routes[ routeName ]
@@ -132,22 +133,22 @@ class Router extends Configurable {
      * @param  {Controller} controller
      */
     defineMiddlewaresRoutes( configurations, controller ) {
-        const router            = this.scope
+        const router = this.scope
         const middlewaresConfig = this.analyzerMiddlewaresConfig.extractMiddlewaresConfig( configurations )
-        let middleware          = ''
-        let middlewareInfos     = {}
+        let middleware = ''
+        let middlewareInfos = {}
 
         for ( let config in middlewaresConfig ) {
             config = middlewaresConfig[ config ]
             middlewareInfos = this.analyzerMiddlewaresConfig.extractMiddlewareInfos( config )
 
             router[ middlewareInfos.type ]( middlewareInfos.param, ( req, res, next ) => {
-                const request   = this.getRequest( req )
-                const response  = this.getResponse( res, request )
+                const request = this.getRequest( req )
+                const response = this.getResponse( res, request )
 
                 controller[ middlewareInfos.middleware ]( request, response )
                     .then( () => next() )
-                    .catch( () => {} )
+                    .catch( () => {})
             })
         }
     }
@@ -162,13 +163,13 @@ class Router extends Configurable {
         const router = this.scope
 
         router.use( route, ( req, res, next ) => {
-            const securityConfig    = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
-            const request           = this.getRequest( req )
-            const response          = this.getResponse( res, request )
-            const handler           = this.access.getAccessHandler( securityConfig )
+            const securityConfig = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
+            const request = this.getRequest( req )
+            const response = this.getResponse( res, request )
+            const handler = this.access.getAccessHandler( securityConfig )
 
             handler
-                .authorized({ 
+                .authorized({
                     configurations: securityConfig,
                     request,
                     response,
@@ -193,8 +194,8 @@ class Router extends Configurable {
         method = method.toLowerCase()
 
         router.route( route )[ method ]( ( req, res ) => {
-            const request   = this.getRequest( req )
-            const response  = this.getResponse( res, request )
+            const request = this.getRequest( req )
+            const response = this.getResponse( res, request )
 
             controller[ controllerMethod ]( request, response )
         })
@@ -209,8 +210,8 @@ class Router extends Configurable {
         const router = this.scope
 
         router.route( route ).all( ( req, res ) => {
-            const request   = this.getRequest( req )
-            const response  = this.getResponse( res, request )
+            const request = this.getRequest( req )
+            const response = this.getResponse( res, request )
 
             response.methodNotAllowed()
         })

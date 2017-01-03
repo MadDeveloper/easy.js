@@ -21,7 +21,7 @@ class Repository {
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    findAll( options = {} ) {
+    findAll( options = {}) {
         return this.collection.forge().fetch( options )
     }
 
@@ -32,7 +32,7 @@ class Repository {
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    find( id, options = {} ) {
+    find( id, options = {}) {
         return this.model.forge({ id }).fetch( options )
     }
 
@@ -44,7 +44,7 @@ class Repository {
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    save( model, params, options = {} ) {
+    save( model, params, options = {}) {
         return new Promise( ( resolve, reject ) => {
             this.orm.transaction( t => {
                 options.transacting = t
@@ -70,7 +70,7 @@ class Repository {
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    patch( model, patch, options = {} ) {
+    patch( model, patch, options = {}) {
         return new Promise( ( resolve, reject ) => {
             let patchToApply = {}
             patchToApply[ patch.path.substring( 1 ) ] = patch.value
@@ -99,7 +99,7 @@ class Repository {
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    delete( model, options = {} ) {
+    delete( model, options = {}) {
         return new Promise( ( resolve, reject ) => {
             this.orm.transaction( t => {
                 options.transacting = t

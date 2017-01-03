@@ -1,8 +1,8 @@
-const https     = require( 'https' )
-const http      = require( 'http' )
-const net       = require( 'net' )
-const pad       = require( 'pad-right' )
-const Console   = require( 'easy/core/Console' )
+const https = require( 'https' )
+const http = require( 'http' )
+const net = require( 'net' )
+const pad = require( 'pad-right' )
+const Console = require( 'easy/core/Console' )
 
 /**
  * @class Server
@@ -21,9 +21,9 @@ class Server {
      * start - start server
      */
     start() {
-        let server      = null
-        const port      = this.application.config.server.port
-        const protocol  = this.application.config.server.protocol
+        let server = null
+        const port = this.application.config.server.port
+        const protocol = this.application.config.server.protocol
 
         if ( 'https' === protocol && false !== this.application.config.credentials.found ) {
             /*
@@ -67,9 +67,9 @@ class Server {
                 server.listen( port, () => {
                     Console.line()
                     Console.info( "-----------------------------" )
-                    Console.info( `    ${pad( 'State:', 'Environment'.length + 1, ' ')} Listening` )
+                    Console.info( `    ${pad( 'State:', 'Environment'.length + 1, ' ' )} Listening` )
                     Console.info( "-----------------------------" )
-                    Console.info( `    ${pad( 'Address:', 'Environment'.length + 1, ' ')} ${protocol}://${this.application.config.server.domain}${( 80 !== port && 443 !== port ) ? port : ''}` )
+                    Console.info( `    ${pad( 'Address:', 'Environment'.length + 1, ' ' )} ${protocol}://${this.application.config.server.domain}${( 80 !== port && 443 !== port ) ? port : ''}` )
                     Console.info( "-----------------------------" )
                     Console.info( `    Environment: ${this.application.app.get( 'env' ).capitalizeFirstLetter()}` )
                     Console.info( "-----------------------------" )
