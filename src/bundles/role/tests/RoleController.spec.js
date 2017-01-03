@@ -15,6 +15,7 @@ describe( 'RoleController', () => {
         slug: 'test'
     }
     const roleModel = function() {}
+    const somethingTerribleHappened = 'Something terrible happened!'
 
     beforeEach( () => roleController = new RoleController( container ) )
 
@@ -34,12 +35,12 @@ describe( 'RoleController', () => {
 
         describe( 'when the repository respond with an error', () => {
 
-            beforeEach( () => entityManager.getRepository.and.returnValue({ findAll: () => Promise.reject( 'Something terrible happened!' ) }) )
+            beforeEach( () => entityManager.getRepository.and.returnValue({ findAll: () => Promise.reject( somethingTerribleHappened ) }) )
 
             beforeEach( fakeAsync( () => roleController.getRoles({}, response ) ) )
 
             it( 'should respond with an error', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( 'Something terrible happened!' )
+                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
             })
 
         })
@@ -84,14 +85,14 @@ describe( 'RoleController', () => {
 
             beforeEach( () => {
                 request.getBody.and.returnValue( role )
-                entityManager.getRepository.and.returnValue({ save: () => Promise.reject( 'Something terrible happened!' ) })
+                entityManager.getRepository.and.returnValue({ save: () => Promise.reject( somethingTerribleHappened ) })
                 entityManager.getModel.and.returnValue( roleModel )
             })
 
             beforeEach( fakeAsync( () => roleController.createRole( request, response ) ) )
 
             it( 'should respond with the newly created role', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( 'Something terrible happened!' )
+                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
             })
 
         })
@@ -152,6 +153,40 @@ describe( 'RoleController', () => {
 
             it( 'should respond with bad request', () => {
                 expect( response.badRequest ).toHaveBeenCalledWith()
+            })
+
+        })
+
+    })
+
+    describe( 'deleteRole', () => {
+
+        describe( 'when the repository respond successfully', () => {
+
+            beforeEach( () => {
+                request.retrieve.and.returnValue( role )
+                entityManager.getRepository.and.returnValue({ delete: () => Promise.resolve() })
+            })
+
+            beforeEach( fakeAsync( () => roleController.deleteRole( request, response ) ) )
+
+            it( 'should respond with no content', () => {
+                expect( response.noContent ).toHaveBeenCalledWith()
+            })
+
+        })
+
+        describe( 'when the repository respond with an error', () => {
+
+            beforeEach( () => {
+                request.retrieve.and.returnValue( null )
+                entityManager.getRepository.and.returnValue({ delete: () => Promise.reject( somethingTerribleHappened ) })
+            })
+
+            beforeEach( fakeAsync( () => roleController.deleteRole( request, response ) ) )
+
+            it( 'should respond with no content', () => {
+                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
             })
 
         })

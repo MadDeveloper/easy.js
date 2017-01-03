@@ -3,7 +3,8 @@ const response = jasmine.createSpyObj( 'response', [
     'internalServerError',
     'created',
     'badRequest',
-    'notFound'
+    'notFound',
+    'noContent'
 ])
 const container = easy.application.container
 
