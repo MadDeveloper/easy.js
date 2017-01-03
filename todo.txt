@@ -4,6 +4,7 @@
 
 - finir la JSDoc
 - finir les mocks des classes
+- voir pour renommer les fichiers en : bundle.controller.js, bundle.repository.js
 - faire la connexion database en dehors du container puis l'injecter dans le container, car sinon ça fou la merde lors de la création des services user, ils peuvent nécessiter
 la db et faire des actions au constructeur
 - voir où mettre le skeleton accessible et facilement editable

@@ -1,4 +1,4 @@
 module.exports = {
     routes: require( './config/routes' ),
-    controller: require( './controllers/UserController' )
+    controller: require( './controllers/user.controller' )
 }

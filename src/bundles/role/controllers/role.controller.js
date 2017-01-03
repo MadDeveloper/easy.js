@@ -27,8 +27,8 @@ class RoleController extends Controller {
      */
     roleExists( request, response ) {
         return this.em
-            .getRepository( 'role' )
-            .find( request.getRouteParameter( 'role_id' ), this.em.getModel( 'role' ) )
+            .getRepository( 'role/role.repository' )
+            .find( request.getRouteParameter( 'role_id' ), this.em.getModel( 'role/role' ) )
             .then( role => {
                 if ( role ) {
                     request.store( 'role', role )
@@ -52,7 +52,7 @@ class RoleController extends Controller {
      */
     getRoles( request, response ) {
         this.em
-            .getRepository( 'role' )
+            .getRepository( 'role/role.repository' )
             .findAll()
             .then( roles => response.ok( roles ) )
             .catch( error => response.internalServerError( error ) )
@@ -66,10 +66,10 @@ class RoleController extends Controller {
      */
     createRole( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            const Role = this.em.getModel( 'role' )
+            const Role = this.em.getModel( 'role/role' )
 
             this.em
-                .getRepository( 'role' )
+                .getRepository( 'role/role.repository' )
                 .save( new Role(), request.getBody() )
                 .then( role => response.created( role ) )
                 .catch( error => response.internalServerError( error ) )
@@ -97,7 +97,7 @@ class RoleController extends Controller {
     updateRole( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
             this.em
-                .getRepository( 'role' )
+                .getRepository( 'role/role.repository' )
                 .save( request.retrieve( 'role' ), request.getBody() )
                 .then( role => response.ok( role ) )
                 .catch( error => response.internalServerError( error ) )
@@ -114,7 +114,7 @@ class RoleController extends Controller {
      */
     deleteRole( request, response ) {
         this.em
-            .getRepository( 'role' )
+            .getRepository( 'role/role.repository' )
             .delete( request.retrieve( 'role' ) )
             .then( () => response.noContent() )
             .catch( error => response.internalServerError( error ) )

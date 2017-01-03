@@ -1,4 +1,4 @@
-const Configurable  = require( 'easy/interfaces/Configurable' )
+const Configurable = require( 'easy/interfaces/Configurable' )
 
 /**
  * @class EntityManager
@@ -42,7 +42,8 @@ class EntityManager extends Configurable {
                 return this.getCache( repository, 'repositories' )
             }
 
-            const repositoryClass = require( `${this.bundlesPath}/${repository.decapitalizeFirstLetter()}/entity/${repository.capitalizeFirstLetter()}Repository` )
+            const repositoryInfo = repository.split( '/' )
+            const repositoryClass = require( `${this.bundlesPath}/${repositoryInfo[ 0 ]}/entity/${repositoryInfo[ 1 ]}` )
 
             return this.cache( new repositoryClass( this.getModel( repository ), this ), repository, 'repositories' )
         }
@@ -55,11 +56,14 @@ class EntityManager extends Configurable {
      * @returns {bookshelf.Model}
      */
     getModel( model ) {
+        model = model.replace( '.repository', '' )
+
         if ( this.isCached( model ) ) {
             return this.getCache( model, 'models' )
         }
 
-        const modelClass = require( `${this.bundlesPath}/${model.decapitalizeFirstLetter()}/entity/${model.capitalizeFirstLetter()}` )
+        const modelInfo = model.split( '/' )
+        const modelClass = require( `${this.bundlesPath}/${modelInfo[ 0 ]}/entity/${modelInfo[ 1 ]}` )
 
         return this.cache( new modelClass( this ), model, 'models' )
     }

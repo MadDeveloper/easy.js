@@ -76,13 +76,14 @@ class Server {
                     Console.line()
                 })
             })
-            .catch( () => {
+            .catch( error => {
+                console.log( error )
                 /*
                  * Port ${port} is used
                  */
                 Console.error({
                     title: 'Impossible to start server',
-                    message: `Port ${port} is already used or you have no rights to launch server (try as root)`,
+                    message: `${error.hasOwnProperty( 'code' ) ? `Error code: ${error.code}\n` : ''}${error.toString()}`,
                     exit: 1
                 })
             })

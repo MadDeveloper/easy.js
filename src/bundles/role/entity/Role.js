@@ -16,7 +16,7 @@ class Role extends Entity {
             tableName: 'roles',
 
             users() {
-                return this.hasMany( em.getModel( 'user' ) )
+                return this.hasMany( em.getModel( 'user/user' ) )
             }
         })
     }

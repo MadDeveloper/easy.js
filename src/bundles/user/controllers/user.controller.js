@@ -32,7 +32,7 @@ class UserController extends Controller {
     userExists( request, response ) {
         return this
             .em
-            .getRepository( 'user' )
+            .getRepository( 'user/user.repository' )
             .find( request.getRouteParameter( 'user_id' ) )
             .then( user => {
                 if ( user ) {
@@ -57,7 +57,7 @@ class UserController extends Controller {
      */
     getUsers( request, response ) {
         this.em
-            .getRepository( 'user' )
+            .getRepository( 'user/user.repository' )
             .findAll( request.retrieve( 'role' ) )
             .then( users => response.ok( users ) )
             .catch( error => response.internalServerError( error ) )
@@ -71,10 +71,10 @@ class UserController extends Controller {
      */
     createUser( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            const User = this.em.getModel( 'user' )
+            const User = this.em.getModel( 'user/user' )
 
             this.em
-                .getRepository( 'user' )
+                .getRepository( 'user/user.repository' )
                 .save( new User(), request.getBody() )
                 .then( user => {
                     user.unset( 'password' )
@@ -109,7 +109,7 @@ class UserController extends Controller {
             }
 
             this.em
-                .getRepository( 'user' )
+                .getRepository( 'user/user.repository' )
                 .save( request.retrieve( 'user' ), request.getBody() )
                 .then( user => response.ok( user ) )
                 .catch( error => response.internalServerError( error ) )
@@ -142,7 +142,7 @@ class UserController extends Controller {
                             case 'replace':
                                 if ( indexOf( validPaths, patch.path ) >= 0 ) {
                                     this.em
-                                        .getRepository( 'user' )
+                                        .getRepository( 'user/user.repository' )
                                         .patch( request.retrieve( 'user' ), patch )
                                         .then( user => {
                                             if ( ++currentPatch >= opsLength ) {
@@ -178,7 +178,7 @@ class UserController extends Controller {
      */
     deleteUser( request, response ) {
         this.em
-            .getRepository( 'user' )
+            .getRepository( 'user/user.repository' )
             .delete( request.retrieve( 'user' ) )
             .then( () => response.noContent() )
             .catch( error => response.internalServerError( error ) )
