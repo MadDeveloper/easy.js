@@ -56,6 +56,12 @@ class Application extends Configurable {
         }
 
         /*
+         * Create and try to connect database
+         */
+        this.database = new Database()
+        this.database.connect()
+
+        /*
          * Build container
          */
         const containerBuilder = new ContainerBuilder( this )
@@ -63,8 +69,7 @@ class Application extends Configurable {
         /*
          * Get some components
          */
-        this.container = containerBuilder.configure({ includeComponents: true }).build()
-        this.database = this.container.get( 'component.database' )
+        this.container = containerBuilder.configure({ includeComponents: true }).addToBuild( 'component.database', this.database ).build()
         this.router = this.container.get( 'component.router' )
         this.entityManager = this.container.get( 'component.entitymanager' )
         this.logFileManager = this.container.get( 'component.logfilemanager' )
@@ -81,11 +86,6 @@ class Application extends Configurable {
      * start - start application
      */
     start() {
-        /*
-         * Connect database following configurations
-         */
-        this.database.connect()
-
         /*
          * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
          */

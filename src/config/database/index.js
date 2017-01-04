@@ -1,7 +1,7 @@
-const Bookshelf = require( './connectors/bookshelf' )
+const bookshelf = require( './connectors/bookshelf' )
 const config = require( './config' )
 
 module.exports = {
-    connector: Bookshelf,
+    connector: bookshelf,
     connection: config
 }

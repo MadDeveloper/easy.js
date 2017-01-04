@@ -5,16 +5,14 @@
 - finir la JSDoc
 - finir les mocks des classes
 - pour l'authentification custom, il faut virer l'appel à configure sur le service custom, et laisser la config 'route' dans la config
-- faire la connexion database en dehors du container puis l'injecter dans le container, car sinon ça fou la merde lors de la création des services user, ils peuvent nécessiter
-la db et faire des actions au constructeur
 - Refactor skeleton
 - pouvoir générer une table db en fonction d'une entité et non d'un bundle
 - faire en sorte que l'application se reconnecte à la base de données au bout de x seconds si la connexion n'a pas pu être établie ou a été rompue
 - corriger tous les binaires et les mettre en cli
 - voir les problèmes de synchro pour les roles dans la conf et les securités
 
+- exposer dans un index.js (un par dossier) les classes de chaque dossier
 - si on se trompe sur /login il faut renvoyer autre chose que 401 unauthorized ?
-- renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.
 - faire les tests du vendor
 - rédiger DOC
 
@@ -38,3 +36,4 @@ aurait comme clé 'entitymanager', et pourra gérer son cache interne dans cette
 - ? Utiliser CarminteJS (cross-db ORM)
 - ? translate project to ts
 - ? bin permettant de sync roles from db into config file, and reverse
+- renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.

@@ -1,4 +1,4 @@
-const ConfigLoader  = require( 'easy/core/ConfigLoader' )
+const ConfigLoader = require( 'easy/core/ConfigLoader' )
 
 /**
  * @class Database
@@ -19,6 +19,7 @@ class Database {
      */
     connect() {
         this.instance = this.config.connector
+        this.connected = true
     }
 
     /**

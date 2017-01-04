@@ -1,8 +1,8 @@
-const Container         = require( 'easy/container/Container' )
-const Configurable      = require( 'easy/interfaces/Configurable' )
-const ConfigLoader      = require( 'easy/core/ConfigLoader' )
-const Console           = require( 'easy/core/Console' )
-const { assignIn }      = require( 'lodash' )
+const Container = require( 'easy/container/Container' )
+const Configurable = require( 'easy/interfaces/Configurable' )
+const ConfigLoader = require( 'easy/core/ConfigLoader' )
+const Console = require( 'easy/core/Console' )
+const { assignIn } = require( 'lodash' )
 
 /**
  * @class ContainerBuilder
@@ -16,7 +16,7 @@ class ContainerBuilder extends Configurable {
 
         this.application = application
         this.dependenciesMapping = ConfigLoader.loadFromGlobal( 'services' )
-        this.container = null
+        this.container = new Container()
         this.configurations = {}
         this.path = application.kernel.path
         this.cached = {}
@@ -28,8 +28,23 @@ class ContainerBuilder extends Configurable {
      * @param  {type} options = {} description
      * @returns {type}              description
      */
-    configure( options = {} ) {
+    configure( options = {}) {
         this.configurations.includeComponents = options.includeComponents || false
+
+        return this
+    }
+
+    /**
+     * addToBuild - add dependency manually
+     *
+     * @param {string} name
+     * @param {any} dependency
+     *
+     * @returns {ContainerBuilder}
+     */
+    addToBuild( name, dependency ) {
+        this.cache( name, dependency )
+        this.container.register( name, dependency )
 
         return this
     }
@@ -40,8 +55,6 @@ class ContainerBuilder extends Configurable {
      * @returns {type}  description
      */
     build() {
-        this.container = new Container()
-
         if ( this.configurations.includeComponents ) {
             this.dependenciesMapping = assignIn( this.dependenciesMapping, require( './components' ) )
         }
@@ -74,7 +87,9 @@ class ContainerBuilder extends Configurable {
             requestedDependencies.forEach( dependencyName => {
                 if ( 'easy.application' === dependencyName ) {
                     dependencies.push( this.application )
-                } else {
+                } else if ( 'easy.container' === dependencyName ) {
+                    dependencies.push( this.container )
+                }else {
                     dependencies.push( this.load( dependencyName, this.dependenciesMapping[ dependencyName ].path, -1 !== dependencyName.indexOf( 'component.' ) ) )
                 }
             })
