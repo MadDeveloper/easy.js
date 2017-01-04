@@ -152,12 +152,6 @@
         "no-undef-init": "error",
         "no-undef": "off",
         "no-undefined": "off",
-        "no-underscore-dangle": [
-            "error",
-            {
-                "allowAfterThis": true
-            }
-        ],
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
         "no-unsafe-finally": "off",
@@ -221,6 +215,6 @@
         "wrap-iife": "error",
         "wrap-regex": "error",
         "yield-star-spacing": "error",
-        "yoda": "off"
+        "yoda": ["error", "always", { "onlyEquality": true }]
     }
 }
