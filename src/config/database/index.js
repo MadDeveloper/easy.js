@@ -3,5 +3,6 @@ const config = require( './config' )
 
 module.exports = {
     connector: bookshelf,
-    connection: config
+    config,
+    intervalToReconnect: 5000
 }

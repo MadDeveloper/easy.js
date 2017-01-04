@@ -6,7 +6,6 @@
 - finir les mocks des classes
 - Refactor skeleton
 - pouvoir générer une table db en fonction d'une entité et non d'un bundle
-- faire en sorte que l'application se reconnecte à la base de données au bout de x seconds si la connexion n'a pas pu être établie ou a été rompue
 - corriger tous les binaires et les mettre en cli
 - voir les problèmes de synchro pour les roles dans la conf et les securités
 
