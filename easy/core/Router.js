@@ -20,7 +20,7 @@ class Router extends Configurable {
         super()
 
         this._scope = null
-        this._config = ConfigLoader.loadFromGlobal( 'bundles' )
+        this._config = ConfigLoader.loadFromGlobal( 'bundles/activated' )
         this.application = null
         this.http = new Http()
         this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
