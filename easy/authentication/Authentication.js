@@ -1,9 +1,9 @@
 const passportLocal = require( 'passport-local' )
-const ConfigLoader	= require( './../core/ConfigLoader' )
-const Controller   	= require( './../core/Controller' )
-const Configurable = require( './../interfaces/Configurable' )
-const Authorization = require( './Authorization' )
-const TokenManager	= require( './TokenManager' )
+const ConfigLoader	= require( 'easy/core/ConfigLoader' )
+const Controller   	= require( 'easy/core/Controller' )
+const Configurable = require( 'easy/interfaces/Configurable' )
+const Authorization = require( 'easy/authentication/Authorization' )
+const TokenManager	= require( 'easy/authentication/TokenManager' )
 
 const LocalStrategy = passportLocal.Strategy
 
@@ -33,34 +33,38 @@ class Authentication extends Configurable {
 	 */
 	configure() {
 		if ( this.useCustom() ) {
-			const customProvider = this._container.get( this.config.service )
-			customProvider.configure( this._router, this._container )
+			/*
+			 * Custom authentication process
+			 */
+			this.initCustomStrategy()
 		} else {
 			/*
 			 * Default authentication process
 			 */
-			this._userRepository = this._container.get( 'component.entitymanager' ).getRepository( this.config.repository, { model: this.config.entity })
 			this.initLocalStrategy()
-
-			/*
-			 * Verify token
-			 */
-			this._router.scope.use( ( req, res, next ) => {
-				const request = this._router.getRequest( req )
-				const response = this._router.getResponse( res, request )
-
-				this._authorization
-					.checkToken( request, response )
-					.then( next )
-					.catch( () => response.unauthorized() )
-			})
 		}
+	}
+
+
+	 /**
+	  * initCustomStrategy - init custom strategy
+	  */
+	initCustomStrategy() {
+		const customProvider = this._container.get( this.config.service )
+		this._router.scope.post( this.config.route, ( req, res ) => {
+			const request = this._router.getRequest( req )
+			const response = this._router.getResponse( res, request )
+
+			customProvider.login( request, response )
+		})
 	}
 
 	/**
 	 * initLocalStrategy - init local strategy
 	 */
 	initLocalStrategy() {
+		this._userRepository = this._container.get( 'component.entitymanager' ).getRepository( this.config.repository, { model: this.config.entity })
+
 		this._router.scope.post(
 			this.config.route,
 			this._passport.authenticate( 'local', { session: false }),
@@ -87,13 +91,26 @@ class Authentication extends Configurable {
 					if ( user && password === user.get( this.config.passwordField ) ) {
 						user.unset( this.config.passwordField )
 
-						return done( null, { user: user.attributes, token: TokenManager.sign( user.attributes ) })
+						return done( null, { user: user.attributes, token: TokenManager.sign( user.attributes ) })
 					} else {
 						return done( null, false )
 					}
 				})
 				.catch( error => done( error ) )
 		}) )
+
+		/*
+		 * Verify token
+		 */
+		this._router.scope.use( ( req, res, next ) => {
+			const request = this._router.getRequest( req )
+			const response = this._router.getResponse( res, request )
+
+			this._authorization
+				.checkToken( request, response )
+				.then( next )
+				.catch( () => response.unauthorized() )
+		})
 	}
 
 	/**

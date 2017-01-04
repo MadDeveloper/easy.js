@@ -80,20 +80,29 @@ class ContainerBuilder extends Configurable {
      * @returns {Array}
      */
     injectDependencies( dependency ) {
-        let dependencies = []
-        const requestedDependencies = this.dependenciesMapping[ dependency ].dependencies
+        const dependencyMapping = this.dependenciesMapping[ dependency ]
 
-        if ( requestedDependencies.length > 0 ) {
-            requestedDependencies.forEach( dependencyName => {
-                if ( 'easy.application' === dependencyName ) {
-                    dependencies.push( this.application )
-                } else if ( 'easy.container' === dependencyName ) {
-                    dependencies.push( this.container )
-                }else {
-                    dependencies.push( this.load( dependencyName, this.dependenciesMapping[ dependencyName ].path, -1 !== dependencyName.indexOf( 'component.' ) ) )
-                }
-            })
+        if ( !dependencyMapping.hasOwnProperty( 'dependencies' ) ) {
+            return []
         }
+
+        const requestedDependencies = dependencyMapping.dependencies
+
+        if ( 0 === requestedDependencies.length ) {
+            return []
+        }
+
+        let dependencies = []
+
+        requestedDependencies.forEach( dependencyName => {
+            if ( 'easy.application' === dependencyName ) {
+                dependencies.push( this.application )
+            } else if ( 'easy.container' === dependencyName ) {
+                dependencies.push( this.container )
+            }else {
+                dependencies.push( this.load( dependencyName, this.dependenciesMapping[ dependencyName ].path, -1 !== dependencyName.indexOf( 'component.' ) ) )
+            }
+        })
 
         return dependencies
     }
