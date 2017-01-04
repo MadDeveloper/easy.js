@@ -17,6 +17,7 @@ const Router = require( 'easy/core/Router' )
 const Authentication = require( 'easy/authentication/Authentication' )
 const Configurable = require( 'easy/interfaces/Configurable' )
 const Database = require( 'easy/database/Database' )
+const DatabaseDaemon = require( 'easy/database/DatabaseDaemon' )
 const EntityManager = require( 'easy/database/EntityManager' )
 
 /**
@@ -56,10 +57,11 @@ class Application extends Configurable {
         }
 
         /*
-         * Create and try to connect database
+         * Create and daemonize database
          */
         this.database = new Database()
-        this.database.connect()
+        this.databaseDaemon = new DatabaseDaemon()
+        this.databaseDaemon.attach( this.database ).manage()
 
         /*
          * Build container

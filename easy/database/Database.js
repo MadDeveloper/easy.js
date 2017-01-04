@@ -9,20 +9,32 @@ class Database {
      */
     constructor() {
         this._databasePath = ''
+        this.init()
+    }
+
+    /**
+     * init - init attributes
+     */
+    init() {
         this._instance = null
         this._connected = false
         this._config = null
-        this._intervalTryingConnect = null
-
-        this.load()
     }
 
     /**
      * load - load database config
      */
-    load() {
+    start() {
         this._config = ConfigLoader.loadFromGlobal( 'database' )
         this.connect()
+    }
+
+    /**
+     * restart - restart database component
+     */
+    restart() {
+        this.init()
+        this.start()
     }
 
     /**
@@ -30,46 +42,6 @@ class Database {
      */
     connect() {
         this.instance = this.config.connector
-        this.verifyConnection()
-    }
-
-    /**
-     * verifyConnection - verify if connection is established with database
-     */
-    verifyConnection() {
-        if ( false === this.connected ) {
-            this.instance
-                .knex
-                .raw( 'select 1+1 as result' )
-                .then( () => {
-                    this.connected = true
-                    this.stopIntervalTryingConnect()
-                })
-                .catch( () => this.startIntervalTryingConnect() )
-        }
-    }
-
-    /**
-     * startIntervalTryingConnect - start interval to trying establish connection with the database
-     *
-     * @returns {type} Description
-     */
-    startIntervalTryingConnect() {
-        if ( null === this._intervalTryingConnect ) {
-            this._intervalTryingConnect = setInterval( () => this.load(), this.config.intervalToReconnect )
-        }
-    }
-
-    /**
-     * stopIntervalTryingConnect - Description
-     *
-     * @returns {type} Description
-     */
-    stopIntervalTryingConnect() {
-        if ( null !== this._intervalTryingConnect ) {
-            clearInterval( this._intervalTryingConnect )
-            this._intervalTryingConnect = null
-        }
     }
 
     /**

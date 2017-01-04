@@ -4,5 +4,7 @@ const config = require( './config' )
 module.exports = {
     connector: bookshelf,
     config,
-    intervalToReconnect: 5000
+    intervalToTryingReconnect: 5000,
+    intervalToCheckConnection: 15000,
+    maxAttempsReconnect: Infinity
 }

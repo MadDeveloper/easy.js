@@ -77,7 +77,6 @@ class Server {
                 })
             })
             .catch( error => {
-                console.log( error )
                 /*
                  * Port ${port} is used
                  */
