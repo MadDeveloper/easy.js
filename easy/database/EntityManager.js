@@ -1,4 +1,5 @@
 const Configurable = require( 'easy/interfaces/Configurable' )
+const { isEqual } = require( 'lodash' )
 
 /**
  * @class EntityManager
@@ -34,19 +35,27 @@ class EntityManager extends Configurable {
      * getRepository - get specific bundle repository (e.g. skeleton -> SkeletonRepository)
      *
      * @param {string} repository
+     * @param {object} options = {}
      * @returns {Repository}
      */
-    getRepository( repository ) {
-        if ( repository.length > 0 ) {
-            if ( this.isCached( repository ) ) {
-                return this.getCache( repository, 'repositories' )
-            }
-
-            const repositoryInfo = repository.split( '/' )
-            const repositoryClass = require( `${this.bundlesPath}/${repositoryInfo[ 0 ]}/entity/${repositoryInfo[ 1 ]}` )
-
-            return this.cache( new repositoryClass( this.getModel( repository ), this ), repository, 'repositories' )
+    getRepository( repository, options = {}) {
+        if ( 0 === repository.length ) {
+            return {}
         }
+
+        if ( this.isCached( repository ) ) {
+            return this.getCache( repository, this.inCacheRepositories() )
+        }
+
+        let associatedModel = {}
+
+        if ( options.hasOwnProperty( 'model' ) ) {
+            associatedModel = 'string' === typeof options.model ? this.getModel( options.model ) : options.model
+        }
+
+        const repositoryClass = require( `${this.bundlesPath}/${repository}` )
+
+        return this.cache( new repositoryClass( associatedModel, this ), repository, this.inCacheRepositories() )
     }
 
     /**
@@ -56,16 +65,17 @@ class EntityManager extends Configurable {
      * @returns {bookshelf.Model}
      */
     getModel( model ) {
-        model = model.replace( '.repository', '' )
-
-        if ( this.isCached( model ) ) {
-            return this.getCache( model, 'models' )
+        if ( 0 === model.length ) {
+            return {}
         }
 
-        const modelInfo = model.split( '/' )
-        const modelClass = require( `${this.bundlesPath}/${modelInfo[ 0 ]}/entity/${modelInfo[ 1 ]}` )
+        if ( this.isCached( model ) ) {
+            return this.getCache( model, this.inCacheModels() )
+        }
 
-        return this.cache( new modelClass( this ), model, 'models' )
+        const modelClass = require( `${this.bundlesPath}/${model}` )
+
+        return this.cache( new modelClass( this ), model, this.inCacheModels() )
     }
 
     /**
@@ -75,9 +85,31 @@ class EntityManager extends Configurable {
      * @returns {bookshelf.Collection}
      */
     getCollection( model ) {
+        if ( !model || isEqual({}, model ) ) {
+            return {}
+        }
+
         return this.orm.Collection.extend({
             model
         })
+    }
+
+    /**
+     * inCacheModels - returns cache repositories namespace
+     *
+     * @returns {string}
+     */
+    inCacheModels() {
+        return 'repositories'
+    }
+
+    /**
+     * inCacheRepositories - returns cache models namespace
+     *
+     * @returns {string}
+     */
+    inCacheRepositories() {
+        return 'models'
     }
 
     /**

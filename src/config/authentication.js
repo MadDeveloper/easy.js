@@ -2,7 +2,8 @@ module.exports = {
 	enabled: true,
 	// custom: true,
 	// service: 'authentication'
-	repository: 'user/user.repository',
+	repository: 'user/entity/user.repository',
+	entity: 'user/entity/user',
 	usernameField: 'email',
 	passwordField: 'password',
 	route: '/login',

@@ -32,7 +32,7 @@ class UserController extends Controller {
     userExists( request, response ) {
         return this
             .em
-            .getRepository( 'user/user.repository' )
+            .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             .find( request.getRouteParameter( 'user_id' ) )
             .then( user => {
                 if ( user ) {
@@ -57,7 +57,7 @@ class UserController extends Controller {
      */
     getUsers( request, response ) {
         this.em
-            .getRepository( 'user/user.repository' )
+            .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             .findAll( request.retrieve( 'role' ) )
             .then( users => response.ok( users ) )
             .catch( error => response.internalServerError( error ) )
@@ -71,10 +71,10 @@ class UserController extends Controller {
      */
     createUser( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            const User = this.em.getModel( 'user/user' )
+            const User = this.em.getModel( 'user/entity/user' )
 
             this.em
-                .getRepository( 'user/user.repository' )
+                .getRepository( 'user/entity/user.repository', { model: User })
                 .save( new User(), request.getBody() )
                 .then( user => {
                     user.unset( 'password' )
@@ -104,12 +104,12 @@ class UserController extends Controller {
      */
     updateUser( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            if ( typeof request.getAppParameter( 'role_id' ) === "undefined" ) {
+            if ( "undefined" === typeof request.getAppParameter( 'role_id' ) ) {
                 request.setAppParameter( 'role_id', request.getRouteParameter( 'role_id' ) )
             }
 
             this.em
-                .getRepository( 'user/user.repository' )
+                .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
                 .save( request.retrieve( 'user' ), request.getBody() )
                 .then( user => response.ok( user ) )
                 .catch( error => response.internalServerError( error ) )
@@ -142,7 +142,7 @@ class UserController extends Controller {
                             case 'replace':
                                 if ( indexOf( validPaths, patch.path ) >= 0 ) {
                                     this.em
-                                        .getRepository( 'user/user.repository' )
+                                        .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
                                         .patch( request.retrieve( 'user' ), patch )
                                         .then( user => {
                                             if ( ++currentPatch >= opsLength ) {
@@ -178,7 +178,7 @@ class UserController extends Controller {
      */
     deleteUser( request, response ) {
         this.em
-            .getRepository( 'user/user.repository' )
+            .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             .delete( request.retrieve( 'user' ) )
             .then( () => response.noContent() )
             .catch( error => response.internalServerError( error ) )

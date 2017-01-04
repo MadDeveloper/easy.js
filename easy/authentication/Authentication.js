@@ -1,7 +1,7 @@
 const passportLocal = require( 'passport-local' )
 const ConfigLoader	= require( './../core/ConfigLoader' )
 const Controller   	= require( './../core/Controller' )
-const Configurable  = require( './../interfaces/Configurable' )
+const Configurable = require( './../interfaces/Configurable' )
 const Authorization = require( './Authorization' )
 const TokenManager	= require( './TokenManager' )
 
@@ -39,15 +39,15 @@ class Authentication extends Configurable {
 			/*
 			 * Default authentication process
 			 */
-			this._userRepository = this._container.get( 'component.entitymanager' ).getRepository( this.config.repository )
+			this._userRepository = this._container.get( 'component.entitymanager' ).getRepository( this.config.repository, { model: this.config.entity })
 			this.initLocalStrategy()
 
 			/*
 			 * Verify token
 			 */
 			this._router.scope.use( ( req, res, next ) => {
-				const request   = this._router.getRequest( req )
-				const response  = this._router.getResponse( res, request )
+				const request = this._router.getRequest( req )
+				const response = this._router.getResponse( res, request )
 
 				this._authorization
 					.checkToken( request, response )
@@ -65,8 +65,8 @@ class Authentication extends Configurable {
 			this.config.route,
 			this._passport.authenticate( 'local', { session: false }),
 			( req, res ) => {
-				const request   = this._router.getRequest( req )
-	            const response  = this._router.getResponse( res, request )
+				const request = this._router.getRequest( req )
+	            const response = this._router.getResponse( res, request )
 
 				response.ok({
 					user: request.getProperty( 'user' ).user,
@@ -87,13 +87,13 @@ class Authentication extends Configurable {
 					if ( user && password === user.get( this.config.passwordField ) ) {
 						user.unset( this.config.passwordField )
 
-						return done( null, { user: user.attributes, token: TokenManager.sign( user.attributes ) } )
+						return done( null, { user: user.attributes, token: TokenManager.sign( user.attributes ) })
 					} else {
 						return done( null, false )
 					}
 				})
 				.catch( error => done( error ) )
-		}))
+		}) )
 	}
 
 	/**
