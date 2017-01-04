@@ -4,7 +4,7 @@
 
 - finir la JSDoc
 - finir les mocks des classes
-- Refactor skeleton
+- voir avec aurélien si c'est nécessaire d'avoir un skeleton trop 'fourni'
 - pouvoir générer une table db en fonction d'une entité et non d'un bundle
 - corriger tous les binaires et les mettre en cli
 - voir les problèmes de synchro pour les roles dans la conf et les securités

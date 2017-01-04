@@ -1,4 +1,4 @@
-const config = require( '../config' )
+const config = require( '../config-driver' )
 const Bookshelf = require( 'bookshelf' )
 const Knex = require( 'knex' )
 

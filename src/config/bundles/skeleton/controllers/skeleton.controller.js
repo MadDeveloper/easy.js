@@ -1,5 +1,5 @@
-const { indexOf }   = require( 'lodash' )
-const Controller    = require( 'easy/core/Controller' )
+const { indexOf } = require( 'lodash' )
+const Controller = require( 'easy/core/Controller' )
 
 /**
  * @class SkeletonController
@@ -28,7 +28,7 @@ class SkeletonController extends Controller {
     skeletonExists( request, response ) {
         return this
             .em
-            .getRepository( 'skeleton' )
+            .getRepository( 'skeleton/entity/skeleton.repository', { model: 'skeleton/entity/skeleton' })
             .find( request.getRouteParameter( 'skeleton_id' ) )
             .then( skeleton => {
                 if ( skeleton ) {
@@ -53,7 +53,7 @@ class SkeletonController extends Controller {
      */
     getSkeletons( request, response ) {
         this.em
-            .getRepository( 'skeleton' )
+            .getRepository( 'skeleton/entity/skeleton.repository', { model: 'skeleton/entity/skeleton' })
             .findAll()
             .then( skeletons => response.ok( skeletons ) )
             .catch( error => response.internalServerError( error ) )
@@ -67,10 +67,10 @@ class SkeletonController extends Controller {
      */
     createSkeleton( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            const Skeleton = this.em.getModel( 'skeleton' )
+            const Skeleton = this.em.getModel( 'skeleton/entity/skeleton' )
 
             this.em
-                .getRepository( 'skeleton' )
+                .getRepository( 'skeleton/entity/skeleton.repository', { model: Skeleton })
                 .save( new Skeleton(), request.getBody() )
                 .then( skeleton => response.created( skeleton ) )
                 .catch( error => response.internalServerError( error ) )
@@ -98,7 +98,7 @@ class SkeletonController extends Controller {
     updateSkeleton( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
             this.em
-                .getRepository( 'skeleton' )
+                .getRepository( 'skeleton/entity/skeleton.repository', { model: 'skeleton/entity/skeleton' })
                 .save( request.retrieve( 'skeleton' ), request.getBody() )
                 .then( skeleton => response.ok( skeleton ) )
                 .catch( error => response.internalServerError( error ) )
@@ -115,7 +115,7 @@ class SkeletonController extends Controller {
      */
     deleteSkeleton( request, response ) {
         this.em
-            .getRepository( 'skeleton' )
+            .getRepository( 'skeleton/entity/skeleton.repository', { model: 'skeleton/entity/skeleton' })
             .delete( request.retrieve( 'skeleton' ) )
             .then( () => response.noContent() )
             .catch( error => response.internalServerError( error ) )

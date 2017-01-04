@@ -1,10 +1,10 @@
-const security      = require( './security' )
-const middlewares   = require( './middlewares' )
+const security = require( './security' )
+const middlewares = require( './middlewares' )
 
-module.exports.routes = {
+module.exports = {
     '/skeletons': {
-        get: 'getSkeletons',
-        post: 'createSkeletons',
+        get: 'skeleton:getSkeletons',
+        post: 'skeleton:createSkeletons',
         security: {
             strategy: 'default',
             rules: security[ '/skeletons' ],
@@ -13,10 +13,10 @@ module.exports.routes = {
     },
 
     '/skeletons/:skeleton_id': {
-        get: 'getSkeleton',
-        put: 'updateSkeleton',
-        patch: 'patchSkeleton',
-        delete: 'deleteSkeleton',
+        get: 'skeleton:getSkeleton',
+        put: 'skeleton:updateSkeleton',
+        patch: 'skeleton:patchSkeleton',
+        delete: 'skeleton:deleteSkeleton',
         security: {
             strategy: 'default',
             rules: security[ '/skeletons' ],

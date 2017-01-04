@@ -1,5 +1,5 @@
 const bookshelf = require( './connectors/bookshelf' )
-const config = require( './config' )
+const config = require( './config-driver' )
 
 module.exports = {
     connector: bookshelf,
