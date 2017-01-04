@@ -1,7 +1,7 @@
+const role = require( 'src/bundles/role' )
+const user = require( 'src/bundles/user' )
+
 module.exports = [
-    /*
-     * Register bundles to implements their routing
-     */
-    'role',
-    'user'
+    role,
+    user
 ]

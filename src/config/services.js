@@ -1,14 +1,12 @@
 module.exports = {
     /*
-     * component.* are already available as dependencies
-	 * List of available components:
-	 * bundlemanager
-	 * router
-	 * database
-	 * entitymanager
-	 * logger
-	 * logfilemanager
-	 * logwriter
+	 * List of available easy components injectable:
+	 * component.router
+	 * component.database
+     * component.entitymanager
+	 * component.logger
+	 * component.logfilemanager
+	 * component.logwriter
      *
      * example gmail service
      * 'auth.facebook': {

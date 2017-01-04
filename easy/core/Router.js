@@ -40,10 +40,8 @@ class Router extends Configurable {
 
 	/**
 	 * init - init app routing
-	 *
-	 * @param  {BundleManager} bundleManager
 	 */
-	load( bundleManager ) {
+	load() {
 		/*
 		 * Express router
 		 */
@@ -52,7 +50,7 @@ class Router extends Configurable {
 	    /*
 	     * Bundles routes
 	     */
-        this.loadBundlesRoutes( bundleManager.bundles )
+        this.loadBundlesRoutes()
 
 	    /*
 	     * Final middleware: No route found
@@ -65,17 +63,10 @@ class Router extends Configurable {
 	}
 
     /**
-     * loadBundlesRoutes - load all enabled bundles routes
-     *
-     * @param  {Array} bundles
+     * loadBundlesRoutes - load all bundles routes
      */
-    loadBundlesRoutes( bundles ) {
-        let bundle = {}
-
-        for( let bundleName in bundles ) {
-            bundle = bundles[ bundleName ]
-            this.parseBundleRoutes( bundle )
-        }
+    loadBundlesRoutes() {
+        this.config.forEach( bundle => this.parseBundleRoutes( bundle ) )
     }
 
     /**

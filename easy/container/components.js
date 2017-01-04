@@ -3,10 +3,6 @@ module.exports = {
         path: 'core/Router',
         dependencies: []
     },
-    'component.bundlemanager': {
-        path: 'core/BundleManager',
-        dependencies: []
-    },
     'component.entitymanager': {
         path: 'database/EntityManager',
         dependencies: []

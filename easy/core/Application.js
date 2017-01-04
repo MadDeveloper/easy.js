@@ -14,7 +14,6 @@ const Console = require( 'easy/core/Console' )
 const Polyfills = require( 'easy/core/Polyfills' )
 const ConfigLoader = require( 'easy/core/ConfigLoader' )
 const Router = require( 'easy/core/Router' )
-const BundleManager = require( 'easy/core/BundleManager' )
 const Authentication = require( 'easy/authentication/Authentication' )
 const Configurable = require( 'easy/interfaces/Configurable' )
 const Database = require( 'easy/database/Database' )
@@ -67,7 +66,6 @@ class Application extends Configurable {
         this.container = containerBuilder.configure({ includeComponents: true }).build()
         this.database = this.container.get( 'component.database' )
         this.router = this.container.get( 'component.router' )
-        this.bundleManager = this.container.get( 'component.bundlemanager' )
         this.entityManager = this.container.get( 'component.entitymanager' )
         this.logFileManager = this.container.get( 'component.logfilemanager' )
 
@@ -76,9 +74,7 @@ class Application extends Configurable {
          */
         this.appName = this.config.app.name
         this.entityManager.configure( this.kernel.path.bundles, this.database )
-        this.bundleManager.configure( this.kernel.path.bundles )
         this.router.configure( this, express.Router() )
-        this.bundleManager.loadBundles()
     }
 
     /**
@@ -152,7 +148,7 @@ class Application extends Configurable {
         /*
          * Loads all the app routes
          */
-        this.router.load( this.bundleManager )
+        this.router.load()
 
         /*
          * Initialize Passport
