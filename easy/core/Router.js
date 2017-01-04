@@ -84,10 +84,13 @@ class Router extends Configurable {
      * @param  {Object} bundle
      */
     parseBundleRoutes( bundle ) {
-        const controller = new bundle.controller( this.application.container )
-
+        let controllers = {}
         let routesConfig = {}
         let configValue = ''
+
+        for( let controller in bundle.controllers ) {
+            controllers[ controller ] = new bundle.controllers[ controller ]( this.application.container )
+        }
 
         for( let routeName in bundle.routes ) {
             routesConfig = bundle.routes[ routeName ]
@@ -103,7 +106,7 @@ class Router extends Configurable {
              * Middlewares
              */
             if ( this.analyzerMiddlewaresConfig.analyze( routesConfig ) ) {
-                this.defineMiddlewaresRoutes( routesConfig, controller )
+                this.defineMiddlewaresRoutes( routesConfig, controllers )
             }
 
             /*
@@ -113,16 +116,18 @@ class Router extends Configurable {
                 configValue = routesConfig[ config ]
 
                 if ( -1 !== indexOf( this.http.methods, config ) ) {
+                    const [ controllerId, controllerMethod ] = configValue.split( ':' )
+
                     this.defineRoute({
                         route: routeName,
                         method: config,
-                        controller,
-                        controllerMethod: configValue
+                        controller: controllers[ controllerId ],
+                        controllerMethod: controllerMethod
                     })
                 }
             }
 
-            this.defineMethodNotAllowed( routeName )
+            this.defineMethodNotAllowedRoute( routeName )
         }
     }
 
@@ -130,9 +135,9 @@ class Router extends Configurable {
      * defineMiddlewaresRoutes - define all middlewares into express router
      *
      * @param  {Object} configurations
-     * @param  {Controller} controller
+     * @param  {Controller[]} controller
      */
-    defineMiddlewaresRoutes( configurations, controller ) {
+    defineMiddlewaresRoutes( configurations, controllers ) {
         const router = this.scope
         const middlewaresConfig = this.analyzerMiddlewaresConfig.extractMiddlewaresConfig( configurations )
         let middleware = ''
@@ -142,11 +147,14 @@ class Router extends Configurable {
             config = middlewaresConfig[ config ]
             middlewareInfos = this.analyzerMiddlewaresConfig.extractMiddlewareInfos( config )
 
+            const [ controllerId, controllerMethod ] = middlewareInfos.middleware.split( ':' )
+            const controller = controllers[ controllerId ]
+
             router[ middlewareInfos.type ]( middlewareInfos.param, ( req, res, next ) => {
                 const request = this.getRequest( req )
                 const response = this.getResponse( res, request )
 
-                controller[ middlewareInfos.middleware ]( request, response )
+                controller[ controllerMethod ]( request, response )
                     .then( () => next() )
                     .catch( () => {})
             })
@@ -202,11 +210,11 @@ class Router extends Configurable {
     }
 
     /**
-     * defineMethodNotAllowed - define route on all http verbs which returns 405 Method Not Allowed
+     * defineMethodNotAllowedRoute - define route on all http verbs which returns 405 Method Not Allowed
      *
      * @param  {string} route
      */
-    defineMethodNotAllowed( route ) {
+    defineMethodNotAllowedRoute( route ) {
         const router = this.scope
 
         router.route( route ).all( ( req, res ) => {

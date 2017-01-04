@@ -1,4 +1,4 @@
-const UserController = require( '../' ).controller
+const UserController = require( '../controllers/user.controller' )
 const container = easy.application.container
 const { entityManager,
         response,

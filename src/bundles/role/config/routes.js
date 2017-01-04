@@ -3,8 +3,8 @@ const middlewares = require( './middlewares' )
 
 module.exports = {
     '/roles': {
-        get: 'getRoles',
-        post: 'createRole',
+        get: 'role:getRoles',
+        post: 'role:createRole',
         security: {
             strategy: 'default',
             rules: security[ '/roles' ],
@@ -13,9 +13,9 @@ module.exports = {
     },
 
     '/roles/:role_id': {
-        get: 'getRole',
-        put: 'updateRole',
-        delete: 'deleteRole',
+        get: 'role:getRole',
+        put: 'role:updateRole',
+        delete: 'role:deleteRole',
         security: {
             strategy: 'default',
             rules: security[ '/roles' ],

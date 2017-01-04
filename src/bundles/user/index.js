@@ -1,4 +1,9 @@
+const routes = require( './config/routes' )
+const UserController = require( './controllers/user.controller' )
+
 module.exports = {
-    routes: require( './config/routes' ),
-    controller: require( './controllers/user.controller' )
+    routes,
+    controllers: {
+        'user': UserController
+    }
 }

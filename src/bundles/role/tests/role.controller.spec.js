@@ -1,4 +1,4 @@
-const RoleController = require( '../' ).controller
+const RoleController = require( '../controllers/role.controller' )
 const container = easy.application.container
 const { entityManager,
         response,

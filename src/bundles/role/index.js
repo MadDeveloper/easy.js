@@ -1,4 +1,9 @@
+const routes = require( './config/routes' )
+const RoleController = require( './controllers/role.controller' )
+
 module.exports = {
-    routes: require( './config/routes' ),
-    controller: require( './controllers/role.controller' )
+    routes,
+    controllers: {
+        'role': RoleController
+    }
 }
