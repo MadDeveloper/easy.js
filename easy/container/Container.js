@@ -1,5 +1,5 @@
-const fs        = require( 'fs' )
-const Console   = require( 'easy/core/Console' )
+const fs = require( 'fs' )
+const Console = require( 'easy/core/Console' )
 
 /**
  * @class Container

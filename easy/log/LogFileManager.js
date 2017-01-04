@@ -1,6 +1,8 @@
-const fs            = require( 'fs' )
-const path          = require( 'path' )
-const Injectable    = require( 'easy/interfaces/Injectable' )
+const fs = require( 'fs' )
+const path = require( 'path' )
+const Injectable = require( 'easy/interfaces/Injectable' )
+const Directory = require( 'easy/fs/Directory' )
+const Console = require( 'easy/core/Console' )
 
 /**
  * @class LogFileManager
@@ -16,6 +18,14 @@ class LogFileManager extends Injectable {
         super()
 
         this._logDirectoryPath = `${application.kernel.path.root}/logs`
+
+        if ( application.config.app.log ) {
+            const directory = new Directory( this._logDirectoryPath )
+
+            if ( !directory.exists() ) {
+                directory.create()
+            }
+        }
     }
 
     /**
