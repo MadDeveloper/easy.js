@@ -15,9 +15,9 @@ class Response extends Http {
     constructor( res, request, logger ) {
         super()
 
-        this._scope     = res
-        this._logger    = logger
-        this._request   = request
+        this._scope = res
+        this._logger = logger
+        this._request = request
     }
 
     /**
@@ -28,7 +28,7 @@ class Response extends Http {
      * @returns {Object}
      */
     formatParams( params, setDefault ) {
-        if ( typeof params === "undefined" ) {
+        if ( "undefined" === typeof params ) {
             if ( typeof setDefault !== "undefined" ) {
                 params = setDefault
             }
@@ -493,8 +493,8 @@ class Response extends Http {
      * @param  {any} params
      */
     internalServerError( params ) {
-        const req       = this.request.scope
-        const alertLog  = `[{currentDate}] -- {remoteHostIp} -- {method} {originalUrl} {statusCode} -- ${params}\n`
+        const req = this.request.scope
+        const alertLog = `[{currentDate}] -- {remoteHostIp} -- {method} {originalUrl} {statusCode} -- ${params}\n`
 
         this._logger.alert( alertLog, {
             '{currentDate}': new Date().toUTCString(),
