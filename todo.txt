@@ -2,7 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- finir les mocks des classes
 - voir avec aurélien si c'est nécessaire d'avoir un skeleton trop 'fourni', ou bien de pouvoir choisir avec une cli
 - permettre un système de sécurité custom (pas seulement celui par défaut fonctionnant sur les roles)
 - pouvoir générer une table db en fonction d'une entité et non d'un bundle

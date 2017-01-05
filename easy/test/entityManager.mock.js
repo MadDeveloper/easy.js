@@ -1,7 +1,8 @@
 const entityManager = jasmine.createSpyObj( 'em', [
     'getRepository',
     'getModel',
-    'getCollection'
+    'getCollection',
+    'database'
 ])
 const container = easy.application.container
 

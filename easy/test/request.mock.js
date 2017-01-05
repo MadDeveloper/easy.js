@@ -11,8 +11,16 @@ const request = jasmine.createSpyObj( 'request', [
     'getBodyParameter',
     'setBodyParameter',
     'getRouteParameter',
-    'getAppParameter'
+    'getAppParameter',
+    'getAppParameter',
+    'setAppParameter',
+    'getProperty',
+    'setProperty',
+    'urlContains',
+    'store',
+    'retrieve',
+    'getCookies',
+    'scope'
 ])
-const container = easy.application.container
 
 module.exports = request

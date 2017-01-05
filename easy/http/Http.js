@@ -85,7 +85,7 @@ class Http {
             networkConnectTimeoutError: 599
         }
 
-        this.methods = [
+        this._methods = [
             'get',
             'post',
             'put',
@@ -101,6 +101,15 @@ class Http {
      */
     get status() {
         return this._status
+    }
+
+    /**
+     * methods - http methods
+     *
+     * @returns {Array}
+     */
+    get methods() {
+        return this._methods
     }
 }
 
