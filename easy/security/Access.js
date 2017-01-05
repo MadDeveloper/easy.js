@@ -62,23 +62,23 @@ class Access extends SecurityAccess {
      * @returns {Access}
      */
     restrict({ mustBe = [], canCreate = [], canRead = [], canUpdate = [], canDelete = [] }) {
-        if ( !mustBe || mustBe.length === 0 ) {
+        if ( !mustBe || 0 === mustBe.length ) {
             mustBe = [ this.any ]
         }
 
-        if ( !canCreate || canCreate.length === 0 ) {
+        if ( !canCreate || 0 === canCreate.length ) {
             canCreate = mustBe
         }
 
-        if ( !canRead || canRead.length === 0 ) {
+        if ( !canRead || 0 === canRead.length ) {
             canRead = mustBe
         }
 
-        if ( !canUpdate || canUpdate.length === 0 ) {
+        if ( !canUpdate || 0 === canUpdate.length ) {
             canUpdate = mustBe
         }
 
-        if ( !canDelete || canDelete.length === 0 ) {
+        if ( !canDelete || 0 === canDelete.length ) {
             canDelete = mustBe
         }
 
@@ -114,7 +114,7 @@ class Access extends SecurityAccess {
 
         if ( authorized ) {
 
-            const methodWhenReading = [ 'get' ]
+            const methodWhenReading = [ 'get', 'head', 'options', 'trace' ]
             const methodWhenCreating = [ 'post' ]
             const methodWhenUpdating = [ 'put', 'patch' ]
             const methodWhenDeleting = [ 'delete' ]
