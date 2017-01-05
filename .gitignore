@@ -43,3 +43,6 @@ node_modules/
 
 # doc
 /doc
+
+# Atom ternjs
+.tern-project
