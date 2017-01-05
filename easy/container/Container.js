@@ -16,11 +16,11 @@ class Container {
     }
 
     /**
-     * register - description
+     * register - register dependency
      *
-     * @param  {type} name       description
-     * @param  {type} dependency description
-     * @returns {type}            description
+     * @param  {string} name
+     * @param  {any} dependency
+     * @returns {Cotnainer}
      */
     register( name, dependency ) {
         this.shared[ name ] = dependency

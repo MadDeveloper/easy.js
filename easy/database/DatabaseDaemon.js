@@ -81,8 +81,6 @@ class DatabaseDaemon {
 
     /**
      * startIntervalTryingReconnect - start interval to trying establish connection with the database
-     *
-     * @returns {type} Description
      */
     startIntervalTryingReconnect() {
         if ( null === this.interval ) {
@@ -103,9 +101,7 @@ class DatabaseDaemon {
     }
 
     /**
-     * stopIntervalTryingReconnect - Description
-     *
-     * @returns {type} Description
+     * stopIntervalTryingReconnect - stop interval to trying establish connection with the database
      */
     stopIntervalTryingReconnect() {
         if ( null !== this.interval ) {

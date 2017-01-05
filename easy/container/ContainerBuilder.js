@@ -23,10 +23,10 @@ class ContainerBuilder extends Configurable {
     }
 
     /**
-     * configure - description
+     * configure - configure container builder
      *
-     * @param  {type} options = {} description
-     * @returns {type}              description
+     * @param  {object} options = {}
+     * @returns {ContainerBuilder}
      */
     configure( options = {}) {
         this.configurations.includeComponents = options.includeComponents || false
@@ -38,7 +38,7 @@ class ContainerBuilder extends Configurable {
      * addToBuild - add dependency manually
      *
      * @param {string} name
-     * @param {any} dependency
+     * @param {object} dependency
      *
      * @returns {ContainerBuilder}
      */
@@ -50,9 +50,9 @@ class ContainerBuilder extends Configurable {
     }
 
     /**
-     * build - description
+     * build - build container and return it
      *
-     * @returns {type}  description
+     * @returns {Container}
      */
     build() {
         if ( this.configurations.includeComponents ) {
@@ -135,31 +135,31 @@ class ContainerBuilder extends Configurable {
     }
 
     /**
-     * isLoaded - description
+     * isLoaded - check if dependency is loaded
      *
-     * @param  {type} name description
-     * @returns {type}      description
+     * @param  {name} name
+     * @returns {boolean}
      */
     isLoaded( name ) {
         return this.cached.hasOwnProperty( name )
     }
 
     /**
-     * getLoaded - description
+     * getLoaded - get already loaded dependency
      *
-     * @param  {type} name description
-     * @returns {type}      description
+     * @param  {string} name
+     * @returns {object}
      */
     getLoaded( name ) {
         return this.cached[ name ]
     }
 
     /**
-     * cache - description
+     * cache - cache a dependency
      *
-     * @param  {type} name       description
-     * @param  {type} dependency description
-     * @returns {type}            description
+     * @param  {string} name
+     * @param  {object} dependency
+     * @returns {object}
      */
     cache( name, dependency ) {
         this.cached[ name ] = dependency

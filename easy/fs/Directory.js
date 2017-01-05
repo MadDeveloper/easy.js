@@ -53,27 +53,21 @@ class Directory {
     }
 
     /**
-     * delete - Description
-     *
-     * @returns {type} Description
+     * delete - delete directory
      */
     delete() {
         throw new Error( 'Not implemented yet' )
     }
 
     /**
-     * rename - Description
-     *
-     * @returns {type} Description
+     * rename - rename repository
      */
     rename() {
         throw new Error( 'Not implemented yet' )
     }
 
     /**
-     * move - Description
-     *
-     * @returns {type} Description
+     * move - move repository
      */
     move() {
         throw new Error( 'Not implemented yet' )
