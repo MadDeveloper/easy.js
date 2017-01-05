@@ -7,6 +7,6 @@ module.exports = {
     logger: require( 'easy/test/logger.mock' ),
     logWriter: require( 'easy/test/logwriter.mock' ),
     logFileManager: require( 'easy/test/logfilemanager.mock' ),
-    tokenManager: require( 'easy/test/tokenmanage.mock' ),
+    tokenManager: require( 'easy/test/tokenmanager.mock' ),
     authorization: require( 'easy/test/authorization.mock' )
 }
