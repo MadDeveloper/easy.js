@@ -1,4 +1,4 @@
-const Controller = require( 'easy/core/Controller' )
+const { Controller } = require( 'easy/core' )
 
 /**
  * @class RoleController

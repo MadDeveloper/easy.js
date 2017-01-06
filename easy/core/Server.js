@@ -2,7 +2,7 @@ const https = require( 'https' )
 const http = require( 'http' )
 const net = require( 'net' )
 const pad = require( 'pad-right' )
-const Console = require( './Console' )
+const Console = require( 'easy/core/Console' )
 
 /**
  * @class Server
@@ -82,7 +82,7 @@ class Server {
                  */
                 Console.error({
                     title: 'Impossible to start server',
-                    message: `${error.hasOwnProperty( 'code' ) ? `Error code: ${error.code}\n` : ''}${error.toString()}`,
+                    message: `${error.hasOwnProperty( 'code' ) ? `Error code: ${error.code}\n` : ''}${error.toString()}${error.stack}`,
                     exit: 1
                 })
             })

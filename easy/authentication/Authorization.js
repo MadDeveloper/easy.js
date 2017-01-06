@@ -1,4 +1,4 @@
-const { TokenManager } = require( 'easy/authentication' )
+const TokenManager = require( 'easy/authentication/TokenManager' )
 
 class Authorization {
 	/**

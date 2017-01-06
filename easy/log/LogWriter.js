@@ -1,7 +1,7 @@
-const fs            = require( 'fs' )
-const Injectable    = require( 'easy/interfaces/Injectable' )
-const Console       = require( 'easy/core/Console' )
-const { strtr }     = require( 'easy/lib/string' )
+const fs = require( 'fs' )
+const { Injectable } = require( 'easy/interfaces' )
+const { Console } = require( 'easy/core' )
+const { strtr } = require( 'easy/lib/string' )
 
 /**
  * @class LogWriter

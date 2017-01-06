@@ -2,8 +2,7 @@ const appRootPath = `${__dirname}/../`
 
 require( 'app-module-path' ).addPath( appRootPath )
 
-const Kernel = require( 'easy/core/Kernel' )
-const Application = require( 'easy/core/Application' )
+const { Kernel, Application } = require( 'easy/core' )
 
 /*
  * Easy.js minimal configurations

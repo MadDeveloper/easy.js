@@ -1,5 +1,5 @@
 const { indexOf } = require( 'lodash' )
-const Controller = require( 'easy/core/Controller' )
+const { Controller } = require( 'easy/core' )
 
 /**
  * @class SkeletonController

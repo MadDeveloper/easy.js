@@ -1,4 +1,4 @@
-const Configurable = require( 'easy/interfaces/Configurable' )
+const { Configurable } = require( 'easy/interfaces' )
 const { isEqual } = require( 'lodash' )
 
 /**

@@ -1,4 +1,4 @@
-const { ConfigLoader } = require( 'easy/core' )
+const ConfigLoader = require( 'easy/core/ConfigLoader' )
 
 /**
  * @class Controller

@@ -1,4 +1,4 @@
-const Repository = require( 'easy/database/Repository' )
+const { Repository } = require( 'easy/database' )
 
 /**
  * @class UserRepository
@@ -26,8 +26,8 @@ class UserRepository extends Repository {
      * @param  {Object} options = {}
      * @returns {Promise}
      */
-    find( byParam, options = {} ) {
-        const forgeParam = ( typeof byParam === "number" || ( typeof byParam === 'string' && byParam.isNumber() ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email } )
+    find( byParam, options = {}) {
+        const forgeParam = ( "number" === typeof byParam || ( 'string' === typeof byParam && byParam.isNumber() ) ) ? { id: byParam } : ( ( undefined !== byParam.id ) ? { id: byParam.id } : { email: byParam.email })
 
         return this
             .model

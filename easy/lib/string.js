@@ -1,8 +1,15 @@
+/**
+ * asSnakeCase - transform string as snake case
+ *
+ * @param {string} originalName
+ *
+ * @returns {string}
+ */
 module.exports.asSnakeCase = function( originalName ) {
     let formatedName = originalName
 
     formatedName = formatedName.trim()
-    formatedName = this.cleanAccents( formatedName )
+    formatedName = this.transformAsWord( formatedName )
     formatedName = formatedName.replace( /[-!#$€£¤§<>%&~=+'"°%`.,:/@()\\{[]}]/gi, '' )
     formatedName = formatedName.replace( / /g, '_' )
     formatedName = formatedName.toLowerCase()
@@ -10,14 +17,37 @@ module.exports.asSnakeCase = function( originalName ) {
     return formatedName
 }
 
-module.exports.cleanAccents = function( str ) {
+/**
+ * transformAsWord - remove all caracters which are not considered as regex word
+ *
+ * @param {string} str
+ *
+ * @returns {string}
+ */
+module.exports.transformAsWord = function( str ) {
     return str.replace( /[^\w ]/gi, '' )
 }
 
+/**
+ * cleanSpaces - clean spaces into string
+ *
+ * @param {string} str
+ *
+ * @returns {string}
+ */
 module.exports.cleanSpaces = function( str ) {
     return str.replace( /\s/i, '' )
 }
 
+/**
+ * strtr - replace string occurences (eq. strtr php), see: http://locutus.io/php/strings/strtr/
+ *
+ * @param {string} str
+ * @param {string|object} fromObj
+ * @param {string|object} to
+ *
+ * @returns {string}
+ */
 module.exports.strtr = function( str, fromObj, to ) {
     let fr = ''
     let i = 0
@@ -34,11 +64,11 @@ module.exports.strtr = function( str, fromObj, to ) {
 
     // Received replace_pairs?
     // Convert to normal from->to chars
-    if ( typeof fromObj === 'object' ) {
+    if ( 'object' === typeof fromObj ) {
         for ( fr in fromObj ) {
             if ( fromObj.hasOwnProperty( fr ) ) {
                 tmpFrom.push( fr )
-                tmpTo.push( fromObj[ fr ] )
+                tmpTo.push( fromObj[ fr ])
             }
         }
 
@@ -49,8 +79,8 @@ module.exports.strtr = function( str, fromObj, to ) {
     // Walk through subject and replace chars when needed
     lenStr = str.length
     lenFrom = fromObj.length
-    fromTypeStr = typeof fromObj === 'string'
-    toTypeStr = typeof to === 'string'
+    fromTypeStr = 'string' === typeof fromObj
+    toTypeStr = 'string' === typeof to
 
     for ( i = 0; i < lenStr; i++ ) {
         match = false
@@ -64,7 +94,7 @@ module.exports.strtr = function( str, fromObj, to ) {
             }
         } else {
             for ( j = 0; j < lenFrom; j++ ) {
-                if ( str.substr( i, fromObj[ j ].length ) == fromObj[ j ] ) {
+                if ( str.substr( i, fromObj[ j ].length ) == fromObj[ j ]) {
                     match = true
                     // Fast forward
                     i = ( i + fromObj[ j ].length ) - 1

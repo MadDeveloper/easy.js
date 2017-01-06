@@ -1,4 +1,4 @@
-const Http  = require( 'easy/http/Http' )
+const Http = require( 'easy/http/Http' )
 
 /**
  * @class Request
@@ -14,8 +14,8 @@ class Request extends Http {
     constructor( req, appName ) {
         super()
 
-        this._appName               = appName
-        this._scope                 = req
+        this._appName = appName
+        this._scope = req
         this._applicationCacheScope = 'applicationCache'
 
         /*

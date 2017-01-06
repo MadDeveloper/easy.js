@@ -1,7 +1,7 @@
-const Container = require( './Container' )
-const Configurable = require( '../interfaces/Configurable' )
-const ConfigLoader = require( '../core/ConfigLoader' )
-const Console = require( '../core/Console' )
+const Container = require( 'easy/provider/Container' )
+const { Configurable } = require( 'easy/interfaces' )
+const ConfigLoader = require( 'easy/core/ConfigLoader' )
+const { Console } = require( 'easy/core' )
 const { assignIn } = require( 'lodash' )
 
 /**
