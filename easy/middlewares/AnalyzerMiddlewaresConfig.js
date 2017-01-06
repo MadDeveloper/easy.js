@@ -1,4 +1,4 @@
-const Analyzer = require( 'easy/interfaces/Analyzer' )
+const Analyzer = require( '../interfaces/Analyzer' )
 
 /**
  * @class AnalyzerMiddlewaresConfig

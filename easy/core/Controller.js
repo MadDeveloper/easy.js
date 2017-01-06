@@ -1,4 +1,4 @@
-const ConfigLoader = require( 'easy/core/ConfigLoader' )
+const { ConfigLoader } = require( 'easy/core' )
 
 /**
  * @class Controller
@@ -20,7 +20,7 @@ class Controller {
      * @param  {object} params = {}
      * @returns {boolean}
      */
-    verifyParams( required, params = {} ) {
+    verifyParams( required, params = {}) {
         let verified = true
 
         for ( let requiredParam in required ) {
@@ -32,7 +32,7 @@ class Controller {
                     break
                 }
             } else if ( typeof params[ required[ requiredParam ].property ] !== required[ requiredParam ].typeExpected ) {
-                if ( required[ requiredParam ].typeExpected === 'number' ) {
+                if ( 'number' === required[ requiredParam ].typeExpected ) {
                     if ( !params[ required[ requiredParam ].property ].isNumber() ) {
                         verified = false
                         break

@@ -1,5 +1,5 @@
 const jwt = require( 'jsonwebtoken' )
-const ConfigLoader = require( 'easy/core/ConfigLoader' )
+const { ConfigLoader } = require( 'easy/core' )
 
 /**
  * @class TokenManager

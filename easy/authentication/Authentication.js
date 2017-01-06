@@ -1,9 +1,7 @@
 const passportLocal = require( 'passport-local' )
-const ConfigLoader	= require( 'easy/core/ConfigLoader' )
-const Controller   	= require( 'easy/core/Controller' )
-const Configurable = require( 'easy/interfaces/Configurable' )
-const Authorization = require( 'easy/authentication/Authorization' )
-const TokenManager	= require( 'easy/authentication/TokenManager' )
+const { ConfigLoader, Controller } = require( 'easy/core' )
+const { Configurable } = require( 'easy/interfaces' )
+const { Authorization, TokenManager } = require( 'easy/authentication' )
 
 const LocalStrategy = passportLocal.Strategy
 

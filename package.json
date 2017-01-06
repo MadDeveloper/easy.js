@@ -2,7 +2,7 @@
   "name": "Easy.js",
   "version": "0.1.0",
   "description": "Easy.js Restful API framework",
-  "main": "src/app.js",
+  "main": "src/server.js",
   "repository": "https://github.com/MadDeveloper/easy.js.git",
   "scripts": {
     "app:routes": "node bin/bundles/routes",

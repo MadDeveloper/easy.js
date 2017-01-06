@@ -2,6 +2,7 @@
   "name": "easy",
   "version": "0.1.0",
   "description": "Easy.js Restful API framework",
+  "main": "index.js",
   "repository": "https://github.com/MadDeveloper/easy.js.git",
   "scripts": {
     "bundles:new": "node bin/bundles/new",

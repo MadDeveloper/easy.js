@@ -1,11 +1,9 @@
-const ConfigLoader = require( 'easy/core/ConfigLoader' )
-const Configurable = require( 'easy/interfaces/Configurable' )
-const Request = require( 'easy/http/Request' )
-const Response = require( 'easy/http/Response' )
-const Http = require( 'easy/http/Http' )
-const AnalyzerSecurityConfig = require( 'easy/security/AnalyzerSecurityConfig' )
-const AnalyzerMiddlewaresConfig = require( 'easy/middlewares/AnalyzerMiddlewaresConfig' )
-const Access = require( 'easy/security/Access' )
+const { ConfigLoader } = require( 'easy/core' )
+const { Configurable } = require( 'easy/interfaces' )
+const { Http, Request, Response } = require( 'easy/http' )
+const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
+const AnalyzerMiddlewaresConfig = require( '../middlewares/AnalyzerMiddlewaresConfig' )
+const Access = require( '../security/Access' )
 const { indexOf } = require( 'lodash' )
 
 /**
