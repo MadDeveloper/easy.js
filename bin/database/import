@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-const { kernel, application }   = require( '../../src/bootstrap' )
+const cwd = process.cwd()
+const { kernel, application } = require( `${cwd}/src/bootstrap` )
 const execsql			        = require( 'execsql' )
-const Console                   = require( 'easy/core/Console' )
-const ConfigLoader              = require( 'easy/core/ConfigLoader' )
+const Console = require( 'easy/core/Console' )
+const ConfigLoader = require( 'easy/core/ConfigLoader' )
 
 const config 	= ConfigLoader.loadFromGlobal( 'database' )
 const dbConfig	= {
@@ -14,7 +15,7 @@ const dbConfig	= {
 const titleError		= "Error when importing database"
 const consequenceError	= "Importation aborted."
 
-const sql       = `use ${config.connection.database}`
+const sql = `use ${config.connection.database}`
 const sqlFile	= `${kernel.path.config}/database/${config.connection.database}.sql`
 
 function raiseError( err ) {

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-const { kernel, application }   = require( '../../src/bootstrap' )
-const execsql                   = require( 'execsql' )
-const schema					= require( 'src/config/database/schema' )
-const sequence                  = require( 'when/sequence' )
-const Console                   = require( 'easy/core/Console' )
+const cwd = process.cwd()
+const { kernel, application } = require( `${cwd}/src/bootstrap` )
+const execsql = require( 'execsql' )
+const schema = require( 'src/config/database/schema' )
+const sequence = require( 'when/sequence' )
+const Console = require( 'easy/core/Console' )
 const { indexOf,
 		 has,
 		 keys,
@@ -46,7 +47,7 @@ function createTables () {
 	let tables 			= []
 	const tableNames 	= keys( schema )
 
-	tables = map( tableNames, tableName => () => createTable( tableName, schema[ tableName ] ) )
+	tables = map( tableNames, tableName => () => createTable( tableName, schema[ tableName ]) )
 
   	return sequence( tables )
 }
@@ -77,17 +78,17 @@ function createTable( tableName, tableSchema ) {
 			let columnKeys = keys( tableSchema )
 
 			each( columnKeys, key => {
-				if ( tableSchema[ key ].type === 'text' && tableSchema[ key ].hasOwnProperty( 'fieldtype' ) ) {
+				if ( 'text' === tableSchema[ key ].type && tableSchema[ key ].hasOwnProperty( 'fieldtype' ) ) {
 					column = table[ tableSchema[ key ].type ]( key, tableSchema[ key ].fieldtype )
-				} else if (tableSchema[ key ].type === 'string' && tableSchema[ key ].hasOwnProperty( 'maxlength' ) ) {
+				} else if ( 'string' === tableSchema[ key ].type && tableSchema[ key ].hasOwnProperty( 'maxlength' ) ) {
 					column = table[ tableSchema[ key ].type ]( key, tableSchema[ key ].maxlength )
-				} else if ( ( tableSchema[ key ].type === 'float' || tableSchema[ key ].type === 'decimal' ) ) {
-					const defaultPrecision  = 8
-					const precision         = ( tableSchema[ key ].hasOwnProperty( 'precision' ) ) ? tableSchema[ key ].precision : defaultPrecision
+				} else if ( ( 'float' === tableSchema[ key ].type || 'decimal' === tableSchema[ key ].type ) ) {
+					const defaultPrecision = 8
+					const precision = ( tableSchema[ key ].hasOwnProperty( 'precision' ) ) ? tableSchema[ key ].precision : defaultPrecision
 
 					if ( 'decimal' === tableSchema[ key ].type ) {
-						const defaultScale  = 2
-						const scale         = ( tableSchema[ key ].hasOwnProperty( 'scale' ) ) ? tableSchema[ key ].scale : defaultScale
+						const defaultScale = 2
+						const scale = ( tableSchema[ key ].hasOwnProperty( 'scale' ) ) ? tableSchema[ key ].scale : defaultScale
 
 						table[ tableSchema[ key ].type ]( key, precision, scale )
 					} else {
@@ -97,13 +98,13 @@ function createTable( tableName, tableSchema ) {
 					column = table[ tableSchema[ key ].type ]( key )
 				}
 
-				if ( tableSchema[ key ].hasOwnProperty( 'nullable' ) && tableSchema[ key ].nullable === true ) {
+				if ( tableSchema[ key ].hasOwnProperty( 'nullable' ) && true === tableSchema[ key ].nullable ) {
 					column.nullable()
 				} else {
 					column.notNullable()
 				}
 
-				if ( tableSchema[ key ].hasOwnProperty( 'primary' ) && tableSchema[ key ].primary === true ) {
+				if ( tableSchema[ key ].hasOwnProperty( 'primary' ) && true === tableSchema[ key ].primary ) {
 					column.primary()
 				}
 

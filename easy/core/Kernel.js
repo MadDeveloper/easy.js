@@ -20,12 +20,12 @@ class Kernel {
         /*
          * paths
          */
-        this.path.root          = path.resolve( `${rootPath}/../` )
-        this.path.bin           = `${this.path.root}/bin`
-        this.path.src           = `${this.path.root}/src`
-        this.path.bundles       = `${this.path.src}/bundles`
-        this.path.config        = `${this.path.src}/config`
-        this.path.services      = `${this.path.src}/services`
+        this.path.root = path.resolve( rootPath )
+        this.path.bin = `${this.path.root}/bin`
+        this.path.src = `${this.path.root}/src`
+        this.path.bundles = `${this.path.src}/bundles`
+        this.path.config = `${this.path.src}/config`
+        this.path.services = `${this.path.src}/services`
     }
 
     /**
