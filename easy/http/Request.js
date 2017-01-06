@@ -1,4 +1,4 @@
-const Http = require( 'easy/http/Http' )
+const Http = require( './Http' )
 
 /**
  * @class Request

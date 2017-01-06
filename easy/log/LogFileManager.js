@@ -1,8 +1,8 @@
 const fs = require( 'fs' )
 const path = require( 'path' )
-const { Injectable } = require( 'easy/interfaces' )
-const { Directory } = require( 'easy/fs' )
-const { Console } = require( 'easy/core' )
+const Injectable = require( '../interfaces/Injectable' )
+const Directory = require( '../fs/Directory' )
+const Console = require( '../core/Console' )
 
 /**
  * @class LogFileManager

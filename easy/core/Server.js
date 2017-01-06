@@ -2,7 +2,7 @@ const https = require( 'https' )
 const http = require( 'http' )
 const net = require( 'net' )
 const pad = require( 'pad-right' )
-const Console = require( 'easy/core/Console' )
+const Console = require( './Console' )
 
 /**
  * @class Server

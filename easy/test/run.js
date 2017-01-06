@@ -1,7 +1,5 @@
-#!/usr/bin/env node
-const cwd = process.cwd()
 const Jasmine = require( 'jasmine' )
-const { kernel, application } = require( `${cwd}/src/bootstrap` )
+const { kernel, application } = require( `../../src/bootstrap` )
 
 const jasmine = new Jasmine()
 

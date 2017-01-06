@@ -1,6 +1,6 @@
 const { indexOf } = require( 'lodash' )
-const ConfigLoader = require( 'easy/core/ConfigLoader' )
-const { SecurityAccess } = require( 'easy/interfaces' )
+const ConfigLoader = require( '../core/ConfigLoader' )
+const SecurityAccess = require( '../interfaces/SecurityAccess' )
 const roles = ConfigLoader.loadFromGlobal( 'roles' )
 
 /**

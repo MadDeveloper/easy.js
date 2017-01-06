@@ -1,4 +1,4 @@
-const { Injectable } = require( 'easy/interfaces' )
+const Injectable = require( '../interfaces/Injectable' )
 
 /**
  * Describes a logger instance

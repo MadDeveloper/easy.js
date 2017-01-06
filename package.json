@@ -15,7 +15,7 @@
     "restore:skeleton": "node bin/bundles/restore",
     "start": "nodemon -w src --expose-gc --harmony src/server.js",
     "start:forever": "node --expose-gc --harmony src/server.js > stdout.txt 2> stderr.txt &",
-    "test": "node bin/tests"
+    "test": "node node_modules/easy/test/run"
   },
   "keywords": [
     "node",
@@ -54,7 +54,6 @@
     "knex": "~0.12.2",
     "lodash": "~4.16.3",
     "minimist": "^1.2.0",
-    "mongoose": "^4.6.3",
     "morgan": "~1.7.0",
     "mysql": "^2.12.0",
     "numeral": "^1.5.3",

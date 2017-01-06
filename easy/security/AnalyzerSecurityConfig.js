@@ -1,5 +1,5 @@
-const Access = require( 'easy/security/Access' )
-const { Analyzer } = require( 'easy/interfaces' )
+const Access = require( './Access' )
+const Analyzer = require( '../interfaces/Analyzer' )
 
 /**
  * @class AnalyzerSecurityConfig
