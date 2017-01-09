@@ -1,3 +1,5 @@
+require( 'use-strict' )
+
 const appRootPath = `${__dirname}/../`
 
 require( 'app-module-path' ).addPath( appRootPath )

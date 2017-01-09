@@ -1,7 +1,7 @@
 {
-  "name": "Easy.js",
-  "version": "0.1.0",
-  "description": "Easy.js Restful API framework",
+  "name": "easy",
+  "version": "1.0.0",
+  "description": "Node.js framework for restful API",
   "main": "src/server.js",
   "repository": "https://github.com/MadDeveloper/easy.js.git",
   "scripts": {
@@ -15,7 +15,7 @@
     "restore:skeleton": "node bin/bundles/restore",
     "start": "nodemon -w src --expose-gc --harmony src/server.js",
     "start:forever": "node --expose-gc --harmony src/server.js > stdout.txt 2> stderr.txt &",
-    "test": "node node_modules/easy/test/run"
+    "test": "node easy/test/run"
   },
   "keywords": [
     "node",
@@ -37,6 +37,7 @@
     "nodejs"
   ],
   "author": "Julien Sergent",
+  "email": "sergent.julien@icloud.com",
   "license": "MIT",
   "dependencies": {
     "app-module-path": "^2.1.0",
@@ -61,11 +62,14 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "readline-sync": "^1.4.4",
+    "use-strict": "^1.0.1",
     "when": "~3.7.7"
   },
   "devDependencies": {
     "copy-dir": "^0.3.0",
     "execsql": "0.0.3",
+    "gulp": "^3.9.1",
+    "gulp-banner": "^0.1.3",
     "jasmine": "^2.5.2",
     "karma": "^1.3.0",
     "karma-chrome-launcher": "^2.0.0",
