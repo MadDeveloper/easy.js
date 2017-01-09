@@ -6,7 +6,7 @@ class ConfigLoader {
 	 * @returns {Object}
 	 */
 	static loadFromGlobal( file ) {
-		return require( `src/config/${file}` )
+		return require( `${__dirname}/../../../src/config/${file}` )
 	}
 }
 
