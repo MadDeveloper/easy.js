@@ -32,4 +32,8 @@ module.exports = {
         path: 'log/Logger',
         dependencies: [ 'component.logwriter' ]
     }
+    /*, 'component.configloader': {
+        path: 'core/ConfigLoader',
+        dependencies: [ 'easy.application' ]
+    }*/
 }

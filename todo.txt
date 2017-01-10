@@ -11,13 +11,13 @@
 -----------------------------
 
 - pouvoir générer un service, un controller, un repository
-- appliquer le logger aux endroits utiles
+- appliquer le logger aux endroits utiles (générale où il y a un Console.error)
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
 tout lier en promise pour les patchs
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
 - créer une classe Cache qui pourra être instanciée dans n'importe quelle autre classe afin de pouvoir gérer son cache
 - exposer dans un index.js (un par dossier) les classes de chaque dossier
-
+- mettre chaque composant easy utile en module externe github et npm
 
 -----------------------------
 ---------|  MAYBE  |---------

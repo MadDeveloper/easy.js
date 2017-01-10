@@ -75,6 +75,17 @@ class Controller {
     isPatchRequestWellParameterized() {
         return this.request.getRawbody().length > 0
     }
+
+    /**
+     * get - get container element from id
+     *
+     * @param {string} id
+     *
+     * @returns {Service|Component}
+     */
+    get( id ) {
+        return this.container.get( id )
+    }
 }
 
 module.exports = Controller
