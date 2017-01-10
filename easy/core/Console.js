@@ -87,7 +87,7 @@ class Console {
      * @param  {string} message = ""
      */
     static log( message = "" ) {
-        console.log( message )
+        console.log( `${Console.leftSpaces}${message}` )
     }
 
     /**

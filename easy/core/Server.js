@@ -13,6 +13,11 @@ const net = require( 'net' )
 const pad = require( 'pad-right' )
 const Console = require( './Console' )
 
+const state = {
+    stopped: 'Stopped',
+    started: 'Started'
+}
+
 /**
  * @class Server
  */
@@ -24,77 +29,90 @@ class Server {
      */
     constructor( application ) {
         this.application = application
+        this.port = this.application.config.server.port
+        this.protocol = this.application.config.server.protocol
+        this.server = null
+        this.state = state.stopped
     }
 
     /**
      * start - start server
      */
     start() {
-        let server = null
-        const port = this.application.config.server.port
-        const protocol = this.application.config.server.protocol
+        Console.log( 'Starting server...' )
 
-        if ( 'https' === protocol && false !== this.application.config.credentials.found ) {
+        if ( 'https' === this.protocol && false !== this.application.config.credentials.found ) {
             /*
              * If specified or if https credentials are found (keys and cert), an HTTPS server is started
              */
-            server = https.createServer( config.credentials, this.application.app )
+            this.server = https.createServer( this.application.config.credentials, this.application.app )
         } else {
             /*
              * Default, we create an HTTP server
              */
-            server = http.createServer( this.application.app )
+            this.server = http.createServer( this.application.app )
         }
 
-        let canStartServer = port => {
-            return new Promise( ( resolve, reject ) => {
-                const serverTest = net.createServer( socket => {
-                    socket.write( 'Echo server\r\n' )
-                    socket.pipe( socket )
-                })
 
-                serverTest.listen( port, '127.0.0.1' )
+        this.canBeStarted()
+            .then( () => this.canStart() )
+            .catch( error => this.failedToStart( error ) )
+    }
 
-                serverTest.on( 'error', error => {
-                    reject( error )
-                })
-
-                serverTest.on( 'listening', () => {
-                    serverTest.close()
-                    resolve()
-                })
+    /**
+     * canBeStarted - check if a server can be started on specified port
+     *
+     * @returns {Promise}
+     */
+    canBeStarted() {
+        return new Promise( ( resolve, reject ) => {
+            const serverTest = net.createServer( socket => {
+                socket.write( 'Echo server\r\n' )
+                socket.pipe( socket )
             })
-        }
 
-        canStartServer( port )
-            .then( () => {
-                /*
-                 * Everything is ok, starting server and application
-                 */
-                this.application.start()
+            serverTest.listen( this.port, '127.0.0.1' )
+            serverTest.on( 'error', error => {
+                reject( error )
+            })
+            serverTest.on( 'listening', () => {
+                serverTest.close()
+                resolve()
+            })
+        })
+    }
 
-                server.listen( port, () => {
-                    Console.line()
-                    Console.info( "-----------------------------" )
-                    Console.info( `    ${pad( 'State:', 'Environment'.length + 1, ' ' )} Listening` )
-                    Console.info( "-----------------------------" )
-                    Console.info( `    ${pad( 'Address:', 'Environment'.length + 1, ' ' )} ${protocol}://${this.application.config.server.domain}${( 80 !== port && 443 !== port ) ? port : ''}` )
-                    Console.info( "-----------------------------" )
-                    Console.info( `    Environment: ${this.application.app.get( 'env' ).capitalizeFirstLetter()}` )
-                    Console.info( "-----------------------------" )
-                    Console.line()
-                })
-            })
-            .catch( error => {
-                /*
-                 * Port ${port} is used
-                 */
-                Console.error({
-                    title: 'Impossible to start server',
-                    message: `${error.hasOwnProperty( 'code' ) ? `Error code: ${error.code}\n` : ''}${error.toString()}${error.stack}`,
-                    exit: 1
-                })
-            })
+    /**
+     * canStart - server can be started safely
+     */
+    canStart() {
+        /*
+         * Everything is ok, starting server and application
+         */
+        const padRightLength = 30
+
+        this.application.start()
+        this.state = state.started
+        this.server.listen( this.port, () => {
+            Console.line()
+            Console.info( `${pad( 'State', padRightLength, '.' )}${this.state}` )
+            Console.info( `${pad( 'Address', padRightLength, '.' )}${this.protocol}://${this.application.config.server.domain}${( 80 !== this.port && 443 !== this.port ) ? `:${this.port}` : ''}` )
+            Console.info( `${pad( 'Environment', padRightLength, '.' )}${this.application.app.get( 'env' ).capitalizeFirstLetter()}` )
+            Console.line()
+        })
+    }
+
+    /**
+     * failedToStart - cannot start server, display the error
+     *
+     * @param {object} error
+     */
+    failedToStart( error ) {
+        Console.error({
+            title: 'Impossible to start server',
+            message: `${error.hasOwnProperty( 'code' ) ? `Error code: ${error.code}\n` : ''}${error.toString()}`,
+            exit: 1
+        })
     }
 }
 

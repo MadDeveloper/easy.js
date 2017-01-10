@@ -2,10 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- voir avec aurélien si c'est nécessaire d'avoir un skeleton trop 'fourni', ou bien de pouvoir choisir avec une cli
-- pouvoir générer une table db en fonction d'une entité et non d'un bundle
-- corriger tous les binaires et les mettre en cli
-
+- corriger la vérification de l'adresse de démarrage du serveur ne fonctionne pas
 - faire les tests du vendor
 - rédiger DOC
 
