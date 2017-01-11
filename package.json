@@ -13,8 +13,8 @@
     "generate:bundle": "node bin/bundles/new",
     "generate:doc": "apidoc -i src/ -e skeleton/ -o apidoc/",
     "restore:skeleton": "node bin/bundles/restore",
-    "start": "nodemon -w src --expose-gc --harmony src/server.js",
-    "start:forever": "node --expose-gc --harmony src/server.js > stdout.txt 2> stderr.txt &",
+    "start": "nodemon -w src --harmony src/server.js",
+    "start:forever": "node --harmony src/server.js > stdout.txt 2> stderr.txt &",
     "test": "node easy/test/run"
   },
   "keywords": [
@@ -57,7 +57,6 @@
     "minimist": "^1.2.0",
     "morgan": "~1.7.0",
     "mysql": "^2.12.0",
-    "numeral": "^1.5.3",
     "pad-right": "^0.2.2",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",

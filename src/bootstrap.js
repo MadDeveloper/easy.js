@@ -1,14 +1,18 @@
 require( 'use-strict' )
 
+/*
+ * Permit to require from application root path
+ */
+const appModulePath = require( 'app-module-path' )
 const appRootPath = `${__dirname}/../`
 
-require( 'app-module-path' ).addPath( appRootPath )
-
-const { Kernel, Application } = require( 'easy/core' )
+appModulePath.addPath( appRootPath )
 
 /*
- * Easy.js minimal configurations
+ * Import and configure main Easy classes
  */
+const { Kernel, Application } = require( 'easy/core' )
+
 const kernel = new Kernel()
 kernel.init( appRootPath )
 

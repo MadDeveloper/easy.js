@@ -15,8 +15,6 @@ const helmet = require( 'helmet' )
 const cors = require( 'cors' )
 const compression = require( 'compression' )
 const cookieParser = require( 'cookie-parser' )
-const numeral = require( 'numeral' )
-const { indexOf } = require( 'lodash' )
 const passport = require( 'passport' )
 const ContainerBuilder = require( '../provider/ContainerBuilder' )
 const Console = require( './Console' )
@@ -97,6 +95,19 @@ class Application extends Configurable {
      * start - start application
      */
     start() {
+        this.plugThirdPartyMiddlewares()
+        this.exposeRawBody()
+        this.plugAuthentication()
+        this.router.load()
+        this.initializePassport()
+        this.plugMiddlewareLogger()
+        this.app.use( '/', this.router.scope )
+    }
+
+    /**
+     * plugThirdPartyMiddlewares - plug third-party middlewares
+     */
+    plugThirdPartyMiddlewares() {
         /*
          * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
          */
@@ -127,10 +138,12 @@ class Application extends Configurable {
          */
         this.app.use( bodyParser.json() ) // support json encoded bodies
         this.app.use( bodyParser.urlencoded({ extended: true }) ) // support encoded bodies
+    }
 
-        /*
-         * Permit to retrieve rawBody
-         */
+    /**
+     * exposeRawBody - permit to retrieve rawBody
+     */
+    exposeRawBody() {
         this.app.use( ( req, res, next ) => {
             const method = req.method.toLowerCase()
             const contentType = req.headers[ 'content-type' ] || ''
@@ -150,67 +163,6 @@ class Application extends Configurable {
                 next()
             })
         })
-
-        /*
-         * Plug authentication process
-         */
-        this.plugAuthentication()
-
-        /*
-         * Loads all the app routes
-         */
-        this.router.load()
-
-        /*
-         * Initialize Passport
-         */
-        this.app.use( passport.initialize() )
-
-        /*
-         * Trace everything that happens on the server
-         */
-        if ( this.config.app.log ) {
-            this.app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${this.kernel.path.root}/logs/traffic.log`, { flags: 'a' }) }) )
-        }
-
-        /*
-         * Auto call to gc
-         */
-        let warnDisplayed = false
-
-        this.app.get( '/gc', ( req, res, next ) => {
-            if ( global.gc ) {
-                global.gc()
-                res.status( 200 ).end()
-            } else if ( false === warnDisplayed ) {
-                Console.warn( "You should launch node server with npm start command in order to enable gc.\n" )
-                warnDisplayed = true
-            }
-
-            next()
-        })
-
-        /*
-         * See memory usage if specified
-         */
-        if ( this.config.app.memory ) {
-            this.app.use( ( req, res, next ) => {
-                const memory = process.memoryUsage()
-
-                Console.info( "---- Memory usage ----" )
-                Console.info( `RSS:        ${numeral( memory.rss ).format( 'bytes' )}` )
-                Console.info( `Heap total: ${numeral( memory.heapTotal ).format( 'bytes' )}` )
-                Console.info( `Heap used:  ${numeral( memory.heapUsed ).format( 'bytes' )}` )
-                Console.info( "----------------------" )
-
-                next()
-            })
-        }
-
-        /*
-         * Registration router routes
-         */
-        this.app.use( '/', this.router.scope )
     }
 
     /**
@@ -228,6 +180,22 @@ class Application extends Configurable {
              */
             authentication.configure()
 		}
+    }
+
+    /**
+     * initializePassport - initialize passport
+     */
+    initializePassport() {
+        this.app.use( passport.initialize() )
+    }
+
+    /**
+     * plugMiddlewareLogger - Trace everything that happens on the server
+     */
+    plugMiddlewareLogger() {
+        if ( this.config.app.log ) {
+            this.app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${this.kernel.path.root}/logs/traffic.log`, { flags: 'a' }) }) )
+        }
     }
 
     /**
@@ -249,7 +217,7 @@ class Application extends Configurable {
     }
 
     /**
-     * isDevEnv - check if we are in dev environment
+     * isProdEnv - check if we are in prod environment
      *
      * @returns {boolean}
      */

@@ -2,7 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- refactorer Application en plusieurs méthodes. Virer la visualisation de memory, pm2, etc. le gère bien mieux
 - corriger la vérification de l'adresse de démarrage du serveur ne fonctionne pas
 - faire les tests du vendor
 - rédiger DOC
