@@ -9,8 +9,8 @@
 
 const https = require( 'https' )
 const http = require( 'http' )
-const net = require( 'net' )
 const pad = require( 'pad-right' )
+const portfinder = require( 'portfinder' )
 const Console = require( './Console' )
 
 const state = {
@@ -66,18 +66,14 @@ class Server {
      */
     canBeStarted() {
         return new Promise( ( resolve, reject ) => {
-            const serverTest = net.createServer( socket => {
-                socket.write( 'Echo server\r\n' )
-                socket.pipe( socket )
-            })
+            const options = {
+                host: '127.0.0.1',
+                port: 'string' === typeof this.port && 'random' === this.port.toLowerCase() ? undefined : parseInt( this.port, 10 )
+            }
 
-            serverTest.listen( this.port, '127.0.0.1' )
-            serverTest.on( 'error', error => {
-                reject( error )
-            })
-            serverTest.on( 'listening', () => {
-                serverTest.close()
-                resolve()
+            portfinder.getPort( options, ( error, port ) => {
+                this.port = port
+                error ? reject() : resolve()
             })
         })
     }
