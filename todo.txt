@@ -2,7 +2,9 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- terminer les tests du bundle user
 - corriger la vérification de l'adresse de démarrage du serveur ne fonctionne pas
+- appliquer le logger aux endroits utiles (générale où il y a un Console.error)
 - faire les tests du vendor
 - rédiger DOC
 
@@ -10,20 +12,16 @@
 ---------|  LATER  |---------
 -----------------------------
 
-- pouvoir générer un service, un controller, un repository
-- appliquer le logger aux endroits utiles (générale où il y a un Console.error)
-- simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de
-tout lier en promise pour les patchs
+- simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de tout lier en promise pour les patchs
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
 - créer une classe Cache qui pourra être instanciée dans n'importe quelle autre classe afin de pouvoir gérer son cache
-- exposer dans un index.js (un par dossier) les classes de chaque dossier
 - mettre chaque composant easy utile en module externe github et npm
 
 -----------------------------
 ---------|  MAYBE  |---------
 -----------------------------
 
-- ? Utiliser CarminteJS (cross-db ORM)
-- ? translate project to ts
-- ? bin permettant de sync roles from db into config file, and reverse
+- Utiliser CarminteJS (cross-db ORM)
+- translate project to ts
+- bin permettant de sync roles from db into config file, and reverse
 - renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.

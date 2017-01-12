@@ -1,6 +1,6 @@
 {
   "name": "easy",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Node.js framework for restful API",
   "main": "src/server.js",
   "repository": "https://github.com/MadDeveloper/easy.js.git",

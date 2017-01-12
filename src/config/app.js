@@ -7,8 +7,7 @@ module.exports = {
     app: {
         name: 'myapp',
 		production: false,
-        log: true,
-        memory: false
+        log: true
     },
 
     /*

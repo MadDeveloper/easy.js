@@ -120,3 +120,14 @@ module.exports.strtr = function( str, fromObj, to ) {
 
     return ret
 }
+
+/**
+ * transformAsBundleName - format string as bundle name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transformAsBundleName = function( name ) {
+    return module.exports.cleanSpaces( module.exports.transformAsWord( name ) )
+}
