@@ -8,43 +8,13 @@
 */
 
 /**
- * asSnakeCase - transform string as snake case
- *
- * @param {string} originalName
- *
- * @returns {string}
- */
-module.exports.asSnakeCase = function( originalName ) {
-    let formatedName = originalName
-
-    formatedName = formatedName.trim()
-    formatedName = this.transformAsWord( formatedName )
-    formatedName = formatedName.replace( /[-!#$€£¤§<>%&~=+'"°%`.,:/@()\\{[]}]/gi, '' )
-    formatedName = formatedName.replace( / /g, '_' )
-    formatedName = formatedName.toLowerCase()
-
-    return formatedName
-}
-
-/**
- * transformAsWord - remove all caracters which are not considered as regex word
- *
- * @param {string} str
- *
- * @returns {string}
- */
-module.exports.transformAsWord = function( str ) {
-    return str.replace( /[^\w ]/gi, '' )
-}
-
-/**
  * cleanSpaces - clean spaces into string
  *
  * @param {string} str
  *
  * @returns {string}
  */
-module.exports.cleanSpaces = function( str ) {
+module.exports.cleanSpaces = str => {
     return str.replace( /\s/i, '' )
 }
 
@@ -57,7 +27,7 @@ module.exports.cleanSpaces = function( str ) {
  *
  * @returns {string}
  */
-module.exports.strtr = function( str, fromObj, to ) {
+module.exports.strtr = ( str, fromObj, to ) => {
     let fr = ''
     let i = 0
     let j = 0
@@ -121,13 +91,67 @@ module.exports.strtr = function( str, fromObj, to ) {
     return ret
 }
 
+module.exports.transform = {}
+
 /**
- * transformAsBundleName - format string as bundle name
+ * asSnakeCase - transform string as snake case
+ *
+ * @param {string} originalName
+ *
+ * @returns {string}
+ */
+module.exports.transform.asSnakeCase = originalName => {
+    let formatedName = originalName
+
+    formatedName = formatedName.trim()
+    formatedName = module.exports.transform.asWord( formatedName )
+    formatedName = formatedName.replace( /[-!#$€£¤§<>%&~=+'"°%`.,:/@()\\{[]}]/gi, '' )
+    formatedName = formatedName.replace( / /g, '_' )
+    formatedName = formatedName.toLowerCase()
+
+    return formatedName
+}
+
+/**
+ * transformAsWord - remove all caracters which are not considered as regex word
+ *
+ * @param {string} str
+ *
+ * @returns {string}
+ */
+module.exports.transform.asWord = str => {
+    return str.replace( /[^\w ]/gi, '' )
+}
+
+/**
+ * asBundleName - format string as bundle name
  *
  * @param {string} name
  *
  * @returns {string}
  */
-module.exports.transformAsBundleName = function( name ) {
-    return module.exports.cleanSpaces( module.exports.transformAsWord( name.toLowerCase() ) )
+module.exports.transform.asBundleName = name => {
+    return module.exports.cleanSpaces( module.exports.transform.asWord( name.toLowerCase() ) )
+}
+
+/**
+ * asBundleName - format string as bundle name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asFileName = name => {
+
+}
+
+/**
+ * asBundleName - format string as bundle name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asClassName = name => {
+    return name
 }

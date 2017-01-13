@@ -31,8 +31,11 @@ class LogFileManager extends Injectable {
         if ( application.config.app.log ) {
             const directory = new Directory( this._logDirectoryPath )
 
-            if ( !directory.exists() ) {
-                directory.create()
+            if ( !directory.existsSync() && !directory.createSync() ) {
+                Console.error({
+                    title: `Impossible to create directory : ${this._logDirectoryPath}`,
+                    message: error.toString()
+                })
             }
         }
     }

@@ -29,13 +29,26 @@ class Directory {
     /**
      * exists - check if path is a directory
      *
-     * @returns {boolean}
+     * @returns {Promise}
      */
     exists() {
-        try {
-            const statInfo = fs.lstatSync( this.path )
+        return new Promise( ( resolve, reject ) => {
+            fs.lstat( this.path, ( error, stat ) => {
+                if ( error || !stat.isDirectory() ) {
+                    reject( error )
+                }
 
-            return statInfo.isDirectory()
+                resolve()
+            })
+        })
+    }/**
+     * exists - check, in synchronous maner, if path is a directory
+     *
+     * @returns {boolean}
+     */
+    existsSync() {
+        try {
+            return fs.lstatSync( this.path ).isDirectory()
         } catch( error ) {
             return false
         }
@@ -46,18 +59,27 @@ class Directory {
      *
      * @param {number} mode = 755
      *
-     * @returns {boolean}
+     * @returns {Promise}
      */
     create( mode = 755 ) {
+        fs.mkdir( this.path, parseInt( mode, 8 ), error => {
+            error ? reject( error ) : resolve()
+        })
+    }
+
+    /**
+     * createSync - create, in synchronous maner, directory at indicated path
+     *
+     * @param {number} mode = 755
+     *
+     * @returns {boolean}
+     */
+    createSync( mode = 755 ) {
         try {
             fs.mkdirSync( this.path, parseInt( mode, 8 ) )
 
             return true
         } catch ( error ) {
-            Console.error({
-                title: `Impossible to create directory : ${this.path}`,
-                message: error.toString()
-            })
             return false
         }
     }

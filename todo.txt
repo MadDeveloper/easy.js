@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- provide sync and normal way in Directory class
 - terminer les tests du bundle user
 - corriger la vérification de l'adresse de démarrage du serveur ne fonctionne pas
 - appliquer le logger aux endroits utiles (générale où il y a un Console.error)
