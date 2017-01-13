@@ -8,6 +8,7 @@
 */
 
 const fs = require( 'fs' )
+const path = require( 'path' )
 const Console = require( '../core/Console' )
 
 /**
@@ -17,12 +18,12 @@ class Directory {
     /**
      * @constructor
      *
-     * @param {string} path=''
+     * @param {string} directoryPath=''
      *
      * @returns {Directory}
      */
-    constructor( path = '' ) {
-        this.path = path
+    constructor( directoryPath = '' ) {
+        this.path = path.resolve( directoryPath )
     }
 
     /**

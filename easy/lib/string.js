@@ -129,5 +129,5 @@ module.exports.strtr = function( str, fromObj, to ) {
  * @returns {string}
  */
 module.exports.transformAsBundleName = function( name ) {
-    return module.exports.cleanSpaces( module.exports.transformAsWord( name ) )
+    return module.exports.cleanSpaces( module.exports.transformAsWord( name.toLowerCase() ) )
 }
