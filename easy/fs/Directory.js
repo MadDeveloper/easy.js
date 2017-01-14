@@ -41,7 +41,9 @@ class Directory {
                 resolve()
             })
         })
-    }/**
+    }
+
+    /**
      * exists - check, in synchronous maner, if path is a directory
      *
      * @returns {boolean}
@@ -62,8 +64,8 @@ class Directory {
      * @returns {Promise}
      */
     create( mode = 755 ) {
-        fs.mkdir( this.path, parseInt( mode, 8 ), error => {
-            error ? reject( error ) : resolve()
+        return new Promise( ( resolve, reject ) => {
+            fs.mkdir( this.path, parseInt( mode, 8 ), error => error ? reject( error ) : resolve() )
         })
     }
 
