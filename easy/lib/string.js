@@ -142,7 +142,7 @@ module.exports.transform.asBundleName = name => {
  * @returns {string}
  */
 module.exports.transform.asFileName = name => {
-
+    return name
 }
 
 /**
@@ -154,4 +154,16 @@ module.exports.transform.asFileName = name => {
  */
 module.exports.transform.asClassName = name => {
     return name
+}
+
+
+/**
+ * asControllerFileName - format string as controller file name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asControllerFileName = name => {
+    return `${module.exports.transform.asWord( name.toLowerCase() ).replace( /controller/ig, '' )}.controller.js`
 }

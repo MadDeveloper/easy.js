@@ -25,14 +25,14 @@ class Console {
         if ( undefined !== title ) {
 
             Console.line()
-            console.log( `${Console.leftSpaces}${colors.bgRed( colors.white( `Error: ${title}` ) )}` )
+            console.log( `${colors.bgRed( colors.white( `Error: ${title.toString()}` ) )}` )
 
-            if ( undefined !== typeof message && message.length > 0 ) {
-                console.log( `${Console.leftSpaces}${colors.bgRed( colors.white( `    ->  ${message}` ) )}` )
+            if ( ( undefined !== typeof message && message.length > 0 ) || 'object' === typeof message ) {
+                console.log( `${colors.bgRed( colors.white( `    ->  ${message.toString()}` ) )}` )
             }
 
-            if ( undefined !== typeof consequence && consequence.length > 0 ) {
-                console.log( `${Console.leftSpaces}${colors.bgRed( colors.white( consequence ) )}` )
+            if ( ( undefined !== typeof consequence && consequence.length > 0 ) || 'object' === typeof message ) {
+                console.log( `${colors.bgRed( colors.white( consequence.toString() ) )}` )
             }
 
             Console.line()
@@ -55,7 +55,7 @@ class Console {
      * @param  {string} message = ""
      */
     static warn( message = "" ) {
-        console.log( `${Console.leftSpaces}${colors.bgYellow( colors.black( `WARN: ${message}` ) )}` )
+        console.log( `${colors.bgYellow( colors.black( `WARN: ${message.toString()}` ) )}` )
     }
 
     /**
@@ -64,7 +64,7 @@ class Console {
      * @param  {string} message = ""
      */
     static info( message = "" ) {
-        console.log( `${Console.leftSpaces}${colors.cyan( message )}` )
+        console.log( `${colors.cyan( message.toString() )}` )
     }
 
     /**
@@ -74,7 +74,7 @@ class Console {
      * @param  {number} exit
      */
     static success( message = "", exit = null ) {
-        console.log( `${Console.leftSpaces}${colors.green( message )}` )
+        console.log( `${colors.green( message.toString() )}` )
 
         if ( exit ) {
             process.exit()
@@ -87,7 +87,7 @@ class Console {
      * @param  {string} message = ""
      */
     static log( message = "" ) {
-        console.log( `${Console.leftSpaces}${message}` )
+        console.log( `${message.toString()}` )
     }
 
     /**
@@ -95,15 +95,6 @@ class Console {
      */
     static line() {
         console.log( '\n' )
-    }
-
-    /**
-     * get - left spaces (e.g. tab)
-     *
-     * @returns {string}
-     */
-    static get leftSpaces() {
-        return '  '
     }
 }
 

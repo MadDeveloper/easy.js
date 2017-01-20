@@ -8,3 +8,4 @@
 */
 
 module.exports.Directory = require( './Directory' )
+module.exports.File = require( './File' )

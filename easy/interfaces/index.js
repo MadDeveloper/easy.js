@@ -9,5 +9,6 @@
 
 module.exports.Analyzer = require( './Analyzer' )
 module.exports.Configurable = require( './Configurable' )
+module.exports.Document = require( './Document' )
 module.exports.Injectable = require( './Injectable' )
 module.exports.SecurityAccess = require( './SecurityAccess' )

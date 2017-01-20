@@ -9,20 +9,20 @@
 
 const fs = require( 'fs' )
 const path = require( 'path' )
-const Console = require( '../core/Console' )
+const Document = require( '../interfaces/Document' )
 
 /**
  * @class Directory
  */
-class Directory {
+class Directory extends Document {
     /**
      * @constructor
      *
      * @param {string} directoryPath=''
-     *
-     * @returns {Directory}
      */
     constructor( directoryPath = '' ) {
+        super()
+
         this.path = path.resolve( directoryPath )
     }
 
@@ -59,26 +59,34 @@ class Directory {
     /**
      * create - create directory at indicated path
      *
-     * @param {number} mode = 755
+     * @param {object} options = { mode: 755 }
      *
      * @returns {Promise}
      */
-    create( mode = 755 ) {
+    create( options = { mode: 755 }) {
         return new Promise( ( resolve, reject ) => {
-            fs.mkdir( this.path, parseInt( mode, 8 ), error => error ? reject( error ) : resolve() )
+            if ( options.hasOwnProperty( 'mode' ) ) {
+                options.mode = parseInt( options.mode, 8 )
+            }
+
+            fs.mkdir( this.path, options, error => error ? reject( error ) : resolve() )
         })
     }
 
     /**
      * createSync - create, in synchronous maner, directory at indicated path
      *
-     * @param {number} mode = 755
+     * @param {object} options = { mode: 755 }
      *
      * @returns {boolean}
      */
-    createSync( mode = 755 ) {
+    createSync( options = { mode: 755 }) {
         try {
-            fs.mkdirSync( this.path, parseInt( mode, 8 ) )
+            if ( options.hasOwnProperty( 'mode' ) ) {
+                options.mode = parseInt( options.mode, 8 )
+            }
+
+            fs.mkdirSync( this.path, options )
 
             return true
         } catch ( error ) {
