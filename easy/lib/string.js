@@ -135,29 +135,6 @@ module.exports.transform.asBundleName = name => {
 }
 
 /**
- * asBundleName - format string as bundle name
- *
- * @param {string} name
- *
- * @returns {string}
- */
-module.exports.transform.asFileName = name => {
-    return name
-}
-
-/**
- * asBundleName - format string as bundle name
- *
- * @param {string} name
- *
- * @returns {string}
- */
-module.exports.transform.asClassName = name => {
-    return name
-}
-
-
-/**
  * asControllerFileName - format string as controller file name
  *
  * @param {string} name
@@ -166,4 +143,103 @@ module.exports.transform.asClassName = name => {
  */
 module.exports.transform.asControllerFileName = name => {
     return `${module.exports.transform.asWord( name.toLowerCase() ).replace( /controller/ig, '' )}.controller.js`
+}
+
+/**
+ * asRepositoryFileName - format string as repository file name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asRepositoryFileName = name => {
+    return `${module.exports.transform.asWord( name.toLowerCase() ).replace( /repository/ig, '' )}.repository.js`
+}
+
+/**
+ * asEntityFileName - format string as entity file name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asEntityFileName = name => {
+    return module.exports.transform.asEntityName( name ).decapitalizeFirstLetter()
+}
+
+/**
+ * asServiceFileName - format string as service file name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asServiceFileName = name => {
+    return `${module.exports.transform.asWord( name.toLowerCase() ).replace( /service/ig, '' )}.service.js`
+}
+
+/**
+ * asClassName - format string as class file name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asClassName = name => {
+    return module.exports.transform.asWord( name ).capitalizeFirstLetter()
+}
+
+/**
+ * asControllerName - format string as controller name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asControllerName = name => {
+    return module.exports.transform.asWord( name ).concat( 'Controller' ).capitalizeFirstLetter()
+}
+
+/**
+ * asRepositoryName - format string as repository name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asRepositoryName = name => {
+    return module.exports.transform.asWord( name ).concat( 'Repository' ).capitalizeFirstLetter()
+}
+
+/**
+ * asEntityName - format string as entity name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asEntityName = name => {
+    return module.exports.transform.asWord( name ).replace( /(service|repository|controller)/gi, '' ).capitalizeFirstLetter()
+}
+
+/**
+ * asEntityName - format string as entity name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asEntityName = name => {
+    return module.exports.transform.asWord( name ).replace( /(service|repository|controller)/gi, '' ).capitalizeFirstLetter()
+}
+
+/**
+ * asServiceName - format string as service name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asServiceName = name => {
+    return module.exports.transform.asWord( name ).concat( 'Service' ).capitalizeFirstLetter()
 }
