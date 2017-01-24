@@ -1,4 +1,4 @@
-const config = require( '../config-driver' )
+const config = require( '../config' )
 const Bookshelf = require( 'bookshelf' )
 const Knex = require( 'knex' )
 
@@ -17,4 +17,7 @@ const bookshelf = Bookshelf( Knex({
     }
 }) )
 
-module.exports = bookshelf
+module.exports = {
+    connector: bookshelf,
+    config
+}
