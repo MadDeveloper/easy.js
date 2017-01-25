@@ -23,6 +23,17 @@ class Controller {
     }
 
     /**
+     * getEntityManager - Description
+     *
+     * @param {string} [name=default] Description
+     *
+     * @returns {type} Description
+     */
+    getEntityManager( name = 'default' ) {
+        return this.container.get( 'component.databasesmanager' ).getEntityManager( name )
+    }
+
+    /**
      * verifyParams - verify params by type expected, can be optional
      *
      * @param  {object} required

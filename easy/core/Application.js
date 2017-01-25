@@ -25,7 +25,7 @@ const Authentication = require( '../authentication/Authentication' )
 const Configurable = require( '../interfaces/Configurable' )
 const Database = require( '../database/Database' )
 const DatabaseDaemon = require( '../database/DatabaseDaemon' )
-const DatabasesStarter = require( '../database/DatabasesStarter' )
+const DatabasesManager = require( '../database/DatabasesManager' )
 const EntityManager = require( '../database/EntityManager' )
 
 /**
@@ -71,11 +71,13 @@ class Application extends Configurable {
         containerBuilder.configure({ includeComponents: true })
 
         /*
-         * Create, daemonize, and add database to container
+         * Create and daemonize databases
          */
-        const databasesStarter = new DatabasesStarter( this, containerBuilder.container )
-        databasesStarter.load()
-        databasesStarter.start()
+        const databasesManager = new DatabasesManager( this, containerBuilder.container )
+        databasesManager.load()
+        databasesManager.start()
+
+        containerBuilder.addToBuild( 'component.databasesmanager', databasesManager )
 
         /*
          * Get some components

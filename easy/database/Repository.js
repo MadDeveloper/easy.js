@@ -18,10 +18,8 @@ class Repository {
      */
     constructor( model, em ) {
         this.model = model
-        this.collection = em.getCollection( model )
         this.entityManager = this.em = em
-        this.database = this.db = em.database
-        this.orm = this.database.instance
+        this.database = this.db = em.database.instance
     }
 
     /**
@@ -31,7 +29,9 @@ class Repository {
      * @returns {Promise}
      */
     findAll( options = {}) {
-        return this.collection.forge().fetch( options )
+        const collection = this.database.Collection.extend({ model: this.model })
+
+        return collection.forge().fetch( options )
     }
 
     /**
@@ -55,7 +55,7 @@ class Repository {
      */
     save( model, params, options = {}) {
         return new Promise( ( resolve, reject ) => {
-            this.orm.transaction( t => {
+            this.database.transaction( t => {
                 options.transacting = t
 
                 model.save( params, options )
@@ -84,7 +84,7 @@ class Repository {
             let patchToApply = {}
             patchToApply[ patch.path.substring( 1 ) ] = patch.value
 
-            this.orm.transaction( t => {
+            this.database.transaction( t => {
                 options.transacting = t
                 options.patch = true
 
@@ -110,7 +110,7 @@ class Repository {
      */
     delete( model, options = {}) {
         return new Promise( ( resolve, reject ) => {
-            this.orm.transaction( t => {
+            this.database.transaction( t => {
                 options.transacting = t
 
                 model.destroy( options )

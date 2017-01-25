@@ -84,23 +84,7 @@ class EntityManager extends Configurable {
 
         const modelClass = require( `${this.bundlesPath}/${model}` )
 
-        return this.cache( new modelClass( this ), model, this.inCacheModels() )
-    }
-
-    /**
-     * getCollection - returns collection of Model (cf. Bookshelf.js)
-     *
-     * @param {Model} model
-     * @returns {bookshelf.Collection}
-     */
-    getCollection( model ) {
-        if ( !model || isEqual({}, model ) ) {
-            return {}
-        }
-
-        return this.orm.Collection.extend({
-            model
-        })
+        return this.cache( new modelClass( this ).build(), model, this.inCacheModels() )
     }
 
     /**
@@ -189,15 +173,6 @@ class EntityManager extends Configurable {
      */
     get cached() {
         return this._cached
-    }
-
-    /**
-     * get - database instance
-     *
-     * @returns {Object}
-     */
-    get orm() {
-        return this.database.instance
     }
 
     /**

@@ -6,13 +6,10 @@ const { Entity } = require( 'easy/database' )
  */
 class Skeleton extends Entity {
     /**
-     * @constructor
-     * @param  {EntityManager} em
+     * build - build entity the first time
      */
-    constructor( em ) {
-        super( em )
-
-        return this.orm.Model.extend({
+    build() {
+        return this.database.Model.extend({
             tableName: 'skeletons'
         })
     }

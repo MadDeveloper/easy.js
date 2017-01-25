@@ -18,6 +18,7 @@ class Database {
      */
     constructor( config ) {
         this._config = config
+        this.init()
     }
 
     /**

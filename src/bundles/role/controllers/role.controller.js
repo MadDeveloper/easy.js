@@ -27,9 +27,10 @@ class RoleController extends Controller {
      * @returns {Promise}
      */
     roleExists( request, response ) {
-        const Role = this.em.getModel( 'role/entity/role' )
+        const em = this.getEntityManager()
+        const Role = em.getModel( 'role/entity/role' )
 
-        return this.em
+        return em
             .getRepository( 'role/entity/role.repository', { model: Role })
             .find( request.getRouteParameter( 'role_id' ), Role )
             .then( role => {
@@ -54,7 +55,7 @@ class RoleController extends Controller {
      * @param  {Response} response
      */
     getRoles( request, response ) {
-        this.em
+        this.getEntityManager()
             .getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
             .findAll()
             .then( roles => response.ok( roles ) )
@@ -69,9 +70,10 @@ class RoleController extends Controller {
      */
     createRole( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            const Role = this.em.getModel( 'role/entity/role' )
+            const em = this.getEntityManager()
+            const Role = em.getModel( 'role/entity/role' )
 
-            this.em
+            em
                 .getRepository( 'role/entity/role.repository', { model: Role })
                 .save( new Role(), request.getBody() )
                 .then( role => response.created( role ) )
@@ -99,7 +101,7 @@ class RoleController extends Controller {
      */
     updateRole( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            this.em
+            this.getEntityManager()
                 .getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
                 .save( request.retrieve( 'role' ), request.getBody() )
                 .then( role => response.ok( role ) )
@@ -116,7 +118,7 @@ class RoleController extends Controller {
      * @param  {Response} response
      */
     deleteRole( request, response ) {
-        this.em
+        this.getEntityManager()
             .getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
             .delete( request.retrieve( 'role' ) )
             .then( () => response.noContent() )

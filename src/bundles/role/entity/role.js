@@ -6,17 +6,16 @@ const { Entity } = require( 'easy/database' )
  */
 class Role extends Entity {
     /**
-     * @constructor
-     * @param  {EntityManager} em
+     * build - build entity the first time
+     *
+     * @returns {Bookshelf.Model}
      */
-    constructor( em ) {
-        super( em )
-
-        return em.orm.Model.extend({
+    build() {
+        return this.database.Model.extend({
             tableName: 'roles',
 
             users() {
-                return this.hasMany( em.getModel( 'user/entity/user' ) )
+                return this.hasMany( this.em.getModel( 'user/entity/user' ) )
             }
         })
     }

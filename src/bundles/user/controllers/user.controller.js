@@ -31,7 +31,7 @@ class UserController extends Controller {
      */
     userExists( request, response ) {
         return this
-            .em
+            .getEntityManager()
             .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             .find( request.getRouteParameter( 'user_id' ) )
             .then( user => {
@@ -56,7 +56,7 @@ class UserController extends Controller {
      * @param  {Response} response
      */
     getUsers( request, response ) {
-        this.em
+        this.getEntityManager()
             .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             .findAll( request.retrieve( 'role' ) )
             .then( users => response.ok( users ) )
@@ -71,9 +71,10 @@ class UserController extends Controller {
      */
     createUser( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            const User = this.em.getModel( 'user/entity/user' )
+            const em = this.getEntityManager()
+            const User = em.getModel( 'user/entity/user' )
 
-            this.em
+            em
                 .getRepository( 'user/entity/user.repository', { model: User })
                 .save( new User(), request.getBody() )
                 .then( user => {
@@ -108,7 +109,7 @@ class UserController extends Controller {
                 request.setAppParameter( 'role_id', request.getRouteParameter( 'role_id' ) )
             }
 
-            this.em
+            this.getEntityManager()
                 .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
                 .save( request.retrieve( 'user' ), request.getBody() )
                 .then( user => response.ok( user ) )
@@ -141,7 +142,7 @@ class UserController extends Controller {
                         switch ( patch.op ) {
                             case 'replace':
                                 if ( indexOf( validPaths, patch.path ) >= 0 ) {
-                                    this.em
+                                    this.getEntityManager()
                                         .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
                                         .patch( request.retrieve( 'user' ), patch )
                                         .then( user => {
@@ -177,7 +178,7 @@ class UserController extends Controller {
      * @param  {Response} response
      */
     deleteUser( request, response ) {
-        this.em
+        this.getEntityManager()
             .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             .delete( request.retrieve( 'user' ) )
             .then( () => response.noContent() )

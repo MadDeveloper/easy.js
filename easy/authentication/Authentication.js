@@ -72,7 +72,7 @@ class Authentication extends Configurable {
 	 * initLocalStrategy - init local strategy
 	 */
 	initLocalStrategy() {
-		this._userRepository = this._container.get( 'component.entitymanager' ).getRepository( this.config.repository, { model: this.config.entity })
+		this._userRepository = this._container.get( 'component.entitymanager' ).getRepository( this.config.repository, { model: this.config.model })
 
 		this._router.scope.post(
 			this.config.route,

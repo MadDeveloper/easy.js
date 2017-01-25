@@ -16,9 +16,18 @@ class Entity {
      * @param {EntityManager} em
      */
     constructor( em ) {
-        this.em = this.entityManager = em
-        this.database = this.db = em.database
-        this.orm = this.database.instance
+        this.entityManager = this.em = em
+        this.database = this.db = em.database.instance
+    }
+
+    /**
+     * getModel - returns entity
+     *
+     * @param {string} model
+     * @returns {bookshelf.Model}
+     */
+    getModel( model ) {
+        return this.em.getModel( model )
     }
 }
 
