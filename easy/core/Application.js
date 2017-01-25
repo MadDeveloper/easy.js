@@ -25,6 +25,7 @@ const Authentication = require( '../authentication/Authentication' )
 const Configurable = require( '../interfaces/Configurable' )
 const Database = require( '../database/Database' )
 const DatabaseDaemon = require( '../database/DatabaseDaemon' )
+const DatabasesStarter = require( '../database/DatabasesStarter' )
 const EntityManager = require( '../database/EntityManager' )
 
 /**
@@ -64,30 +65,29 @@ class Application extends Configurable {
         }
 
         /*
-         * Create and daemonize database
-         */
-        this.database = new Database()
-        this.databaseDaemon = new DatabaseDaemon()
-        this.databaseDaemon.attach( this.database ).manage()
-
-        /*
          * Build container
          */
         const containerBuilder = new ContainerBuilder( this )
+        containerBuilder.configure({ includeComponents: true })
+
+        /*
+         * Create, daemonize, and add database to container
+         */
+        const databasesStarter = new DatabasesStarter( this, containerBuilder.container )
+        databasesStarter.load()
+        databasesStarter.start()
 
         /*
          * Get some components
          */
-        this.container = containerBuilder.configure({ includeComponents: true }).addToBuild( 'component.database', this.database ).build()
+        this.container = containerBuilder.build()
         this.router = this.container.get( 'component.router' )
-        this.entityManager = this.container.get( 'component.entitymanager' )
         this.logFileManager = this.container.get( 'component.logfilemanager' )
 
         /*
          * Configure components
          */
         this.appName = this.config.app.name
-        this.entityManager.configure( this.kernel.path.bundles, this.database )
         this.router.configure( this, express.Router() )
     }
 

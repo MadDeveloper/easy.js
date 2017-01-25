@@ -16,9 +16,8 @@ class Database {
     /**
      * @constructor
      */
-    constructor() {
-        this._databasePath = ''
-        this.init()
+    constructor( config ) {
+        this._config = config
     }
 
     /**
@@ -27,14 +26,12 @@ class Database {
     init() {
         this._instance = null
         this._connected = false
-        this._config = null
     }
 
     /**
      * load - load database config
      */
     start() {
-        this._config = ConfigLoader.loadFromGlobal( 'database' )
         this.connect()
     }
 
@@ -47,10 +44,10 @@ class Database {
     }
 
     /**
-     * connect - connect database to connector
+     * connect - connect database to instance
      */
     connect() {
-        this.instance = this.config.connector
+        this.instance = this.config.instance
     }
 
     /**

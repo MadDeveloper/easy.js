@@ -1,4 +1,4 @@
-const config = require( '../config' )
+const config = require( './config' )
 const Bookshelf = require( 'bookshelf' )
 const Knex = require( 'knex' )
 
@@ -18,6 +18,6 @@ const bookshelf = Bookshelf( Knex({
 }) )
 
 module.exports = {
-    connector: bookshelf,
+    instance: bookshelf,
     config
 }

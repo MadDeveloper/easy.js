@@ -9,6 +9,7 @@
 
 module.exports.Database = require( './Database' )
 module.exports.DatabaseDaemon = require( './DatabaseDaemon' )
+module.exports.DatabasesStarter = require( './DatabasesStarter' )
 module.exports.Entity = require( './Entity' )
 module.exports.EntityManager = require( './EntityManager' )
 module.exports.Repository = require( './Repository' )

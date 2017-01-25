@@ -12,14 +12,6 @@ module.exports = {
         path: 'core/Router',
         dependencies: []
     },
-    'component.entitymanager': {
-        path: 'database/EntityManager',
-        dependencies: []
-    },
-    'component.database': {
-        path: 'database/Database',
-        dependencies: []
-    },
     'component.logfilemanager': {
         path: 'log/LogFileManager',
         dependencies: [ 'easy.application' ]
@@ -32,8 +24,4 @@ module.exports = {
         path: 'log/Logger',
         dependencies: [ 'component.logwriter' ]
     }
-    /*, 'component.configloader': {
-        path: 'core/ConfigLoader',
-        dependencies: [ 'easy.application' ]
-    }*/
 }

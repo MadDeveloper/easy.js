@@ -74,7 +74,7 @@ class DatabaseDaemon {
         if ( null === this.interval ) {
             this.interval = setInterval( () => {
                 this.verifyConnection().catch( () => this.definedAsStopped() )
-            }, this.managed.config.intervalToCheckConnection )
+            }, this.managed.config.config.intervalToCheckConnection )
         }
     }
 
@@ -95,7 +95,7 @@ class DatabaseDaemon {
         if ( null === this.interval ) {
             this.attemps = 0
             this.interval = setInterval( () => {
-                if ( this.attemps < this.managed.config.maxAttempsReconnect ) {
+                if ( this.attemps < this.managed.config.config.maxAttempsReconnect ) {
                     this.managed.restart()
                     this.verifyConnection()
                         .then( () => {
@@ -105,7 +105,7 @@ class DatabaseDaemon {
                 } else {
                     this.stopIntervalTryingReconnect()
                 }
-            }, this.managed.config.intervalToTryingReconnect )
+            }, this.managed.config.config.intervalToTryingReconnect )
         }
     }
 
