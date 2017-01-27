@@ -98,9 +98,7 @@ class DatabaseDaemon {
                 if ( this.attemps < this.managed.config.config.maxAttempsReconnect ) {
                     this.managed.restart()
                     this.verifyConnection()
-                        .then( () => {
-                            this.defineAsStarted()
-                        })
+                        .then( () => this.defineAsStarted() )
                         .catch( () => this.attemps++ )
                 } else {
                     this.stopIntervalTryingReconnect()

@@ -28,7 +28,7 @@ class ContainerBuilder extends Configurable {
         this.container = new Container()
         this.configurations = {}
         this.path = application.kernel.path
-        this.cached = {}
+        this.cached = new Map()
     }
 
     /**
@@ -77,9 +77,16 @@ class ContainerBuilder extends Configurable {
      * registerDependencies - preload all dependencies
      */
     registerDependencies() {
-        Object.keys( this.dependenciesMapping ).forEach( name => {
-            this.container.register( name, this.load( name, this.dependenciesMapping[ name ].path, -1 !== name.indexOf( 'component.' ) ) )
-        })
+        Reflect
+            .ownKeys( this.dependenciesMapping )
+            .forEach( name => {
+                this.container.register(
+                    name,
+                    this.load(
+                        name,
+                        this.dependenciesMapping[ name ].path,
+                        name.includes( 'component.' ) ) )
+            })
     }
 
     /**
@@ -91,7 +98,7 @@ class ContainerBuilder extends Configurable {
     injectDependencies( dependency ) {
         const dependencyMapping = this.dependenciesMapping[ dependency ]
 
-        if ( !dependencyMapping.hasOwnProperty( 'dependencies' ) ) {
+        if ( !( 'dependencies' in dependencyMapping ) ) {
             return []
         }
 
@@ -101,15 +108,18 @@ class ContainerBuilder extends Configurable {
             return []
         }
 
-        let dependencies = []
+        let dependencies = new Set()
 
         requestedDependencies.forEach( dependencyName => {
             if ( 'easy.application' === dependencyName ) {
-                dependencies.push( this.application )
+                dependencies.add( this.application )
             } else if ( 'easy.container' === dependencyName ) {
-                dependencies.push( this.container )
-            }else {
-                dependencies.push( this.load( dependencyName, this.dependenciesMapping[ dependencyName ].path, -1 !== dependencyName.indexOf( 'component.' ) ) )
+                dependencies.add( this.container )
+            } else {
+                dependencies.add(
+                    this.load( dependencyName,
+                    this.dependenciesMapping[ dependencyName ].path,
+                    dependencyName.includes( 'component.' ) ) )
             }
         })
 
@@ -119,8 +129,9 @@ class ContainerBuilder extends Configurable {
     /**
      * load - load a new instance of a dependency
      *
-     * @param  {string} name
-     * @param  {string} path
+     * @param {string} name
+     * @param {string} path
+     * @param {boolean} isComponent=false
      */
     load( name, path, isComponent = false ) {
         if ( this.isLoaded( name ) ) {
@@ -146,11 +157,11 @@ class ContainerBuilder extends Configurable {
     /**
      * isLoaded - check if dependency is loaded
      *
-     * @param  {name} name
+     * @param {name} name
      * @returns {boolean}
      */
     isLoaded( name ) {
-        return this.cached.hasOwnProperty( name )
+        return this.cached.has( name )
     }
 
     /**
@@ -160,7 +171,7 @@ class ContainerBuilder extends Configurable {
      * @returns {object}
      */
     getLoaded( name ) {
-        return this.cached[ name ]
+        return this.cached.get( name )
     }
 
     /**
@@ -171,7 +182,7 @@ class ContainerBuilder extends Configurable {
      * @returns {object}
      */
     cache( name, dependency ) {
-        this.cached[ name ] = dependency
+        this.cached.set( name, dependency )
 
         return dependency
     }

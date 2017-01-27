@@ -28,7 +28,7 @@ class DatabasesManager {
         this.bundlesPath = application.kernel.path.bundles
         this.container = container
         this.baseComponentNamespace = 'component.entitymanager'
-        this.ems = {}
+        this.ems = new Map()
     }
 
     /**
@@ -53,9 +53,7 @@ class DatabasesManager {
      */
     start() {
         if ( this.hasConfiguredDatabases() ) {
-            for ( let emName in this.ems ) {
-                const { em, database } = this.ems[ emName ]
-
+            for ( let { em, database } of this.ems.values() ) {
                 if ( null !== database ) {
                     this.daemonizeDatabase( database )
                 }
@@ -116,10 +114,7 @@ class DatabasesManager {
      * @param {type} database Description
      */
     addEntityManager( name, em, database ) {
-        this.ems[ name ] = {
-            em,
-            database
-        }
+        this.ems.set( name, { em, database })
     }
 
     /**
@@ -157,7 +152,7 @@ class DatabasesManager {
      * @returns {boolean}
      */
     hasConfiguredDatabases() {
-        return Object.keys( this.config ).length > 0
+        return Reflect.ownKeys( this.config ).length > 0
     }
 }
 

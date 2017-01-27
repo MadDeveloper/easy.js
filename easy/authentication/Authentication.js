@@ -91,8 +91,9 @@ class Authentication extends Configurable {
 			usernameField: this.config.usernameField,
 			passwordField: this.config.passwordField
 		}, ( username, password, done ) => {
-			let findBy = {}
-			findBy[ this.config.usernameField ] = username
+			let findBy = {
+				[ this.config.usernameField ]: username
+			}
 
 			this._userRepository
 				.find( findBy )

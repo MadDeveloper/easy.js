@@ -21,7 +21,7 @@ class Container {
         /*
          * Dependencies
          */
-        this._shared = {}
+        this._shared = new Map()
     }
 
     /**
@@ -32,7 +32,7 @@ class Container {
      * @returns {Cotnainer}
      */
     register( name, dependency ) {
-        this.shared[ name ] = dependency
+        this.shared.set( name, dependency )
 
         return this
     }
@@ -44,13 +44,13 @@ class Container {
      * @returns {Service|Component|undefined}
      */
     get( name ) {
-        return this.shared[ name ]
+        return this.shared.get( name )
     }
 
     /**
      * get - services loaded
      *
-     * @returns {Object}
+     * @returns {Map}
      */
     get shared() {
         return this._shared

@@ -41,6 +41,16 @@ class Server {
     start() {
         Console.log( 'Starting server...' )
 
+        this.startHttpServer()
+        this.canBeStarted()
+            .then( () => this.canStart() )
+            .catch( error => this.failedToStart( error ) )
+    }
+
+    /**
+     * startHttpServer - start correct http server (HTTP or HTTPS if credentials are found and tls is requested)
+     */
+    startHttpServer() {
         if ( 'https' === this.protocol && false !== this.application.config.credentials.found ) {
             /*
              * If specified or if https credentials are found (keys and cert), an HTTPS server is started
@@ -52,11 +62,6 @@ class Server {
              */
             this.server = http.createServer( this.application.app )
         }
-
-
-        this.canBeStarted()
-            .then( () => this.canStart() )
-            .catch( error => this.failedToStart( error ) )
     }
 
     /**
@@ -106,7 +111,7 @@ class Server {
     failedToStart( error ) {
         Console.error({
             title: 'Impossible to start server',
-            message: `${error.hasOwnProperty( 'code' ) ? `Error code: ${error.code}\n` : ''}${error.toString()}`,
+            message: `${( 'code' in error ) ? `Error code: ${error.code}\n` : ''}${error.toString()}`,
             exit: 1
         })
     }

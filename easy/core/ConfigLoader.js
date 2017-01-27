@@ -12,15 +12,6 @@
  * @class ConfigLoader
  */
 class ConfigLoader {
-    /**
-     * constructor
-     *
-     * @param {Application} application
-     */
-    constructor( application ) {
-        this.path = application.kernel.path
-    }
-
 	/**
 	 * loadFromGlobal - load file from global configurations directory
 	 *
@@ -29,7 +20,6 @@ class ConfigLoader {
 	 */
 	static loadFromGlobal( file ) {
 		return require( `src/config/${file}` )
-        // return require( `${this.path.config}/${file}` )
 	}
 }
 

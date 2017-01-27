@@ -23,10 +23,9 @@ class EntityManager extends Configurable {
 
         this._database = null
         this._bundlesPath = ''
-        this._cached = {
-            models: {},
-            repositories: {}
-        }
+        this._cached = new Map()
+        this._cached.set( 'models', new Map() )
+        this._cached.set( 'repositories', new Map() )
     }
 
     /**
@@ -58,7 +57,7 @@ class EntityManager extends Configurable {
 
         let associatedModel = {}
 
-        if ( options.hasOwnProperty( 'model' ) ) {
+        if ( 'model' in options ) {
             associatedModel = 'string' === typeof options.model ? this.getModel( options.model ) : options.model
         }
 
@@ -113,7 +112,7 @@ class EntityManager extends Configurable {
      * @returns {boolean}
      */
     isCached( key = '', type = 'models' ) {
-        return this.cached.hasOwnProperty( type ) && this.cached[ type ].hasOwnProperty( key )
+        return this.cached.has( type ) && this.cached.get( type ).has( key )
     }
 
     /**
@@ -124,7 +123,11 @@ class EntityManager extends Configurable {
      * @returns {object}
      */
     getCache( key = '', type = 'models' ) {
-        return ( this.cached.hasOwnProperty( type ) && this.cached[ type ].hasOwnProperty( key ) ) ? this.cached[ type ][ key ] : {}
+        if ( this.isCached( key, type ) ) {
+            return this.cached.get( type ).get( key )
+        }
+
+        return {}
     }
 
     /**
@@ -136,8 +139,8 @@ class EntityManager extends Configurable {
      * @returns {object}
      */
     cache( object = {}, key = '', type = 'models' ) {
-        if ( this.cached.hasOwnProperty( type ) ) {
-            this.cached[ type ][ key ] = object
+        if ( this.cached.has( type ) ) {
+            this.cached.get( type ).set( key, object )
 
             return object
         }
@@ -152,8 +155,8 @@ class EntityManager extends Configurable {
      * @param  {string} type = 'models'
      */
     uncache( key = '', type = 'models' ) {
-        if ( this.cached.hasOwnProperty( type ) ) {
-            delete this.cached[ type ][ key ]
+        if ( this.cached.has( type ) ) {
+            this.cached.get( type ).delete( key )
         }
     }
 
@@ -169,7 +172,7 @@ class EntityManager extends Configurable {
     /**
      * get - get cached objects
      *
-     * @returns {object}
+     * @returns {Map}
      */
     get cached() {
         return this._cached

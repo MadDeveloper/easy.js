@@ -115,7 +115,7 @@ class Router extends Configurable {
             for ( let config in routesConfig ) {
                 configValue = routesConfig[ config ]
 
-                if ( -1 !== indexOf( this.http.methods, config ) ) {
+                if ( this.http.methods.includes( config ) ) {
                     const [ controllerId, controllerMethod ] = configValue.split( ':' )
 
                     this.defineRoute({
