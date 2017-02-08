@@ -1,7 +1,8 @@
------------------------------
+﻿-----------------------------
 ----------|  NOW  |----------
 -----------------------------
 
+- utiliser les méthodes lodash pour les string (upperFirst, deburr, kebab-case, camelCase, etc.)
 - terminer les tests du bundle user
 - appliquer le logger aux endroits utiles (générale où il y a un Console.error)
 - faire les tests du vendor
