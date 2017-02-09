@@ -7,6 +7,8 @@
 * file that was distributed with this source code.
 */
 
+const { deburr, snakeCase, kebabCase, camelCase, upperFirst, upperCase, trim } = require( 'lodash' )
+
 /**
  * cleanSpaces - clean spaces into string
  *
@@ -100,17 +102,7 @@ module.exports.transform = {}
  *
  * @returns {string}
  */
-module.exports.transform.asSnakeCase = originalName => {
-    let formatedName = originalName
-
-    formatedName = formatedName.trim()
-    formatedName = module.exports.transform.asWord( formatedName )
-    formatedName = formatedName.replace( /[-!#$€£¤§<>%&~=+'"°%`.,:/@()\\{[]}]/gi, '' )
-    formatedName = formatedName.replace( / /g, '_' )
-    formatedName = formatedName.toLowerCase()
-
-    return formatedName
-}
+module.exports.transform.asSnakeCase = originalName => snakeCase( formatedName )
 
 /**
  * transformAsWord - remove all caracters which are not considered as regex word
@@ -131,8 +123,17 @@ module.exports.transform.asWord = str => {
  * @returns {string}
  */
 module.exports.transform.asBundleName = name => {
-    return module.exports.cleanSpaces( module.exports.transform.asWord( name.toLowerCase() ) )
+    return kebabCase( deburr( trim( name ) ) )
 }
+
+/**
+ * asFileName - format string as file name
+ *
+ * @param {string} name
+ *
+ * @returns {string}
+ */
+module.exports.transform.asFileName = name => kebabCase( deburr( trim( name ) ) )
 
 /**
  * asControllerFileName - format string as controller file name
@@ -142,7 +143,7 @@ module.exports.transform.asBundleName = name => {
  * @returns {string}
  */
 module.exports.transform.asControllerFileName = name => {
-    return `${module.exports.transform.asWord( name.toLowerCase() ).replace( /controller/ig, '' )}.controller.js`
+    return `${module.exports.transform.asFileName( name ).replace( /controller/ig, '' )}.controller.js`
 }
 
 /**
@@ -153,7 +154,7 @@ module.exports.transform.asControllerFileName = name => {
  * @returns {string}
  */
 module.exports.transform.asRepositoryFileName = name => {
-    return `${module.exports.transform.asWord( name.toLowerCase() ).replace( /repository/ig, '' )}.repository.js`
+    return `${module.exports.transform.asFileName( name ).replace( /repository/ig, '' )}.repository.js`
 }
 
 /**
@@ -164,7 +165,7 @@ module.exports.transform.asRepositoryFileName = name => {
  * @returns {string}
  */
 module.exports.transform.asEntityFileName = name => {
-    return module.exports.transform.asEntityName( name ).decapitalizeFirstLetter()
+    return module.exports.transform.asFileName( name )
 }
 
 /**
@@ -175,7 +176,7 @@ module.exports.transform.asEntityFileName = name => {
  * @returns {string}
  */
 module.exports.transform.asServiceFileName = name => {
-    return `${module.exports.transform.asWord( name.toLowerCase() ).replace( /service/ig, '' )}.service.js`
+    return `${module.exports.transform.asFileName( name ).replace( /service/ig, '' )}.service.js`
 }
 
 /**
@@ -186,7 +187,7 @@ module.exports.transform.asServiceFileName = name => {
  * @returns {string}
  */
 module.exports.transform.asClassName = name => {
-    return module.exports.transform.asWord( name ).capitalizeFirstLetter()
+    return camelCase( module.exports.transform.asFileName( name ) )
 }
 
 /**
@@ -197,7 +198,7 @@ module.exports.transform.asClassName = name => {
  * @returns {string}
  */
 module.exports.transform.asControllerName = name => {
-    return module.exports.transform.asWord( name ).concat( 'Controller' ).capitalizeFirstLetter()
+    return module.exports.transform.asClassName( name ).concat( 'Controller' )
 }
 
 /**
@@ -208,7 +209,7 @@ module.exports.transform.asControllerName = name => {
  * @returns {string}
  */
 module.exports.transform.asRepositoryName = name => {
-    return module.exports.transform.asWord( name ).concat( 'Repository' ).capitalizeFirstLetter()
+    return module.exports.transform.asClassName( name ).concat( 'Repository' )
 }
 
 /**
@@ -219,7 +220,7 @@ module.exports.transform.asRepositoryName = name => {
  * @returns {string}
  */
 module.exports.transform.asEntityName = name => {
-    return module.exports.transform.asWord( name ).replace( /(service|repository|controller)/gi, '' ).capitalizeFirstLetter()
+    return module.exports.transform.asClassName( name ).replace( /(service|repository|controller)/gi, '' )
 }
 
 /**
@@ -230,7 +231,7 @@ module.exports.transform.asEntityName = name => {
  * @returns {string}
  */
 module.exports.transform.asEntityName = name => {
-    return module.exports.transform.asWord( name ).replace( /(service|repository|controller)/gi, '' ).capitalizeFirstLetter()
+    return module.exports.transform.asClassName( name ).replace( /(service|repository|controller)/gi, '' )
 }
 
 /**
@@ -241,5 +242,5 @@ module.exports.transform.asEntityName = name => {
  * @returns {string}
  */
 module.exports.transform.asServiceName = name => {
-    return module.exports.transform.asWord( name ).concat( 'Service' ).capitalizeFirstLetter()
+    return module.exports.transform.asClassName( name ).concat( 'Service' )
 }
