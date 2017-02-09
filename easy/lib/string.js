@@ -10,17 +10,6 @@
 const { deburr, snakeCase, kebabCase, camelCase, upperFirst, upperCase, trim } = require( 'lodash' )
 
 /**
- * cleanSpaces - clean spaces into string
- *
- * @param {string} str
- *
- * @returns {string}
- */
-module.exports.cleanSpaces = str => {
-    return str.replace( /\s/i, '' )
-}
-
-/**
  * strtr - replace string occurences (eq. strtr php), see: http://locutus.io/php/strings/strtr/
  *
  * @param {string} str
@@ -29,7 +18,7 @@ module.exports.cleanSpaces = str => {
  *
  * @returns {string}
  */
-module.exports.strtr = ( str, fromObj, to ) => {
+function strtr ( str, fromObj, to ) {
     let fr = ''
     let i = 0
     let j = 0
@@ -93,17 +82,6 @@ module.exports.strtr = ( str, fromObj, to ) => {
     return ret
 }
 
-module.exports.transform = {}
-
-/**
- * asSnakeCase - transform string as snake case
- *
- * @param {string} originalName
- *
- * @returns {string}
- */
-module.exports.transform.asSnakeCase = originalName => snakeCase( formatedName )
-
 /**
  * transformAsWord - remove all caracters which are not considered as regex word
  *
@@ -111,7 +89,7 @@ module.exports.transform.asSnakeCase = originalName => snakeCase( formatedName )
  *
  * @returns {string}
  */
-module.exports.transform.asWord = str => {
+function asWord( str ) {
     return str.replace( /[^\w ]/gi, '' )
 }
 
@@ -122,7 +100,7 @@ module.exports.transform.asWord = str => {
  *
  * @returns {string}
  */
-module.exports.transform.asBundleName = name => {
+function asBundleName( name ) {
     return kebabCase( deburr( trim( name ) ) )
 }
 
@@ -133,7 +111,9 @@ module.exports.transform.asBundleName = name => {
  *
  * @returns {string}
  */
-module.exports.transform.asFileName = name => kebabCase( deburr( trim( name ) ) )
+function asFileName( name ) {
+    return kebabCase( deburr( trim( name ) ) )
+}
 
 /**
  * asControllerFileName - format string as controller file name
@@ -142,8 +122,8 @@ module.exports.transform.asFileName = name => kebabCase( deburr( trim( name ) ) 
  *
  * @returns {string}
  */
-module.exports.transform.asControllerFileName = name => {
-    return `${module.exports.transform.asFileName( name ).replace( /controller/ig, '' )}.controller.js`
+function asControllerFileName( name ) {
+    return `${asFileName( name ).replace( /controller/ig, '' )}.controller.js`
 }
 
 /**
@@ -153,8 +133,8 @@ module.exports.transform.asControllerFileName = name => {
  *
  * @returns {string}
  */
-module.exports.transform.asRepositoryFileName = name => {
-    return `${module.exports.transform.asFileName( name ).replace( /repository/ig, '' )}.repository.js`
+function asRepositoryFileName( name ) {
+    return `${asFileName( name ).replace( /repository/ig, '' )}.repository.js`
 }
 
 /**
@@ -164,8 +144,8 @@ module.exports.transform.asRepositoryFileName = name => {
  *
  * @returns {string}
  */
-module.exports.transform.asEntityFileName = name => {
-    return module.exports.transform.asFileName( name )
+function asEntityFileName ( name ) {
+    return asFileName( name )
 }
 
 /**
@@ -175,8 +155,8 @@ module.exports.transform.asEntityFileName = name => {
  *
  * @returns {string}
  */
-module.exports.transform.asServiceFileName = name => {
-    return `${module.exports.transform.asFileName( name ).replace( /service/ig, '' )}.service.js`
+function asServiceFileName( name ) {
+    return `${asFileName( name ).replace( /service/ig, '' )}.service.js`
 }
 
 /**
@@ -186,8 +166,8 @@ module.exports.transform.asServiceFileName = name => {
  *
  * @returns {string}
  */
-module.exports.transform.asClassName = name => {
-    return camelCase( module.exports.transform.asFileName( name ) )
+function asClassName( name ) {
+    return camelCase( asFileName( name ) )
 }
 
 /**
@@ -197,8 +177,8 @@ module.exports.transform.asClassName = name => {
  *
  * @returns {string}
  */
-module.exports.transform.asControllerName = name => {
-    return module.exports.transform.asClassName( name ).concat( 'Controller' )
+function asControllerName( name ) {
+    return asClassName( name ).concat( 'Controller' )
 }
 
 /**
@@ -208,8 +188,8 @@ module.exports.transform.asControllerName = name => {
  *
  * @returns {string}
  */
-module.exports.transform.asRepositoryName = name => {
-    return module.exports.transform.asClassName( name ).concat( 'Repository' )
+function asRepositoryName( name ) {
+    return asClassName( name ).concat( 'Repository' )
 }
 
 /**
@@ -219,19 +199,8 @@ module.exports.transform.asRepositoryName = name => {
  *
  * @returns {string}
  */
-module.exports.transform.asEntityName = name => {
-    return module.exports.transform.asClassName( name ).replace( /(service|repository|controller)/gi, '' )
-}
-
-/**
- * asEntityName - format string as entity name
- *
- * @param {string} name
- *
- * @returns {string}
- */
-module.exports.transform.asEntityName = name => {
-    return module.exports.transform.asClassName( name ).replace( /(service|repository|controller)/gi, '' )
+function asEntityName( name ) {
+    return asClassName( name ).replace( /(service|repository|controller)/gi, '' )
 }
 
 /**
@@ -241,6 +210,23 @@ module.exports.transform.asEntityName = name => {
  *
  * @returns {string}
  */
-module.exports.transform.asServiceName = name => {
-    return module.exports.transform.asClassName( name ).concat( 'Service' )
+function asServiceName( name ) {
+    return asClassName( name ).concat( 'Service' )
 }
+
+
+// exports
+module.exports.strtr = strtr
+module.exports.transform = {}
+module.exports.transform.asWord = asWord
+module.exports.transform.asBundleName = asBundleName
+module.exports.transform.asClassName = asClassName
+module.exports.transform.asControllerName = asControllerName
+module.exports.transform.asRepositoryName = asRepositoryName
+module.exports.transform.asEntityName = asEntityName
+module.exports.transform.asServiceName = asServiceName
+module.exports.transform.asFileName = asFileName
+module.exports.transform.asControllerFileName = asControllerFileName
+module.exports.transform.asRepositoryFileName = asRepositoryFileName
+module.exports.transform.asRepositoryName = asRepositoryFileName
+module.exports.transform.asServiceFileName = asServiceFileName
