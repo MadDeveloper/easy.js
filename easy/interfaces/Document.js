@@ -12,35 +12,94 @@
  */
 class Document {
     /**
-     * exists - check if path is a directory
+     * exists - check if path is a document
      *
      * @returns {Promise}
      */
     exists() {}
 
     /**
-     * create - create directory at indicated path
+     * exists - check, in synchronous maner, if path is a document
      *
-     * @param {object} options
+     * @returns {boolean}
+     */
+    existsSync() {}
+
+    /**
+     * create - create the document at indicated path
+     *
+     * @param {number} options = {}
      *
      * @returns {Promise}
      */
-    create( options ) {}
+    create( options = {}) {}
 
     /**
-     * delete - delete directory
+     * createSync - create, in synchronous maner, the document at indicated path
+     *
+     * @param {object} options = {}
+     *
+     * @returns {Object}
+     */
+    createSync( options = {}) {}
+
+    /**
+     * delete - Delete the document
+     *
+     * @returns {Promise}
+     *
+     * @memberOf Document
      */
     delete() {}
 
     /**
-     * rename - rename repository
+     * deleteSync - Delete the document synchronously
+     *
+     * @returns {Object}
+     *
+     * @memberOf Document
      */
-    rename() {}
+    deleteSync() {}
 
     /**
-     * move - move repository
+     * rename - rename the document
+     *
+     * @param {string} newPath
+     * @returns {Promise}
+     *
+     * @memberOf Document
      */
-    move() {}
+    rename( newPath ) {}
+
+    /**
+     * renameSync - renamed the document synchronously
+     *
+     * @param {string} newPath
+     * @returns {Object}
+     *
+     * @memberOf Document
+     */
+    renameSync( newPath ) {}
+
+    /**
+     * move - move document at indicated path
+     *
+     * @param {Object} newPath
+     * @returns {Promise}
+     *
+     * @memberOf Document
+     */
+    move( newPath ) {}
+
+    /**
+     * moveSync - move document at indicated path synchronously
+     *
+     * @param {Object} newPath
+     * @returns {Object}
+     *
+     * @memberOf Document
+     */
+    moveSync( newPath ) {}
 }
 
 module.exports = Document

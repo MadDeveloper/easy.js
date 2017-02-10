@@ -10,6 +10,7 @@
 const fs = require( 'fs' )
 const path = require( 'path' )
 const Document = require( '../interfaces/Document' )
+const Directory = require( './Directory' )
 
 /**
  * @class File
@@ -24,8 +25,26 @@ class File extends Document {
     constructor( filePath = '', content = '' ) {
         super()
 
-        this.path = path.resolve( filePath )
+        this.loadPathInfo( filePath )
         this.content = content
+    }
+
+    /**
+     * loadPathInfo - load all infos relative to the file path
+     *
+     * @param {string} filePath
+     *
+     * @memberOf File
+     */
+    loadPathInfo( filePath ) {
+        const { root, dir, base, ext, name } = path.parse( filePath )
+
+        this.root = root
+        this.base = base
+        this.ext = ext
+        this.name = name
+        this.path = `${dir}/${base}`
+        this.directory = new Directory( dir )
     }
 
     /**
@@ -87,7 +106,7 @@ class File extends Document {
     /**
      * read
      *
-     * @param {object} options={encoding: 'utf8'}
+     * @param {Object} options={encoding: 'utf8'}
      *
      * @returns {Promise}
      */
@@ -110,7 +129,7 @@ class File extends Document {
      *
      * @param {object} options={encoding: 'utf8'}
      *
-     * @returns {object}
+     * @returns {Object}
      */
     readSync( options = { encoding: 'utf8' }) {
         let results = { success: false, data: null, error: null }
@@ -144,13 +163,19 @@ class File extends Document {
      *
      * @param {object} options = { mode: 755, encoding: 'utf8' }
      *
-     * @returns {boolean}
+     * @returns {Object}
      */
     createSync( options = { mode: 755, encoding: 'utf8' }) {
-        /*
-         * Create synchronously is equivalent to write synchronously with no content
-         */
-        return this.writeSync( options )
+        let results = { success: false, error: null }
+
+        try {
+            this.writeSync( options )
+            results.success = true
+        } catch ( error ) {
+            results.error = error
+        } finally {
+            return results
+        }
     }
 
     /**
@@ -162,7 +187,7 @@ class File extends Document {
      */
     write( options = { mode: 755, encoding: 'utf8' }) {
         return new Promise( ( resolve, reject ) => {
-            if ( options.hasOwnProperty( 'mode' ) ) {
+            if ( 'mode' in options ) {
                 options.mode = parseInt( options.mode, 8 )
             }
 
@@ -175,41 +200,136 @@ class File extends Document {
      *
      * @param {number} options = { mode: 755, encoding: 'utf8' }
      *
-     * @returns {boolean}
+     * @returns {Object}
      */
     writeSync( options = { mode: 755, encoding: 'utf8' }) {
+        let results = { success: false, error: null }
+
         try {
-            if ( options.hasOwnProperty( 'mode' ) ) {
+            if ( 'mode' in options ) {
                 options.mode = parseInt( options.mode, 8 )
             }
 
             fs.writeFileSync( this.path, this.content, options )
-
-            return true
+            results.success = true
         } catch ( error ) {
-            return false
+            results.error = error
+        } finally {
+            return results
         }
     }
 
     /**
-     * delete - delete directory
+     * delete - Delete the file
+     *
+     * @returns {Promise}
+     *
+     * @memberOf File
      */
     delete() {
-        throw new Error( 'Not implemented yet' )
+        return new Promise( ( resolve, reject ) => {
+            fs.unlink( this.path, error => error ? Promise.reject( error ) : Promise.resolve() )
+        })
     }
 
     /**
-     * rename - rename repository
+     * deleteSync - Delete the file synchronously
+     *
+     * @returns {Object}
+     *
+     * @memberOf File
      */
-    rename() {
-        throw new Error( 'Not implemented yet' )
+    deleteSync() {
+        let results = { success: false, error: null }
+
+        try {
+            fs.unlinkSync( this.path )
+            results.success = true
+        } catch ( error ) {
+            results.error = error
+        } finally {
+            return results
+        }
     }
 
     /**
-     * move - move repository
+     * rename - rename the file
+     *
+     * @param {string} newName
+     * @returns {Promise}
+     *
+     * @memberOf File
      */
-    move() {
-        throw new Error( 'Not implemented yet' )
+    rename( newName ) {
+        return new Promise( ( resolve, reject ) => {
+            const newPath = `${this.directory.path}/${newName}`
+
+            fs.rename( this.path, newPath, error => error ? Promise.reject( error ) : Promise.resolve() )
+
+            this.loadPathInfo( newPath )
+        })
+    }
+
+    /**
+     * renameSync - rename the file synchronously
+     *
+     * @param {string} newName
+     * @returns {Object}
+     *
+     * @memberOf File
+     */
+    renameSync( newName ) {
+        let results = { success: false, error: null }
+
+        try {
+            const newPath = `${this.directory.path}/${newName}`
+
+            fs.renameSync( this.path, newPath )
+
+            this.loadPathInfo( newPath )
+            results.success = true
+        } catch ( error ) {
+            results.error = error
+        } finally {
+            return results
+        }
+    }
+
+    /**
+     * move - move the file at indicated path
+     *
+     * @param {Object} newPath
+     * @returns {Promise}
+     *
+     * @memberOf File
+     */
+    move( newPath ) {
+        return this.rename( path.resolve( this.path, newPath ) )
+    }
+
+    /**
+     * moveSync - move the file at indicated path synchronously
+     *
+     * @param {Object} newPath
+     * @returns {Object}
+     *
+     * @memberOf File
+     */
+    moveSync( newPath ) {
+        return this.renameSync( path.resolve( this.path, newPath ) )
+    }
+
+    /**
+     * path - set the file path
+     *
+     * @param {string} newPath
+     *
+     * @memberOf File
+     */
+    set path( newPath = '' ) {
+        if ( 'string' === typeof newPath ) {
+            this.path = path.resolve( newPath )
+        }
     }
 }
 

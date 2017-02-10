@@ -23,7 +23,25 @@ class Directory extends Document {
     constructor( directoryPath = '' ) {
         super()
 
-        this.path = path.resolve( directoryPath )
+        this.loadPathInfo( directoryPath )
+    }
+
+    /**
+     * loadPathInfo - load all infos relative to the directory path
+     *
+     * @param {string} directoryPath
+     *
+     * @memberOf Directory
+     */
+    loadPathInfo( directoryPath ) {
+        const { root, dir, base, ext, name } = path.parse( directoryPath )
+
+        this.root = root
+        this.dir = dir
+        this.base = base
+        this.ext = ext
+        this.name = name
+        this.path = `${dir}/${base}`
     }
 
     /**
@@ -65,7 +83,7 @@ class Directory extends Document {
      */
     create( options = { mode: 755 }) {
         return new Promise( ( resolve, reject ) => {
-            if ( options.hasOwnProperty( 'mode' ) ) {
+            if ( 'mode' in options ) {
                 options.mode = parseInt( options.mode, 8 )
             }
 
@@ -74,45 +92,134 @@ class Directory extends Document {
     }
 
     /**
-     * createSync - create, in synchronous maner, directory at indicated path
+     * createSync - create, in synchronous maner, the directory at indicated path
      *
      * @param {object} options = { mode: 755 }
      *
      * @returns {boolean}
      */
     createSync( options = { mode: 755 }) {
+        let results = { success: false, error: null }
+
         try {
-            if ( options.hasOwnProperty( 'mode' ) ) {
+            if ( 'mode' in options ) {
                 options.mode = parseInt( options.mode, 8 )
             }
 
             fs.mkdirSync( this.path, options )
-
-            return true
+            results.success = true
         } catch ( error ) {
-            return false
+            results.error = error
+        } finally {
+            return results
         }
     }
 
     /**
-     * delete - delete directory
+     * delete - Delete the directory
+     *
+     * @returns {Promise}
+     *
+     * @memberOf Directory
      */
     delete() {
-        throw new Error( 'Not implemented yet' )
+        return new Promise( ( resolve, reject ) => {
+            fs.rmdir( this.path, error => error ? Promise.reject( error ) : Promise.resolve() )
+        })
     }
 
     /**
-     * rename - rename repository
+     * deleteSync - Delete the directory synchronously
+     *
+     * @returns {Object}
+     *
+     * @memberOf Directory
      */
-    rename() {
-        throw new Error( 'Not implemented yet' )
+    deleteSync() {
+        let results = { success: false, error: null }
+
+        try {
+            fs.rmdirSync( this.path )
+            results.success = true
+        } catch ( error ) {
+            results.error = error
+        } finally {
+            return results
+        }
     }
 
     /**
-     * move - move repository
+     * rename - rename the directory
+     *
+     * @param {string} newName
+     * @returns {Promise}
+     *
+     * @memberOf Directory
      */
-    move() {
-        throw new Error( 'Not implemented yet' )
+    rename( newName ) {
+        return new Promise( ( resolve, reject ) => {
+            fs.rename( this.path, `${dir}/${newName}`, error => error ? Promise.reject( error ) : Promise.resolve() )
+
+            this.loadPathInfo( newPath )
+        })
+    }
+
+    /**
+     * renameSync - rename the directory synchronously
+     *
+     * @param {string} newName
+     * @returns {Object}
+     *
+     * @memberOf Directory
+     */
+    renameSync( newName ) {
+        let results = { success: false, error: null }
+
+        try {
+           fs.renameSync( this.path, `${dir}/${newName}` )
+            results.success = true
+        } catch ( error ) {
+            results.error = error
+        } finally {
+            return results
+        }
+    }
+
+    /**
+     * move - move the directory at indicated path
+     *
+     * @param {Object} newPath
+     * @returns {Promise}
+     *
+     * @memberOf Directory
+     */
+    move( newPath ) {
+        return this.rename( path.resolve( this.path, newPath ) )
+    }
+
+    /**
+     * moveSync - move the directory at indicated path synchronously
+     *
+     * @param {Object} newPath
+     * @returns {Object}
+     *
+     * @memberOf Directory
+     */
+    moveSync( newPath ) {
+        return this.renameSync( path.resolve( this.path, newPath ) )
+    }
+
+    /**
+     * path - set the directory path
+     *
+     * @param {string} newPath
+     *
+     * @memberOf Directory
+     */
+    set path( newPath = '' ) {
+        if ( 'string' === typeof newPath ) {
+            this.path = path.resolve( newPath )
+        }
     }
 }
 
