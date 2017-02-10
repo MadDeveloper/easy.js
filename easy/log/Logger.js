@@ -7,8 +7,6 @@
 * file that was distributed with this source code.
 */
 
-const Injectable = require( '../interfaces/Injectable' )
-
 /**
  * Describes a logger instance
  *
@@ -25,16 +23,13 @@ const Injectable = require( '../interfaces/Injectable' )
  * for the full specification.
  *
  * @class Logger
- * @extends Injectable
  */
-class Logger extends Injectable {
+class Logger {
     /**
      * @constructor
      * @param  {LogWriter} logWriter
      */
     constructor( logWriter ) {
-        super()
-
         this._logWriter = logWriter
     }
 

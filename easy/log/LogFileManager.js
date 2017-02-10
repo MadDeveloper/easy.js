@@ -9,34 +9,30 @@
 
 const fs = require( 'fs' )
 const path = require( 'path' )
-const Injectable = require( '../interfaces/Injectable' )
 const Directory = require( '../fs/Directory' )
 const Console = require( '../core/Console' )
 
 /**
  * @class LogFileManager
- * @extends Injectable
  */
-class LogFileManager extends Injectable {
+class LogFileManager {
     /**
      * @constructor
      *
      * @param {Application} application
      */
     constructor( application ) {
-        super()
-
         this._logDirectoryPath = `${application.kernel.path.root}/logs`
 
         if ( application.config.app.log ) {
             const directory = new Directory( this._logDirectoryPath )
 
-            if ( !directory.existsSync() && !directory.createSync() ) {
+            /*if ( !directory.existsSync() && !directory.createSync().success ) {
                 Console.error({
                     title: `Impossible to create directory : ${this._logDirectoryPath}`,
                     message: error.toString()
                 })
-            }
+            }*/
         }
     }
 

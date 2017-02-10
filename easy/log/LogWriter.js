@@ -8,22 +8,18 @@
 */
 
 const fs = require( 'fs' )
-const Injectable = require( '../interfaces/Injectable' )
 const Console = require( '../core/Console' )
 const { strtr } = require( '../lib/string' )
 
 /**
  * @class LogWriter
- * @extends Injectable
  */
-class LogWriter extends Injectable {
+class LogWriter {
     /**
      * @constructor
      * @param  {LogFileManager} logFileManager
      */
     constructor( logFileManager ) {
-        super()
-
         this._logFileManager = logFileManager
     }
 

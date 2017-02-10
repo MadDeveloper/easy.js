@@ -320,6 +320,15 @@ class File extends Document {
     }
 
     /**
+     * path - get the file path
+     *
+     * @memberOf File
+     */
+    get path() {
+        return this._path
+    }
+
+    /**
      * path - set the file path
      *
      * @param {string} newPath
@@ -328,7 +337,7 @@ class File extends Document {
      */
     set path( newPath = '' ) {
         if ( 'string' === typeof newPath ) {
-            this.path = path.resolve( newPath )
+            this._path = path.resolve( newPath )
         }
     }
 }

@@ -3,7 +3,7 @@ const container = easy.application.container
 const { entityManager,
         response,
         request,
-        fakeAsync } = require( 'easy/test' )
+        fakeAsync } = require( 'easy/mocks' )
 
 describe( 'UserController', () => {
 

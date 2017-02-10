@@ -210,6 +210,15 @@ class Directory extends Document {
     }
 
     /**
+     * path - get the directory path
+     *
+     * @memberOf Directory
+     */
+    get path() {
+        return this._path
+    }
+
+    /**
      * path - set the directory path
      *
      * @param {string} newPath
@@ -218,7 +227,7 @@ class Directory extends Document {
      */
     set path( newPath = '' ) {
         if ( 'string' === typeof newPath ) {
-            this.path = path.resolve( newPath )
+            this._path = path.resolve( newPath )
         }
     }
 }
