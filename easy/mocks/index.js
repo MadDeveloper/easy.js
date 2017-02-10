@@ -7,13 +7,13 @@
 * file that was distributed with this source code.
 */
 
-module.exports.entityManager = require( 'easy/test/entitymanager.mock' )
-module.exports.request = require( 'easy/test/request.mock' )
-module.exports.response = require( 'easy/test/response.mock' )
-module.exports.fakeAsync = require( 'easy/test/fakeAsync.mock' )
-module.exports.directory = require( 'easy/test/directory.mock' )
-module.exports.logger = require( 'easy/test/logger.mock' )
-module.exports.logWriter = require( 'easy/test/logwriter.mock' )
-module.exports.logFileManager = require( 'easy/test/logfilemanager.mock' )
-module.exports.tokenManager = require( 'easy/test/tokenmanager.mock' )
-module.exports.authorization = require( 'easy/test/authorization.mock' )
+module.exports.entityManager = require( 'easy/mocks/entitymanager.mock' )
+module.exports.request = require( 'easy/mocks/request.mock' )
+module.exports.response = require( 'easy/mocks/response.mock' )
+module.exports.fakeAsync = require( 'easy/mocks/fakeAsync.mock' )
+module.exports.directory = require( 'easy/mocks/directory.mock' )
+module.exports.logger = require( 'easy/mocks/logger.mock' )
+module.exports.logWriter = require( 'easy/mocks/logwriter.mock' )
+module.exports.logFileManager = require( 'easy/mocks/logfilemanager.mock' )
+module.exports.tokenManager = require( 'easy/mocks/tokenmanager.mock' )
+module.exports.authorization = require( 'easy/mocks/authorization.mock' )
