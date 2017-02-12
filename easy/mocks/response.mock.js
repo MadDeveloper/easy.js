@@ -73,7 +73,12 @@ const response = jasmine.createSpyObj( 'response', [
     'networkConnectTimeoutError',
     'attachment',
     'scope',
-    'request'
+    'request',
+    'reset'
 ])
+
+response.reset = () => {
+    response.ok.calls.reset()
+}
 
 module.exports = response

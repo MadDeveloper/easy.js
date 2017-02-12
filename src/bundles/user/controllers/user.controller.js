@@ -126,12 +126,12 @@ class UserController extends Controller {
      * @param  {Response} response
      */
     patchUser( request, response ) {
-        if ( this.isPatchRequestWellParameterized() ) {
+        if ( this.isPatchRequestWellParameterized( request ) ) {
             let patchRequestCorrectlyFormed = false
 
-            let patchUser = new Promise( ( resolve, reject ) => {
+            let patchUser = () => new Promise( ( resolve, reject ) => {
                 const validPaths = [ '/email', '/username', '/password', '/role_id' ]
-                const ops = this.parsePatchParams()
+                const ops = this.parsePatchParams( request )
 
                 if ( ops ) {
                     patchRequestCorrectlyFormed = true
@@ -160,7 +160,7 @@ class UserController extends Controller {
             })
 
             if ( patchRequestCorrectlyFormed ) {
-                patchUser
+                patchUser()
                     .then( user => response.ok( user ) )
                     .catch( error => response.internalServerError( error ) )
             } else {

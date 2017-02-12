@@ -2,7 +2,10 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- terminer les tests du bundle user
+- revoir les describe des TU pour être plus clair
+- créer les méthodes reset pour les mocks
+- rename getRawbody in getRawBody
+- mettre à jour les mocks
 - appliquer le logger aux endroits utiles (générale où il y a un Console.error)
 - faire les tests du vendor
 - exporter role et user dans un repo externe, importable

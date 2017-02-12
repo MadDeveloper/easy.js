@@ -72,19 +72,21 @@ class Controller {
      *
      * @returns {object}
      */
-    parsePatchParams() {
+    parsePatchParams( request ) {
         try {
-            return JSON.parse( this.request.getRawbody() )
+            return JSON.parse( request.getRawbody() )
         } catch ( error ) {}
     }
 
     /**
      * isPatchRequestWellParameterized - check if patch request is correct
      *
+     * @param {Request} request
+     *
      * @returns {boolean}
      */
-    isPatchRequestWellParameterized() {
-        return this.request.getRawbody().length > 0
+    isPatchRequestWellParameterized( request ) {
+        return request.getRawbody().length > 0
     }
 
     /**

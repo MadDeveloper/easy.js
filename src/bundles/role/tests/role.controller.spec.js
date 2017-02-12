@@ -14,7 +14,7 @@ describe( 'RoleController', () => {
         name: 'test',
         slug: 'test'
     }
-    const roleModel = function() {}
+    const Role = class {}
     const somethingTerribleHappened = 'Something terrible happened!'
 
     beforeEach( () => roleController = new RoleController( container ) )
@@ -70,7 +70,7 @@ describe( 'RoleController', () => {
             beforeEach( () => {
                 request.getBody.and.returnValue( role )
                 entityManager.getRepository.and.returnValue({ save: () => Promise.resolve( role ) })
-                entityManager.getModel.and.returnValue( roleModel )
+                entityManager.getModel.and.returnValue( Role )
             })
 
             beforeEach( fakeAsync( () => roleController.createRole( request, response ) ) )
@@ -86,12 +86,12 @@ describe( 'RoleController', () => {
             beforeEach( () => {
                 request.getBody.and.returnValue( role )
                 entityManager.getRepository.and.returnValue({ save: () => Promise.reject( somethingTerribleHappened ) })
-                entityManager.getModel.and.returnValue( roleModel )
+                entityManager.getModel.and.returnValue( Role )
             })
 
             beforeEach( fakeAsync( () => roleController.createRole( request, response ) ) )
 
-            it( 'should respond with the newly created role', () => {
+            it( 'should respond with internal server error', () => {
                 expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
             })
 
@@ -113,7 +113,7 @@ describe( 'RoleController', () => {
 
     describe( 'roleExists', () => {
 
-        beforeEach( () => entityManager.getModel.and.returnValue( roleModel ) )
+        beforeEach( () => entityManager.getModel.and.returnValue( Role ) )
 
         describe( 'when the repository respond successfully', () => {
 
