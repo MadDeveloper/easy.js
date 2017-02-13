@@ -123,7 +123,7 @@ function asFileName( name ) {
  * @returns {string}
  */
 function asControllerFileName( name ) {
-    return `${asFileName( name ).replace( /controller/ig, '' )}.controller.js`
+    return `${asFileName( name.replace( /controller/ig, '' ) )}.controller.js`
 }
 
 /**
@@ -134,7 +134,7 @@ function asControllerFileName( name ) {
  * @returns {string}
  */
 function asRepositoryFileName( name ) {
-    return `${asFileName( name ).replace( /repository/ig, '' )}.repository.js`
+    return `${asFileName( name.replace( /repository/ig, '' ) )}.repository.js`
 }
 
 /**
@@ -156,7 +156,7 @@ function asEntityFileName ( name ) {
  * @returns {string}
  */
 function asServiceFileName( name ) {
-    return `${asFileName( name ).replace( /service/ig, '' )}.service.js`
+    return `${asFileName( name.replace( /service/ig, '' ) )}.service.js`
 }
 
 /**
@@ -167,7 +167,7 @@ function asServiceFileName( name ) {
  * @returns {string}
  */
 function asClassName( name ) {
-    return camelCase( asFileName( name ) )
+    return upperFirst( camelCase( asFileName( name ) ) )
 }
 
 /**
@@ -178,7 +178,7 @@ function asClassName( name ) {
  * @returns {string}
  */
 function asControllerName( name ) {
-    return asClassName( name ).concat( 'Controller' )
+    return asClassName( name ).replace( /controller/gi, '' ).concat( 'Controller' )
 }
 
 /**
@@ -189,7 +189,7 @@ function asControllerName( name ) {
  * @returns {string}
  */
 function asRepositoryName( name ) {
-    return asClassName( name ).concat( 'Repository' )
+    return asClassName( name ).replace( /repository/gi, '' ).concat( 'Repository' )
 }
 
 /**
@@ -211,7 +211,7 @@ function asEntityName( name ) {
  * @returns {string}
  */
 function asServiceName( name ) {
-    return asClassName( name ).concat( 'Service' )
+    return asClassName( name ).replace( /service/gi, '' ).concat( 'Service' )
 }
 
 
@@ -222,11 +222,12 @@ module.exports.transform.asWord = asWord
 module.exports.transform.asBundleName = asBundleName
 module.exports.transform.asClassName = asClassName
 module.exports.transform.asControllerName = asControllerName
+module.exports.transform.asControllerFileName = asControllerFileName
 module.exports.transform.asRepositoryName = asRepositoryName
 module.exports.transform.asEntityName = asEntityName
+module.exports.transform.asEntityFileName = asEntityFileName
 module.exports.transform.asServiceName = asServiceName
-module.exports.transform.asFileName = asFileName
-module.exports.transform.asControllerFileName = asControllerFileName
-module.exports.transform.asRepositoryFileName = asRepositoryFileName
-module.exports.transform.asRepositoryName = asRepositoryFileName
 module.exports.transform.asServiceFileName = asServiceFileName
+module.exports.transform.asFileName = asFileName
+module.exports.transform.asRepositoryFileName = asRepositoryFileName
+module.exports.transform.asRepositoryName = asRepositoryName
