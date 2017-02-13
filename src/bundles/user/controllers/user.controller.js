@@ -126,43 +126,55 @@ class UserController extends Controller {
      * @param  {Response} response
      */
     patchUser( request, response ) {
-        if ( this.isPatchRequestWellParameterized( request ) ) {
-            const ops = this.parsePatchParams( request )
-            let patchRequestCorrectlyFormed = ops || false
+        if ( request.getRawbody().length > 0 ) {
+            let ops = []
+            let patchRequestCorrectlyFormed = true
+
+            try {
+                ops = JSON.parse( request.getRawbody() )
+            } catch ( error ) {
+                patchRequestCorrectlyFormed = false
+            }
 
             let patchUser = () => new Promise( ( resolve, reject ) => {
                 const validPaths = [ '/email', '/username', '/password', '/role_id' ]
+                const opsLength = ops.length
+                let currentPatch = 0
 
-                if ( ops ) {
-                    patchRequestCorrectlyFormed = true
-                    const opsLength = ops.length
-                    let currentPatch = 0
-
+                if ( Array.isArray( ops ) && ops.length > 0 ) {
                     ops.forEach( patch => {
-                        switch ( patch.op ) {
-                            case 'replace':
-                                if ( indexOf( validPaths, patch.path ) >= 0 ) {
-                                    this.getEntityManager()
-                                        .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-                                        .patch( request.retrieve( 'user' ), patch )
-                                        .then( user => {
-                                            if ( ++currentPatch >= opsLength ) {
-                                                // It's ok
-                                                resolve( user )
-                                            }
-                                        })
-                                        .catch( reject )
-                                }
-                                break
+                        if ( 'replace' === patch.op ) {
+                            if ( validPaths.includes( patch.path ) ) {
+                                this.getEntityManager()
+                                    .getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+                                    .patch( request.retrieve( 'user' ), patch )
+                                    .then( user => {
+                                        if ( ++currentPatch >= opsLength ) {
+                                            // It's ok
+                                            resolve( user )
+                                        }
+                                    })
+                                    .catch( error => reject({ message: error, type: 'server' }) )
+                            } else {
+                                reject({ type: 'user' })
+                            }
                         }
                     })
+                } else {
+                    reject({ type: 'user' })
                 }
             })
 
             if ( patchRequestCorrectlyFormed ) {
                 patchUser()
                     .then( user => response.ok( user ) )
-                    .catch( error => response.internalServerError( error ) )
+                    .catch( error => {
+                        if ( 'server' === error.type ) {
+                            response.internalServerError()
+                        } else {
+                            response.badRequest()
+                        }
+                    })
             } else {
                 response.badRequest()
             }

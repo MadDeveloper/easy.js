@@ -226,9 +226,13 @@ describe( 'UserController', () => {
 
         describe( 'when the repository respond with an error', () => {
 
-            beforeEach( () => request.getBody.and.returnValue({}) )
+            beforeEach( () => {
+                request.getBody.and.returnValue({})
+            })
 
-            beforeEach( fakeAsync( () => userController.updateUser( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.updateUser( request, response )
+            }) )
 
             it( 'should respond with bad request', () => {
                 expect( response.badRequest ).toHaveBeenCalledWith()
@@ -245,10 +249,12 @@ describe( 'UserController', () => {
             beforeEach( () => {
                 request.retrieve.and.returnValue( user )
                 entityManager.getRepository.and.returnValue({ patch: () => Promise.resolve( user ) })
-                request.getRawbody.and.returnValue( '[{ "op": "replace", "path": "email", "value": "patched@example.com" }]' )
+                request.getRawbody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
             })
 
-            beforeEach( fakeAsync( () => userController.patchUser( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.patchUser( request, response )
+            }) )
 
             it( 'should respond with the patched user', () => {
                 expect( response.ok ).toHaveBeenCalledWith( user )
@@ -260,23 +266,29 @@ describe( 'UserController', () => {
 
             beforeEach( () => {
                 request.retrieve.and.returnValue( user )
-                entityManager.getRepository.and.returnValue({ patch: () => Promise.reject( somethingTerribleHappened ) })
-                request.getRawbody.and.returnValue( '{}' )
+                entityManager.getRepository.and.returnValue({ patch: () => Promise.reject({ type: 'server' }) })
+                request.getRawbody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
             })
 
-            beforeEach( fakeAsync( () => userController.patchUser( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.patchUser( request, response )
+            }) )
 
             it( 'should respond with internal server error', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
+                expect( response.internalServerError ).toHaveBeenCalledWith()
             })
 
         })
 
         describe( 'when the raw body is not in valid json format', () => {
 
-            beforeEach( () => request.getRawbody.and.returnValue( '{' ) )
+            beforeEach( () => {
+                request.getRawbody.and.returnValue( 'foo' )
+            })
 
-            beforeEach( fakeAsync( () => userController.patchUser( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.patchUser( request, response )
+            }) )
 
             it( 'should respond with bad request', () => {
                 expect( response.badRequest ).toHaveBeenCalledWith()

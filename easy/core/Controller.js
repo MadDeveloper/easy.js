@@ -23,14 +23,27 @@ class Controller {
     }
 
     /**
-     * getEntityManager - Description
+     * getEntityManager - get entity manager
      *
-     * @param {string} [name=default] Description
+     * @param {string} [name=default]
      *
-     * @returns {type} Description
+     * @returns {EntityManager}
      */
     getEntityManager( name = 'default' ) {
         return this.container.get( 'component.databasesmanager' ).getEntityManager( name )
+    }
+
+
+    /**
+     * getRepository - shortcut to get repository on default entity manager
+     *
+     * @param {string} repository
+     * @returns {Repository}
+     *
+     * @memberOf Controller
+     */
+    getRepository( repository ) {
+        return this.getEntityManager().getRepository( repository )
     }
 
     /**
@@ -65,28 +78,6 @@ class Controller {
         }
 
         return verified
-    }
-
-    /**
-     * parsePatchParams - parse body from patch http request
-     *
-     * @returns {object}
-     */
-    parsePatchParams( request ) {
-        try {
-            return JSON.parse( request.getRawbody() )
-        } catch ( error ) {}
-    }
-
-    /**
-     * isPatchRequestWellParameterized - check if patch request is correct
-     *
-     * @param {Request} request
-     *
-     * @returns {boolean}
-     */
-    isPatchRequestWellParameterized( request ) {
-        return request.getRawbody().length > 0
     }
 
     /**
