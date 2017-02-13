@@ -9,6 +9,9 @@ describe( 'UserController', () => {
 
     afterEach( () => {
         response.reset()
+        request.reset()
+        entityManager.reset()
+        tokenManager.reset()
     })
 
     let userController

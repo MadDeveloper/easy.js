@@ -10,7 +10,16 @@
 const tokenManager = jasmine.createSpyObj( 'tokenManager', [
     'sign',
     'verify',
-    'getConfig'
+    'getConfig',
+    'reset'
 ])
+
+tokenManager.reset = () => {
+    for( let property in tokenManager ) {
+        if ( tokenManager.hasOwnProperty( property ) && tokenManager[ property ].hasOwnProperty( 'calls' ) ) {
+            tokenManager[ property ].calls.reset()
+        }
+    }
+}
 
 module.exports = tokenManager

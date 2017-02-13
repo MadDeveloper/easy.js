@@ -1,11 +1,14 @@
 const RoleController = require( '../controllers/role.controller' )
 const container = easy.application.container
-const { entityManager,
-        response,
-        request,
-        fakeAsync } = require( 'easy/mocks' )
+const { entityManager, response, request, fakeAsync } = require( 'easy/mocks' )
 
 describe( 'RoleController', () => {
+
+    afterEach( () => {
+        response.reset()
+        request.reset()
+        entityManager.reset()
+    })
 
     let roleController
     const roles = [ { k: 'bar' }, { k: 'foo' } ]

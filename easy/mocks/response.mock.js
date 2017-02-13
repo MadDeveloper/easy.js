@@ -78,7 +78,11 @@ const response = jasmine.createSpyObj( 'response', [
 ])
 
 response.reset = () => {
-    response.ok.calls.reset()
+    for( let property in response ) {
+        if ( response.hasOwnProperty( property ) && response[ property ].hasOwnProperty( 'calls' ) ) {
+            response[ property ].calls.reset()
+        }
+    }
 }
 
 module.exports = response

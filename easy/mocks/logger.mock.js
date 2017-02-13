@@ -17,7 +17,16 @@ const logger = jasmine.createSpyObj( 'logger', [
     'info',
     'debug',
     'log',
-    'logWriter'
+    'logWriter',
+    'reset'
 ])
+
+logger.reset = () => {
+    for( let property in logger ) {
+        if ( logger.hasOwnProperty( property ) && logger[ property ].hasOwnProperty( 'calls' ) ) {
+            logger[ property ].calls.reset()
+        }
+    }
+}
 
 module.exports = logger

@@ -29,7 +29,16 @@ const request = jasmine.createSpyObj( 'request', [
     'store',
     'retrieve',
     'getCookies',
-    'scope'
+    'scope',
+    'reset'
 ])
+
+request.reset = () => {
+    for( let property in request ) {
+        if ( request.hasOwnProperty( property ) && request[ property ].hasOwnProperty( 'calls' ) ) {
+            request[ property ].calls.reset()
+        }
+    }
+}
 
 module.exports = request

@@ -8,7 +8,16 @@
 */
 
 const authorization = jasmine.createSpyObj( 'authorization', [
-    'checkToken'
+    'checkToken',
+    'reset'
 ])
+
+authorization.reset = () => {
+    for( let property in authorization ) {
+        if ( authorization.hasOwnProperty( property ) && authorization[ property ].hasOwnProperty( 'calls' ) ) {
+            authorization[ property ].calls.reset()
+        }
+    }
+}
 
 module.exports = authorization

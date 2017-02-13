@@ -11,8 +11,18 @@ const entityManager = jasmine.createSpyObj( 'em', [
     'getRepository',
     'getModel',
     'getCollection',
-    'database'
+    'database',
+    'reset'
 ])
+
+entityManager.reset = () => {
+    for( let property in entityManager ) {
+        if ( entityManager.hasOwnProperty( property ) && entityManager[ property ].hasOwnProperty( 'calls' ) ) {
+            entityManager[ property ].calls.reset()
+        }
+    }
+}
+
 const container = easy.application.container
 
 container.register( 'component.entitymanager', entityManager )

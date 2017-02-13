@@ -12,7 +12,16 @@ const directory = jasmine.createSpyObj( 'directory', [
     'create',
     'delete',
     'rename',
-    'move'
+    'move',
+    'reset'
 ])
+
+directory.reset = () => {
+    for( let property in directory ) {
+        if ( directory.hasOwnProperty( property ) && directory[ property ].hasOwnProperty( 'calls' ) ) {
+            directory[ property ].calls.reset()
+        }
+    }
+}
 
 module.exports = directory

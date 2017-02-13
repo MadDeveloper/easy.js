@@ -9,7 +9,16 @@
 
 const logWriter = jasmine.createSpyObj( 'logWriter', [
     'write',
-    'logFileManager'
+    'logFileManager',
+    'reset'
 ])
+
+logWriter.reset = () => {
+    for( let property in logWriter ) {
+        if ( logWriter.hasOwnProperty( property ) && logWriter[ property ].hasOwnProperty( 'calls' ) ) {
+            logWriter[ property ].calls.reset()
+        }
+    }
+}
 
 module.exports = logWriter

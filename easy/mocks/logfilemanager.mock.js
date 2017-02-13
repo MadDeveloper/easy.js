@@ -10,7 +10,16 @@
 const logFileManager = jasmine.createSpyObj( 'v', [
     'openLogFile',
     'openLogFileSync',
-    'logDirectoryPath'
+    'logDirectoryPath',
+    'reset'
 ])
+
+logFileManager.reset = () => {
+    for( let property in logFileManager ) {
+        if ( logFileManager.hasOwnProperty( property ) && logFileManager[ property ].hasOwnProperty( 'calls' ) ) {
+            logFileManager[ property ].calls.reset()
+        }
+    }
+}
 
 module.exports = logFileManager
