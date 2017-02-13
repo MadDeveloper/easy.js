@@ -2,7 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- revoir les describe des TU pour être plus clair
 - enlever les error renvoyées dans internalServerError
 - mettre à jour les mocks
 - appliquer le logger aux endroits utiles (générale où il y a un Console.error)

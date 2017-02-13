@@ -46,7 +46,9 @@ describe( 'UserController', () => {
                 entityManager.getRepository.and.returnValue({ findAll: role => Promise.resolve( users ) })
             })
 
-            beforeEach( fakeAsync( () => userController.getUsers( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.getUsers( request, response )
+            }) )
 
             it( 'should respond with the provided users', () => {
                 expect( response.ok ).toHaveBeenCalledWith( users )
@@ -54,14 +56,18 @@ describe( 'UserController', () => {
 
         })
 
-        describe( 'when the repository respond with an error', () => {
+        describe( 'when the findAll repository method fails', () => {
 
-            beforeEach( () => entityManager.getRepository.and.returnValue({ findAll: () => Promise.reject( 'Something terrible happened!' ) }) )
+            beforeEach( () => {
+                entityManager.getRepository.and.returnValue({ findAll: () => Promise.reject( somethingTerribleHappened ) })
+            })
 
-            beforeEach( fakeAsync( () => userController.getUsers( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.getUsers( request, response )
+            }) )
 
-            it( 'should respond with an error', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( 'Something terrible happened!' )
+            it( 'should respond with internal server error', () => {
+                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
             })
 
         })
@@ -72,9 +78,13 @@ describe( 'UserController', () => {
 
         describe( 'when respond successfully', () => {
 
-            beforeEach( () => request.retrieve.and.returnValue( user ) )
+            beforeEach( () => {
+                request.retrieve.and.returnValue( user )
+            })
 
-            beforeEach( fakeAsync( () => userController.getUser( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.getUser( request, response )
+            }) )
 
             it( 'should respond with the provided user', () => {
                 expect( response.ok ).toHaveBeenCalledWith( user )
@@ -95,7 +105,9 @@ describe( 'UserController', () => {
                 tokenManager.sign.and.returnValue( token )
             })
 
-            beforeEach( fakeAsync( () => userController.createUser( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.createUser( request, response )
+            }) )
 
             it( 'should respond with the newly created user', () => {
                 expect( response.created ).toHaveBeenCalledWith({ user: userReturned, token })
@@ -111,7 +123,9 @@ describe( 'UserController', () => {
                 entityManager.getModel.and.returnValue( User )
             })
 
-            beforeEach( fakeAsync( () => userController.createUser( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.createUser( request, response )
+            }) )
 
             it( 'should respond with internal server error', () => {
                 expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
@@ -119,11 +133,15 @@ describe( 'UserController', () => {
 
         })
 
-        describe( 'when the repository respond with an error', () => {
+        describe( 'when the request body is empty', () => {
 
-            beforeEach( () => request.getBody.and.returnValue({}) )
+            beforeEach( () => {
+                request.getBody.and.returnValue({})
+            })
 
-            beforeEach( fakeAsync( () => userController.createUser( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.createUser( request, response )
+            }) )
 
             it( 'should respond with bad request', () => {
                 expect( response.badRequest ).toHaveBeenCalledWith()
@@ -135,7 +153,9 @@ describe( 'UserController', () => {
 
     describe( 'userExists', () => {
 
-        beforeEach( () => entityManager.getModel.and.returnValue( User ) )
+        beforeEach( () => {
+            entityManager.getModel.and.returnValue( User )
+        })
 
         describe( 'when the repository respond successfully', () => {
 
@@ -143,7 +163,9 @@ describe( 'UserController', () => {
                 entityManager.getRepository.and.returnValue({ find: () => Promise.resolve( user ) })
             })
 
-            beforeEach( fakeAsync( () => userController.userExists( request, response ) ) )
+            beforeEach( fakeAsync( () => {
+                userController.userExists( request, response )
+            }) )
 
             it( 'should store found user in request dedicated scope', () => {
                 expect( request.retrieve( 'user' ) ).toEqual( user )
@@ -167,10 +189,10 @@ describe( 'UserController', () => {
 
         })
 
-        describe( 'when the repository respond with an error', () => {
+        describe( 'when the find repository methods fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ find: () => Promise.reject() })
+                entityManager.getRepository.and.returnValue({ find: () => Promise.reject( somethingTerribleHappened ) })
             })
 
             beforeEach( fakeAsync( () => {
@@ -178,7 +200,7 @@ describe( 'UserController', () => {
             }) )
 
             it( 'should respond with bad request', () => {
-                expect( response.badRequest ).toHaveBeenCalledWith()
+                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
             })
 
         })
@@ -208,7 +230,7 @@ describe( 'UserController', () => {
 
         })
 
-        describe( 'when the repository respond with an error', () => {
+        describe( 'when the save repository method fails', () => {
 
             beforeEach( () => {
                 entityManager.getRepository.and.returnValue({ save: () => Promise.reject( somethingTerribleHappened ) })
@@ -224,7 +246,7 @@ describe( 'UserController', () => {
 
         })
 
-        describe( 'when the repository respond with an error', () => {
+        describe( 'when the body response is empty', () => {
 
             beforeEach( () => {
                 request.getBody.and.returnValue({})
@@ -329,7 +351,7 @@ describe( 'UserController', () => {
 
         })
 
-        describe( 'when the repository respond with an error', () => {
+        describe( 'when the delete repository method fails', () => {
 
             beforeEach( () => {
                 request.retrieve.and.returnValue( null )
@@ -340,7 +362,7 @@ describe( 'UserController', () => {
                 userController.deleteUser( request, response )
             }) )
 
-            it( 'should respond with no content', () => {
+            it( 'should respond with internal server error', () => {
                 expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
             })
 

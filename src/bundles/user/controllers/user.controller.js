@@ -44,7 +44,7 @@ class UserController extends Controller {
                 }
             })
             .catch( error => {
-                response.badRequest()
+                response.internalServerError( error )
                 return Promise.reject()
             })
     }
