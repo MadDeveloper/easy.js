@@ -37,16 +37,19 @@ class DatabaseDaemon {
      */
     manage() {
         this.managed.start()
-        this.verifyConnection()
-            .then( () => this.defineAsStarted() )
-            .catch( () => this.definedAsStopped() )
+
+        if ( this.managed.config.config.enableDaemon ) {
+            this.verifyConnection()
+                .then( () => this.defineAsStarted() )
+                .catch( () => this.definedAsStopped() )
+        }
     }
 
     /**
      * verifyConnection - verify if connection is established with database
      */
     verifyConnection() {
-        return this.managed.instance.knex.raw( 'select 1+1 as result' )
+        return this.managed.verifyConnectionHandler()
     }
 
     /**

@@ -22,11 +22,11 @@ class AnalyzerSecurityConfig extends Analyzer {
      * @returns {boolean}
      */
     analyze( configurations ) {
-        if ( configurations.hasOwnProperty( 'security' ) ) {
+        if ( 'security' in configurations ) {
             const security = configurations.security
 
-            if ( security.hasOwnProperty( 'strategy' ) ) {
-                return security.hasOwnProperty( 'rules' )
+            if ( 'strategy' in security ) {
+                return 'rules' in security
             }
         }
 

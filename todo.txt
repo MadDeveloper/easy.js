@@ -5,7 +5,6 @@
 - enlever les error renvoyées dans internalServerError
 - mettre à jour les mocks
 - pour les classes log, travailler avec Directory et File
-- le daemon de DB travaille sur knex pour vérifier la connectivité de la db (travailler sur quelque chose de plus générique ou bien selon les cas)
 - appliquer le logger aux endroits utiles (générale où il y a un Console.error)
 - faire les tests du vendor
 - exporter role et user dans un repo externe, importable

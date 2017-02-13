@@ -52,6 +52,17 @@ class Database {
     }
 
     /**
+     * verifyConnectionHandler - handler called by daemon which indicates if database still available or not
+     *
+     * @returns {Promise}
+     *
+     * @memberOf Database
+     */
+    verifyConnectionHandler() {
+        return this.config.verifyConnectionHandler( this.config.instance )
+    }
+
+    /**
      * get - get database instance
      *
      * @returns {Object}
