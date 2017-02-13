@@ -16,7 +16,7 @@ const request = jasmine.createSpyObj( 'request', [
     'getMethod',
     'getHeader',
     'getBody',
-    'getRawbody',
+    'getRawBody',
     'getBodyParameter',
     'setBodyParameter',
     'getRouteParameter',

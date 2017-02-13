@@ -78,11 +78,11 @@ class Request extends Http {
     }
 
     /**
-     * getRawbody - get raw http body
+     * getRawBody - get raw http body
      *
      * @returns {string}
      */
-    getRawbody() {
+    getRawBody() {
         return this.scope.rawBody
     }
 

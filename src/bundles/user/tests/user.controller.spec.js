@@ -249,7 +249,7 @@ describe( 'UserController', () => {
             beforeEach( () => {
                 request.retrieve.and.returnValue( user )
                 entityManager.getRepository.and.returnValue({ patch: () => Promise.resolve( user ) })
-                request.getRawbody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
+                request.getRawBody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
             })
 
             beforeEach( fakeAsync( () => {
@@ -267,7 +267,7 @@ describe( 'UserController', () => {
             beforeEach( () => {
                 request.retrieve.and.returnValue( user )
                 entityManager.getRepository.and.returnValue({ patch: () => Promise.reject({ type: 'server' }) })
-                request.getRawbody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
+                request.getRawBody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
             })
 
             beforeEach( fakeAsync( () => {
@@ -283,7 +283,7 @@ describe( 'UserController', () => {
         describe( 'when the raw body is not in valid json format', () => {
 
             beforeEach( () => {
-                request.getRawbody.and.returnValue( 'foo' )
+                request.getRawBody.and.returnValue( 'foo' )
             })
 
             beforeEach( fakeAsync( () => {
@@ -298,7 +298,7 @@ describe( 'UserController', () => {
 
         describe( 'when the raw body is empty', () => {
 
-            beforeEach( () => request.getRawbody.and.returnValue( '' ) )
+            beforeEach( () => request.getRawBody.and.returnValue( '' ) )
 
             beforeEach( fakeAsync( () => userController.patchUser( request, response ) ) )
 

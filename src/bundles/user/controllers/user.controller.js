@@ -126,12 +126,12 @@ class UserController extends Controller {
      * @param  {Response} response
      */
     patchUser( request, response ) {
-        if ( request.getRawbody().length > 0 ) {
+        if ( request.getRawBody().length > 0 ) {
             let ops = []
             let patchRequestCorrectlyFormed = true
 
             try {
-                ops = JSON.parse( request.getRawbody() )
+                ops = JSON.parse( request.getRawBody() )
             } catch ( error ) {
                 patchRequestCorrectlyFormed = false
             }
