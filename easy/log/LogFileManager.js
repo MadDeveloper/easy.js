@@ -27,12 +27,12 @@ class LogFileManager {
         if ( application.config.app.log ) {
             const directory = new Directory( this._logDirectoryPath )
 
-            /*if ( !directory.existsSync() && !directory.createSync().success ) {
+            if ( !directory.existsSync() && !directory.createSync().success ) {
                 Console.error({
                     title: `Impossible to create directory : ${this._logDirectoryPath}`,
                     message: error.toString()
                 })
-            }*/
+            }
         }
     }
 
