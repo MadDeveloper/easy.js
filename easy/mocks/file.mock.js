@@ -7,12 +7,16 @@
 * file that was distributed with this source code.
 */
 
-const directory = jasmine.createSpyObj( 'directory', [
+const file = jasmine.createSpyObj( 'file', [
     'loadPathInfo',
     'exists',
     'existsSync',
     'create',
     'createSync',
+    'read',
+    'readSync',
+    'write',
+    'writeSync',
     'delete',
     'deleteSync',
     'rename',
@@ -20,15 +24,16 @@ const directory = jasmine.createSpyObj( 'directory', [
     'move',
     'moveSync',
     'path',
+    'content',
     'reset'
 ])
 
-directory.reset = () => {
-    for( let property in directory ) {
-        if ( directory.hasOwnProperty( property ) && directory[ property ].hasOwnProperty( 'calls' ) ) {
-            directory[ property ].calls.reset()
+file.reset = () => {
+    for( let property in file ) {
+        if ( file.hasOwnProperty( property ) && file[ property ].hasOwnProperty( 'calls' ) ) {
+            file[ property ].calls.reset()
         }
     }
 }
 
-module.exports = directory
+module.exports = file

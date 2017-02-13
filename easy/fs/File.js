@@ -26,7 +26,7 @@ class File extends Document {
         super()
 
         this.loadPathInfo( filePath )
-        this.content = content
+        this._content = content
     }
 
     /**
@@ -45,32 +45,6 @@ class File extends Document {
         this.name = name
         this.path = `${dir}/${base}`
         this.directory = new Directory( dir )
-    }
-
-    /**
-     * addContent
-     *
-     * @param {string} content=''
-     *
-     * @returns {File}
-     */
-    addContent( content = '' ) {
-        this.content += content
-
-        return this
-    }
-
-    /**
-     * addContent
-     *
-     * @param {string} content=''
-     *
-     * @returns {File}
-     */
-    setContent( content = '' ) {
-        this.content = content
-
-        return this
     }
 
     /**
@@ -338,6 +312,28 @@ class File extends Document {
     set path( newPath = '' ) {
         if ( 'string' === typeof newPath ) {
             this._path = path.resolve( newPath )
+        }
+    }
+
+    /**
+     * content - get the file content
+     *
+     * @memberOf File
+     */
+    get content() {
+        return this.content
+    }
+
+    /**
+     * content - set the file content
+     *
+     * @param {string} content
+     *
+     * @memberOf File
+     */
+    set content( content ) {
+        if ( 'string' === typeof content ) {
+            this._content = content
         }
     }
 }
