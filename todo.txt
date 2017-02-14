@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- use async await
 - pour les classes log, travailler avec Directory et File
 - faire les tests du vendor
 - exporter role et user dans un repo externe, importable
