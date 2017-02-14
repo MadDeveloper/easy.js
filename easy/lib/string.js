@@ -214,6 +214,17 @@ function asServiceName( name ) {
     return asClassName( name ).replace( /service/gi, '' ).concat( 'Service' )
 }
 
+/**
+ * asServiceFilePath - format string as service file path
+ *
+ * @param {string} fileName
+ *
+ * @returns {string}
+ */
+function asServiceFilePath( fileName ) {
+    return `src/services/${fileName}`
+}
+
 
 // exports
 module.exports.strtr = strtr
@@ -228,6 +239,7 @@ module.exports.transform.asEntityName = asEntityName
 module.exports.transform.asEntityFileName = asEntityFileName
 module.exports.transform.asServiceName = asServiceName
 module.exports.transform.asServiceFileName = asServiceFileName
+module.exports.transform.asServiceFilePath = asServiceFilePath
 module.exports.transform.asFileName = asFileName
 module.exports.transform.asRepositoryFileName = asRepositoryFileName
 module.exports.transform.asRepositoryName = asRepositoryName

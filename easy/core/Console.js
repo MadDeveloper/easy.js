@@ -94,7 +94,7 @@ class Console {
      * line - insert new line in console
      */
     static line() {
-        console.log( '\n' )
+        console.log( '' )
     }
 }
 

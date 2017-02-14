@@ -138,7 +138,7 @@ class ContainerBuilder extends Configurable {
             return this.getLoaded( name )
         }
 
-        const dependencyFilePath = `${isComponent ? 'easy' : this.path.src}/${this.dependenciesMapping[ name ].path}`
+        const dependencyFilePath = `${isComponent ? '' : `${this.path.src}/`}${this.dependenciesMapping[ name ].path}`
 
         try {
             const dependencyClass = require( dependencyFilePath )

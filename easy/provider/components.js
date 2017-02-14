@@ -9,19 +9,19 @@
 
 module.exports = {
     'component.router': {
-        path: 'core/Router',
+        path: 'easy/core/Router',
         dependencies: []
     },
     'component.logfilemanager': {
-        path: 'log/LogFileManager',
+        path: 'easy/log/LogFileManager',
         dependencies: [ 'easy.application' ]
     },
     'component.logwriter': {
-        path: 'log/LogWriter',
+        path: 'easy/log/LogWriter',
         dependencies: [ 'component.logfilemanager' ]
     },
     'component.logger': {
-        path: 'log/Logger',
+        path: 'easy/log/Logger',
         dependencies: [ 'component.logwriter' ]
     }
 }

@@ -321,7 +321,7 @@ class File extends Document {
      * @memberOf File
      */
     get content() {
-        return this.content
+        return this._content
     }
 
     /**
