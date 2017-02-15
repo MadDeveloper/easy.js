@@ -2,7 +2,6 @@ module.exports = {
     /*
 	 * List of available easy components injectable:
 	 * component.router
-	 * component.database
      * component.entitymanager
 	 * component.logger
 	 * component.logfilemanager

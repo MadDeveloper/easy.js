@@ -9,8 +9,7 @@
 
 module.exports = {
     'component.router': {
-        path: 'easy/core/Router',
-        dependencies: []
+        path: 'easy/core/Router'
     },
     'component.logdirectorymanager': {
         path: 'easy/log/LogDirectoryManager',
