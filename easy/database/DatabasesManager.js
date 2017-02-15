@@ -32,7 +32,7 @@ class DatabasesManager {
     }
 
     /**
-     * load - Description
+     * load all entity manager
      *
      * @returns {type} Description
      */
@@ -42,19 +42,17 @@ class DatabasesManager {
                 this.createEntityManager( configName, this.config[ configName ])
             }
         } else {
-            this.createDefaultEmptyEntityManager()
+            this.createEntityManager( 'default', {})
         }
     }
 
     /**
-     * start - Description
-     *
-     * @returns {type} Description
+     * start manager
      */
     start() {
         if ( this.hasConfiguredDatabases() ) {
             for ( let { em, database } of this.ems.values() ) {
-                if ( null !== database ) {
+                if ( database ) {
                     this.daemonizeDatabase( database )
                 }
             }
@@ -62,7 +60,7 @@ class DatabasesManager {
     }
 
     /**
-     * createEntityManager - Description
+     * create entity manager with database associated
      *
      * @param {type} name   Description
      * @param {type} config Description
@@ -74,18 +72,6 @@ class DatabasesManager {
         em.configure( this.bundlesPath, database )
         this.addEntityManager( name, em, database )
         this.injectEntityManagerInContainer( name, em )
-    }
-
-    /**
-     * createDefaultEmptyEntityManager - create default empty entity manager
-     */
-    createDefaultEmptyEntityManager() {
-        const em = new EntityManager()
-        const database = new Database()
-
-        em.configure( this.bundlesPath, database )
-        this.addEntityManager( 'default', em, database )
-        this.injectEntityManagerInContainer( 'default', em )
     }
 
     /**
@@ -135,11 +121,11 @@ class DatabasesManager {
     }
 
     /**
-     * daemonizeDatabase - Description
+     * Daemonize database
      *
-     * @param {type} database Description
+     * @param {any} database
      *
-     * @returns {type} Description
+     * @memberOf DatabasesManager
      */
     daemonizeDatabase( database ) {
         const daemon = new DatabaseDaemon()

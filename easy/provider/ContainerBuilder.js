@@ -20,11 +20,11 @@ class ContainerBuilder extends Configurable {
     /**
      * constructor
      */
-    constructor( application ) {
+    constructor( application, dependenciesMapping ) {
         super()
 
         this.application = application
-        this.dependenciesMapping = ConfigLoader.loadFromGlobal( 'services' )
+        this.dependenciesMapping = dependenciesMapping || ConfigLoader.loadFromGlobal( 'services' )
         this.container = new Container()
         this.configurations = {}
         this.path = application.kernel.path
@@ -80,12 +80,8 @@ class ContainerBuilder extends Configurable {
         Reflect
             .ownKeys( this.dependenciesMapping )
             .forEach( name => {
-                this.container.register(
-                    name,
-                    this.load(
-                        name,
-                        this.dependenciesMapping[ name ].path,
-                        name.includes( 'component.' ) ) )
+                const dependency = this.load( name, this.dependenciesMapping[ name ].path, name.includes( 'component.' ) )
+                this.container.register( name, dependency )
             })
     }
 

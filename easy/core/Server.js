@@ -38,18 +38,20 @@ class Server {
     /**
      * start - start server
      */
-    start() {
-        this.startHttpServer();
+    async start() {
+        try {
+            this.startHttpServer()
 
-        ( async () => {
-            try {
-                const canStart = await this.canBeStarted()
+            const canBeStarted = await this.canBeStarted()
 
+            if ( canBeStarted ) {
                 this.canStart()
-            } catch ( error ) {
-                this.failedToStart( error )
+            } else {
+                throw new Error( 'Serveur cannot be started' )
             }
-        })()
+        } catch ( error ) {
+            this.failedToStart( error )
+        }
     }
 
     /**
@@ -85,7 +87,7 @@ class Server {
                 this.port = port
 
                 if ( error ) {
-                    reject( error )
+                    resolve( false )
                 } else {
                     resolve( true )
                 }
