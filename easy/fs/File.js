@@ -54,13 +54,17 @@ class File extends Document {
      */
     exists() {
         return new Promise( ( resolve, reject ) => {
-            fs.lstat( this.path, ( error, stat ) => {
-                if ( error || !stat.isFile() ) {
-                    reject( error )
-                }
+            try {
+                fs.lstat( this.path, ( error, stat ) => {
+                    if ( error || !stat.isFile() ) {
+                        resolve( false )
+                    }
 
-                resolve()
-            })
+                    resolve( true )
+                })
+            } catch ( error ) {
+                resolve( false )
+            }
         })
     }
 
@@ -159,8 +163,12 @@ class File extends Document {
      *
      * @returns {Promise}
      */
-    write( options = { mode: 755, encoding: 'utf8' }) {
+    write( content = '', options = { mode: 755, encoding: 'utf8' }) {
         return new Promise( ( resolve, reject ) => {
+            if ( content.length > 0 ) {
+                this.content = content
+            }
+
             if ( 'mode' in options ) {
                 options.mode = parseInt( options.mode, 8 )
             }
@@ -176,10 +184,14 @@ class File extends Document {
      *
      * @returns {Object}
      */
-    writeSync( options = { mode: 755, encoding: 'utf8' }) {
+    writeSync( content = '', options = { mode: 755, encoding: 'utf8' }) {
         let results = { success: false, error: null }
 
         try {
+            if ( content.length > 0 ) {
+                this.content = content
+            }
+
             if ( 'mode' in options ) {
                 options.mode = parseInt( options.mode, 8 )
             }

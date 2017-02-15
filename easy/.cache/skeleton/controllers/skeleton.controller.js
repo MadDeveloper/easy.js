@@ -1,4 +1,3 @@
-const { indexOf } = require( 'lodash' )
 const { Controller } = require( 'easy/core' )
 
 /**

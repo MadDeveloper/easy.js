@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-const fs = require( 'fs' )
+const File = require( '../fs/File' )
 const Console = require( '../core/Console' )
 const { strtr } = require( '../lib/string' )
 
@@ -16,39 +16,40 @@ const { strtr } = require( '../lib/string' )
  */
 class LogWriter {
     /**
+     * Creates an instance of LogWriter.
+     *
      * @constructor
-     * @param  {LogFileManager} logFileManager
+     *
+     * @param {LogDirectoryManager} logDirectoryManager
+     *
+     * @memberOf LogWriter
      */
-    constructor( logFileManager ) {
-        this._logFileManager = logFileManager
+    constructor( logDirectoryManager ) {
+        this.logDirectoryManager = logDirectoryManager
     }
 
     /**
      * General log method
      *
-     * @param {string} file
+     * @param {string} fileName
      * @param {string} message
      * @param {object} context
      */
-    async write( file, message, context ) {
+    async write( fileName, message, context ) {
+        const filePath = `${this.logDirectoryManager.logDirectoryPath}/${fileName}.log`
+
         try {
-            const fd = await this.logFileManager.openLogFile( file )
+            const file = await new File( filePath )
+            const exists = await file.exists()
 
-            if ( fd ) {
-                fs.write( fd, strtr( message, context ), null, 'utf8', error => {})
+            if ( !exists ) {
+                await file.create()
             }
-        } catch ( error ) {
-            Console.error({ title: `Impossible to open or create ${file}.log at: ${this.logDirectoryPath}/${file}.log`, message: error })
-        }
-    }
 
-    /**
-     * get logFileManager instance
-     *
-     * @returns {LogFileManager}
-     */
-    get logFileManager() {
-        return this._logFileManager
+            file.write( strtr( message, context ) )
+        } catch ( error ) {
+            Console.error({ title: `Impossible to writing on file ${fileName}.log at: ${filePath}`, message: error })
+        }
     }
 }
 

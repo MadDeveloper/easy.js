@@ -6,7 +6,7 @@
   "repository": "https://github.com/MadDeveloper/easy.js.git",
   "scripts": {
     "debug": "node --harmony debug src/server.js",
-    "start": "nodemon -w src --trace-warnings --harmony src/server.js",
+    "start": "nodemon -w src --harmony src/server.js",
     "start:forever": "node --harmony src/server.js > stdout.txt 2> stderr.txt &"
   },
   "keywords": [

@@ -8,7 +8,6 @@
 */
 
 const Configurable = require( '../interfaces/Configurable' )
-const { isEqual } = require( 'lodash' )
 
 /**
  * @class EntityManager

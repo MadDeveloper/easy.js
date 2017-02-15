@@ -7,7 +7,6 @@
 * file that was distributed with this source code.
 */
 
-const { indexOf } = require( 'lodash' )
 const ConfigLoader = require( '../core/ConfigLoader' )
 const SecurityAccess = require( '../interfaces/SecurityAccess' )
 const roles = ConfigLoader.loadFromGlobal( 'roles' )
@@ -120,7 +119,7 @@ class Access extends SecurityAccess {
 
         this.restrict( configurations.rules ).focusOn( user[ configurations.focus ])
 
-        authorized = indexOf( this.restrictions.mustBe, this.focus ) !== -1 || indexOf( this.restrictions.mustBe, this.any ) !== -1
+        authorized = this.restrictions.mustBe.includes( this.focus ) || this.restrictions.mustBe.includes( this.any )
 
         if ( authorized ) {
 
@@ -129,21 +128,21 @@ class Access extends SecurityAccess {
             const methodWhenUpdating = [ 'put', 'patch' ]
             const methodWhenDeleting = [ 'delete' ]
 
-            if ( indexOf( methodWhenReading, method ) !== -1 ) {
+            if ( methodWhenReading.includes( method ) ) {
 
-                isAuthorizedToAccess = indexOf( this.restrictions.canRead, this.focus ) !== -1 || indexOf( this.restrictions.canRead, this.any ) !== -1
+                isAuthorizedToAccess = this.restrictions.canRead.includes( this.focus ) || this.restrictions.canRead.includes( this.any )
 
-            } else if ( indexOf( methodWhenCreating, method ) !== -1 ) {
+            } else if ( methodWhenCreating.includes( method ) ) {
 
-                isAuthorizedToAccess = indexOf( this.restrictions.canCreate, this.focus ) !== -1 || indexOf( this.restrictions.canCreate, this.any ) !== -1
+                isAuthorizedToAccess = this.restrictions.canCreate.includes( this.focus ) || this.restrictions.canCreate.includes( this.any )
 
-            } else if ( indexOf( methodWhenUpdating, method ) !== -1 ) {
+            } else if ( methodWhenUpdating.includes( method ) ) {
 
-                isAuthorizedToAccess = indexOf( this.restrictions.canUpdate, this.focus ) !== -1 || indexOf( this.restrictions.canUpdate, this.any ) !== -1
+                isAuthorizedToAccess = this.restrictions.canUpdate.includes( this.focus ) || this.restrictions.canUpdate.includes( this.any )
 
-            } else if ( indexOf( methodWhenDeleting, method ) !== -1 ) {
+            } else if ( methodWhenDeleting.includes( method ) ) {
 
-                isAuthorizedToAccess = indexOf( this.restrictions.canDelete, this.focus ) !== -1 || indexOf( this.restrictions.canDelete, this.any ) !== -1
+                isAuthorizedToAccess = this.restrictions.canDelete.includes( this.focus ) || this.restrictions.canDelete.includes( this.any )
 
             }
 

@@ -7,7 +7,6 @@
 * file that was distributed with this source code.
 */
 
-const fs = require( 'fs' )
 const Console = require( '../core/Console' )
 
 /**

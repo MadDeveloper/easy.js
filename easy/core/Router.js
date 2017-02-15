@@ -15,7 +15,6 @@ const Response = require( '../http/Response' )
 const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
 const Access = require( '../security/Access' )
 const AnalyzerMiddlewaresConfig = require( '../middlewares/AnalyzerMiddlewaresConfig' )
-const { indexOf } = require( 'lodash' )
 
 /**
  * @class Router

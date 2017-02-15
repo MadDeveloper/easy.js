@@ -12,13 +12,13 @@ module.exports = {
         path: 'easy/core/Router',
         dependencies: []
     },
-    'component.logfilemanager': {
-        path: 'easy/log/LogFileManager',
+    'component.logdirectorymanager': {
+        path: 'easy/log/LogDirectoryManager',
         dependencies: [ 'easy.application' ]
     },
     'component.logwriter': {
         path: 'easy/log/LogWriter',
-        dependencies: [ 'component.logfilemanager' ]
+        dependencies: [ 'component.logdirectorymanager' ]
     },
     'component.logger': {
         path: 'easy/log/Logger',

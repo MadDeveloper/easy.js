@@ -1,4 +1,4 @@
-const fs = require( 'fs' )
+const { File } = require( 'easy/fs' )
 
 module.exports = {
     /*
@@ -26,13 +26,11 @@ module.exports = {
 }
 
 function getCredentials() {
-    let credentials = { key: null, cert: null, found: false }
+    const keyFile = new File( `${__dirname}/ssl/myapp-privkey.pem` )
+    const certFile = new File( `${__dirname}/ssl/myapp-cert.pem` )
 
-    try {
-        credentials.key = fs.readFileSync( `${__dirname}/ssl/myapp-privkey.pem` )
-        credentials.cert = fs.readFileSync( `${__dirname}/ssl/myapp-cert.pem` )
-        credentials.found = true
-    } finally {
-        return credentials
+    return {
+        key: keyFile.existsSync() ? keyFile.readSync() : null,
+        cert: certFile.existsSync() ? certFile.readSync() : null
     }
 }

@@ -56,7 +56,7 @@ class Server {
      * startHttpServer - start correct http server (HTTP or HTTPS if credentials are found and tls is requested)
      */
     startHttpServer() {
-        if ( 'https' === this.protocol && false !== this.application.config.credentials.found ) {
+        if ( 'https' === this.protocol && this.application.config.credentials.key && this.application.config.credentials.cert ) {
             /*
              * If specified or if https credentials are found (keys and cert), an HTTPS server is started
              */
