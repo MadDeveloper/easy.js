@@ -5,7 +5,7 @@ module.exports = {
     password: 'root',
     database: 'prepapp',
     charset: 'utf8',
-    enableDaemon: false,
+    enableDaemon: true,
     intervalToTryingReconnect: 5000,
     intervalToCheckConnection: 15000,
     maxAttempsReconnect: Infinity

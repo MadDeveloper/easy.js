@@ -90,36 +90,39 @@ class Authentication extends Configurable {
 		this._passport.use( new LocalStrategy({
 			usernameField: this.config.usernameField,
 			passwordField: this.config.passwordField
-		}, ( username, password, done ) => {
+		}, async ( username, password, done ) => {
 			let findBy = {
 				[ this.config.usernameField ]: username
 			}
 
-			this._userRepository
-				.find( findBy )
-				.then( user => {
-					if ( user && password === user.get( this.config.passwordField ) ) {
-						user.unset( this.config.passwordField )
+			try {
+				const user = await this._userRepository.find( findBy )
 
-						return done( null, { user: user.attributes, token: TokenManager.sign( user.attributes ) })
-					} else {
-						return done( null, false )
-					}
-				})
-				.catch( error => done( error ) )
+				if ( user && password === user.get( this.config.passwordField ) ) {
+					user.unset( this.config.passwordField )
+
+					return done( null, { user: user.attributes, token: TokenManager.sign( user.attributes ) })
+				} else {
+					return done( null, false )
+				}
+			} catch ( error ) {
+				done( error )
+			}
 		}) )
 
 		/*
 		 * Verify token
 		 */
-		this._router.scope.use( ( req, res, next ) => {
+		this._router.scope.use( async ( req, res, next ) => {
 			const request = this._router.getRequest( req )
 			const response = this._router.getResponse( res, request )
+			const authorized = await this._authorization.checkToken( request, response )
 
-			this._authorization
-				.checkToken( request, response )
-				.then( next )
-				.catch( () => response.unauthorized() )
+			if ( authorized ) {
+				next()
+			} else {
+				response.unauthorized()
+			}
 		})
 	}
 

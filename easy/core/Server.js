@@ -39,12 +39,17 @@ class Server {
      * start - start server
      */
     start() {
-        Console.log( 'Starting server...' )
+        this.startHttpServer();
 
-        this.startHttpServer()
-        this.canBeStarted()
-            .then( () => this.canStart() )
-            .catch( error => this.failedToStart( error ) )
+        ( async () => {
+            try {
+                const canStart = await this.canBeStarted()
+
+                this.canStart()
+            } catch ( error ) {
+                this.failedToStart( error )
+            }
+        })()
     }
 
     /**
@@ -78,7 +83,12 @@ class Server {
 
             portfinder.getPort( options, ( error, port ) => {
                 this.port = port
-                error ? reject() : resolve()
+
+                if ( error ) {
+                    reject( error )
+                } else {
+                    resolve( true )
+                }
             })
         })
     }

@@ -23,29 +23,30 @@ class RoleController extends Controller {
      *
      * @param  {Request} request
      * @param  {Response} response
-     * @param  {Function} next
-     * @returns {Promise}
+     * @returns {boolean}
      */
-    roleExists( request, response ) {
+    async roleExists( request, response ) {
         const em = this.getEntityManager()
         const Role = em.getModel( 'role/entity/role' )
+        const roleRepository = em.getRepository( 'role/entity/role.repository', { model: Role })
 
-        return em
-            .getRepository( 'role/entity/role.repository', { model: Role })
-            .find( request.getRouteParameter( 'role_id' ), Role )
-            .then( role => {
-                if ( role ) {
-                    request.store( 'role', role )
-                    return Promise.resolve()
-                } else {
-                    response.notFound()
-                    return Promise.reject()
-                }
-            })
-            .catch( error => {
-                response.internalServerError( error )
-                return Promise.reject()
-            })
+        try {
+            const role = await roleRepository.find( request.getRouteParameter( 'role_id' ), Role )
+
+            if ( !role ) {
+                response.notFound()
+
+                return false
+            }
+
+            request.store( 'role', role )
+
+            return true
+        } catch ( error ) {
+            response.internalServerError( error )
+
+            return false
+        }
     }
 
     /**
@@ -54,12 +55,15 @@ class RoleController extends Controller {
      * @param  {Request} request
      * @param  {Response} response
      */
-    getRoles( request, response ) {
-        this.getEntityManager()
-            .getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
-            .findAll()
-            .then( roles => response.ok( roles ) )
-            .catch( error => response.internalServerError( error ) )
+    async getRoles( request, response ) {
+        const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
+
+        try {
+            const roles = await roleRepository.findAll()
+            response.ok( roles )
+        } catch ( error ) {
+            response.internalServerError( error )
+        }
     }
 
     /**
@@ -68,16 +72,19 @@ class RoleController extends Controller {
      * @param  {Request} request
      * @param  {Response} response
      */
-    createRole( request, response ) {
+    async createRole( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
             const em = this.getEntityManager()
             const Role = em.getModel( 'role/entity/role' )
+            const roleRepository = em.getRepository( 'role/entity/role.repository', { model: Role })
 
-            em
-                .getRepository( 'role/entity/role.repository', { model: Role })
-                .save( new Role(), request.getBody() )
-                .then( role => response.created( role ) )
-                .catch( error => response.internalServerError( error ) )
+            try {
+                const role = await roleRepository.save( new Role(), request.getBody() )
+
+                response.created( role )
+            } catch ( error ) {
+                response.internalServerError( error )
+            }
         } else {
             response.badRequest()
         }
@@ -99,13 +106,16 @@ class RoleController extends Controller {
      * @param  {Request} request
      * @param  {Response} response
      */
-    updateRole( request, response ) {
+    async updateRole( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            this.getEntityManager()
-                .getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
-                .save( request.retrieve( 'role' ), request.getBody() )
-                .then( role => response.ok( role ) )
-                .catch( error => response.internalServerError( error ) )
+            const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
+            try {
+                const role = await roleRepository.save( request.retrieve( 'role' ), request.getBody() )
+
+                response.ok( role )
+            } catch ( error ) {
+                response.internalServerError( error )
+            }
         } else {
             response.badRequest()
         }
@@ -117,12 +127,15 @@ class RoleController extends Controller {
      * @param  {Request} request
      * @param  {Response} response
      */
-    deleteRole( request, response ) {
-        this.getEntityManager()
-            .getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
-            .delete( request.retrieve( 'role' ) )
-            .then( () => response.noContent() )
-            .catch( error => response.internalServerError( error ) )
+    async deleteRole( request, response ) {
+        const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
+
+        try {
+            await roleRepository.delete( request.retrieve( 'role' ) )
+            response.noContent()
+        } catch ( error ) {
+            response.internalServerError( error )
+        }
     }
 }
 

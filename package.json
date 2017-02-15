@@ -6,8 +6,8 @@
   "repository": "https://github.com/MadDeveloper/easy.js.git",
   "scripts": {
     "clean:logs": "rm -rf logs/*.log",
-    "debug": "node --expose-gc --harmony debug src/server.js",
-    "start": "nodemon -w src --harmony src/server.js",
+    "debug": "node --harmony debug src/server.js",
+    "start": "nodemon -w src --trace-warnings --harmony src/server.js",
     "start:forever": "node --harmony src/server.js > stdout.txt 2> stderr.txt &",
     "test": "easy test"
   },

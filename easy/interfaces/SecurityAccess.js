@@ -20,9 +20,9 @@ class SecurityAccess {
      * @param  {Request} request
      * @param  {Response} response
      * @param  {Container} container }
-     * @returns {Promise}
+     * @returns {boolean}
      */
-    authorized({ configurations, request, response, container }) {}
+    async authorized({ configurations, request, response, container }) {}
 }
 
 module.exports = SecurityAccess

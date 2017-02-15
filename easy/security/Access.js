@@ -110,9 +110,9 @@ class Access extends SecurityAccess {
      * @param  {Request} request
      * @param  {Response} response
      * @param  {Container} container }
-     * @returns {Promise}
+     * @returns {boolean}
      */
-    authorized({ configurations, request, response, container }) {
+    async authorized({ configurations, request, response, container }) {
         let isAuthorizedToAccess = false
         let authorized = false
         const method = request.getMethod().toLowerCase()
@@ -149,7 +149,7 @@ class Access extends SecurityAccess {
 
         }
 
-        return isAuthorizedToAccess ? Promise.resolve() : Promise.reject()
+        return isAuthorizedToAccess
     }
 
     /**

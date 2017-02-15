@@ -28,19 +28,18 @@ class LogWriter {
      *
      * @param {string} file
      * @param {string} message
-     * @param {string} context
+     * @param {object} context
      */
-    write( file, message, context ) {
-        this.logFileManager
-            .openLogFile( file )
-            .then( fd => fs.write( fd, strtr( message, context ), null, 'utf8' ) )
-            .catch( error => {
-                Console.error({
-                    title: `Impossible to open/create ${file}.log at: ${this.logDirectoryPath}/${file}.log`,
-                    message: error,
-                    type: 'error'
-                })
-            })
+    async write( file, message, context ) {
+        try {
+            const fd = await this.logFileManager.openLogFile( file )
+
+            if ( fd ) {
+                fs.write( fd, strtr( message, context ), null, 'utf8', error => {})
+            }
+        } catch ( error ) {
+            Console.error({ title: `Impossible to open or create ${file}.log at: ${this.logDirectoryPath}/${file}.log`, message: error })
+        }
     }
 
     /**

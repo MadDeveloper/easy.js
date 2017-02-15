@@ -55,18 +55,18 @@ class Repository {
      */
     save( model, params, options = {}) {
         return new Promise( ( resolve, reject ) => {
-            this.database.transaction( t => {
+            this.database.transaction( async t => {
                 options.transacting = t
 
-                model.save( params, options )
-                    .then( model => {
-                        t.commit()
-                        resolve( model )
-                    })
-                    .catch( error => {
-                        t.rollback()
-                        reject( error )
-                    })
+                try {
+                    const model = await model.save( params, options )
+
+                    t.commit()
+                    resolve( model )
+                } catch ( error ) {
+                    t.rollback()
+                    reject( error )
+                }
             })
         })
     }
@@ -88,15 +88,15 @@ class Repository {
                 options.transacting = t
                 options.patch = true
 
-                this.save( model, patchToApply, options )
-                    .then( model => {
-                        t.commit()
-                        resolve( model )
-                    })
-                    .catch( error => {
-                        t.rollback()
-                        reject( error )
-                    })
+                try {
+                    const model = this.save( model, patchToApply, options )
+
+                    t.commit()
+                    resolve( model )
+                } catch ( error ) {
+                    t.rollback()
+                    reject( error )
+                }
             })
         })
     }
@@ -113,15 +113,14 @@ class Repository {
             this.database.transaction( t => {
                 options.transacting = t
 
-                model.destroy( options )
-                    .then( () => {
-                        t.commit()
-                        resolve()
-                    })
-                    .catch( error => {
-                        t.rollback()
-                        reject( error )
-                    })
+                try {
+                    model.destroy( options )
+                    t.commit()
+                    resolve()
+                } catch ( error ) {
+                    t.rollback()
+                    reject( error )
+                }
             })
         })
     }

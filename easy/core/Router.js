@@ -150,13 +150,15 @@ class Router extends Configurable {
             const [ controllerId, controllerMethod ] = middlewareInfos.middleware.split( ':' )
             const controller = controllers[ controllerId ]
 
-            router[ middlewareInfos.type ]( middlewareInfos.param, ( req, res, next ) => {
+            router[ middlewareInfos.type ]( middlewareInfos.param, async ( req, res, next ) => {
                 const request = this.getRequest( req )
                 const response = this.getResponse( res, request )
 
-                controller[ controllerMethod ]( request, response )
-                    .then( () => next() )
-                    .catch( () => {})
+                const authorized = await controller[ controllerMethod ]( request, response )
+
+                if ( authorized ) {
+                    next()
+                }
             })
         }
     }
@@ -170,21 +172,23 @@ class Router extends Configurable {
     defineAccessRoute( route, configurations ) {
         const router = this.scope
 
-        router.use( route, ( req, res, next ) => {
+        router.use( route, async ( req, res, next ) => {
             const securityConfig = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
             const request = this.getRequest( req )
             const response = this.getResponse( res, request )
             const handler = this.access.getAccessHandler( securityConfig )
+            const authorized = await handler.authorized({
+                configurations: securityConfig,
+                request,
+                response,
+                container: this.application.container
+            })
 
-            handler
-                .authorized({
-                    configurations: securityConfig,
-                    request,
-                    response,
-                    container: this.application.container
-                })
-                .then( () => next() )
-                .catch( () => response.forbidden() )
+            if ( authorized ) {
+                next()
+            } else {
+                response.forbidden()
+            }
         })
     }
 

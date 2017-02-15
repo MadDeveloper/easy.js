@@ -9,26 +9,33 @@
 
 const TokenManager = require( './TokenManager' )
 
+/**
+ * @class Authorization
+ */
 class Authorization {
 	/**
 	 * checkToken - check if user is logged with his token
 	 *
 	 * @param  {express.Request} req
 	 * @param  {express.Response} res
-	 * @returns {Promise}
+	 * @returns {boolean}
 	 */
-	checkToken( request, response ) {
+	async checkToken( request, response ) {
 		const token	= request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.getHeader( 'x-access-token' )
 
 		if ( token ) {
-			return TokenManager
-				.verify( token )
-				.then( decoded => {
-					request.setAppParameter( 'token', token )
-					request.setAppParameter( 'user', decoded )
-				})
+			const decoded = await TokenManager.verify( token )
+
+			if ( !decoded ) {
+				return false
+			}
+
+			request.setAppParameter( 'token', token )
+			request.setAppParameter( 'user', decoded )
+
+			return true
 		} else {
-			return Promise.reject()
+			return false
 		}
 	}
 }

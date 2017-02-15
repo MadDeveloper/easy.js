@@ -27,10 +27,10 @@
 class Logger {
     /**
      * @constructor
-     * @param  {LogWriter} logWriter
+     * @param  {LogWriter} writer
      */
-    constructor( logWriter ) {
-        this._logWriter = logWriter
+    constructor( writer ) {
+        this._writer = writer
     }
 
     /**
@@ -40,8 +40,8 @@ class Logger {
      * @param {string} message
      * @param {object} context
      */
-    emergency( message, context ) {
-        this.logWriter.write( 'fatals', message, context )
+    emergency( message = '', context = {}) {
+        this.writer.write( 'fatals', message, context )
     }
 
     /**
@@ -54,8 +54,8 @@ class Logger {
      * @param {string} message
      * @param {object} context
      */
-    alert( message, context ) {
-        this.logWriter.write( 'fatals', message, context )
+    alert( message = '', context = {}) {
+        this.writer.write( 'fatals', message, context )
     }
 
     /**
@@ -64,11 +64,11 @@ class Logger {
      * Example: Application component unavailable, unexpected exception.
      * Use errors.log
      *
-     * @param {string} message
-     * @param {object} context
+     * @param {string} [message='']
+     * @param {object} [context={}]
      */
-    critical( message, context ) {
-        this.logWriter.write( 'errors', message, context )
+    critical( message = '', context = {}) {
+        this.writer.write( 'errors', message, context )
     }
 
     /**
@@ -76,11 +76,11 @@ class Logger {
      * be logged and monitored.
      * Use errors.log
      *
-     * @param {string} message
-     * @param {object} context
+     * @param {string} [message='']
+     * @param {object} [context={}]
      */
-    error( message, context ) {
-        this.logWriter.write( 'errors', message, context )
+    error( message = '', context = {}) {
+        this.writer.write( 'errors', message, context )
     }
 
     /**
@@ -90,22 +90,22 @@ class Logger {
      * Example: Use of deprecated APIs, poor use of an API, undesirable things
      * that are not necessarily wrong.
      *
-     * @param {string} message
-     * @param {object} context
+     * @param {string} [message='']
+     * @param {object} [context={}]
      */
-    warning( message, context ) {
-        this.logWriter.write( 'warn', message, context )
+    warning( message = '', context = {}) {
+        this.writer.write( 'warn', message, context )
     }
 
     /**
      * Normal but significant events.
      * Use events.log
      *
-     * @param {string} message
-     * @param {object} context
+     * @param {string} [message='']
+     * @param {object} [context={}]
      */
     notice( message, context ) {
-        this.logWriter.write( 'events', message, context )
+        this.writer.write( 'events', message, context )
     }
 
     /**
@@ -114,33 +114,33 @@ class Logger {
      *
      * Example: User logs in, SQL logs.
      *
-     * @param {string} message
-     * @param {object} context
+     * @param {string} [message='']
+     * @param {object} [context={}]
      */
-    info( message, context ) {
-        this.logWriter.write( 'events', message, context )
+    info( message = '', context = {}) {
+        this.writer.write( 'events', message, context )
     }
 
     /**
      * Detailed debug informationso.
      * Use debugs.log
      *
-     * @param {string} message
-     * @param {object} context
+     * @param {string} [message='']
+     * @param {object} [context={}]
      */
-    debug( message, context ) {
-        this.logWriter.write( 'debugs', message, context )
+    debug( message = '', context = {}) {
+        this.writer.write( 'debugs', message, context )
     }
 
     /**
      * Logs standard message.
      * Use std.log
      *
-     * @param {string} message
-     * @param {object} context
+     * @param {string} [message='']
+     * @param {object} [context={}]
      */
-    log( message, context ) {
-        this.logWriter.write( 'std', message, context )
+    log( message = '', context = {}) {
+        this.writer.write( 'std', message, context )
     }
 
     /**
@@ -148,8 +148,8 @@ class Logger {
      *
      * @returns {LogWriter}
      */
-    get logWriter() {
-        return this._logWriter
+    get writer() {
+        return this._writer
     }
 }
 

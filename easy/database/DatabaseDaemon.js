@@ -35,21 +35,33 @@ class DatabaseDaemon {
     /**
      * manage - manage database attached
      */
-    manage() {
+    async manage() {
         this.managed.start()
 
         if ( this.managed.config.config.enableDaemon ) {
-            this.verifyConnection()
-                .then( () => this.defineAsStarted() )
-                .catch( () => this.definedAsStopped() )
+            const established = await this.verifyConnection()
+
+            if ( established ) {
+                this.defineAsStarted()
+            } else {
+                this.definedAsStopped()
+            }
         }
     }
 
     /**
      * verifyConnection - verify if connection is established with database
+     *
+     * @returns {boolean}
      */
-    verifyConnection() {
-        return this.managed.verifyConnectionHandler()
+    async verifyConnection() {
+        try {
+            const established = await this.managed.verifyConnectionHandler()
+
+            return !!established
+        } catch ( error ) {
+            return false
+        }
     }
 
     /**
@@ -75,8 +87,12 @@ class DatabaseDaemon {
      */
     startIntervalCheckConnection() {
         if ( null === this.interval ) {
-            this.interval = setInterval( () => {
-                this.verifyConnection().catch( () => this.definedAsStopped() )
+            this.interval = setInterval( async () => {
+                const established = await this.verifyConnection()
+
+                if ( !established ) {
+                    this.definedAsStopped()
+                }
             }, this.managed.config.config.intervalToCheckConnection )
         }
     }
@@ -97,12 +113,16 @@ class DatabaseDaemon {
     startIntervalTryingReconnect() {
         if ( null === this.interval ) {
             this.attemps = 0
-            this.interval = setInterval( () => {
+            this.interval = setInterval( async () => {
                 if ( this.attemps < this.managed.config.config.maxAttempsReconnect ) {
                     this.managed.restart()
-                    this.verifyConnection()
-                        .then( () => this.defineAsStarted() )
-                        .catch( () => this.attemps++ )
+                    const established = await this.verifyConnection()
+
+                    if ( established ) {
+                        this.defineAsStarted()
+                    } else {
+                        this.attemps++
+                    }
                 } else {
                     this.stopIntervalTryingReconnect()
                 }

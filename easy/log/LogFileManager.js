@@ -40,6 +40,8 @@ class LogFileManager {
      * Open log file (create it if doesn't exist) and returns it
      *
      * @param {string} name
+     *
+     * @returns {Promise}
      */
     openLogFile( name ) {
         return new Promise( ( resolve, reject ) => {
@@ -53,6 +55,8 @@ class LogFileManager {
      * Synchronous version of openLogFile
      *
      * @param {string} name
+     *
+     * @returns {fd}
      */
     openLogFileSync( name ) {
         return fs.openSync( path.resolve( `${this.logDirectoryPath}/${name}.log` ), 'a+' )
