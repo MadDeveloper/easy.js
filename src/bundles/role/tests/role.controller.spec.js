@@ -163,7 +163,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.roleExists( request, response ).catch( () => {})
+                roleController.roleExists( request, response )
             }) )
 
             it( 'should respond with not found', () => {
@@ -179,7 +179,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.roleExists( request, response ).catch( () => {})
+                roleController.roleExists( request, response )
             }) )
 
             it( 'should respond with bad request', () => {

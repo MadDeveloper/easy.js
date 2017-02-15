@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/MadDeveloper/easy.js.git",
   "scripts": {
-    "test": "easy test"
+    "test": ""
   },
   "keywords": [
     "node",

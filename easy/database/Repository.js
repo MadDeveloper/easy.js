@@ -84,12 +84,12 @@ class Repository {
             let patchToApply = {}
             patchToApply[ patch.path.substring( 1 ) ] = patch.value
 
-            this.database.transaction( t => {
+            this.database.transaction( async t => {
                 options.transacting = t
                 options.patch = true
 
                 try {
-                    const model = this.save( model, patchToApply, options )
+                    const model = await this.save( model, patchToApply, options )
 
                     t.commit()
                     resolve( model )
@@ -110,11 +110,11 @@ class Repository {
      */
     delete( model, options = {}) {
         return new Promise( ( resolve, reject ) => {
-            this.database.transaction( t => {
+            this.database.transaction( async t => {
                 options.transacting = t
 
                 try {
-                    model.destroy( options )
+                    await model.destroy( options )
                     t.commit()
                     resolve()
                 } catch ( error ) {

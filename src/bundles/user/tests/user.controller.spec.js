@@ -180,7 +180,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.userExists( request, response ).catch( () => {})
+                userController.userExists( request, response )
             }) )
 
             it( 'should respond with not found', () => {
@@ -196,7 +196,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.userExists( request, response ).catch( () => {})
+                userController.userExists( request, response )
             }) )
 
             it( 'should respond with bad request', () => {
