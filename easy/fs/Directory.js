@@ -51,13 +51,17 @@ class Directory extends Document {
      */
     exists() {
         return new Promise( ( resolve, reject ) => {
-            fs.lstat( this.path, ( error, stat ) => {
-                if ( error || !stat.isDirectory() ) {
-                    reject( error )
-                }
+            try {
+                fs.lstat( this.path, ( error, stat ) => {
+                    if ( error || !stat.isDirectory() ) {
+                        resolve( false )
+                    }
 
-                resolve()
-            })
+                    resolve( true )
+                })
+            } catch ( error ) {
+                resolve( false )
+            }
         })
     }
 
