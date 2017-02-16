@@ -2,8 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- déléguer les connecteurs db à easy, mettre juste les configurations à disposition dans la config
-  de telle sorte, lorsqu'on appelle application.start() on pourra utiliser async/await pour attendre que les db démarrent
 - faire les tests du vendor
 - exporter role et user dans un repo externe, importable
 - rédiger DOC

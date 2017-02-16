@@ -9,9 +9,9 @@
 
 const https = require( 'https' )
 const http = require( 'http' )
-const { padEnd } = require( 'lodash' )
 const portfinder = require( 'portfinder' )
 const Console = require( './Console' )
+const Table = require( 'cli-table' )
 
 const state = {
     stopped: 'Stopped',
@@ -104,18 +104,25 @@ class Server {
         /*
          * Everything is ok, starting server and application
          */
-        const padRightLength = 30
+        const padLength = 20
 
         await this.application.start()
 
         this.state = state.started
-        this.server.listen( this.port, () => {
-            Console.line()
-            Console.info( `${padEnd( 'State', padRightLength, '.' )}${this.state}` )
-            Console.info( `${padEnd( 'Address', padRightLength, '.' )}${this.protocol}://${this.application.config.server.domain}${( 80 !== this.port && 443 !== this.port ) ? `:${this.port}` : ''}` )
-            Console.info( `${padEnd( 'Environment', padRightLength, '.' )}${this.application.app.get( 'env' ).capitalizeFirstLetter()}` )
-            Console.line()
-        })
+        this.server.listen( this.port, () => this.displayStartedInformations() )
+    }
+
+    displayStartedInformations() {
+        Console.line()
+
+        const table = new Table()
+        table.push(
+            [ 'Address', `${this.protocol}://${this.application.config.server.domain}${[ 80, 443 ].includes( this.port ) ? '' : `:${this.port}`}` ],
+            [ 'Environment', `${this.application.app.get( 'env' ).capitalizeFirstLetter()}` ]
+        )
+
+        Console.info( table )
+        Console.line()
     }
 
     /**
