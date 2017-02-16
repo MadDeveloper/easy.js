@@ -17,16 +17,12 @@ const compression = require( 'compression' )
 const cookieParser = require( 'cookie-parser' )
 const passport = require( 'passport' )
 const ContainerBuilder = require( '../provider/ContainerBuilder' )
-const Console = require( './Console' )
 const Polyfills = require( './Polyfills' )
 const ConfigLoader = require( './ConfigLoader' )
 const Router = require( './Router' )
 const Authentication = require( '../authentication/Authentication' )
 const Configurable = require( '../interfaces/Configurable' )
-const Database = require( '../database/Database' )
-const DatabaseDaemon = require( '../database/DatabaseDaemon' )
 const DatabasesManager = require( '../database/DatabasesManager' )
-const EntityManager = require( '../database/EntityManager' )
 
 /**
  * @class Application
@@ -58,14 +54,7 @@ class Application extends Configurable {
      * configure - configure application
      */
     configure() {
-        /*
-         * API environement
-         */
-        if ( this.config.app.production ) {
-            process.env.NODE_ENV = 'production'
-        } else {
-            process.env.NODE_ENV = 'development'
-        }
+        this.configureEnvironment()
 
         /*
          * Build container
@@ -96,10 +85,26 @@ class Application extends Configurable {
     }
 
     /**
+     * configure node environment
+     *
+     * @memberOf Application
+     */
+    configureEnvironment() {
+        /*
+         * API environement
+         */
+        if ( this.config.app.production ) {
+            process.env.NODE_ENV = 'production'
+        } else {
+            process.env.NODE_ENV = 'development'
+        }
+    }
+
+    /**
      * start - start application
      */
     async start() {
-        await this.databasesManager.start()
+        await this.startDatabases()
         this.plugThirdPartyMiddlewares()
         this.exposeRawBody()
         this.plugAuthentication()
@@ -107,6 +112,17 @@ class Application extends Configurable {
         this.initializePassport()
         this.plugMiddlewareLogger()
         this.app.use( '/', this.router.scope )
+    }
+
+    /**
+     * start all databases
+     *
+     * @returns {Promise}
+     *
+     * @memberOf Application
+     */
+    async startDatabases() {
+        return this.databasesManager.start()
     }
 
     /**
