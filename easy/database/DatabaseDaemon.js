@@ -36,17 +36,15 @@ class DatabaseDaemon {
      * manage - manage database attached
      */
     async manage() {
-        this.managed.start()
+        const established = await this.verifyConnection()
 
-        if ( this.managed.config.config.enableDaemon ) {
-            const established = await this.verifyConnection()
-
-            if ( established ) {
-                this.defineAsStarted()
-            } else {
-                this.definedAsStopped()
-            }
+        if ( established ) {
+            this.defineAsStarted()
+        } else {
+            this.definedAsStopped()
         }
+
+        return established
     }
 
     /**

@@ -25,6 +25,7 @@ class Database {
      * init - init attributes
      */
     init() {
+        this._connector = this._config.connector
         this._instance = null
         this._connected = false
     }
@@ -32,23 +33,23 @@ class Database {
     /**
      * load - load database config
      */
-    start() {
-        this.connect()
+    async start() {
+        await this.connect()
     }
 
     /**
      * restart - restart database component
      */
-    restart() {
+    async restart() {
         this.init()
-        this.start()
+        await this.start()
     }
 
     /**
      * connect - connect database to instance
      */
-    connect() {
-        this.instance = this.config.instance
+    async connect() {
+        this.instance = await this.config.connector()
     }
 
     /**
@@ -59,7 +60,7 @@ class Database {
      * @memberOf Database
      */
     verifyConnectionHandler() {
-        return this.config.verifyConnectionHandler( this.config.instance )
+        return this.config.verifyConnectionHandler( this.instance )
     }
 
     /**

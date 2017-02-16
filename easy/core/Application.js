@@ -49,6 +49,9 @@ class Application extends Configurable {
         this.container = null
         this.config = ConfigLoader.loadFromGlobal( 'app' )
         this.app = express()
+        this.router = null
+        this.appName = null
+        this.databasesManager = null
     }
 
     /**
@@ -73,11 +76,10 @@ class Application extends Configurable {
         /*
          * Create and daemonize databases
          */
-        const databasesManager = new DatabasesManager( this, containerBuilder.container )
-        databasesManager.load()
-        databasesManager.start()
+        this.databasesManager = new DatabasesManager( this, containerBuilder.container )
+        this.databasesManager.load()
 
-        containerBuilder.addToBuild( 'component.databasesmanager', databasesManager )
+        containerBuilder.addToBuild( 'component.databasesmanager', this.databasesManager )
 
         /*
          * Get some components
@@ -96,7 +98,8 @@ class Application extends Configurable {
     /**
      * start - start application
      */
-    start() {
+    async start() {
+        await this.databasesManager.start()
         this.plugThirdPartyMiddlewares()
         this.exposeRawBody()
         this.plugAuthentication()

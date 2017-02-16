@@ -45,7 +45,7 @@ class Server {
             const canBeStarted = await this.canBeStarted()
 
             if ( canBeStarted ) {
-                this.canStart()
+                await this.canStart()
             } else {
                 throw new Error( 'Serveur cannot be started' )
             }
@@ -97,14 +97,17 @@ class Server {
 
     /**
      * canStart - server can be started safely
+     *
+     * @private
      */
-    canStart() {
+    async canStart() {
         /*
          * Everything is ok, starting server and application
          */
         const padRightLength = 30
 
-        this.application.start()
+        await this.application.start()
+
         this.state = state.started
         this.server.listen( this.port, () => {
             Console.line()

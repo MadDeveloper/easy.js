@@ -18,7 +18,7 @@ const bookshelf = Bookshelf( Knex({
 }) )
 
 module.exports = {
-    instance: bookshelf,
+    connector: () => new Promise( resolve => setTimeout( () => resolve( bookshelf ), 5000 ) ),
     config,
     verifyConnectionHandler: bookshelf => bookshelf.knex.raw( 'select 1+1 as result' )
 }

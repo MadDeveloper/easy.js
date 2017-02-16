@@ -49,11 +49,15 @@ class DatabasesManager {
     /**
      * start manager
      */
-    start() {
+    async start() {
         if ( this.hasConfiguredDatabases() ) {
             for ( let { em, database } of this.ems.values() ) {
                 if ( database ) {
-                    this.daemonizeDatabase( database )
+                    await database.start()
+
+                    if ( database.config.config.enableDaemon ) {
+                        await this.daemonizeDatabase( database )
+                    }
                 }
             }
         }
@@ -127,9 +131,9 @@ class DatabasesManager {
      *
      * @memberOf DatabasesManager
      */
-    daemonizeDatabase( database ) {
+    async daemonizeDatabase( database ) {
         const daemon = new DatabaseDaemon()
-        daemon.attach( database ).manage()
+        await daemon.attach( database ).manage()
     }
 
     /**
