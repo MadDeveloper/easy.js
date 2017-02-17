@@ -128,7 +128,7 @@ class Directory extends Document {
      */
     delete() {
         return new Promise( ( resolve, reject ) => {
-            fs.rmdir( this.path, error => error ? Promise.reject( error ) : Promise.resolve() )
+            fs.rmdir( this.path, error => error ? reject( error ) : resolve() )
         })
     }
 
@@ -162,7 +162,7 @@ class Directory extends Document {
      */
     rename( newName ) {
         return new Promise( ( resolve, reject ) => {
-            fs.rename( this.path, `${dir}/${newName}`, error => error ? Promise.reject( error ) : Promise.resolve() )
+            fs.rename( this.path, `${dir}/${newName}`, error => error ? reject( error ) : resolve() )
 
             this.loadPathInfo( newPath )
         })

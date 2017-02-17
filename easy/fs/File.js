@@ -110,7 +110,7 @@ class File extends Document {
      * @returns {Object}
      */
     readSync( options = { encoding: 'utf8' }) {
-        let results = { success: false, data: null, error: null }
+        let results = { success: false, data: null }
 
         try {
             results.data = fs.readFileSync( this.path, options )
@@ -144,7 +144,7 @@ class File extends Document {
      * @returns {Object}
      */
     createSync( options = { mode: 755, encoding: 'utf8' }) {
-        let results = { success: false, error: null }
+        let results = { success: false }
 
         try {
             this.writeSync( options )
@@ -185,7 +185,7 @@ class File extends Document {
      * @returns {Object}
      */
     writeSync( content = '', options = { mode: 755, encoding: 'utf8' }) {
-        let results = { success: false, error: null }
+        let results = { success: false }
 
         try {
             if ( content.length > 0 ) {
@@ -214,7 +214,7 @@ class File extends Document {
      */
     delete() {
         return new Promise( ( resolve, reject ) => {
-            fs.unlink( this.path, error => error ? Promise.reject( error ) : Promise.resolve() )
+            fs.unlink( this.path, error => error ? reject( error ) : resolve() )
         })
     }
 
@@ -226,7 +226,7 @@ class File extends Document {
      * @memberOf File
      */
     deleteSync() {
-        let results = { success: false, error: null }
+        let results = { success: false }
 
         try {
             fs.unlinkSync( this.path )
@@ -250,7 +250,7 @@ class File extends Document {
         return new Promise( ( resolve, reject ) => {
             const newPath = `${this.directory.path}/${newName}`
 
-            fs.rename( this.path, newPath, error => error ? Promise.reject( error ) : Promise.resolve() )
+            fs.rename( this.path, newPath, error => error ? reject( error ) : resolve() )
 
             this.loadPathInfo( newPath )
         })
