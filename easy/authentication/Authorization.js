@@ -24,16 +24,20 @@ class Authorization {
 		const token	= request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.getHeader( 'x-access-token' )
 
 		if ( token ) {
-			const decoded = await TokenManager.verify( token )
+			try {
+				const decoded = await TokenManager.verify( token )
 
-			if ( !decoded ) {
+				if ( !decoded ) {
+					return false
+				}
+
+				request.setAppParameter( 'token', token )
+				request.setAppParameter( 'user', decoded )
+
+				return true
+			} catch ( error ) {
 				return false
 			}
-
-			request.setAppParameter( 'token', token )
-			request.setAppParameter( 'user', decoded )
-
-			return true
 		} else {
 			return false
 		}

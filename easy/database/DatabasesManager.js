@@ -11,7 +11,6 @@ const ConfigLoader = require( '../core/ConfigLoader' )
 const EntityManager = require( './EntityManager' )
 const DatabaseDaemon = require( './DatabaseDaemon' )
 const Database = require( './Database' )
-const Console = require( '../core/Console' )
 
 /**
  * @class DatabasesManager
@@ -54,7 +53,7 @@ class DatabasesManager {
         if ( this.hasConfiguredDatabases() ) {
             for ( let [ databaseName, { database } ] of this.ems ) {
                 if ( database ) {
-                    await this.startDatabase( database, databaseName )
+                    await this.startDatabase( database )
                 }
             }
         }
@@ -64,27 +63,40 @@ class DatabasesManager {
      * Start a database
      *
      * @param {Database} database
-     * @param {string} name
      *
      * @memberOf DatabasesManager
      */
-    async startDatabase( database, name ) {
+    async startDatabase( database ) {
         const logger = this.container.get( 'component.logger' )
 
         try {
             if ( database ) {
                 await database.start()
-
-                if ( database.config.config.enableDaemon ) {
-                    await this.daemonizeDatabase( database )
-                }
             }
         } catch ( error ) {
-            const title = `An error occured when trying to retrieve database instance. (database: "${name}")`
-
-            Console.error({ title, message: error })
-            logger.critical( `${title}.\n${error}` )
+            await logger.critical( `An error occured when trying to connect to the database "${database.config.config.name}".\n${error}\n` )
+        } finally {
+            if ( database && database.config.config.enableDaemon ) {
+                await this.daemonizeDatabase( database )
+            }
         }
+    }
+
+    /**
+     * Get all databases states
+     *
+     * @returns {Map}
+     *
+     * @memberOf DatabasesManager
+     */
+    getDatabasesStates() {
+        const states = new Map()
+
+        for ( let [ databaseName, { database } ] of this.ems ) {
+            states.set( databaseName, { state: database.connected, onStateChange: handler => database.connectToStateEmitter( handler ) })
+        }
+
+        return states
     }
 
     /**
@@ -156,7 +168,7 @@ class DatabasesManager {
      * @memberOf DatabasesManager
      */
     async daemonizeDatabase( database ) {
-        const daemon = new DatabaseDaemon()
+        const daemon = new DatabaseDaemon( this.container.get( 'component.logger' ) )
         await daemon.attach( database ).manage()
     }
 

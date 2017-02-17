@@ -43,11 +43,12 @@ class LogWriter {
         try {
             const file = await new File( filePath )
             const exists = await file.exists()
-            const content = await file.read()
 
             if ( !exists ) {
                 await file.create()
             }
+
+            const content = await file.read()
 
             return file.addContent( strtr( message, context ) ).write()
         } catch ( error ) {

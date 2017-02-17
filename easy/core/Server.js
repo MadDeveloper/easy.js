@@ -11,7 +11,8 @@ const https = require( 'https' )
 const http = require( 'http' )
 const portfinder = require( 'portfinder' )
 const Console = require( './Console' )
-const Table = require( 'cli-table' )
+const Table = require( 'cli-table2' )
+const { upperFirst } = require( 'lodash' )
 
 const state = {
     stopped: 'Stopped',
@@ -112,16 +113,21 @@ class Server {
         this.server.listen( this.port, () => this.displayStartedInformations() )
     }
 
+    /**
+     * Display application informations
+     *
+     * @memberOf Server
+     */
     displayStartedInformations() {
         Console.line()
 
-        const table = new Table()
-        table.push(
+        const serverInfos = new Table()
+        serverInfos.push(
             [ 'Address', `${this.protocol}://${this.application.config.server.domain}${[ 80, 443 ].includes( this.port ) ? '' : `:${this.port}`}` ],
-            [ 'Environment', `${this.application.app.get( 'env' ).capitalizeFirstLetter()}` ]
+            [ 'Environment', `${upperFirst( this.application.app.get( 'env' ) )}` ]
         )
 
-        Console.info( table )
+        Console.info( serverInfos )
         Console.line()
     }
 
@@ -133,7 +139,7 @@ class Server {
     failedToStart( error ) {
         Console.error({
             title: 'Impossible to start server',
-            message: `${( 'code' in error ) ? `Error code: ${error.code}\n` : ''}${error.toString()}`,
+            message: error,
             exit: 1
         })
     }

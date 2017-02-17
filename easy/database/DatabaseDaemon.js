@@ -14,10 +14,11 @@ class DatabaseDaemon {
     /**
      * constructor
      */
-    constructor() {
+    constructor( logger ) {
         this.managed = null
         this.attemps = 0
         this.interval = null
+        this.logger = logger
     }
 
     /**
@@ -41,7 +42,7 @@ class DatabaseDaemon {
         if ( established ) {
             this.defineAsStarted()
         } else {
-            this.definedAsStopped()
+            this.defineAsStopped()
         }
 
         return established
@@ -66,18 +67,18 @@ class DatabaseDaemon {
      * defineAsStarted - define database as started
      */
     defineAsStarted() {
-        this.managed.connected = true
         this.stopIntervalTryingReconnect()
         this.startIntervalCheckConnection()
     }
 
     /**
-     * definedAsStopped - define database as stopped
+     * defineAsStopped - define database as stopped
      */
-    definedAsStopped() {
-        this.managed.connected = false
+    defineAsStopped() {
+        this.managed.disconnect()
         this.stopIntervalCheckConnection()
         this.startIntervalTryingReconnect()
+        this.logger.critical( `The connection to the database "${this.managed.name}" has been lost` )
     }
 
     /**
@@ -86,10 +87,14 @@ class DatabaseDaemon {
     startIntervalCheckConnection() {
         if ( null === this.interval ) {
             this.interval = setInterval( async () => {
-                const established = await this.verifyConnection()
+                try {
+                    const established = await this.verifyConnection()
 
-                if ( !established ) {
-                    this.definedAsStopped()
+                    if ( !established ) {
+                        this.defineAsStopped()
+                    }
+                } catch ( error ) {
+                    this.defineAsStopped()
                 }
             }, this.managed.config.config.intervalToCheckConnection )
         }
@@ -113,12 +118,15 @@ class DatabaseDaemon {
             this.attemps = 0
             this.interval = setInterval( async () => {
                 if ( this.attemps < this.managed.config.config.maxAttempsReconnect ) {
-                    this.managed.restart()
-                    const established = await this.verifyConnection()
+                    try {
+                        await this.managed.restart()
 
-                    if ( established ) {
-                        this.defineAsStarted()
-                    } else {
+                        if ( this.managed.connected ) {
+                            this.defineAsStarted()
+                        } else {
+                            this.attemps++
+                        }
+                    } catch ( error ) {
                         this.attemps++
                     }
                 } else {

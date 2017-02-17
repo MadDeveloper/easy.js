@@ -25,14 +25,14 @@ class Console {
         if ( undefined !== title ) {
 
             Console.line()
-            console.log( `${colors.bgRed( colors.white( `Error: ${title.toString()}` ) )}` )
+            console.log( `[${colors.red( `Error: ${title}` )}]` )
 
-            if ( ( undefined !== typeof message && message.length > 0 ) || 'object' === typeof message ) {
-                console.log( `${colors.bgRed( colors.white( `    ->  ${message.toString()}` ) )}` )
+            if ( message ) {
+                console.log( `${colors.red( message )}` )
             }
 
-            if ( ( undefined !== typeof consequence && consequence.length > 0 ) || 'object' === typeof message ) {
-                console.log( `${colors.bgRed( colors.white( consequence.toString() ) )}` )
+            if ( consequence ) {
+                console.log( colors.white( consequence ) )
             }
 
             Console.line()
@@ -64,7 +64,7 @@ class Console {
      * @param  {string} message = ""
      */
     static info( message = "" ) {
-        console.log( `${colors.cyan( message.toString() )}` )
+        console.log( `${colors.blue( message.toString() )}` )
     }
 
     /**
@@ -88,6 +88,21 @@ class Console {
      */
     static log( message = "" ) {
         console.log( `${message.toString()}` )
+    }
+
+    /**
+     * Clear terminal by adding as many lines as screen height
+     *
+     * @static
+     *
+     * @memberOf Console
+     */
+    static clear() {
+        const lines = process.stdout.getWindowSize()[ 1 ]
+
+        for( let i = 0; i < lines; i++ ) {
+            console.log( '\r\n' )
+        }
     }
 
     /**

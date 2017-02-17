@@ -36,9 +36,7 @@ class TokenManager {
 		const config = TokenManager.getConfig()
 
 		return new Promise( ( resolve, reject ) => {
-			jwt.verify( token, config.secret, ( error, decoded ) => {
-				!error ? resolve( decoded ) : reject( error )
-			})
+			jwt.verify( token, config.secret, ( error, decoded ) => error ? reject( error ) : resolve( decoded ) )
 		})
 	}
 

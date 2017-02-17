@@ -40,8 +40,8 @@ class Logger {
      * @param {string} message
      * @param {object} context
      */
-    emergency( message = '', context = {}) {
-        this.writer.write( 'fatals', message, context )
+    async emergency( message = '', context = {}) {
+        await this.writer.write( 'fatals', message, context )
     }
 
     /**
@@ -54,8 +54,8 @@ class Logger {
      * @param {string} message
      * @param {object} context
      */
-    alert( message = '', context = {}) {
-        this.writer.write( 'fatals', message, context )
+    async alert( message = '', context = {}) {
+        await this.writer.write( 'fatals', message, context )
     }
 
     /**
@@ -67,8 +67,8 @@ class Logger {
      * @param {string} [message='']
      * @param {object} [context={}]
      */
-    critical( message = '', context = {}) {
-        this.writer.write( 'errors', message, context )
+    async critical( message = '', context = {}) {
+        await this.writer.write( 'errors', message, context )
     }
 
     /**
@@ -79,8 +79,8 @@ class Logger {
      * @param {string} [message='']
      * @param {object} [context={}]
      */
-    error( message = '', context = {}) {
-        this.writer.write( 'errors', message, context )
+    async error( message = '', context = {}) {
+        await this.writer.write( 'errors', message, context )
     }
 
     /**
@@ -93,8 +93,8 @@ class Logger {
      * @param {string} [message='']
      * @param {object} [context={}]
      */
-    warning( message = '', context = {}) {
-        this.writer.write( 'warn', message, context )
+    async warning( message = '', context = {}) {
+        await this.writer.write( 'warn', message, context )
     }
 
     /**
@@ -104,8 +104,8 @@ class Logger {
      * @param {string} [message='']
      * @param {object} [context={}]
      */
-    notice( message, context ) {
-        this.writer.write( 'events', message, context )
+    async notice( message, context ) {
+        await this.writer.write( 'events', message, context )
     }
 
     /**
@@ -117,8 +117,8 @@ class Logger {
      * @param {string} [message='']
      * @param {object} [context={}]
      */
-    info( message = '', context = {}) {
-        this.writer.write( 'events', message, context )
+    async info( message = '', context = {}) {
+        await this.writer.write( 'events', message, context )
     }
 
     /**
@@ -128,8 +128,8 @@ class Logger {
      * @param {string} [message='']
      * @param {object} [context={}]
      */
-    debug( message = '', context = {}) {
-        this.writer.write( 'debugs', message, context )
+    async debug( message = '', context = {}) {
+        await this.writer.write( 'debugs', message, context )
     }
 
     /**
@@ -139,8 +139,8 @@ class Logger {
      * @param {string} [message='']
      * @param {object} [context={}]
      */
-    log( message = '', context = {}) {
-        this.writer.write( 'std', message, context )
+    async log( message = '', context = {}) {
+        await this.writer.write( 'std', message, context )
     }
 
     /**
