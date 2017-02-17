@@ -93,6 +93,7 @@ class File extends Document {
                     return
                 }
 
+                this.content = data
                 resolve( data )
             })
         })
@@ -111,6 +112,7 @@ class File extends Document {
         try {
             results.data = fs.readFileSync( this.path, options )
             results.success = true
+            this.content = results.data
         } catch ( error ) {
             results.error = error
         } finally {
@@ -299,6 +301,20 @@ class File extends Document {
      */
     moveSync( newPath ) {
         return this.renameSync( path.resolve( this.path, newPath ) )
+    }
+
+    /**
+     * Add content to current content
+     *
+     * @param {string} newContent
+     * @returns {File}
+     *
+     * @memberOf File
+     */
+    addContent( newContent ) {
+        this.content += newContent
+
+        return this
     }
 
     /**

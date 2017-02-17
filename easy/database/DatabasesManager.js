@@ -11,6 +11,7 @@ const ConfigLoader = require( '../core/ConfigLoader' )
 const EntityManager = require( './EntityManager' )
 const DatabaseDaemon = require( './DatabaseDaemon' )
 const Database = require( './Database' )
+const Console = require( '../core/Console' )
 
 /**
  * @class DatabasesManager
@@ -51,15 +52,38 @@ class DatabasesManager {
      */
     async start() {
         if ( this.hasConfiguredDatabases() ) {
-            for ( let { em, database } of this.ems.values() ) {
+            for ( let [ databaseName, { database } ] of this.ems ) {
                 if ( database ) {
-                    await database.start()
-
-                    if ( database.config.config.enableDaemon ) {
-                        await this.daemonizeDatabase( database )
-                    }
+                    await this.startDatabase( database, databaseName )
                 }
             }
+        }
+    }
+
+    /**
+     * Start a database
+     *
+     * @param {Database} database
+     * @param {string} name
+     *
+     * @memberOf DatabasesManager
+     */
+    async startDatabase( database, name ) {
+        const logger = this.container.get( 'component.logger' )
+
+        try {
+            if ( database ) {
+                await database.start()
+
+                if ( database.config.config.enableDaemon ) {
+                    await this.daemonizeDatabase( database )
+                }
+            }
+        } catch ( error ) {
+            const title = `An error occured when trying to retrieve database instance. (database: "${name}")`
+
+            Console.error({ title, message: error })
+            logger.critical( `${title}.\n${error}` )
         }
     }
 

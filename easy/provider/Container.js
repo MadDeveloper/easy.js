@@ -7,8 +7,6 @@
 * file that was distributed with this source code.
 */
 
-const Console = require( '../core/Console' )
-
 /**
  * @class Container
  */

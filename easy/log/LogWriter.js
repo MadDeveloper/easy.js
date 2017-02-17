@@ -34,6 +34,8 @@ class LogWriter {
      * @param {string} fileName
      * @param {string} message
      * @param {object} context
+     *
+     * @returns {Promise}
      */
     async write( fileName, message, context ) {
         const filePath = `${this.logDirectoryManager.logDirectoryPath}/${fileName}.log`
@@ -41,12 +43,13 @@ class LogWriter {
         try {
             const file = await new File( filePath )
             const exists = await file.exists()
+            const content = await file.read()
 
             if ( !exists ) {
                 await file.create()
             }
 
-            file.write( strtr( message, context ) )
+            return file.addContent( strtr( message, context ) ).write()
         } catch ( error ) {
             Console.error({ title: `Impossible to writing on file ${fileName}.log at: ${filePath}`, message: error })
         }

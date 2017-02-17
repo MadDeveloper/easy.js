@@ -39,7 +39,7 @@ class LogFileManager {
 
         if ( !directory.existsSync() && !directory.createSync().success ) {
             Console.error({
-                title: `Impossible to create directory : ${this.logDirectoryPath}`,
+                title: `Impossible to create log directory: ${this.logDirectoryPath}`,
                 message: error.toString()
             })
         }

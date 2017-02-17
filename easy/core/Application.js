@@ -122,7 +122,7 @@ class Application extends Configurable {
      * @memberOf Application
      */
     async startDatabases() {
-        return this.databasesManager.start()
+        await this.databasesManager.start()
     }
 
     /**
