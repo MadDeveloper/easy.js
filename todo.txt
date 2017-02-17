@@ -2,7 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- pouvoir ajouter la date courante dans les logger
 - pouvoir rm un dossier non vide
 - dans l'attribut ems (db manager), il faut mettre juste em en valeur du Map et non em et database (cf. addEntityManager())
 - refactor Application class

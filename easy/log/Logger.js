@@ -41,7 +41,7 @@ class Logger {
      * @param {object} context
      */
     async emergency( message = '', context = {}) {
-        await this.writer.write( 'fatals', message, context )
+        await this.writer.write( 'fatals', this._appendDate( message ), context )
     }
 
     /**
@@ -55,7 +55,7 @@ class Logger {
      * @param {object} context
      */
     async alert( message = '', context = {}) {
-        await this.writer.write( 'fatals', message, context )
+        await this.writer.write( 'fatals', this._appendDate( message ), context )
     }
 
     /**
@@ -68,7 +68,7 @@ class Logger {
      * @param {object} [context={}]
      */
     async critical( message = '', context = {}) {
-        await this.writer.write( 'errors', message, context )
+        await this.writer.write( 'errors', this._appendDate( message ), context )
     }
 
     /**
@@ -80,7 +80,7 @@ class Logger {
      * @param {object} [context={}]
      */
     async error( message = '', context = {}) {
-        await this.writer.write( 'errors', message, context )
+        await this.writer.write( 'errors', this._appendDate( message ), context )
     }
 
     /**
@@ -94,7 +94,7 @@ class Logger {
      * @param {object} [context={}]
      */
     async warning( message = '', context = {}) {
-        await this.writer.write( 'warn', message, context )
+        await this.writer.write( 'warn', this._appendDate( message ), context )
     }
 
     /**
@@ -105,7 +105,7 @@ class Logger {
      * @param {object} [context={}]
      */
     async notice( message, context ) {
-        await this.writer.write( 'events', message, context )
+        await this.writer.write( 'events', this._appendDate( message ), context )
     }
 
     /**
@@ -141,6 +141,19 @@ class Logger {
      */
     async log( message = '', context = {}) {
         await this.writer.write( 'std', message, context )
+    }
+
+    /**
+     * Append current date to the message
+     *
+     * @private
+     * @param {string} message
+     * @returns {string}
+     *
+     * @memberOf Logger
+     */
+    _appendDate( message ) {
+        return `[${new Date().toUTCString()}] ${message}`
     }
 
     /**
