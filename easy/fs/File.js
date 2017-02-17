@@ -54,17 +54,13 @@ class File extends Document {
      */
     exists() {
         return new Promise( ( resolve, reject ) => {
-            try {
-                fs.lstat( this.path, ( error, stat ) => {
-                    if ( error || !stat.isFile() ) {
-                        resolve( false )
-                    }
+            fs.lstat( this.path, ( error, stat ) => {
+                if ( error || !stat.isFile() ) {
+                    resolve( false )
+                }
 
-                    resolve( true )
-                })
-            } catch ( error ) {
-                resolve( false )
-            }
+                resolve( true )
+            })
         })
     }
 
