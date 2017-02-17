@@ -13,9 +13,9 @@ const Directory = require( '../fs/Directory' )
 const Console = require( '../core/Console' )
 
 /**
- * @class LogFileManager
+ * @class LogDirectoryManager
  */
-class LogFileManager {
+class LogDirectoryManager {
     /**
      * @constructor
      *
@@ -32,7 +32,7 @@ class LogFileManager {
     /**
      * Create logs directory if doesn't exist
      *
-     * @memberOf LogFileManager
+     * @memberOf LogDirectoryManager
      */
     createLogDirectory() {
         const directory = new Directory( this.logDirectoryPath )
@@ -55,4 +55,4 @@ class LogFileManager {
     }
 }
 
-module.exports = LogFileManager
+module.exports = LogDirectoryManager
