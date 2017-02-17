@@ -3,9 +3,9 @@ const roles = require( 'src/config/roles' )
 module.exports = {
 	'/roles/:role_id/users': {
 		mustBe: [ roles.any ],
-		canCreate: [ roles.user ],
+		canCreate: [ roles.admin ],
 		canRead: [],
-		canUpdate: [ roles.user ],
-		canDelete: [ roles.user ]
+		canUpdate: [ roles.admin ],
+		canDelete: [ roles.admin ]
 	}
 }

@@ -33,7 +33,6 @@ class Controller {
         return this.container.get( 'component.databasesmanager' ).getEntityManager( name )
     }
 
-
     /**
      * getRepository - shortcut to get repository on default entity manager
      *
