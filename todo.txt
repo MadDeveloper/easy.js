@@ -5,7 +5,6 @@
 - Réduire le couplage (par exemple dans LogDirectoryManager, enlever application du constructeur et juste envoyer le path du dossier log)
 - refactor Router, Application, Controller classes
 - pouvoir rm un dossier non vide
-- dans l'attribut ems (db manager), il faut mettre juste em en valeur du Map et non em et database (cf. addEntityManager())
 - faire les tests du vendor
 - exporter role et user dans un repo externe, importable
 - rédiger DOC

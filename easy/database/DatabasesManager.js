@@ -51,9 +51,9 @@ class DatabasesManager {
      */
     async start() {
         if ( this.hasConfiguredDatabases() ) {
-            for ( let [ databaseName, { database } ] of this.ems ) {
-                if ( database ) {
-                    await this.startDatabase( database )
+            for ( let [ databaseName, em ] of this.ems ) {
+                if ( em.database ) {
+                    await this.startDatabase( em.database )
                 }
             }
         }
@@ -92,35 +92,33 @@ class DatabasesManager {
     getDatabasesStates() {
         const states = new Map()
 
-        for ( let [ databaseName, { database } ] of this.ems ) {
-            states.set( databaseName, { state: database.connected, onStateChange: handler => database.connectToStateEmitter( handler ) })
+        for ( let [ databaseName, em ] of this.ems ) {
+            states.set( databaseName, { state: em.database.connected, onStateChange: handler => em.database.connectToStateEmitter( handler ) })
         }
 
         return states
     }
 
     /**
-     * create entity manager with database associated
+     * Create entity manager with database associated
      *
-     * @param {type} name   Description
-     * @param {type} config Description
+     * @param {string} name
+     * @param {Object} config
      */
     createEntityManager( name, config ) {
         const em = new EntityManager()
         const database = new Database( config )
 
         em.configure( this.bundlesPath, database )
-        this.addEntityManager( name, em, database )
+        this.addEntityManager( name, em )
         this.injectEntityManagerInContainer( name, em )
     }
 
     /**
-     * injectEntityManagerInContainer - Description
+     * Inject entity manager into default container
      *
-     * @param {type} name Description
-     * @param {type} em   Description
-     *
-     * @returns {type} Description
+     * @param {string} name
+     * @param {EntityManager} em
      */
     injectEntityManagerInContainer( name, em ) {
         let entityManagerNamespace = this.baseComponentNamespace
@@ -133,14 +131,13 @@ class DatabasesManager {
     }
 
     /**
-     * addEntityManager - Description
+     * Add new entity manager in Map
      *
-     * @param {type} name     Description
-     * @param {type} em       Description
-     * @param {type} database Description
+     * @param {string} name
+     * @param {EntityManager} em
      */
-    addEntityManager( name, em, database ) {
-        this.ems.set( name, { em, database })
+    addEntityManager( name, em ) {
+        this.ems.set( name, em )
     }
 
     /**
