@@ -10,11 +10,14 @@
 const File = require( '../fs/File' )
 const Console = require( '../core/Console' )
 const { strtr } = require( '../lib/string' )
+const Writer = require( '../interfaces/Writer' )
+
 
 /**
  * @class LogWriter
+ * @extends {Writer}
  */
-class LogWriter {
+class LogWriter extends Writer {
     /**
      * Creates an instance of LogWriter.
      *
@@ -25,6 +28,8 @@ class LogWriter {
      * @memberOf LogWriter
      */
     constructor( logDirectoryManager ) {
+        super()
+
         this.logDirectoryManager = logDirectoryManager
     }
 

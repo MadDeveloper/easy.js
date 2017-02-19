@@ -2,8 +2,9 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- Réduire le couplage (par exemple dans LogDirectoryManager, enlever application du constructeur et juste envoyer le path du dossier log)
 - refactor Router, Application, Controller classes
+- Voir pour déléguer des tâches entre Application et Kernel ou virer Kernel 
+- Working on reusable components (Logger, Router, etc.)
 - pouvoir rm un dossier non vide
 - faire les tests du vendor
 - exporter role et user dans un repo externe, importable

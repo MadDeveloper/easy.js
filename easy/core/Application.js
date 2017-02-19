@@ -57,17 +57,20 @@ class Application extends Configurable {
         this.configureEnvironment()
 
         /*
-         * Build container
+         * Prepare container
          */
         const containerBuilder = new ContainerBuilder( this )
         containerBuilder.configure({ includeComponents: true })
 
         /*
-         * Create and daemonize databases
+         * Start and daemonize databases
          */
         this.databasesManager = new DatabasesManager( this, containerBuilder.container )
         this.databasesManager.load()
 
+        /*
+         * Build container
+         */
         containerBuilder.addToBuild( 'component.databasesmanager', this.databasesManager )
 
         /*
@@ -110,7 +113,6 @@ class Application extends Configurable {
         this.plugAuthentication()
         this.router.load()
         this.initializePassport()
-        this.plugMiddlewareLogger()
         this.app.use( '/', this.router.scope )
     }
 
@@ -159,6 +161,13 @@ class Application extends Configurable {
          */
         this.app.use( bodyParser.json() ) // support json encoded bodies
         this.app.use( bodyParser.urlencoded({ extended: true }) ) // support encoded bodies
+
+        if ( this.config.app.log ) {
+            this.app.use( morgan(
+                ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]',
+                { stream: fs.createWriteStream( `${this.kernel.path.root}/logs/traffic.log`, { flags: 'a' }) }
+            ) )
+        }
     }
 
     /**
@@ -176,9 +185,7 @@ class Application extends Configurable {
             }
 
             req.setEncoding( 'utf8' )
-            req.on( 'data', chunk => {
-                data += chunk
-            })
+            req.on( 'data', chunk => data += chunk )
             req.on( 'end', () => {
                 req.rawBody = data
                 next()
@@ -208,15 +215,6 @@ class Application extends Configurable {
      */
     initializePassport() {
         this.app.use( passport.initialize() )
-    }
-
-    /**
-     * plugMiddlewareLogger - Trace everything that happens on the server
-     */
-    plugMiddlewareLogger() {
-        if ( this.config.app.log ) {
-            this.app.use( morgan( ':date - [:method :url] - [:status, :response-time ms, :res[content-length] B] - [HTTP/:http-version, :remote-addr, :user-agent]', { stream: fs.createWriteStream( `${this.kernel.path.root}/logs/traffic.log`, { flags: 'a' }) }) )
-        }
     }
 
     /**

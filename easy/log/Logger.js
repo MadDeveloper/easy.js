@@ -27,7 +27,7 @@
 class Logger {
     /**
      * @constructor
-     * @param  {LogWriter} writer
+     * @param  {Writer} writer
      */
     constructor( writer ) {
         this._writer = writer
