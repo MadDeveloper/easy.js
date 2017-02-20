@@ -9,14 +9,11 @@ const appRootPath = `${__dirname}/../`
 appModulePath.addPath( appRootPath )
 
 /*
- * Import and configure main Easy classes
+ * Import and configure main Easy class
  */
-const { Kernel, Application } = require( 'easy/core' )
+const { Application } = require( 'easy/core' )
 
-const kernel = new Kernel()
-kernel.init( appRootPath )
+const application = new Application()
+application.configure( appRootPath )
 
-const application = new Application( kernel )
-application.configure()
-
-module.exports = { kernel, application }
+module.exports = { kernel: application.kernel, application }

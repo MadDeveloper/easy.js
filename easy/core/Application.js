@@ -7,6 +7,7 @@
 * file that was distributed with this source code.
 */
 
+const Kernel = require( './Kernel' )
 const fs = require( 'fs' )
 const express = require( 'express' )
 const bodyParser = require( 'body-parser' )
@@ -30,10 +31,8 @@ const DatabasesManager = require( '../database/DatabasesManager' )
 class Application extends Configurable {
     /**
      * constructor
-     *
-     * @param  {Kernel} kernel
      */
-    constructor( kernel ) {
+    constructor() {
         super()
 
         /*
@@ -41,9 +40,9 @@ class Application extends Configurable {
          */
         Polyfills.load()
 
-        this.kernel = kernel
+        this.kernel = new Kernel()
         this.container = null
-        this.config = ConfigLoader.loadFromGlobal( 'app' )
+        this.config = null
         this.app = express()
         this.router = null
         this.appName = null
@@ -51,10 +50,14 @@ class Application extends Configurable {
     }
 
     /**
-     * configure - configure application
+     * configure - configure the application
+     *
+     * @param {string} appRootPath
      */
-    configure() {
-        this.configureEnvironment()
+    configure( appRootPath ) {
+        this.config = ConfigLoader.loadFromGlobal( 'app' )
+        this.kernel.init( appRootPath )
+        this.setEnvironment()
 
         /*
          * Prepare container
@@ -92,7 +95,7 @@ class Application extends Configurable {
      *
      * @memberOf Application
      */
-    configureEnvironment() {
+    setEnvironment() {
         /*
          * API environement
          */

@@ -8,6 +8,7 @@
 */
 
 const path = require( 'path' )
+const ConfigLoader = require( './ConfigLoader' )
 
 /**
  * @class Kernel
@@ -23,18 +24,28 @@ class Kernel {
     /**
      * init - init kernel
      *
-     * @param {string} rootPath
+     * @param {string} appRootPath
      */
-    init( rootPath ) {
+    init( appRootPath ) {
         /*
          * paths
          */
-        this.path.root = path.resolve( rootPath )
+        this.path.root = path.resolve( appRootPath )
         this.path.bin = `${this.path.root}/bin`
         this.path.src = `${this.path.root}/src`
         this.path.bundles = `${this.path.src}/bundles`
         this.path.config = `${this.path.src}/config`
         this.path.services = `${this.path.src}/services`
+    }
+
+    /**
+     * Load all bundles
+     *
+     * @memberOf Kernel
+     */
+    loadBundles() {
+        const bundles = ConfigLoader.loadFromGlobal( 'bundles/activated' )
+        this.config.forEach( bundle => this.parseBundleRoutes( bundle ) )
     }
 
     /**
