@@ -45,6 +45,7 @@ class Kernel {
      */
     loadBundles() {
         const bundles = ConfigLoader.loadFromGlobal( 'bundles/activated' )
+
         this.config.forEach( bundle => this.parseBundleRoutes( bundle ) )
     }
 
