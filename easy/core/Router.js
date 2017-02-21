@@ -9,12 +9,11 @@
 
 const ConfigLoader = require( './ConfigLoader' )
 const Configurable = require( '../interfaces/Configurable' )
-const Http = require( '../http/Http' )
 const Request = require( '../http/Request' )
 const Response = require( '../http/Response' )
-const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
 const Access = require( '../security/Access' )
 const AnalyzerMiddlewaresConfig = require( '../middlewares/AnalyzerMiddlewaresConfig' )
+const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
 
 /**
  * @class Router
@@ -30,7 +29,7 @@ class Router extends Configurable {
         this._scope = null
         this._config = ConfigLoader.loadFromGlobal( 'bundles/activated' )
         this.application = null
-        this.http = new Http()
+        this.access = null
         this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
         this.analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
     }
@@ -47,18 +46,13 @@ class Router extends Configurable {
     }
 
 	/**
-	 * init - init app routing
+	 * Add default final not found route
 	 */
-	load() {
+	addNotFoundRoute() {
 		/*
 		 * Express router
 		 */
 		const router = this.scope
-
-	    /*
-	     * Bundles routes
-	     */
-        this.loadBundlesRoutes()
 
 	    /*
 	     * Final middleware: No route found
@@ -69,66 +63,6 @@ class Router extends Configurable {
 	        }
 	    })
 	}
-
-    /**
-     * loadBundlesRoutes - load all bundles routes
-     */
-    loadBundlesRoutes() {
-        this.config.forEach( bundle => this.parseBundleRoutes( bundle ) )
-    }
-
-    /**
-     * parseBundleRoutes - parse bundles routes and implement all middlewares and routes into express router
-     *
-     * @param  {Object} bundle
-     */
-    parseBundleRoutes( bundle ) {
-        let controllers = {}
-        let routesConfig = {}
-        let configValue = ''
-
-        for( let controller in bundle.controllers ) {
-            controllers[ controller ] = new bundle.controllers[ controller ]( this.application.container )
-        }
-
-        for( let routeName in bundle.routes ) {
-            routesConfig = bundle.routes[ routeName ]
-
-            /*
-             * Security
-             */
-            if ( this.analyzerSecurityConfig.analyze( routesConfig ) ) {
-                this.defineAccessRoute( routeName, routesConfig )
-            }
-
-            /*
-             * Middlewares
-             */
-            if ( this.analyzerMiddlewaresConfig.analyze( routesConfig ) ) {
-                this.defineMiddlewaresRoutes( routesConfig, controllers )
-            }
-
-            /*
-             * Methods
-             */
-            for ( let config in routesConfig ) {
-                configValue = routesConfig[ config ]
-
-                if ( this.http.methods.includes( config ) ) {
-                    const [ controllerId, controllerMethod ] = configValue.split( ':' )
-
-                    this.defineRoute({
-                        route: routeName,
-                        method: config,
-                        controller: controllers[ controllerId ],
-                        controllerMethod: controllerMethod
-                    })
-                }
-            }
-
-            this.defineMethodNotAllowedRoute( routeName )
-        }
-    }
 
     /**
      * defineMiddlewaresRoutes - define all middlewares into express router

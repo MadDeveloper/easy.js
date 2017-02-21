@@ -19,13 +19,12 @@ class DatabasesManager {
     /**
      * @constructor
      *
-     * @param {Application} application
+     * @param {Kernel} kernel
      * @param {Container} container
      */
-    constructor( application, container ) {
+    constructor( kernel, container ) {
         this.config = ConfigLoader.loadFromGlobal( 'database' )
-        this.application = application
-        this.bundlesPath = application.kernel.path.bundles
+        this.bundlesPath = kernel.path.bundles
         this.container = container
         this.baseComponentNamespace = 'component.entitymanager'
         this.ems = new Map()

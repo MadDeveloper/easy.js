@@ -8,6 +8,7 @@
 */
 
 module.exports.Application = require( './Application' )
+module.exports.Bundle = require( './Bundle' )
 module.exports.ConfigLoader = require( './ConfigLoader' )
 module.exports.Console = require( './Console' )
 module.exports.Controller = require( './Controller' )

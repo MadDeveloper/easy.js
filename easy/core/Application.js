@@ -17,13 +17,10 @@ const cors = require( 'cors' )
 const compression = require( 'compression' )
 const cookieParser = require( 'cookie-parser' )
 const passport = require( 'passport' )
-const ContainerBuilder = require( '../provider/ContainerBuilder' )
 const Polyfills = require( './Polyfills' )
 const ConfigLoader = require( './ConfigLoader' )
-const Router = require( './Router' )
 const Authentication = require( '../authentication/Authentication' )
 const Configurable = require( '../interfaces/Configurable' )
-const DatabasesManager = require( '../database/DatabasesManager' )
 
 /**
  * @class Application
@@ -40,13 +37,9 @@ class Application extends Configurable {
          */
         Polyfills.load()
 
-        this.kernel = new Kernel()
-        this.container = null
+        this.kernel = new Kernel( this )
         this.config = null
         this.app = express()
-        this.router = null
-        this.appName = null
-        this.databasesManager = null
     }
 
     /**
@@ -56,38 +49,11 @@ class Application extends Configurable {
      */
     configure( appRootPath ) {
         this.config = ConfigLoader.loadFromGlobal( 'app' )
-        this.kernel.init( appRootPath )
+
         this.setEnvironment()
 
-        /*
-         * Prepare container
-         */
-        const containerBuilder = new ContainerBuilder( this )
-        containerBuilder.configure({ includeComponents: true })
-
-        /*
-         * Start and daemonize databases
-         */
-        this.databasesManager = new DatabasesManager( this, containerBuilder.container )
-        this.databasesManager.load()
-
-        /*
-         * Build container
-         */
-        containerBuilder.addToBuild( 'component.databasesmanager', this.databasesManager )
-
-        /*
-         * Get some components
-         */
-        this.container = containerBuilder.build()
-        this.router = this.container.get( 'component.router' )
-        this.logFileManager = this.container.get( 'component.logfilemanager' )
-
-        /*
-         * Configure components
-         */
-        this.appName = this.config.app.name
-        this.router.configure( this, express.Router() )
+        this.kernel.configure( appRootPath )
+        this.kernel.loadComponents()
     }
 
     /**
@@ -114,8 +80,18 @@ class Application extends Configurable {
         this.plugThirdPartyMiddlewares()
         this.exposeRawBody()
         this.plugAuthentication()
-        this.router.load()
+        this.kernel.loadBundles()
+        this.router.addNotFoundRoute()
         this.initializePassport()
+        this.bindRouterToExpress()
+    }
+
+    /**
+     * Bind express router to express application
+     *
+     * @memberOf Application
+     */
+    bindRouterToExpress() {
         this.app.use( '/', this.router.scope )
     }
 
@@ -245,6 +221,50 @@ class Application extends Configurable {
      */
     isProdEnv() {
         return !this.isDevEnv()
+    }
+
+    /**
+     * Get application router
+     *
+     * @readonly
+     *
+     * @memberOf Application
+     */
+    get router() {
+        return this.kernel.router
+    }
+
+    /**
+     * Get application container
+     *
+     * @readonly
+     *
+     * @memberOf Application
+     */
+    get container() {
+        return this.kernel.container
+    }
+
+    /**
+     * Get databases manager
+     *
+     * @readonly
+     *
+     * @memberOf Application
+     */
+    get databasesManager() {
+        return this.kernel.databasesManager
+    }
+
+    /**
+     * Get the application name
+     *
+     * @readonly
+     *
+     * @memberOf Application
+     */
+    get appName() {
+        return this.config.app.name
     }
 }
 
