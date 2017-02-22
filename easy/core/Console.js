@@ -42,10 +42,7 @@ class Console {
             }
 
         } else {
-            Console.error({
-                title: "Invalid arguments",
-                message: "Missing arguments to error from Console class"
-            })
+            throw new Error( 'Missing arguments to Console.error() function' )
         }
     }
 

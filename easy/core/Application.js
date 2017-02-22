@@ -49,9 +49,7 @@ class Application extends Configurable {
      */
     configure( appRootPath ) {
         this.config = ConfigLoader.loadFromGlobal( 'app' )
-
         this.setEnvironment()
-
         this.kernel.configure( appRootPath )
         this.kernel.loadComponents()
     }

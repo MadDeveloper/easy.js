@@ -48,10 +48,10 @@ class Server {
             if ( canBeStarted ) {
                 await this.canStart()
             } else {
-                throw new Error( 'Serveur cannot be started' )
+                throw new Error( 'Server cannot be started' )
             }
         } catch ( error ) {
-            this.failedToStart( error )
+            throw new Error( `Server cannot be started\n${error}` )
         }
     }
 
@@ -129,19 +129,6 @@ class Server {
 
         Console.info( serverInfos )
         Console.line()
-    }
-
-    /**
-     * failedToStart - cannot start server, display the error
-     *
-     * @param {object} error
-     */
-    failedToStart( error ) {
-        Console.error({
-            title: 'Impossible to start server',
-            message: error,
-            exit: 1
-        })
     }
 }
 

@@ -8,7 +8,6 @@
 */
 
 const File = require( '../fs/File' )
-const Console = require( '../core/Console' )
 const { strtr } = require( '../lib/string' )
 const Writer = require( '../interfaces/Writer' )
 
@@ -57,7 +56,7 @@ class LogWriter extends Writer {
 
             return file.addContent( strtr( message, context ) ).write()
         } catch ( error ) {
-            Console.error({ title: `Impossible to writing on file ${fileName}.log at: ${filePath}`, message: error })
+            throw new Error( `Impossible to writing on file ${fileName}.log (${filePath})\n${error}` )
         }
     }
 }

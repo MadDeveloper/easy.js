@@ -10,7 +10,6 @@
 const path = require( 'path' )
 const File = require( '../fs/File' )
 const Directory = require( '../fs/Directory' )
-const Console = require( '../core/Console' )
 
 /**
  * @class LogDirectoryManager
@@ -38,10 +37,7 @@ class LogDirectoryManager {
         const directory = new Directory( this.logDirectoryPath )
 
         if ( !directory.existsSync() && !directory.createSync().success ) {
-            Console.error({
-                title: `Impossible to create log directory: ${this.logDirectoryPath}`,
-                message: error.toString()
-            })
+            throw new ReferenceError( `Impossible to create log directory (${this.logDirectoryPath})\n${error}` )
         }
     }
 

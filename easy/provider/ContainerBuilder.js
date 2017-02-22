@@ -10,7 +10,6 @@
 const Container = require( './Container' )
 const Configurable = require( '../interfaces/Configurable' )
 const ConfigLoader = require( '../core/ConfigLoader' )
-const Console = require( '../core/Console' )
 const { assignIn } = require( 'lodash' )
 
 /**
@@ -127,6 +126,8 @@ class ContainerBuilder extends Configurable {
      * @param {string} name
      * @param {string} path
      * @param {boolean} isComponent=false
+     *
+     * @returns {Object}
      */
     load( name, path, isComponent = false ) {
         if ( this.isLoaded( name ) ) {
@@ -140,12 +141,7 @@ class ContainerBuilder extends Configurable {
 
             return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
         } catch ( error ) {
-            Console.error({
-                title: "Impossible to load dependency",
-                message: `Path: ${dependencyFilePath}\n${error}`,
-                type: 'error',
-                exit: 1
-            })
+            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})` )
         }
     }
 

@@ -20,7 +20,6 @@ class Database {
     constructor( config ) {
         this._config = config
         this.stateEmitter = new EventsEmitter()
-        this.name = config.config.name
         this.init()
     }
 
@@ -74,7 +73,7 @@ class Database {
         }
 
         if ( error ) {
-            throw new Error( error )
+            throw new Error( `Error when trying to connect to database ${this.name}\n${error}` )
         }
     }
 
@@ -112,6 +111,17 @@ class Database {
      */
     connectToStateEmitter( handler ) {
         this.stateEmitter.on( 'change', handler )
+    }
+
+    /**
+     * Get database name
+     *
+     * @readonly
+     *
+     * @memberOf Database
+     */
+    get name() {
+        return config.config.name
     }
 
     /**
