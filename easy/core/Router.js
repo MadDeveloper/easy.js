@@ -27,9 +27,9 @@ class Router extends Configurable {
         super()
 
         this._scope = null
-        this._config = ConfigLoader.loadFromGlobal( 'bundles/activated' )
+        this._config = null
         this.application = null
-        this.access = null
+        this.access = new Access()
         this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
         this.analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
     }
@@ -42,7 +42,7 @@ class Router extends Configurable {
     configure( application, router ) {
         this.application = application
         this._scope = router
-        this.access = new Access( application.container )
+        this._config = ConfigLoader.loadFromGlobal( 'bundles/activated' )
     }
 
 	/**
@@ -109,7 +109,7 @@ class Router extends Configurable {
             const securityConfig = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
             const request = this.getRequest( req )
             const response = this.getResponse( res, request )
-            const handler = this.access.getAccessHandler( securityConfig )
+            const handler = this.getAccessHandler( securityConfig )
             const authorized = await handler.authorized({
                 configurations: securityConfig,
                 request,
@@ -123,6 +123,16 @@ class Router extends Configurable {
                 response.forbidden()
             }
         })
+    }
+
+    /**
+     * getAccessHandler - returns access authority handler
+     *
+     * @param  {Object} configurations
+     * @returns {Access|Service}
+     */
+    getAccessHandler( configurations ) {
+        return 'default' === configurations.strategy ? this.access : this.application.container.get( configurations.strategy )
     }
 
     /**

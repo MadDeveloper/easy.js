@@ -43,7 +43,7 @@ class RoleController extends Controller {
 
             return true
         } catch ( error ) {
-            response.internalServerError( error )
+            response.internalServerError()
 
             return false
         }
@@ -62,7 +62,7 @@ class RoleController extends Controller {
             const roles = await roleRepository.findAll()
             response.ok( roles )
         } catch ( error ) {
-            response.internalServerError( error )
+            response.internalServerError()
         }
     }
 
@@ -83,7 +83,7 @@ class RoleController extends Controller {
 
                 response.created( role )
             } catch ( error ) {
-                response.internalServerError( error )
+                response.internalServerError()
             }
         } else {
             response.badRequest()
@@ -114,7 +114,7 @@ class RoleController extends Controller {
 
                 response.ok( role )
             } catch ( error ) {
-                response.internalServerError( error )
+                response.internalServerError()
             }
         } else {
             response.badRequest()
@@ -134,7 +134,7 @@ class RoleController extends Controller {
             await roleRepository.delete( request.retrieve( 'role' ) )
             response.noContent()
         } catch ( error ) {
-            response.internalServerError( error )
+            response.internalServerError()
         }
     }
 }

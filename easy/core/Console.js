@@ -25,7 +25,7 @@ class Console {
         if ( undefined !== title ) {
 
             Console.line()
-            console.log( `[${colors.red( `Error: ${title}` )}]` )
+            console.log( `${colors.red( `[${title}]` )}` )
 
             if ( message ) {
                 console.log( `${colors.red( message )}` )

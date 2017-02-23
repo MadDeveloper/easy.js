@@ -72,9 +72,17 @@ class Authentication extends Configurable {
 	 * initLocalStrategy - init local strategy
 	 */
 	initLocalStrategy() {
-		const em = this._container.get( 'component.entitymanager' )
-		this._userRepository = em.getRepository( this.config.repository, { model: this.config.model })
+		this.defineLoginRoute()
+		this.defineLocalStrategy()
+		this.addCheckTokenRoute()
+	}
 
+	/**
+	 * Define the default login route
+	 *
+	 * @memberOf Authentication
+	 */
+	defineLoginRoute() {
 		this._router.scope.post(
 			this.config.route,
 			this._passport.authenticate( 'local', { session: false }),
@@ -87,6 +95,16 @@ class Authentication extends Configurable {
 					token: request.getProperty( 'user' ).token
 				})
 		})
+	}
+
+	/**
+	 * Define local strategy behaviour
+	 *
+	 * @memberOf Authentication
+	 */
+	defineLocalStrategy() {
+		const em = this._container.get( 'component.entitymanager' )
+		this._userRepository = em.getRepository( this.config.repository, { model: this.config.model })
 
 		this._passport.use( new LocalStrategy({
 			usernameField: this.config.usernameField,
@@ -107,10 +125,17 @@ class Authentication extends Configurable {
 					return done( null, false )
 				}
 			} catch ( error ) {
-				done( error )
+				done()
 			}
 		}) )
+	}
 
+	/**
+	 * Add check token route
+	 *
+	 * @memberOf Authentication
+	 */
+	addCheckTokenRoute() {
 		/*
 		 * Verify token
 		 */

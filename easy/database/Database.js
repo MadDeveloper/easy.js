@@ -121,7 +121,7 @@ class Database {
      * @memberOf Database
      */
     get name() {
-        return config.config.name
+        return this.config.config.name
     }
 
     /**

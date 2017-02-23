@@ -44,7 +44,7 @@ class UserController extends Controller {
 
             return true
         } catch ( error ) {
-            response.internalServerError( error )
+            response.internalServerError()
         }
     }
 
@@ -62,7 +62,7 @@ class UserController extends Controller {
 
             response.ok( users )
         } catch ( error ) {
-            response.internalServerError( error )
+            response.internalServerError()
         }
     }
 
@@ -84,7 +84,7 @@ class UserController extends Controller {
                 user.unset( 'password' )
                 response.created({ user: user.toJSON(), token: TokenManager.sign( user.toJSON() ) })
             } catch ( error ) {
-                response.internalServerError( error )
+                response.internalServerError()
             }
 
         } else {
@@ -121,7 +121,7 @@ class UserController extends Controller {
 
                 response.ok( user )
             } catch ( error ) {
-                response.internalServerError( error )
+                response.internalServerError()
             }
         } else {
             response.badRequest()
@@ -210,7 +210,7 @@ class UserController extends Controller {
 
             response.noContent()
         } catch ( error ) {
-            response.internalServerError( error )
+            response.internalServerError()
         }
     }
 }

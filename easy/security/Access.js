@@ -17,26 +17,13 @@ const roles = ConfigLoader.loadFromGlobal( 'roles' )
  */
 class Access extends SecurityAccess {
     /**
-     * constructor
-     *
-     * @param  {Container} container
+     * @constructor
      */
-    constructor( container ) {
+    constructor() {
         super()
 
         this.loadRoles()
         this._restrictions = {}
-        this.container = container
-    }
-
-    /**
-     * getAccessHandler - returns access authority handler
-     *
-     * @param  {Object} configurations
-     * @returns {Access|Service}
-     */
-    getAccessHandler( configurations ) {
-        return 'default' === configurations.strategy ? this : this.container.get( configurations.strategy )
     }
 
     /**

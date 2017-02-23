@@ -51,7 +51,7 @@ class Server {
                 throw new Error( 'Server cannot be started' )
             }
         } catch ( error ) {
-            throw new Error( `Server cannot be started\n${error}` )
+            Console.error({ title: error, exit: 1 })
         }
     }
 
