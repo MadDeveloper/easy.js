@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- enlever getAccessHandler de Access pour le mettre dans Router, comme ça Access peut enlever sa dépendance Container, et rendre les roles paramétrable dans constructeur
 - refactor Router, Application, Controller classes
 - Working on reusable components (Logger, Router, etc.)
 - pouvoir rm un dossier non vide
