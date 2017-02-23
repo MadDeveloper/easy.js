@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- pouvoir mettre des middlewares après ceux easy et avant les méthodes des controllers
 - Revoir l'encapsulation
 - refactor Router, Application, Controller classes
 - Working on reusable components (Logger, Router, etc.)
