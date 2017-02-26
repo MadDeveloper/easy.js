@@ -18,7 +18,6 @@ describe( 'RoleController', () => {
         slug: 'test'
     }
     const Role = class {}
-    const somethingTerribleHappened = 'Something terrible happened!'
 
     beforeEach( () => roleController = new RoleController( container ) )
 
@@ -43,7 +42,7 @@ describe( 'RoleController', () => {
         describe( 'when the findAll repository method fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ findAll: () => Promise.reject( somethingTerribleHappened ) })
+                entityManager.getRepository.and.returnValue({ findAll: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -51,7 +50,7 @@ describe( 'RoleController', () => {
             }) )
 
             it( 'should respond with internal server error', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
+                expect( response.internalServerError ).toHaveBeenCalledWith()
             })
 
         })
@@ -102,7 +101,7 @@ describe( 'RoleController', () => {
 
             beforeEach( () => {
                 request.getBody.and.returnValue( role )
-                entityManager.getRepository.and.returnValue({ save: () => Promise.reject( somethingTerribleHappened ) })
+                entityManager.getRepository.and.returnValue({ save: () => Promise.reject() })
                 entityManager.getModel.and.returnValue( Role )
             })
 
@@ -111,7 +110,7 @@ describe( 'RoleController', () => {
             }) )
 
             it( 'should respond with internal server error', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
+                expect( response.internalServerError ).toHaveBeenCalledWith()
             })
 
         })
@@ -175,7 +174,7 @@ describe( 'RoleController', () => {
         describe( 'when the find repository method fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ find: () => Promise.reject( somethingTerribleHappened ) })
+                entityManager.getRepository.and.returnValue({ find: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -183,7 +182,7 @@ describe( 'RoleController', () => {
             }) )
 
             it( 'should respond with bad request', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
+                expect( response.internalServerError ).toHaveBeenCalledWith()
             })
 
         })
@@ -216,7 +215,7 @@ describe( 'RoleController', () => {
         describe( 'when the save repository method fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ save: () => Promise.reject( somethingTerribleHappened ) })
+                entityManager.getRepository.and.returnValue({ save: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -224,7 +223,7 @@ describe( 'RoleController', () => {
             }) )
 
             it( 'should respond with internal server error', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
+                expect( response.internalServerError ).toHaveBeenCalledWith()
             })
 
         })
@@ -270,7 +269,7 @@ describe( 'RoleController', () => {
 
             beforeEach( () => {
                 request.retrieve.and.returnValue( null )
-                entityManager.getRepository.and.returnValue({ delete: () => Promise.reject( somethingTerribleHappened ) })
+                entityManager.getRepository.and.returnValue({ delete: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -278,7 +277,7 @@ describe( 'RoleController', () => {
             }) )
 
             it( 'should respond with an internal server error', () => {
-                expect( response.internalServerError ).toHaveBeenCalledWith( somethingTerribleHappened )
+                expect( response.internalServerError ).toHaveBeenCalledWith()
             })
 
         })
