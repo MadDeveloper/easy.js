@@ -2,7 +2,9 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- pouvoir mettre des middlewares après ceux easy et avant les méthodes des controllers
+- Pouvoir ajouter des routes publiques même si l'auth est activée
+- Corriger les path absolue (app-module-path) dans easy (cf. ConfigLoader, Access, etc.)
+- pouvoir mettre des middlewares globaux
 - Code plus robuste avec des checks dans les classes à propos des paramètres, throw error en cas de problème
 - Revoir l'encapsulation
 - refactor Router, Application, Controller classes
