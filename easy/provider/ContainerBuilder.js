@@ -141,7 +141,7 @@ class ContainerBuilder extends Configurable {
 
             return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
         } catch ( error ) {
-            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})` )
+            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error}` )
         }
     }
 

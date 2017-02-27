@@ -54,7 +54,7 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
         return {
             type: 'use' in configurations ? 'use' : 'param',
             param: configurations.use || configurations.param,
-            middleware: configurations.controller
+            controller: configurations.controller
         }
     }
 }

@@ -14,7 +14,6 @@ const Response = require( '../http/Response' )
 const Access = require( '../security/Access' )
 const AnalyzerMiddlewaresConfig = require( '../middlewares/AnalyzerMiddlewaresConfig' )
 const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
-const Authorization = require( '../authentication/Authorization' )
 
 /**
  * @class Router
@@ -33,7 +32,6 @@ class Router extends Configurable {
         this.access = new Access()
         this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
         this.analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
-        this._authorization = new Authorization()
     }
 
     /**
@@ -78,6 +76,7 @@ class Router extends Configurable {
         const middlewaresConfig = this.analyzerMiddlewaresConfig.extractMiddlewaresConfig( configurations )
         let middleware = ''
         let middlewareInfos = {}
+        httpMethod = httpMethod.toLowerCase()
 
         for ( let config in middlewaresConfig ) {
             config = middlewaresConfig[ config ]
@@ -89,7 +88,7 @@ class Router extends Configurable {
             router[ middlewareInfos.type ]( middlewareInfos.param, async ( req, res, next ) => {
                 const request = this.getRequest( req )
 
-                if ( 'all' === httpMethod || httpMethod === request.getMethod() ) {
+                if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
                     const response = this.getResponse( res, request )
                     const authorized = await controller[ controllerMethod ]( request, response )
 
@@ -112,15 +111,15 @@ class Router extends Configurable {
      */
     defineSecurityRoute( route, httpMethod, configurations ) {
         const router = this.scope
+        httpMethod = httpMethod.toLowerCase()
 
         router.use( route, async ( req, res, next ) => {
             const request = this.getRequest( req )
 
-            if ( 'all' === httpMethod || httpMethod === request.getMethod() ) {
+            if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
                 const securityConfig = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
                 const response = this.getResponse( res, request )
                 const handler = this.getAccessHandler( securityConfig )
-                const tokenValidated = await this.authorization.checkToken( request, response )
                 const authorized = await handler.authorized({
                     configurations: securityConfig,
                     request,
@@ -128,10 +127,8 @@ class Router extends Configurable {
                     container: this.application.container
                 })
 
-                if ( tokenValidated && authorized ) {
+                if ( authorized ) {
                     next()
-                } else {
-                    response.forbidden()
                 }
             } else {
                 next()
@@ -245,17 +242,6 @@ class Router extends Configurable {
      */
     get config() {
         return this._config
-    }
-
-    /**
-     * Authorization instance
-     *
-     * @readonly
-     *
-     * @memberOf Router
-     */
-    get authorization() {
-        return this._authorization
     }
 }
 

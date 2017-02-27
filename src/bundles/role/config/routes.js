@@ -1,4 +1,3 @@
-const security = require( './security' )
 const middlewares = require( './middlewares' )
 const roles = require( 'src/config/roles' )
 
@@ -8,7 +7,6 @@ module.exports = {
             controller: 'role:getRoles',
             security: {
                 strategy: 'default',
-                validateToken: true,
                 roles: [ roles.any ]
             }
         },
@@ -16,7 +14,6 @@ module.exports = {
             controller: 'role:createRole',
             security: {
                 strategy: 'default',
-                validateToken: true,
                 roles: [ roles.admin ]
             }
         }

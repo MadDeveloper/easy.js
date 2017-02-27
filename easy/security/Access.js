@@ -9,6 +9,7 @@
 
 const ConfigLoader = require( '../core/ConfigLoader' )
 const SecurityAccess = require( '../interfaces/SecurityAccess' )
+const Authorization = require( '../authentication/Authorization' )
 const roles = ConfigLoader.loadFromGlobal( 'roles' )
 
 /**
@@ -17,24 +18,64 @@ const roles = ConfigLoader.loadFromGlobal( 'roles' )
  */
 class Access extends SecurityAccess {
     /**
+     * Creates an instance of Access.
+     *
+     * @constructor
+     *
+     * @memberOf Access
+     */
+    constructor() {
+        super()
+
+        this._authorization = new Authorization()
+    }
+
+    /**
      * authorized - check if user is authorized to access to the route requested
      *
      * @param  {Object} { configurations
      * @param  {Request} request
-     * @param  {Response} response
-     * @param  {Container} container }
+     * @param  {Response} response }
+     *
      * @returns {boolean}
      */
-    async authorized({ configurations, request, response, container }) {
-        let isAuthorizedToAccess = false
-        let authorized = false
-        let focus = configurations.focus || 'role_id'
-        const method = request.getMethod().toLowerCase()
-        const user = request.getAppParameter( 'user' )
-        const rolesAuthorized = configurations.roles
-        const focusUserProperty = user[ focus ]
+    async authorized({ configurations, request, response }) {
+        const tokenValidated = await this.authorization.checkToken( request, response )
 
-        return isAuthorizedToAccess
+        if ( !tokenValidated ) {
+            response.unauthorized()
+
+            return false
+        }
+
+        const rolesAuthorized = configurations.roles
+        const focus = configurations.focus || 'role_id'
+        const user = request.getAppParameter( 'user' )
+        const roleUser = user[ focus ]
+        const hasAccess = rolesAuthorized.includes( roleUser )
+
+        if ( rolesAuthorized.includes( roles.any ) ) {
+            return true
+        }
+
+        if ( !hasAccess ) {
+            response.forbidden()
+
+            return false
+        }
+
+        return true
+    }
+
+    /**
+     * Authorization instance
+     *
+     * @readonly
+     *
+     * @memberOf Router
+     */
+    get authorization() {
+        return this._authorization
     }
 }
 
