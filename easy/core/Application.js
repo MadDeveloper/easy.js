@@ -145,6 +145,19 @@ class Application extends Configurable {
                 { stream: fs.createWriteStream( `${this.kernel.path.root}/logs/traffic.log`, { flags: 'a' }) }
             ) )
         }
+
+        this.plugGlobalsUserMiddlewares()
+    }
+
+    /**
+     * Plug globals user middlewares
+     *
+     * @memberOf Application
+     */
+    plugGlobalsUserMiddlewares() {
+        const middlewares = ConfigLoader.loadFromGlobal( 'middlewares' )
+
+        middlewares.forEach( middleware => this.app.use( middleware ) )
     }
 
     /**

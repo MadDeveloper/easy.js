@@ -2,13 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- revoir les try catch
 - Corriger les path absolue (app-module-path) dans easy (cf. ConfigLoader, Access, etc.)
-- pouvoir mettre des middlewares globaux
-- Code plus robuste avec des checks dans les classes à propos des paramètres, throw error en cas de problème
-- Revoir l'encapsulation
-- refactor Router, Application, Controller classes
-- Working on reusable components (Logger, Router, etc.)
 - pouvoir rm un dossier non vide
 - faire les tests du vendor
 - exporter role et user dans un repo externe, importable
@@ -20,6 +14,11 @@
 ---------|  LATER  |---------
 -----------------------------
 
+- revoir les try catch
+- Code plus robuste avec des checks dans les classes à propos des paramètres, throw error en cas de problème
+- Revoir l'encapsulation
+- refactor Router, Application, Controller classes
+- Working on reusable components (Logger, Router, etc.)
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de tout lier en promise pour les patchs
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
 - créer une classe Cache qui pourra être instanciée dans n'importe quelle autre classe afin de pouvoir gérer son cache
