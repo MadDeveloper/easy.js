@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- revoir les try catch
 - Pouvoir ajouter des routes publiques même si l'auth est activée
 - Corriger les path absolue (app-module-path) dans easy (cf. ConfigLoader, Access, etc.)
 - pouvoir mettre des middlewares globaux

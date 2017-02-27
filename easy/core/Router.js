@@ -14,6 +14,7 @@ const Response = require( '../http/Response' )
 const Access = require( '../security/Access' )
 const AnalyzerMiddlewaresConfig = require( '../middlewares/AnalyzerMiddlewaresConfig' )
 const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
+const Authorization = require( '../authentication/Authorization' )
 
 /**
  * @class Router
@@ -32,6 +33,7 @@ class Router extends Configurable {
         this.access = new Access()
         this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
         this.analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
+        this._authorization = new Authorization()
     }
 
     /**
@@ -67,10 +69,11 @@ class Router extends Configurable {
     /**
      * defineMiddlewaresRoutes - define all middlewares into express router
      *
-     * @param  {Object} configurations
-     * @param  {Controller[]} controller
+     * @param {Object} configurations
+     * @param {string} httpMethod
+     * @param {Controller[]} controller
      */
-    defineMiddlewaresRoutes( configurations, controllers ) {
+    defineMiddlewaresRoutes( configurations, httpMethod, controllers ) {
         const router = this.scope
         const middlewaresConfig = this.analyzerMiddlewaresConfig.extractMiddlewaresConfig( configurations )
         let middleware = ''
@@ -80,16 +83,20 @@ class Router extends Configurable {
             config = middlewaresConfig[ config ]
             middlewareInfos = this.analyzerMiddlewaresConfig.extractMiddlewareInfos( config )
 
-            const [ controllerId, controllerMethod ] = middlewareInfos.middleware.split( ':' )
+            const [ controllerId, controllerMethod ] = middlewareInfos.controller.split( ':' )
             const controller = controllers[ controllerId ]
 
             router[ middlewareInfos.type ]( middlewareInfos.param, async ( req, res, next ) => {
                 const request = this.getRequest( req )
-                const response = this.getResponse( res, request )
 
-                const authorized = await controller[ controllerMethod ]( request, response )
+                if ( 'all' === httpMethod || httpMethod === request.getMethod() ) {
+                    const response = this.getResponse( res, request )
+                    const authorized = await controller[ controllerMethod ]( request, response )
 
-                if ( authorized ) {
+                    if ( authorized ) {
+                        next()
+                    }
+                } else {
                     next()
                 }
             })
@@ -97,30 +104,37 @@ class Router extends Configurable {
     }
 
     /**
-     * defineAccessRoute - define access rules for specific route
+     * defineSecurityRoute - define access rules for specific route
      *
-     * @param  {string} route
-     * @param  {Object} configurations
+     * @param {string} route
+     * @param {string} httpMethod
+     * @param {Object} configurations
      */
-    defineAccessRoute( route, configurations ) {
+    defineSecurityRoute( route, httpMethod, configurations ) {
         const router = this.scope
 
         router.use( route, async ( req, res, next ) => {
-            const securityConfig = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
             const request = this.getRequest( req )
-            const response = this.getResponse( res, request )
-            const handler = this.getAccessHandler( securityConfig )
-            const authorized = await handler.authorized({
-                configurations: securityConfig,
-                request,
-                response,
-                container: this.application.container
-            })
 
-            if ( authorized ) {
-                next()
+            if ( 'all' === httpMethod || httpMethod === request.getMethod() ) {
+                const securityConfig = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
+                const response = this.getResponse( res, request )
+                const handler = this.getAccessHandler( securityConfig )
+                const tokenValidated = await this.authorization.checkToken( request, response )
+                const authorized = await handler.authorized({
+                    configurations: securityConfig,
+                    request,
+                    response,
+                    container: this.application.container
+                })
+
+                if ( tokenValidated && authorized ) {
+                    next()
+                } else {
+                    response.forbidden()
+                }
             } else {
-                response.forbidden()
+                next()
             }
         })
     }
@@ -132,7 +146,7 @@ class Router extends Configurable {
      * @returns {Access|Service}
      */
     getAccessHandler( configurations ) {
-        return 'default' === configurations.strategy ? this.access : this.application.container.get( configurations.strategy )
+        return 'default' === configurations.strategy ? this.access : this.application.container.get( configurations.provider )
     }
 
     /**
@@ -172,6 +186,28 @@ class Router extends Configurable {
         })
     }
 
+	/**
+	 * Add check token route
+	 *
+	 * @memberOf Authentication
+	 */
+	addCheckTokenRoute() {
+		/*
+		 * Verify token
+		 */
+		this.scope.use( async ( req, res, next ) => {
+			const request = this.getRequest( req )
+			const response = this.getResponse( res, request )
+			const authorized = await this.authorization.checkToken( request, response )
+
+			if ( authorized ) {
+				next()
+			} else {
+				response.unauthorized()
+			}
+		})
+	}
+
     /**
      * getRequest - get easy Request instance
      *
@@ -209,6 +245,17 @@ class Router extends Configurable {
      */
     get config() {
         return this._config
+    }
+
+    /**
+     * Authorization instance
+     *
+     * @readonly
+     *
+     * @memberOf Router
+     */
+    get authorization() {
+        return this._authorization
     }
 }
 

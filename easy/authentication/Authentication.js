@@ -11,7 +11,6 @@ const passportLocal = require( 'passport-local' )
 const ConfigLoader = require( '../core/ConfigLoader' )
 const Controller = require( '../core/Controller' )
 const Configurable = require( '../interfaces/Configurable' )
-const Authorization = require( './Authorization' )
 const TokenManager = require( './TokenManager' )
 
 const LocalStrategy = passportLocal.Strategy
@@ -34,7 +33,6 @@ class Authentication extends Configurable {
 		this._container			= container
 		this._passport			= passport
 		this._router			= container.get( 'component.router' )
-		this._authorization		= new Authorization()
 	}
 
 	/**
@@ -74,7 +72,6 @@ class Authentication extends Configurable {
 	initLocalStrategy() {
 		this.defineLoginRoute()
 		this.defineLocalStrategy()
-		this.addCheckTokenRoute()
 	}
 
 	/**
@@ -128,28 +125,6 @@ class Authentication extends Configurable {
 				done()
 			}
 		}) )
-	}
-
-	/**
-	 * Add check token route
-	 *
-	 * @memberOf Authentication
-	 */
-	addCheckTokenRoute() {
-		/*
-		 * Verify token
-		 */
-		this._router.scope.use( async ( req, res, next ) => {
-			const request = this._router.getRequest( req )
-			const response = this._router.getResponse( res, request )
-			const authorized = await this._authorization.checkToken( request, response )
-
-			if ( authorized ) {
-				next()
-			} else {
-				response.unauthorized()
-			}
-		})
 	}
 
 	/**

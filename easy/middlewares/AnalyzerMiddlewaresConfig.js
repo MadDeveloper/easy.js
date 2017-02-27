@@ -21,7 +21,7 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
      * @returns {boolean}
      */
     analyze( configurations ) {
-        return configurations.hasOwnProperty( 'middlewares' ) && Object.keys( configurations.middlewares ).length > 0
+        return 'middlewares' in configurations && Object.keys( configurations.middlewares ).length > 0
     }
 
     /**
@@ -41,7 +41,7 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
      * @returns {Object}
      */
     extractMiddleware( configurations ) {
-        return configurations.middleware
+        return configurations.controller
     }
 
     /**
@@ -52,9 +52,9 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
      */
     extractMiddlewareInfos( configurations ) {
         return {
-            type: configurations.hasOwnProperty( 'use' ) ? 'use' : 'param',
+            type: 'use' in configurations ? 'use' : 'param',
             param: configurations.use || configurations.param,
-            middleware: configurations.middleware
+            middleware: configurations.controller
         }
     }
 }

@@ -26,7 +26,7 @@ class AnalyzerSecurityConfig extends Analyzer {
             const security = configurations.security
 
             if ( 'strategy' in security ) {
-                return 'rules' in security
+                return 'roles' in security
             }
         }
 

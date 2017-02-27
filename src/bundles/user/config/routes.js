@@ -1,26 +1,52 @@
-const security = require( './security' )
+const roles = require( 'src/config/roles' )
 const middlewares = require( './middlewares' )
 
 module.exports = {
     '/roles/:role_id/users': {
-        get: 'user:getUsers',
-        post: 'user:createUser',
-        security: {
-            strategy: 'default',
-            rules: security[ '/roles/:role_id/users' ],
-            focus: 'role_id'
+        get: {
+            controller: 'user:getUsers',
+            security: {
+                strategy: 'default',
+                roles: [ roles.any ]
+            }
+        },
+        post: {
+            controller: 'user:createUser',
+            security: {
+                strategy: 'default',
+                roles: [ roles.admin ]
+            }
         }
     },
 
     '/roles/:role_id/users/:user_id': {
-        get: 'user:getUser',
-        put: 'user:updateUser',
-        patch: 'user:patchUser',
-        delete: 'user:deleteUser',
-        security: {
-            strategy: 'default',
-            rules: security[ '/roles/:role_id/users' ],
-            focus: 'role_id'
+        get: {
+            controller: 'user:getUser',
+            security: {
+                strategy: 'default',
+                roles: [ roles.any ]
+            }
+        },
+        put: {
+            controller: 'user:updateUser',
+            security: {
+                strategy: 'default',
+                roles: [ roles.user ]
+            }
+        },
+        patch: {
+            controller: 'user:patchUser',
+            security: {
+                strategy: 'default',
+                roles: [ roles.user ]
+            }
+        },
+        delete: {
+            controller: 'user:deleteUser',
+            security: {
+                strategy: 'default',
+                roles: [ roles.admin ]
+            }
         },
         middlewares
     }
