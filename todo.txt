@@ -3,6 +3,9 @@
 -----------------------------
 
 - pouvoir rm un dossier non vide
+- voir si on peut déplacer bootstrap.js et server.js dans easy/ et si easy-cli permet avec la commande easy start, de pouvoir charger server.js
+  du coup il faudrait enlever app-module-path, on ne peut plus faire require('src/') il faudra faire avec '../../config/roles' mais au moins on peut déplacer les fichiers
+  bootstrap et server dans easy et les faire appeler par la cli
 - faire les tests du vendor
 - exporter role et user dans un repo externe, importable
 - faire une PR pour ecmascript stages, afin de faciliter l'écriture d'objets :
