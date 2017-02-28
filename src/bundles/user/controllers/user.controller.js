@@ -110,8 +110,8 @@ class UserController extends Controller {
      */
     async updateUser( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            if ( "undefined" === typeof request.getAppParameter( 'role_id' ) ) {
-                request.setAppParameter( 'role_id', request.getRouteParameter( 'role_id' ) )
+            if ( "undefined" === typeof request.retrieve( 'role_id' ) ) {
+                request.store( 'role_id', request.getRouteParameter( 'role_id' ) )
             }
 
             const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })

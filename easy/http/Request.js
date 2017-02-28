@@ -18,24 +18,18 @@ class Request extends Http {
      * constructor
      *
      * @param  {express.Request} req
-     * @param  {string} appName
      */
-    constructor( req, appName ) {
+    constructor( req ) {
         super()
 
-        this._appName = appName
         this._scope = req
         this._applicationCacheScope = 'applicationCache'
 
         /*
-         * Defining global app scope in request
+         * Defining application cache in scope
          */
-        if ( !this.scope.hasOwnProperty( this._appName ) ) {
-            this.scope[ this._appName ] = {}
-        }
-
-        if ( !this.scope[ this._appName ].hasOwnProperty( this._applicationCacheScope ) ) {
-            this.scope[ this._appName ][ this._applicationCacheScope ] = {}
+        if ( !( this._applicationCacheScope in this.scope ) ) {
+            this.scope[ this._applicationCacheScope ] = {}
         }
     }
 
@@ -126,35 +120,6 @@ class Request extends Http {
     }
 
     /**
-     * getAppParameter - get application parameter
-     *
-     * @param  {string} key
-     * @returns {any}
-     */
-    getAppParameter( key ) {
-        return this.getAppParameters()[ key ]
-    }
-
-    /**
-     * getAppParameters - get all application parameters
-     *
-     * @returns {any}
-     */
-    getAppParameters() {
-        return this.scope[ this._appName ]
-    }
-
-    /**
-     * setAppParameter - set application parameter
-     *
-     * @param  {string} key
-     * @param  {any} value
-     */
-    setAppParameter( key, value ) {
-        this.scope[ this._appName ][ key ] = value
-    }
-
-    /**
      * getProperty - returns direct property on express request object
      *
      * @param  {string} property
@@ -203,10 +168,7 @@ class Request extends Http {
         /*
          * Defining or redefine property in app cache scope, stored in request
          */
-        const applicationCache = this.getAppParameter( this._applicationCacheScope )
-
-        applicationCache[ property ] = value
-        this.setAppParameter( this._applicationCacheScope, applicationCache )
+        this.scope[ this._applicationCacheScope ][ property ] = value
 
         return this
     }
@@ -218,7 +180,7 @@ class Request extends Http {
      * @returns {any}
      */
     retrieve( property ) {
-        return this.getAppParameters()[ this._applicationCacheScope ][ property ]
+        return this.scope[ this._applicationCacheScope ][ property ]
     }
 
     /**

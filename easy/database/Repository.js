@@ -55,18 +55,23 @@ class Repository {
      */
     save( model, params, options = {}) {
         return new Promise( ( resolve, reject ) => {
-            this.database.transaction( async t => {
+            this.database.transaction( t => {
                 options.transacting = t
 
-                try {
-                    const model = await model.save( params, options )
+                model
+                    .save( params, options )
+                    .then( modelUpdated => {
+                        t.commit()
+                        resolve( modelUpdated )
 
-                    t.commit()
-                    resolve( model )
-                } catch ( error ) {
-                    t.rollback()
-                    reject( error )
-                }
+                        return null
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+
+                        return null
+                    })
             })
         })
     }
@@ -84,19 +89,21 @@ class Repository {
             let patchToApply = {}
             patchToApply[ patch.path.substring( 1 ) ] = patch.value
 
-            this.database.transaction( async t => {
+            this.database.transaction( t => {
                 options.transacting = t
                 options.patch = true
 
-                try {
-                    const model = await this.save( model, patchToApply, options )
+                this.save( model, patchToApply, options )
+                    .then( modelUpdated => {
+                        t.commit()
+                        resolve( modelSaved )
 
-                    t.commit()
-                    resolve( model )
-                } catch ( error ) {
-                    t.rollback()
-                    reject( error )
-                }
+                        return null
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
             })
         })
     }

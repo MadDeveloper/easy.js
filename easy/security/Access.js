@@ -50,7 +50,7 @@ class Access extends SecurityAccess {
 
         const rolesAuthorized = configurations.roles
         const focus = configurations.focus || 'role_id'
-        const user = request.getAppParameter( 'user' )
+        const user = request.retrieve( 'user' )
         const roleUser = user[ focus ]
         const hasAccess = rolesAuthorized.includes( roleUser )
 

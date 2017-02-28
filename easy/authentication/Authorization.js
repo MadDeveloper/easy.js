@@ -31,8 +31,9 @@ class Authorization {
 					return false
 				}
 
-				request.setAppParameter( 'token', token )
-				request.setAppParameter( 'user', decoded )
+				request
+					.store( 'token', token )
+					.store( 'user', decoded )
 
 				return true
 			} catch ( error ) {
