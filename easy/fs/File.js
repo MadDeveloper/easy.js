@@ -318,6 +318,21 @@ class File extends Document {
     }
 
     /**
+     * Set content to current content
+     *
+     * @param {string} newContent
+     *
+     * @returns {File}
+     *
+     * @memberOf File
+     */
+    setContent( newContent ) {
+        this.content = newContent
+
+        return this
+    }
+
+    /**
      * path - get the file path
      *
      * @memberOf File
