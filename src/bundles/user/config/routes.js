@@ -1,4 +1,4 @@
-const roles = require( 'src/config/roles' )
+const roles = require( '../../../config/roles' )
 const middlewares = require( './middlewares' )
 
 module.exports = {

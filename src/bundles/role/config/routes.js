@@ -1,5 +1,5 @@
 const middlewares = require( './middlewares' )
-const roles = require( 'src/config/roles' )
+const roles = require( '../../../config/roles' )
 
 module.exports = {
     '/roles': {

@@ -1,5 +1,5 @@
-const role = require( 'src/bundles/role' )
-const user = require( 'src/bundles/user' )
+const role = require( '../../bundles/role' )
+const user = require( '../../bundles/user' )
 
 module.exports = [
     role,

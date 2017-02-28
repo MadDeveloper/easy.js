@@ -1,5 +1,5 @@
 const UserController = require( '../controllers/user.controller' )
-const roles = require( 'src/config/roles' )
+const roles = require( '../../../config/roles' )
 const container = easy.application.container
 const { TokenManager } = require( 'easy/authentication' )
 const path = require( 'path' )
