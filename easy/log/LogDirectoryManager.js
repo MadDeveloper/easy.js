@@ -31,13 +31,21 @@ class LogDirectoryManager {
     /**
      * Create logs directory if doesn't exist
      *
+     * @throws {ReferenceError} if directory path is invalid
+     *
      * @memberOf LogDirectoryManager
      */
     createLogDirectory() {
         const directory = new Directory( this.logDirectoryPath )
 
-        if ( !directory.existsSync() && !directory.createSync().success ) {
-            throw new ReferenceError( `Impossible to create log directory (${this.logDirectoryPath})\n${error}` )
+        try {
+            const exists = directory.existsSync()
+
+            if ( !exists ) {
+                directory.createSync()
+            }
+        } catch ( error ) {
+            throw new ReferenceError( `An error occured while trying to create logs directory (${this.logDirectoryPath}).\n${error.message}` )
         }
     }
 

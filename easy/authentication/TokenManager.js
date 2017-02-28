@@ -19,11 +19,11 @@ class TokenManager {
 	/**
 	 * sign - sign new token
 	 *
-	 * @param  {any} content
+	 * @param {string} content
 	 * @returns {string}
 	 */
 	static sign( content ) {
-		return jwt.sign( content, config.secret, { expiresIn: config.duration })
+		return jwt.sign( content, TokenManager.config.secret, { expiresIn: TokenManager.config.duration })
 	}
 
 	/**
@@ -34,7 +34,7 @@ class TokenManager {
 	 */
 	static verify( token ) {
 		return new Promise( ( resolve, reject ) => {
-			jwt.verify( token, config.secret, ( error, decoded ) => error ? reject( error ) : resolve( decoded ) )
+			jwt.verify( token, TokenManager.config.secret, ( error, decoded ) => error ? reject( error ) : resolve( decoded ) )
 		})
 	}
 

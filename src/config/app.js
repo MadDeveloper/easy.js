@@ -28,9 +28,23 @@ module.exports = {
 function getCredentials() {
     const keyFile = new File( `${__dirname}/ssl/myapp-privkey.pem` )
     const certFile = new File( `${__dirname}/ssl/myapp-cert.pem` )
+    let key = null
+    let cert = null
 
-    return {
-        key: keyFile.existsSync() ? keyFile.readSync() : null,
-        cert: certFile.existsSync() ? certFile.readSync() : null
+    try {
+        const keyFileExists = keyFile.existsSync()
+        const certFileExists = certFile.existsSync()
+
+        if ( keyFileExists && certFileExists ) {
+            key = keyFile.readSync()
+            cert = certFile.readSync()
+        }
+    } catch ( error ) {
+
+    } finally {
+        return {
+            key,
+            cert
+        }
     }
 }

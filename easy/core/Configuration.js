@@ -24,7 +24,7 @@ class Configuration {
 	 * @returns {any}
 	 */
 	static load( file ) {
-		return require( require.resolve( `${appPath}/src/config/${file}` ) )
+		return require( require.resolve( `${Configuration.appPath}/src/config/${file}` ) )
 	}
 
 	/**
@@ -32,11 +32,10 @@ class Configuration {
 	 *
 	 * @param {string} file
 	 * @param {string} bundle
-	 *
 	 * @returns {any}
 	 */
 	static loadFromBundle( file, bundle ) {
-		return require( require.resolve( `${appPath}/src/bundles/${bundle}/config/${file}` ) )
+		return require( require.resolve( `${Configuration.appPath}/src/bundles/${bundle}/config/${file}` ) )
 	}
 
 	/**

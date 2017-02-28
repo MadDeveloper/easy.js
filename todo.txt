@@ -14,7 +14,6 @@
 ---------|  LATER  |---------
 -----------------------------
 
-- revoir les try catch
 - Code plus robuste avec des checks dans les classes à propos des paramètres, throw error en cas de problème
 - Revoir l'encapsulation
 - refactor Router, Application, Controller classes

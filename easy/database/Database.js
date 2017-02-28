@@ -59,6 +59,8 @@ class Database {
 
     /**
      * connect - connect database to instance
+     *
+     * @throws {Error} if database connection cannot be established
      */
     async connect() {
         const { instance, connected, error } = await this.config.connector()

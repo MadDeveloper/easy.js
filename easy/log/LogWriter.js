@@ -38,8 +38,9 @@ class LogWriter extends Writer {
      * @param {string} fileName
      * @param {string} message
      * @param {object} context
-     *
      * @returns {Promise}
+     *
+     * @throws {Error} if file path is incorrect or user doesn't have access rights
      */
     async write( fileName, message, context ) {
         const filePath = `${this.logDirectoryManager.logDirectoryPath}/${fileName}.log`
@@ -56,7 +57,7 @@ class LogWriter extends Writer {
 
             return file.addContent( strtr( message, context ) ).write()
         } catch ( error ) {
-            throw new Error( `Impossible to writing on file ${fileName}.log (${filePath})\n${error}` )
+            throw new Error( `Impossible to writing on file ${fileName}.log (${filePath})\n${error.message}` )
         }
     }
 }

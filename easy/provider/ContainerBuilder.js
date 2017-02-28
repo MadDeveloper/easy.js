@@ -125,9 +125,10 @@ class ContainerBuilder extends Configurable {
      *
      * @param {string} name
      * @param {string} path
-     * @param {boolean} isComponent=false
-     *
+     * @param {boolean} [isComponent=false]
      * @returns {Object}
+     *
+     * @throws {ReferenceError} if the dependency file path is not found
      */
     load( name, path, isComponent = false ) {
         if ( this.isLoaded( name ) ) {
@@ -141,7 +142,7 @@ class ContainerBuilder extends Configurable {
 
             return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
         } catch ( error ) {
-            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error}` )
+            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error.message}` )
         }
     }
 

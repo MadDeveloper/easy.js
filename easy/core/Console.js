@@ -42,7 +42,7 @@ class Console {
             }
 
         } else {
-            throw new Error( 'Missing arguments to Console.error() function' )
+            Console.error({ title: 'Missing required title argument to Console.error() method' })
         }
     }
 

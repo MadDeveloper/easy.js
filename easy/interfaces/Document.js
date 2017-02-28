@@ -22,6 +22,8 @@ class Document {
      * exists - check, in synchronous maner, if path is a document
      *
      * @returns {boolean}
+     *
+     * @throws {Error} if document path is invalid
      */
     existsSync() {}
 
@@ -29,7 +31,6 @@ class Document {
      * create - create the document at indicated path
      *
      * @param {number} options = {}
-     *
      * @returns {Promise}
      */
     create( options = {}) {}
@@ -38,8 +39,9 @@ class Document {
      * createSync - create, in synchronous maner, the document at indicated path
      *
      * @param {object} options = {}
-     *
      * @returns {Object}
+     *
+     * @throws {Error} if document path is invalid
      */
     createSync( options = {}) {}
 
@@ -56,6 +58,8 @@ class Document {
      * deleteSync - Delete the document synchronously
      *
      * @returns {Object}
+     *
+     * @throws {Error} if document path is invalid
      *
      * @memberOf Document
      */
@@ -77,6 +81,8 @@ class Document {
      * @param {string} newPath
      * @returns {Object}
      *
+     * @throws {Error} if document path is invalid
+     *
      * @memberOf Document
      */
     renameSync( newPath ) {}
@@ -96,6 +102,8 @@ class Document {
      *
      * @param {Object} newPath
      * @returns {Object}
+     *
+     * @throws {Error} if document path is invalid
      *
      * @memberOf Document
      */

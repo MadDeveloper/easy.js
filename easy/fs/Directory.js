@@ -70,7 +70,7 @@ class Directory extends Document {
         try {
             return fs.lstatSync( this.path ).isDirectory()
         } catch( error ) {
-            return false
+            throw new Error( `Error when trying to check synchronously the existance of the directory (${this.path}).\n${error.message}` )
         }
     }
 
@@ -96,7 +96,7 @@ class Directory extends Document {
      *
      * @param {object} options = { mode: 755 }
      *
-     * @returns {boolean}
+     * @throws {Error} if path is invalid
      */
     createSync( options = { mode: 755 }) {
         let results = { success: false, error: null }
@@ -107,11 +107,8 @@ class Directory extends Document {
             }
 
             fs.mkdirSync( this.path, options )
-            results.success = true
-        } catch ( error ) {
-            results.error = error
-        } finally {
-            return results
+        } catch( error ) {
+            throw new Error( `Error when trying to create synchronously the directory (${this.path}).\n${error.message}` )
         }
     }
 
@@ -131,20 +128,15 @@ class Directory extends Document {
     /**
      * deleteSync - Delete the directory synchronously
      *
-     * @returns {Object}
+     * @throws {Error} if path is invalid
      *
      * @memberOf Directory
      */
     deleteSync() {
-        let results = { success: false, error: null }
-
         try {
             fs.rmdirSync( this.path )
-            results.success = true
-        } catch ( error ) {
-            results.error = error
-        } finally {
-            return results
+        } catch( error ) {
+            throw new Error( `Error when trying to delete synchronously the directory (${this.path}).\n${error.message}` )
         }
     }
 
@@ -168,20 +160,16 @@ class Directory extends Document {
      * renameSync - rename the directory synchronously
      *
      * @param {string} newName
-     * @returns {Object}
+     *
+     * @throws {Error} if path is invalid
      *
      * @memberOf Directory
      */
     renameSync( newName ) {
-        let results = { success: false, error: null }
-
         try {
            fs.renameSync( this.path, `${dir}/${newName}` )
-            results.success = true
-        } catch ( error ) {
-            results.error = error
-        } finally {
-            return results
+        } catch( error ) {
+            throw new Error( `Error when trying to rename synchronously the directory (${this.path}).\n${error.message}` )
         }
     }
 
@@ -201,16 +189,19 @@ class Directory extends Document {
      * moveSync - move the directory at indicated path synchronously
      *
      * @param {Object} newPath
-     * @returns {Object}
+     *
+     * @throws {Error} if path is invalid
      *
      * @memberOf Directory
      */
     moveSync( newPath ) {
-        return this.renameSync( path.resolve( this.path, newPath ) )
+        this.renameSync( path.resolve( this.path, newPath ) )
     }
 
     /**
      * path - get the directory path
+     *
+     * @returns {string}
      *
      * @memberOf Directory
      */

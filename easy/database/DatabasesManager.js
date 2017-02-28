@@ -73,7 +73,7 @@ class DatabasesManager {
                 await database.start()
             }
         } catch ( error ) {
-            await logger.critical( `An error occured when trying to connect to the database "${database.config.config.name}".\n${error}\n` )
+            await logger.critical( `An error occured when trying to connect to the database "${database.config.config.name}".\n${error.message}\n` )
         } finally {
             if ( database && database.config.config.enableDaemon ) {
                 await this.daemonizeDatabase( database )

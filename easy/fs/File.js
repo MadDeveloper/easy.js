@@ -179,12 +179,11 @@ class File extends Document {
      * writeSync - write in the file as synchronous maner
      *
      * @param {number} options = { mode: 755, encoding: 'utf8' }
-     *
      * @returns {Object}
+     *
+     * @throws {Error} if file path is invalid
      */
     writeSync( content = '', options = { mode: 755, encoding: 'utf8' }) {
-        let results = { success: false }
-
         try {
             if ( content.length > 0 ) {
                 this.content = content
@@ -195,11 +194,8 @@ class File extends Document {
             }
 
             fs.writeFileSync( this.path, this.content, options )
-            results.success = true
-        } catch ( error ) {
-            results.error = error
-        } finally {
-            return results
+        } catch( error ) {
+            throw new Error( `Error when trying to write synchronously to the file (${this.path}).\n${error.message}` )
         }
     }
 
@@ -221,18 +217,15 @@ class File extends Document {
      *
      * @returns {Object}
      *
+     * @throws {Error} if file path is invalid
+     *
      * @memberOf File
      */
     deleteSync() {
-        let results = { success: false }
-
         try {
             fs.unlinkSync( this.path )
-            results.success = true
-        } catch ( error ) {
-            results.error = error
-        } finally {
-            return results
+        } catch( error ) {
+            throw new Error( `Error when trying to delete synchronously the file (${this.path}).\n${error.message}` )
         }
     }
 
@@ -260,22 +253,19 @@ class File extends Document {
      * @param {string} newName
      * @returns {Object}
      *
+     * @throws {Error} if file path or new path is valid
+     *
      * @memberOf File
      */
     renameSync( newName ) {
-        let results = { success: false, error: null }
-
         try {
             const newPath = `${this.directory.path}/${newName}`
 
             fs.renameSync( this.path, newPath )
 
             this.loadPathInfo( newPath )
-            results.success = true
-        } catch ( error ) {
-            results.error = error
-        } finally {
-            return results
+        } catch( error ) {
+            throw new Error( `Error when trying to rename synchronously the file (${this.path}).\n${error.message}` )
         }
     }
 
@@ -296,6 +286,8 @@ class File extends Document {
      *
      * @param {Object} newPath
      * @returns {Object}
+     *
+     * @throws {Error} if file path or new path is invalid
      *
      * @memberOf File
      */
