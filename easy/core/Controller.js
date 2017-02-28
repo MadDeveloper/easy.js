@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-const ConfigLoader = require( './ConfigLoader' )
+const Configuration = require( './Configuration' )
 
 /**
  * @class Controller

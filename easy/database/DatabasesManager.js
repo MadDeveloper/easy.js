@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-const ConfigLoader = require( '../core/ConfigLoader' )
+const Configuration = require( '../core/Configuration' )
 const EntityManager = require( './EntityManager' )
 const DatabaseDaemon = require( './DatabaseDaemon' )
 const Database = require( './Database' )
@@ -23,7 +23,7 @@ class DatabasesManager {
      * @param {Container} container
      */
     constructor( kernel, container ) {
-        this.config = ConfigLoader.loadFromGlobal( 'database' )
+        this.config = Configuration.load( 'database' )
         this.bundlesPath = kernel.path.bundles
         this.container = container
         this.baseComponentNamespace = 'component.entitymanager'

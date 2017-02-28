@@ -2,7 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- Corriger les path absolue (app-module-path) dans easy (cf. ConfigLoader, Access, etc.)
 - pouvoir rm un dossier non vide
 - faire les tests du vendor
 - exporter role et user dans un repo externe, importable

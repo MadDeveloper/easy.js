@@ -7,10 +7,9 @@
 * file that was distributed with this source code.
 */
 
-const ConfigLoader = require( '../core/ConfigLoader' )
+const Configuration = require( '../core/Configuration' )
 const SecurityAccess = require( '../interfaces/SecurityAccess' )
 const Authorization = require( '../authentication/Authorization' )
-const roles = ConfigLoader.loadFromGlobal( 'roles' )
 
 /**
  * @class Access
@@ -27,6 +26,7 @@ class Access extends SecurityAccess {
     constructor() {
         super()
 
+        this.roles = Configuration.load( 'roles' )
         this._authorization = new Authorization()
     }
 
@@ -54,7 +54,7 @@ class Access extends SecurityAccess {
         const roleUser = user[ focus ]
         const hasAccess = rolesAuthorized.includes( roleUser )
 
-        if ( rolesAuthorized.includes( roles.any ) ) {
+        if ( rolesAuthorized.includes( this.roles.any ) ) {
             return true
         }
 

@@ -9,7 +9,7 @@
 
 const express = require( 'express' )
 const path = require( 'path' )
-const ConfigLoader = require( './ConfigLoader' )
+const Configuration = require( './Configuration' )
 const Bundle = require( './Bundle' )
 const Configurable = require( '../interfaces/Configurable' )
 const ContainerBuilder = require( '../provider/ContainerBuilder' )
@@ -47,6 +47,8 @@ class Kernel extends Configurable {
         this.path.bundles = `${this.path.src}/bundles`
         this.path.config = `${this.path.src}/config`
         this.path.services = `${this.path.src}/services`
+
+        Configuration.appPath = this.path.root
     }
 
     /**
@@ -55,7 +57,7 @@ class Kernel extends Configurable {
      * @memberOf Kernel
      */
     loadBundles() {
-        const bundles = ConfigLoader.loadFromGlobal( 'bundles/activated' )
+        const bundles = Configuration.load( 'bundles/activated' )
 
         bundles.forEach( indexModule => new Bundle( indexModule, this.router, this.container ).load() )
     }

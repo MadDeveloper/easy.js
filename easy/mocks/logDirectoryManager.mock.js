@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-const logDirectoryManager = jasmine.createSpyObj( 'v', [
+const logDirectoryManager = jasmine.createSpyObj( 'logDirectoryManager', [
     'createLogDirectory',
     'logDirectoryPath',
     'reset'

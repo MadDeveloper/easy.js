@@ -8,7 +8,9 @@
 */
 
 const jwt = require( 'jsonwebtoken' )
-const ConfigLoader = require( '../core/ConfigLoader' )
+const Configuration = require( '../core/Configuration' )
+
+let config = null
 
 /**
  * @class TokenManager
@@ -21,8 +23,6 @@ class TokenManager {
 	 * @returns {string}
 	 */
 	static sign( content ) {
-		const config = TokenManager.getConfig()
-
 		return jwt.sign( content, config.secret, { expiresIn: config.duration })
 	}
 
@@ -33,8 +33,6 @@ class TokenManager {
 	 * @returns {Promise}
 	 */
 	static verify( token ) {
-		const config = TokenManager.getConfig()
-
 		return new Promise( ( resolve, reject ) => {
 			jwt.verify( token, config.secret, ( error, decoded ) => error ? reject( error ) : resolve( decoded ) )
 		})
@@ -45,8 +43,12 @@ class TokenManager {
 	 *
 	 * @returns {Object}
 	 */
-	static getConfig() {
-		return ConfigLoader.loadFromGlobal( 'authentication' ).jwt
+	static get config() {
+		if ( null === config ) {
+			config = Configuration.load( 'authentication' )
+		}
+
+		return config.jwt
 	}
 }
 

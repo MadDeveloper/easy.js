@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-const ConfigLoader = require( './ConfigLoader' )
+const Configuration = require( './Configuration' )
 const Configurable = require( '../interfaces/Configurable' )
 const Request = require( '../http/Request' )
 const Response = require( '../http/Response' )
@@ -42,7 +42,7 @@ class Router extends Configurable {
     configure( application, router ) {
         this.application = application
         this._scope = router
-        this._config = ConfigLoader.loadFromGlobal( 'bundles/activated' )
+        this._config = Configuration.load( 'bundles/activated' )
     }
 
 	/**

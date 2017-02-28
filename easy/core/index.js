@@ -9,7 +9,7 @@
 
 module.exports.Application = require( './Application' )
 module.exports.Bundle = require( './Bundle' )
-module.exports.ConfigLoader = require( './ConfigLoader' )
+module.exports.Configuration = require( './Configuration' )
 module.exports.Console = require( './Console' )
 module.exports.Controller = require( './Controller' )
 module.exports.Kernel = require( './Kernel' )

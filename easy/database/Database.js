@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-const ConfigLoader = require( 'easy/core/ConfigLoader' )
+const Configuration = require( 'easy/core/Configuration' )
 const EventsEmitter = require( 'events' )
 
 /**

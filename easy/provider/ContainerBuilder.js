@@ -9,7 +9,7 @@
 
 const Container = require( './Container' )
 const Configurable = require( '../interfaces/Configurable' )
-const ConfigLoader = require( '../core/ConfigLoader' )
+const Configuration = require( '../core/Configuration' )
 const { assignIn } = require( 'lodash' )
 
 /**
@@ -23,7 +23,7 @@ class ContainerBuilder extends Configurable {
         super()
 
         this.application = application
-        this.dependenciesMapping = dependenciesMapping || ConfigLoader.loadFromGlobal( 'services' )
+        this.dependenciesMapping = dependenciesMapping || Configuration.load( 'services' )
         this.container = new Container()
         this.configurations = {}
         this.cached = new Map()

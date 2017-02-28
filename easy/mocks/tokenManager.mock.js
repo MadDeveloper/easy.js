@@ -10,7 +10,7 @@
 const tokenManager = jasmine.createSpyObj( 'tokenManager', [
     'sign',
     'verify',
-    'getConfig',
+    'config',
     'reset'
 ])
 

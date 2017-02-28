@@ -8,7 +8,7 @@
 */
 
 const passportLocal = require( 'passport-local' )
-const ConfigLoader = require( '../core/ConfigLoader' )
+const Configuration = require( '../core/Configuration' )
 const Controller = require( '../core/Controller' )
 const Configurable = require( '../interfaces/Configurable' )
 const TokenManager = require( './TokenManager' )
@@ -29,7 +29,7 @@ class Authentication extends Configurable {
 	constructor( container, passport ) {
 		super()
 
-		this._config 			= ConfigLoader.loadFromGlobal( 'authentication' )
+		this._config 			= Configuration.load( 'authentication' )
 		this._container			= container
 		this._passport			= passport
 		this._router			= container.get( 'component.router' )

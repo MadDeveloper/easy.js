@@ -18,7 +18,7 @@ const compression = require( 'compression' )
 const cookieParser = require( 'cookie-parser' )
 const passport = require( 'passport' )
 const Polyfills = require( './Polyfills' )
-const ConfigLoader = require( './ConfigLoader' )
+const Configuration = require( './Configuration' )
 const Authentication = require( '../authentication/Authentication' )
 const Configurable = require( '../interfaces/Configurable' )
 
@@ -48,9 +48,9 @@ class Application extends Configurable {
      * @param {string} appRootPath
      */
     configure( appRootPath ) {
-        this.config = ConfigLoader.loadFromGlobal( 'app' )
-        this.setEnvironment()
         this.kernel.configure( appRootPath )
+        this.config = Configuration.load( 'app' )
+        this.setEnvironment()
         this.kernel.loadComponents()
     }
 
@@ -155,7 +155,7 @@ class Application extends Configurable {
      * @memberOf Application
      */
     plugGlobalsUserMiddlewares() {
-        const middlewares = ConfigLoader.loadFromGlobal( 'middlewares' )
+        const middlewares = Configuration.load( 'middlewares' )
 
         middlewares.forEach( middleware => this.app.use( middleware ) )
     }
