@@ -32,7 +32,6 @@
   "email": "sergent.julien@icloud.com",
   "license": "MIT",
   "dependencies": {
-    "app-module-path": "^2.2.0",
     "body-parser": "^1.16.0",
     "bookshelf": "^0.10.3",
     "cli-table2": "^0.2.0",
