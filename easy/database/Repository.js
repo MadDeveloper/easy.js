@@ -117,17 +117,21 @@ class Repository {
      */
     delete( model, options = {}) {
         return new Promise( ( resolve, reject ) => {
-            this.database.transaction( async t => {
+            this.database.transaction( t => {
                 options.transacting = t
 
-                try {
-                    await model.destroy( options )
-                    t.commit()
-                    resolve()
-                } catch ( error ) {
-                    t.rollback()
-                    reject( error )
-                }
+                model
+                    .destroy( options )
+                    .then( () => {
+                        t.commit()
+                        resolve()
+
+                        return null
+                    })
+                    .catch( error => {
+                        t.rollback()
+                        reject( error )
+                    })
             })
         })
     }
