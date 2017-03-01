@@ -28,6 +28,24 @@ class Document {
     existsSync() {}
 
     /**
+     * read the document
+     *
+     * @param {Object} options={encoding: 'utf8'}
+     * @returns {Promise}
+     */
+    read( options = { encoding: 'utf8' }) {}
+
+    /**
+     * read the document synchronously
+     *
+     * @param {object} options={encoding: 'utf8'}
+     * @returns {any}
+     *
+     * @throws {Error} if directory path is invalid
+     */
+    readSync( options = { encoding: 'utf8' }) {}
+
+    /**
      * create - create the document at indicated path
      *
      * @param {number} options = {}
@@ -39,7 +57,7 @@ class Document {
      * createSync - create, in synchronous maner, the document at indicated path
      *
      * @param {object} options = {}
-     * @returns {Object}
+     * @returns {boolean}
      *
      * @throws {Error} if document path is invalid
      */
@@ -57,7 +75,7 @@ class Document {
     /**
      * deleteSync - Delete the document synchronously
      *
-     * @returns {Object}
+     * @returns {boolean}
      *
      * @throws {Error} if document path is invalid
      *
@@ -79,7 +97,7 @@ class Document {
      * renameSync - renamed the document synchronously
      *
      * @param {string} newPath
-     * @returns {Object}
+     * @returns {boolean}
      *
      * @throws {Error} if document path is invalid
      *
@@ -101,7 +119,7 @@ class Document {
      * moveSync - move document at indicated path synchronously
      *
      * @param {Object} newPath
-     * @returns {Object}
+     * @returns {boolean}
      *
      * @throws {Error} if document path is invalid
      *

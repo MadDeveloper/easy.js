@@ -81,42 +81,36 @@ class File extends Document {
      * read
      *
      * @param {Object} options={encoding: 'utf8'}
-     *
      * @returns {Promise}
      */
     read( options = { encoding: 'utf8' }) {
         return new Promise( ( resolve, reject ) => {
             fs.readFile( this.path, options, ( error, data ) => {
                 if ( error ) {
-                    reject( error )
-
-                    return
+                    reject( `Error when trying to read the file (${this.path}).\n${error.message}` )
+                } else {
+                    this.content = data
+                    resolve( data )
                 }
-
-                this.content = data
-                resolve( data )
             })
         })
     }
 
     /**
-     * read
+     * read the file content synchronously
      *
      * @param {object} options={encoding: 'utf8'}
+     * @returns {string}
      *
-     * @returns {Object}
+     * @throws {Error} if file path is invalid
      */
     readSync( options = { encoding: 'utf8' }) {
-        let results = { success: false, data: null }
-
         try {
-            results.data = fs.readFileSync( this.path, options )
-            results.success = true
-            this.content = results.data
-        } catch ( error ) {
-            results.error = error
-        } finally {
-            return results
+            this.content = fs.readFileSync( this.path, options )
+
+            return this.content
+        } catch( error ) {
+            throw new Error( `Error when trying to read synchronously the existance of the file (${this.path}).\n${error.message}` )
         }
     }
 
@@ -124,7 +118,6 @@ class File extends Document {
      * create - create file at indicated path
      *
      * @param {number} options = { mode: 755, encoding: 'utf8' }
-     *
      * @returns {Promise}
      */
     create( options = { mode: 755, encoding: 'utf8' }) {
@@ -138,19 +131,17 @@ class File extends Document {
      * createSync - create, in synchronous maner, directory at indicated path
      *
      * @param {object} options = { mode: 755, encoding: 'utf8' }
+     * @returns {boolean}
      *
-     * @returns {Object}
+     * @throws {Error} if file path is invalid
      */
     createSync( options = { mode: 755, encoding: 'utf8' }) {
-        let results = { success: false }
-
         try {
             this.writeSync( options )
-            results.success = true
-        } catch ( error ) {
-            results.error = error
-        } finally {
-            return results
+
+            return true
+        } catch( error ) {
+            throw new Error( `Error when trying to create synchronously the existance of the file (${this.path}).\n${error.message}` )
         }
     }
 
@@ -158,7 +149,6 @@ class File extends Document {
      * write - write in the file
      *
      * @param {number} options = { mode: 755, encoding: 'utf8' }
-     *
      * @returns {Promise}
      */
     write( content = '', options = { mode: 755, encoding: 'utf8' }) {
@@ -171,7 +161,13 @@ class File extends Document {
                 options.mode = parseInt( options.mode, 8 )
             }
 
-            fs.writeFile( this.path, this.content, options, error => error ? reject( error ) : resolve() )
+            fs.writeFile( this.path, this.content, options, error => {
+                if ( error ) {
+                    reject( `Error when trying to write to the file (${this.path}).\n${error.message}` )
+                } else {
+                    resolve()
+                }
+            })
         })
     }
 
@@ -179,7 +175,7 @@ class File extends Document {
      * writeSync - write in the file as synchronous maner
      *
      * @param {number} options = { mode: 755, encoding: 'utf8' }
-     * @returns {Object}
+     * @returns {boolean}
      *
      * @throws {Error} if file path is invalid
      */
@@ -194,6 +190,8 @@ class File extends Document {
             }
 
             fs.writeFileSync( this.path, this.content, options )
+
+            return true
         } catch( error ) {
             throw new Error( `Error when trying to write synchronously to the file (${this.path}).\n${error.message}` )
         }
@@ -208,14 +206,20 @@ class File extends Document {
      */
     delete() {
         return new Promise( ( resolve, reject ) => {
-            fs.unlink( this.path, error => error ? reject( error ) : resolve() )
+            fs.unlink( this.path, error => {
+                if ( error ) {
+                    reject( `Error when trying to delete the file (${this.path}).\n${error.message}` )
+                } else {
+                    resolve()
+                }
+            })
         })
     }
 
     /**
      * deleteSync - Delete the file synchronously
      *
-     * @returns {Object}
+     * @returns {boolean}
      *
      * @throws {Error} if file path is invalid
      *
@@ -224,6 +228,8 @@ class File extends Document {
     deleteSync() {
         try {
             fs.unlinkSync( this.path )
+
+            return true
         } catch( error ) {
             throw new Error( `Error when trying to delete synchronously the file (${this.path}).\n${error.message}` )
         }
@@ -241,7 +247,13 @@ class File extends Document {
         return new Promise( ( resolve, reject ) => {
             const newPath = `${this.directory.path}/${newName}`
 
-            fs.rename( this.path, newPath, error => error ? reject( error ) : resolve() )
+            fs.rename( this.path, newPath, error => {
+                if ( error ) {
+                    reject( `Error when trying to rename the file (${this.path}).\n${error.message}` )
+                } else {
+                    resolve()
+                }
+            })
 
             this.loadPathInfo( newPath )
         })
@@ -251,7 +263,7 @@ class File extends Document {
      * renameSync - rename the file synchronously
      *
      * @param {string} newName
-     * @returns {Object}
+     * @returns {boolean}
      *
      * @throws {Error} if file path or new path is valid
      *
@@ -262,8 +274,9 @@ class File extends Document {
             const newPath = `${this.directory.path}/${newName}`
 
             fs.renameSync( this.path, newPath )
-
             this.loadPathInfo( newPath )
+
+            return true
         } catch( error ) {
             throw new Error( `Error when trying to rename synchronously the file (${this.path}).\n${error.message}` )
         }
@@ -285,7 +298,7 @@ class File extends Document {
      * moveSync - move the file at indicated path synchronously
      *
      * @param {Object} newPath
-     * @returns {Object}
+     * @returns {boolean}
      *
      * @throws {Error} if file path or new path is invalid
      *
@@ -313,7 +326,6 @@ class File extends Document {
      * Set content to current content
      *
      * @param {string} newContent
-     *
      * @returns {File}
      *
      * @memberOf File
@@ -326,6 +338,8 @@ class File extends Document {
 
     /**
      * path - get the file path
+     *
+     * @returns {string}
      *
      * @memberOf File
      */
@@ -348,6 +362,8 @@ class File extends Document {
 
     /**
      * content - get the file content
+     *
+     * @returns {string}
      *
      * @memberOf File
      */

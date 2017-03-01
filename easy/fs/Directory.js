@@ -65,6 +65,8 @@ class Directory extends Document {
      * exists - check, in synchronous maner, if path is a directory
      *
      * @returns {boolean}
+     *
+     * @throws {Error} if file path is invalid
      */
     existsSync() {
         try {
@@ -75,10 +77,43 @@ class Directory extends Document {
     }
 
     /**
+     * read directory documents
+     *
+     * @param {Object} options={encoding: 'utf8'}
+     * @returns {Promise}
+     */
+    read( options = { encoding: 'utf8' }) {
+        return new Promise( ( resolve, reject ) => {
+            fs.readdir( this.path, options, async ( error, documents ) => {
+                if ( error ) {
+                    reject( `Error when trying to read the directory (${this.path}).\n${error.message}` )
+                } else {
+                    resolve( documents )
+                }
+            })
+        })
+    }
+
+    /**
+     * read directory documents synchronously
+     *
+     * @param {object} options={encoding: 'utf8'}
+     * @returns {Array}
+     *
+     * @throws {Error} if directory path is invalid
+     */
+    readSync( options = { encoding: 'utf8' }) {
+        try {
+            return fs.readdirSync( this.path, options )
+        } catch( error ) {
+            throw new Error( `Error when trying to read synchronously the directory (${this.path}).\n${error.message}` )
+        }
+    }
+
+    /**
      * create - create directory at indicated path
      *
      * @param {object} options = { mode: 755 }
-     *
      * @returns {Promise}
      */
     create( options = { mode: 755 }) {
@@ -87,7 +122,13 @@ class Directory extends Document {
                 options.mode = parseInt( options.mode, 8 )
             }
 
-            fs.mkdir( this.path, options, error => error ? reject( error ) : resolve() )
+            fs.mkdir( this.path, options, error => {
+                if ( error ) {
+                    reject( `Error when trying to create the directory (${this.path}).\n${error.message}` )
+                } else {
+                    resolve()
+                }
+            })
         })
     }
 
@@ -95,6 +136,7 @@ class Directory extends Document {
      * createSync - create, in synchronous maner, the directory at indicated path
      *
      * @param {object} options = { mode: 755 }
+     * @returns {boolean}
      *
      * @throws {Error} if path is invalid
      */
@@ -107,6 +149,8 @@ class Directory extends Document {
             }
 
             fs.mkdirSync( this.path, options )
+
+            return true
         } catch( error ) {
             throw new Error( `Error when trying to create synchronously the directory (${this.path}).\n${error.message}` )
         }
@@ -121,12 +165,43 @@ class Directory extends Document {
      */
     delete() {
         return new Promise( ( resolve, reject ) => {
-            fs.rmdir( this.path, error => error ? reject( error ) : resolve() )
+            fs.rmdir( this.path, error => {
+                if ( error ) {
+                    reject( `Error when trying to delete the directory (${this.path}).\n${error.message}` )
+                } else {
+                    resolve()
+                }
+            })
         })
     }
 
     /**
+     * Delete all documents found in the directory
+     *
+     * @private
+     *
+     * @memberOf Directory
+     */
+    async _deleteContainedDocuments() {
+        const documents = await this.read()
+
+        await Promise.all( documents.map( async document => {
+            const documentPath = `${this.path}/${file}`
+
+            if ( fs.lstatSync( documentPath ).isDirectory() ) {
+                const directory = new Directory( documentPath )
+
+                await directory.delete()
+            } else {
+                fs.unlinkSync( document )
+            }
+        }) )
+    }
+
+    /**
      * deleteSync - Delete the directory synchronously
+     *
+     * @returns {boolean}
      *
      * @throws {Error} if path is invalid
      *
@@ -135,6 +210,8 @@ class Directory extends Document {
     deleteSync() {
         try {
             fs.rmdirSync( this.path )
+
+            return true
         } catch( error ) {
             throw new Error( `Error when trying to delete synchronously the directory (${this.path}).\n${error.message}` )
         }
@@ -150,7 +227,13 @@ class Directory extends Document {
      */
     rename( newName ) {
         return new Promise( ( resolve, reject ) => {
-            fs.rename( this.path, `${dir}/${newName}`, error => error ? reject( error ) : resolve() )
+            fs.rename( this.path, `${dir}/${newName}`, error => {
+                if ( error ) {
+                    reject( `Error when trying to rename the directory (${this.path}).\n${error.message}` )
+                } else {
+                    resolve()
+                }
+            })
 
             this.loadPathInfo( newPath )
         })
@@ -160,6 +243,7 @@ class Directory extends Document {
      * renameSync - rename the directory synchronously
      *
      * @param {string} newName
+     * @returns {boolean}
      *
      * @throws {Error} if path is invalid
      *
@@ -168,6 +252,8 @@ class Directory extends Document {
     renameSync( newName ) {
         try {
            fs.renameSync( this.path, `${dir}/${newName}` )
+
+           return true
         } catch( error ) {
             throw new Error( `Error when trying to rename synchronously the directory (${this.path}).\n${error.message}` )
         }
@@ -189,13 +275,14 @@ class Directory extends Document {
      * moveSync - move the directory at indicated path synchronously
      *
      * @param {Object} newPath
+     * @returns {boolean}
      *
      * @throws {Error} if path is invalid
      *
      * @memberOf Directory
      */
     moveSync( newPath ) {
-        this.renameSync( path.resolve( this.path, newPath ) )
+        return this.renameSync( path.resolve( this.path, newPath ) )
     }
 
     /**
