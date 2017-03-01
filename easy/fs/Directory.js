@@ -164,38 +164,21 @@ class Directory extends Document {
      * @memberOf Directory
      */
     delete() {
-        return new Promise( ( resolve, reject ) => {
-            fs.rmdir( this.path, error => {
-                if ( error ) {
-                    reject( `Error when trying to delete the directory (${this.path}).\n${error.message}` )
-                } else {
-                    resolve()
-                }
-            })
-        })
-    }
+        return new Promise( async ( resolve, reject ) => {
+            try {
+                this._deleteContainedDocuments()
 
-    /**
-     * Delete all documents found in the directory
-     *
-     * @private
-     *
-     * @memberOf Directory
-     */
-    async _deleteContainedDocuments() {
-        const documents = await this.read()
-
-        await Promise.all( documents.map( async document => {
-            const documentPath = `${this.path}/${file}`
-
-            if ( fs.lstatSync( documentPath ).isDirectory() ) {
-                const directory = new Directory( documentPath )
-
-                await directory.delete()
-            } else {
-                fs.unlinkSync( document )
+                fs.rmdir( this.path, error => {
+                    if ( error ) {
+                        reject( `Error when trying to delete the directory (${this.path}).\n${error.message}` )
+                    } else {
+                        resolve()
+                    }
+                })
+            } catch ( error ) {
+                reject( `Error when trying to delete directory (${this.path}).\n${error.message}` )
             }
-        }) )
+        })
     }
 
     /**
@@ -209,12 +192,40 @@ class Directory extends Document {
      */
     deleteSync() {
         try {
+            this._deleteContainedDocuments()
             fs.rmdirSync( this.path )
 
             return true
         } catch( error ) {
             throw new Error( `Error when trying to delete synchronously the directory (${this.path}).\n${error.message}` )
         }
+    }
+
+    /**
+     * Delete all documents found in the directory synchronously
+     *
+     * @returns {boolean}
+     *
+     * @private
+     *
+     * @memberOf Directory
+     */
+    _deleteContainedDocuments() {
+        const documents = this.readSync()
+
+        documents.forEach( document => {
+            const documentPath = `${this.path}/${document}`
+
+            if ( fs.lstatSync( documentPath ).isDirectory() ) {
+                const directory = new Directory( documentPath )
+
+                directory.deleteSync()
+            } else {
+                fs.unlinkSync( documentPath )
+            }
+        })
+
+        return true
     }
 
     /**
