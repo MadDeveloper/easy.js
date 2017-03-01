@@ -1,4 +1,5 @@
 const { application } = require( './bootstrap' )
 const { Server } = require( 'easy/core' )
+const server = new Server( application )
 
-new Server( application ).start()
+server.start()
