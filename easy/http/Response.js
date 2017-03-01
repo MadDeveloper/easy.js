@@ -13,20 +13,14 @@ const Http = require( './Http' )
  * @class Response
  * @extends Http
  */
-class Response extends Http {
+class Response {
     /**
      * constructor
      *
      * @param  {express.Response} res
-     * @param  {Request} request
-     * @param  {Logger} logger
      */
-    constructor( res, request, logger ) {
-        super()
-
+    constructor( res ) {
         this._scope = res
-        this._logger = logger
-        this._request = request
     }
 
     /**
@@ -52,7 +46,7 @@ class Response extends Http {
      * @param  {any} params
      */
     continue( params ) {
-        this.scope.status( this.status.continue ).json( params )
+        this.scope.status( Http.status.continue ).json( params )
     }
 
     /**
@@ -61,7 +55,7 @@ class Response extends Http {
      * @param  {any} params
      */
     switchingProtocols( params ) {
-        this.scope.status( this.status.switchingProtocols ).json( params )
+        this.scope.status( Http.status.switchingProtocols ).json( params )
     }
 
     /**
@@ -70,7 +64,7 @@ class Response extends Http {
      * @param  {any} params
      */
     processing( params ) {
-        this.scope.status( this.status.processing ).json( params )
+        this.scope.status( Http.status.processing ).json( params )
     }
 
     /**
@@ -79,7 +73,7 @@ class Response extends Http {
      * @param  {any} params
      */
     ok( params ) {
-        this.scope.status( this.status.ok ).json( params )
+        this.scope.status( Http.status.ok ).json( params )
     }
 
     /**
@@ -88,7 +82,7 @@ class Response extends Http {
      * @param  {any} params
      */
     created( params ) {
-        this.scope.status( this.status.created ).json( params )
+        this.scope.status( Http.status.created ).json( params )
     }
 
     /**
@@ -97,7 +91,7 @@ class Response extends Http {
      * @param  {any} params
      */
     accepted( params ) {
-        this.scope.status( this.status.accepted ).json( params )
+        this.scope.status( Http.status.accepted ).json( params )
     }
 
     /**
@@ -106,7 +100,7 @@ class Response extends Http {
      * @param  {any} params
      */
     nonAuthoritativeInformation( params ) {
-        this.scope.status( this.status.nonAuthoritativeInformation ).json( params )
+        this.scope.status( Http.status.nonAuthoritativeInformation ).json( params )
     }
 
     /**
@@ -115,7 +109,7 @@ class Response extends Http {
      * @param  {any} params
      */
     noContent( params ) {
-        this.scope.status( this.status.noContent ).json( params )
+        this.scope.status( Http.status.noContent ).json( params )
     }
 
     /**
@@ -124,7 +118,7 @@ class Response extends Http {
      * @param  {any} params
      */
     resetContent( params ) {
-        this.scope.status( this.status.resetContent ).json( params )
+        this.scope.status( Http.status.resetContent ).json( params )
     }
 
     /**
@@ -133,7 +127,7 @@ class Response extends Http {
      * @param  {any} params
      */
     partialContent( params ) {
-        this.scope.status( this.status.partialContent ).json( params )
+        this.scope.status( Http.status.partialContent ).json( params )
     }
 
     /**
@@ -142,7 +136,7 @@ class Response extends Http {
      * @param  {any} params
      */
     multiStatus( params ) {
-        this.scope.status( this.status.multiStatus ).json( params )
+        this.scope.status( Http.status.multiStatus ).json( params )
     }
 
     /**
@@ -151,7 +145,7 @@ class Response extends Http {
      * @param  {any} params
      */
     alreadyReported( params ) {
-        this.scope.status( this.status.alreadyReported ).json( params )
+        this.scope.status( Http.status.alreadyReported ).json( params )
     }
 
     /**
@@ -160,7 +154,7 @@ class Response extends Http {
      * @param  {any} params
      */
     IMUsed( params ) {
-        this.scope.status( this.status.IMUsed ).json( params )
+        this.scope.status( Http.status.IMUsed ).json( params )
     }
 
     /**
@@ -169,7 +163,7 @@ class Response extends Http {
      * @param  {any} params
      */
     multipleChoices( params ) {
-        this.scope.status( this.status.multipleChoices ).json( params )
+        this.scope.status( Http.status.multipleChoices ).json( params )
     }
 
     /**
@@ -178,7 +172,7 @@ class Response extends Http {
      * @param  {any} params
      */
     movedPermanently( params ) {
-        this.scope.status( this.status.movedPermanently ).json( params )
+        this.scope.status( Http.status.movedPermanently ).json( params )
     }
 
     /**
@@ -187,7 +181,7 @@ class Response extends Http {
      * @param  {any} params
      */
     found( params ) {
-        this.scope.status( this.status.found ).json( params )
+        this.scope.status( Http.status.found ).json( params )
     }
 
     /**
@@ -196,7 +190,7 @@ class Response extends Http {
      * @param  {any} params
      */
     seeOther( params ) {
-        this.scope.status( this.status.seeOther ).json( params )
+        this.scope.status( Http.status.seeOther ).json( params )
     }
 
     /**
@@ -205,7 +199,7 @@ class Response extends Http {
      * @param  {any} params
      */
     notModified( params ) {
-        this.scope.status( this.status.notModified ).json( params )
+        this.scope.status( Http.status.notModified ).json( params )
     }
 
     /**
@@ -214,7 +208,7 @@ class Response extends Http {
      * @param  {any} params
      */
     useProxy( params ) {
-        this.scope.status( this.status.useProxy ).json( params )
+        this.scope.status( Http.status.useProxy ).json( params )
     }
 
     /**
@@ -223,7 +217,7 @@ class Response extends Http {
      * @param  {any} params
      */
     temporaryRedirect( params ) {
-        this.scope.status( this.status.temporaryRedirect ).json( params )
+        this.scope.status( Http.status.temporaryRedirect ).json( params )
     }
 
     /**
@@ -232,7 +226,7 @@ class Response extends Http {
      * @param  {any} params
      */
     permanentRedirect( params ) {
-        this.scope.status( this.status.permanentRedirect ).json( params )
+        this.scope.status( Http.status.permanentRedirect ).json( params )
     }
 
     /**
@@ -241,7 +235,7 @@ class Response extends Http {
      * @param  {any} params
      */
     badRequest( params ) {
-        this.scope.status( this.status.badRequest ).json( params )
+        this.scope.status( Http.status.badRequest ).json( params )
     }
 
     /**
@@ -250,7 +244,7 @@ class Response extends Http {
      * @param  {any} params
      */
     unauthorized( params ) {
-        this.scope.status( this.status.unauthorized ).json( params )
+        this.scope.status( Http.status.unauthorized ).json( params )
     }
 
     /**
@@ -259,7 +253,7 @@ class Response extends Http {
      * @param  {any} params
      */
     paymentRequired( params ) {
-        this.scope.status( this.status.paymentRequired ).json( params )
+        this.scope.status( Http.status.paymentRequired ).json( params )
     }
 
     /**
@@ -268,7 +262,7 @@ class Response extends Http {
      * @param  {any} params
      */
     forbidden( params ) {
-        this.scope.status( this.status.forbidden ).json( params )
+        this.scope.status( Http.status.forbidden ).json( params )
     }
 
     /**
@@ -277,7 +271,7 @@ class Response extends Http {
      * @param  {any} params
      */
     notFound( params ) {
-        this.scope.status( this.status.notFound ).json( params )
+        this.scope.status( Http.status.notFound ).json( params )
     }
 
     /**
@@ -286,7 +280,7 @@ class Response extends Http {
      * @param  {any} params
      */
     methodNotAllowed( params ) {
-        this.scope.status( this.status.methodNotAllowed ).json( params )
+        this.scope.status( Http.status.methodNotAllowed ).json( params )
     }
 
     /**
@@ -295,7 +289,7 @@ class Response extends Http {
      * @param  {any} params
      */
     notAcceptable( params ) {
-        this.scope.status( this.status.notAcceptable ).json( params )
+        this.scope.status( Http.status.notAcceptable ).json( params )
     }
 
     /**
@@ -304,7 +298,7 @@ class Response extends Http {
      * @param  {any} params
      */
     proxyAuthenticationRequired( params ) {
-        this.scope.status( this.status.proxyAuthenticationRequired ).json( params )
+        this.scope.status( Http.status.proxyAuthenticationRequired ).json( params )
     }
 
     /**
@@ -313,7 +307,7 @@ class Response extends Http {
      * @param  {any} params
      */
     requestTimeout( params ) {
-        this.scope.status( this.status.requestTimeout ).json( params )
+        this.scope.status( Http.status.requestTimeout ).json( params )
     }
 
     /**
@@ -322,7 +316,7 @@ class Response extends Http {
      * @param  {any} params
      */
     conflict( params ) {
-        this.scope.status( this.status.conflict ).json( params )
+        this.scope.status( Http.status.conflict ).json( params )
     }
 
     /**
@@ -331,7 +325,7 @@ class Response extends Http {
      * @param  {any} params
      */
     gone( params ) {
-        this.scope.status( this.status.gone ).json( params )
+        this.scope.status( Http.status.gone ).json( params )
     }
 
     /**
@@ -340,7 +334,7 @@ class Response extends Http {
      * @param  {any} params
      */
     lengthRequired( params ) {
-        this.scope.status( this.status.lengthRequired ).json( params )
+        this.scope.status( Http.status.lengthRequired ).json( params )
     }
 
     /**
@@ -349,7 +343,7 @@ class Response extends Http {
      * @param  {any} params
      */
     preconditionFailed( params ) {
-        this.scope.status( this.status.preconditionFailed ).json( params )
+        this.scope.status( Http.status.preconditionFailed ).json( params )
     }
 
     /**
@@ -358,7 +352,7 @@ class Response extends Http {
      * @param  {any} params
      */
     payloadTooLarge( params ) {
-        this.scope.status( this.status.payloadTooLarge ).json( params )
+        this.scope.status( Http.status.payloadTooLarge ).json( params )
     }
 
     /**
@@ -367,7 +361,7 @@ class Response extends Http {
      * @param  {any} params
      */
     requestURITooLong( params ) {
-        this.scope.status( this.status.requestURITooLong ).json( params )
+        this.scope.status( Http.status.requestURITooLong ).json( params )
     }
 
     /**
@@ -376,7 +370,7 @@ class Response extends Http {
      * @param  {any} params
      */
     unsupportedMediaType( params ) {
-        this.scope.status( this.status.unsupportedMediaType ).json( params )
+        this.scope.status( Http.status.unsupportedMediaType ).json( params )
     }
 
     /**
@@ -385,7 +379,7 @@ class Response extends Http {
      * @param  {any} params
      */
     requestedRangeNotSatisfiable( params ) {
-        this.scope.status( this.status.requestedRangeNotSatisfiable ).json( params )
+        this.scope.status( Http.status.requestedRangeNotSatisfiable ).json( params )
     }
 
     /**
@@ -394,7 +388,7 @@ class Response extends Http {
      * @param  {any} params
      */
     expectationFailed( params ) {
-        this.scope.status( this.status.expectationFailed ).json( params )
+        this.scope.status( Http.status.expectationFailed ).json( params )
     }
 
     /**
@@ -403,7 +397,7 @@ class Response extends Http {
      * @param  {any} params
      */
     misdirectedRequest( params ) {
-        this.scope.status( this.status.misdirectedRequest ).json( params )
+        this.scope.status( Http.status.misdirectedRequest ).json( params )
     }
 
     /**
@@ -412,7 +406,7 @@ class Response extends Http {
      * @param  {any} params
      */
     unprocessableEntity( params ) {
-        this.scope.status( this.status.unprocessableEntity ).json( params )
+        this.scope.status( Http.status.unprocessableEntity ).json( params )
     }
 
     /**
@@ -421,7 +415,7 @@ class Response extends Http {
      * @param  {any} params
      */
     locked( params ) {
-        this.scope.status( this.status.locked ).json( params )
+        this.scope.status( Http.status.locked ).json( params )
     }
 
     /**
@@ -430,7 +424,7 @@ class Response extends Http {
      * @param  {any} params
      */
     failedDependency( params ) {
-        this.scope.status( this.status.failedDependency ).json( params )
+        this.scope.status( Http.status.failedDependency ).json( params )
     }
 
     /**
@@ -439,7 +433,7 @@ class Response extends Http {
      * @param  {any} params
      */
     upgradeRequired( params ) {
-        this.scope.status( this.status.upgradeRequired ).json( params )
+        this.scope.status( Http.status.upgradeRequired ).json( params )
     }
 
     /**
@@ -448,7 +442,7 @@ class Response extends Http {
      * @param  {any} params
      */
     preconditionRequired( params ) {
-        this.scope.status( this.status.preconditionRequired ).json( params )
+        this.scope.status( Http.status.preconditionRequired ).json( params )
     }
 
     /**
@@ -457,7 +451,7 @@ class Response extends Http {
      * @param  {any} params
      */
     tooManyRequests( params ) {
-        this.scope.status( this.status.tooManyRequests ).json( params )
+        this.scope.status( Http.status.tooManyRequests ).json( params )
     }
 
     /**
@@ -466,7 +460,7 @@ class Response extends Http {
      * @param  {any} params
      */
     requestHeaderFieldsTooLarge( params ) {
-        this.scope.status( this.status.requestHeaderFieldsTooLarge ).json( params )
+        this.scope.status( Http.status.requestHeaderFieldsTooLarge ).json( params )
     }
 
     /**
@@ -475,7 +469,7 @@ class Response extends Http {
      * @param  {any} params
      */
     connectionClosedWithoutResponse( params ) {
-        this.scope.status( this.status.connectionClosedWithoutResponse ).json( params )
+        this.scope.status( Http.status.connectionClosedWithoutResponse ).json( params )
     }
 
     /**
@@ -484,7 +478,7 @@ class Response extends Http {
      * @param  {any} params
      */
     unavailableForLegalReasons( params ) {
-        this.scope.status( this.status.unavailableForLegalReasons ).json( params )
+        this.scope.status( Http.status.unavailableForLegalReasons ).json( params )
     }
 
     /**
@@ -493,7 +487,7 @@ class Response extends Http {
      * @param  {any} params
      */
     clientClosedRequest( params ) {
-        this.scope.status( this.status.clientClosedRequest ).json( params )
+        this.scope.status( Http.status.clientClosedRequest ).json( params )
     }
 
     /**
@@ -502,18 +496,7 @@ class Response extends Http {
      * @param  {any} params
      */
     internalServerError( params ) {
-        const req = this.request.scope
-        const alertLog = `[{currentDate}] -- {remoteHostIp} -- {method} {originalUrl} {statusCode} -- ${params}\n`
-
-        this._logger.alert( alertLog, {
-            '{currentDate}': new Date().toUTCString(),
-            '{remoteHostIp}': req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for'],
-            '{method}': req.method,
-            '{originalUrl}': req.originalUrl,
-            '{statusCode}': this.status.internalServerError
-        })
-
-        this.scope.status( this.status.internalServerError ).json( params )
+        this.scope.status( Http.status.internalServerError ).json( params )
     }
 
     /**
@@ -522,7 +505,7 @@ class Response extends Http {
      * @param  {any} params
      */
     notImplemented( params ) {
-        this.scope.status( this.status.notImplemented ).json( params )
+        this.scope.status( Http.status.notImplemented ).json( params )
     }
 
     /**
@@ -531,7 +514,7 @@ class Response extends Http {
      * @param  {any} params
      */
     badGateway( params ) {
-        this.scope.status( this.status.badGateway ).json( params )
+        this.scope.status( Http.status.badGateway ).json( params )
     }
 
     /**
@@ -540,7 +523,7 @@ class Response extends Http {
      * @param  {any} params
      */
     serviceUnavailable( params ) {
-        this.scope.status( this.status.serviceUnavailable ).json( params )
+        this.scope.status( Http.status.serviceUnavailable ).json( params )
     }
 
     /**
@@ -549,7 +532,7 @@ class Response extends Http {
      * @param  {any} params
      */
     gatewayTimeout( params ) {
-        this.scope.status( this.status.gatewayTimeout ).json( params )
+        this.scope.status( Http.status.gatewayTimeout ).json( params )
     }
 
     /**
@@ -558,7 +541,7 @@ class Response extends Http {
      * @param  {any} params
      */
     httpVersionNotSupported( params ) {
-        this.scope.status( this.status.httpVersionNotSupported ).json( params )
+        this.scope.status( Http.status.httpVersionNotSupported ).json( params )
     }
 
     /**
@@ -567,7 +550,7 @@ class Response extends Http {
      * @param  {any} params
      */
     variantAlsoNegotiates( params ) {
-        this.scope.status( this.status.variantAlsoNegotiates ).json( params )
+        this.scope.status( Http.status.variantAlsoNegotiates ).json( params )
     }
 
     /**
@@ -576,7 +559,7 @@ class Response extends Http {
      * @param  {any} params
      */
     insufficientStorage( params ) {
-        this.scope.status( this.status.insufficientStorage ).json( params )
+        this.scope.status( Http.status.insufficientStorage ).json( params )
     }
 
     /**
@@ -585,7 +568,7 @@ class Response extends Http {
      * @param  {any} params
      */
     loopDetected( params ) {
-        this.scope.status( this.status.loopDetected ).json( params )
+        this.scope.status( Http.status.loopDetected ).json( params )
     }
 
     /**
@@ -594,7 +577,7 @@ class Response extends Http {
      * @param  {any} params
      */
     notExtended( params ) {
-        this.scope.status( this.status.notExtended ).json( params )
+        this.scope.status( Http.status.notExtended ).json( params )
     }
 
     /**
@@ -603,7 +586,7 @@ class Response extends Http {
      * @param  {any} params
      */
     networkAuthenticationRequired( params ) {
-        this.scope.status( this.status.networkAuthenticationRequired ).json( params )
+        this.scope.status( Http.status.networkAuthenticationRequired ).json( params )
     }
 
     /**
@@ -612,7 +595,7 @@ class Response extends Http {
      * @param  {any} params
      */
     networkConnectTimeoutError( params ) {
-        this.scope.status( this.status.networkConnectTimeoutError ).json( params )
+        this.scope.status( Http.status.networkConnectTimeoutError ).json( params )
     }
 
     /**
@@ -648,13 +631,6 @@ class Response extends Http {
     set scope( scope ) {
         this._scope = scope
         return this
-    }
-
-    /**
-     * get - get easy.js Request instance
-     */
-    get request() {
-        return this._request
     }
 }
 

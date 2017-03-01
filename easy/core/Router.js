@@ -89,7 +89,7 @@ class Router extends Configurable {
                 const request = this.getRequest( req )
 
                 if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
-                    const response = this.getResponse( res, request )
+                    const response = this.getResponse( res )
                     const authorized = await controller[ controllerMethod ]( request, response )
 
                     if ( authorized ) {
@@ -118,7 +118,7 @@ class Router extends Configurable {
 
             if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
                 const securityConfig = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
-                const response = this.getResponse( res, request )
+                const response = this.getResponse( res )
                 const handler = this.getAccessHandler( securityConfig )
                 const authorized = await handler.authorized({
                     configurations: securityConfig,
@@ -161,7 +161,7 @@ class Router extends Configurable {
 
         router.route( route )[ method ]( ( req, res ) => {
             const request = this.getRequest( req )
-            const response = this.getResponse( res, request )
+            const response = this.getResponse( res )
 
             controller[ controllerMethod ]( request, response )
         })
@@ -177,7 +177,7 @@ class Router extends Configurable {
 
         router.route( route ).all( ( req, res ) => {
             const request = this.getRequest( req )
-            const response = this.getResponse( res, request )
+            const response = this.getResponse( res )
 
             response.methodNotAllowed()
         })
@@ -194,7 +194,7 @@ class Router extends Configurable {
 		 */
 		this.scope.use( async ( req, res, next ) => {
 			const request = this.getRequest( req )
-			const response = this.getResponse( res, request )
+			const response = this.getResponse( res )
 			const authorized = await this.authorization.checkToken( request, response )
 
 			if ( authorized ) {
@@ -219,11 +219,10 @@ class Router extends Configurable {
      * getResponse - get easy Response instance
      *
      * @param  {express.Response} res
-     * @param  {Request} request
      * @returns {Response}
      */
-    getResponse( res, request ) {
-        return new Response( res, request, this.application.container.get( 'component.logger' ) )
+    getResponse( res ) {
+        return new Response( res )
     }
 
     /**

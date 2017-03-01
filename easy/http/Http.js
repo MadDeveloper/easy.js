@@ -12,11 +12,13 @@
  */
 class Http {
     /**
-     * get - http status
+     * HTTP status
      *
-     * @returns {object}
+     * @returns {Object}
+     * 
+     * @static
      */
-    get status() {
+    static get status() {
         return {
             continue: 100,
             switchingProtocols: 101,
@@ -84,11 +86,13 @@ class Http {
     }
 
     /**
-     * methods - http methods
+     * HTTP methods
      *
      * @returns {Array}
+     * 
+     * @static
      */
-    get methods() {
+    static get methods() {
         return [
             'get',
             'post',

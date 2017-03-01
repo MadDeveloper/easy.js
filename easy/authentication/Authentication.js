@@ -60,7 +60,7 @@ class Authentication extends Configurable {
 		const customProvider = this._container.get( this.config.service )
 		this._router.scope.post( this.config.route, ( req, res ) => {
 			const request = this._router.getRequest( req )
-			const response = this._router.getResponse( res, request )
+			const response = this._router.getResponse( res )
 
 			customProvider.login( request, response )
 		})
@@ -85,7 +85,7 @@ class Authentication extends Configurable {
 			this._passport.authenticate( 'local', { session: false }),
 			( req, res ) => {
 				const request = this._router.getRequest( req )
-	            const response = this._router.getResponse( res, request )
+	            const response = this._router.getResponse( res )
 
 				response.ok({
 					user: request.getProperty( 'user' ).user,

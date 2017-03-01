@@ -29,7 +29,6 @@ class Bundle {
         this.container = container
         this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
         this.analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
-        this.http = new Http()
     }
 
     /**
@@ -89,7 +88,7 @@ class Bundle {
     defineSecurity( routeConfig, httpMethod = 'all', route ) {
         httpMethod = httpMethod.toLowerCase()
 
-        if ( this.analyzerSecurityConfig.analyze( routeConfig ) && ( this.http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
+        if ( this.analyzerSecurityConfig.analyze( routeConfig ) && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
             this.router.defineSecurityRoute( route, httpMethod, routeConfig )
         }
     }
@@ -106,7 +105,7 @@ class Bundle {
     defineMiddleware( routeConfig, httpMethod, controllers ) {
         httpMethod = httpMethod.toLowerCase()
 
-        if ( this.analyzerMiddlewaresConfig.analyze( routeConfig ) && ( this.http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
+        if ( this.analyzerMiddlewaresConfig.analyze( routeConfig ) && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
             this.router.defineMiddlewaresRoutes( routeConfig, httpMethod, controllers )
         }
     }
@@ -124,7 +123,7 @@ class Bundle {
         for ( let httpMethod in routeConfig ) {
             const configValue = routeConfig[ httpMethod ]
 
-            if ( this.http.methods.includes( httpMethod ) ) {
+            if ( Http.methods.includes( httpMethod ) ) {
                 const [ controllerId, controllerMethod ] = configValue.controller.split( ':' )
 
                 this.defineSecurity( routeConfig[ httpMethod ], httpMethod, route )

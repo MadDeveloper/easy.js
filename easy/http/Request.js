@@ -13,15 +13,13 @@ const Http = require( './Http' )
  * @class Request
  * @extends Http
  */
-class Request extends Http {
+class Request {
     /**
      * constructor
      *
      * @param  {express.Request} req
      */
     constructor( req ) {
-        super()
-
         this._scope = req
         this._applicationCacheScope = 'applicationCache'
 
