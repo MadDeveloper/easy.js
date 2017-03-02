@@ -10,27 +10,27 @@
 const Container = require( './Container' )
 const Configurable = require( '../interfaces/Configurable' )
 const Configuration = require( '../core/Configuration' )
-const { assignIn } = require( 'lodash' )
+const { isPlainObject } = require( 'lodash' )
 
 /**
  * @class ContainerBuilder
  */
 class ContainerBuilder extends Configurable {
     /**
-     * constructor
+     * @constructor
      */
     constructor( application, dependenciesMapping ) {
         super()
 
-        this.application = application
-        this.dependenciesMapping = dependenciesMapping || Configuration.load( 'services' )
-        this.container = new Container()
-        this.configurations = {}
-        this.cached = new Map()
+        this._application = application
+        this._dependenciesMapping = dependenciesMapping || Configuration.load( 'services' )
+        this._container = new Container()
+        this._configurations = {}
+        this._cached = new Map()
     }
 
     /**
-     * configure - configure container builder
+     * Configure container builder
      *
      * @param  {object} options = {}
      * @returns {ContainerBuilder}
@@ -42,7 +42,7 @@ class ContainerBuilder extends Configurable {
     }
 
     /**
-     * addToBuild - add dependency manually
+     * Add dependency manually
      *
      * @param {string} name
      * @param {object} dependency
@@ -57,13 +57,13 @@ class ContainerBuilder extends Configurable {
     }
 
     /**
-     * build - build container and return it
+     * Build container and return it
      *
      * @returns {Container}
      */
     build() {
         if ( this.configurations.includeComponents ) {
-            this.dependenciesMapping = assignIn( this.dependenciesMapping, require( './components' ) )
+            this.dependenciesMapping = Object.assign( this.dependenciesMapping, require( './components' ) )
         }
 
         this.registerDependencies()
@@ -72,19 +72,18 @@ class ContainerBuilder extends Configurable {
     }
 
     /**
-     * registerDependencies - preload all dependencies
+     * Preload all dependencies
      */
     registerDependencies() {
-        Reflect
-            .ownKeys( this.dependenciesMapping )
-            .forEach( name => {
-                const dependency = this.load( name, this.dependenciesMapping[ name ].path, name.includes( 'component.' ) )
-                this.container.register( name, dependency )
-            })
+        Reflect.ownKeys( this.dependenciesMapping ).forEach( name => {
+			const dependency = this.load( name, this.dependenciesMapping[ name ].path, name.includes( 'component.' ) )
+
+			this.container.register( name, dependency )
+		})
     }
 
     /**
-     * injectDependencies - inject dependencies into the dependency requested
+     * Inject dependencies into the dependency requested
      *
      * @param  {string} dependency
      * @returns {Array}
@@ -106,7 +105,7 @@ class ContainerBuilder extends Configurable {
 
         requestedDependencies.forEach( dependencyName => {
             if ( 'easy.application' === dependencyName ) {
-                dependencies.add( this.application )
+                dependencies.add( this._application )
             } else if ( 'easy.container' === dependencyName ) {
                 dependencies.add( this.container )
             } else {
@@ -121,7 +120,7 @@ class ContainerBuilder extends Configurable {
     }
 
     /**
-     * load - load a new instance of a dependency
+     * Load a new instance of the dependency
      *
      * @param {string} name
      * @param {string} path
@@ -135,19 +134,20 @@ class ContainerBuilder extends Configurable {
             return this.getLoaded( name )
         }
 
-        const dependencyFilePath = `${isComponent ? '' : `${this.application.kernel.path.root}/src/`}${this.dependenciesMapping[ name ].path}`
+        const dependencyFilePath = `${isComponent ? '' : `${this._application.kernel.path.root}/src/`}${this.dependenciesMapping[ name ].path}`
+		let dependencyClass
 
         try {
-            const dependencyClass = require( dependencyFilePath )
-
-            return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
+			dependencyClass = require( dependencyFilePath )
         } catch ( error ) {
             throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error.message}` )
         }
+
+		return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
     }
 
     /**
-     * isLoaded - check if dependency is loaded
+     * Check if the dependency is loaded
      *
      * @param {name} name
      * @returns {boolean}
@@ -157,7 +157,7 @@ class ContainerBuilder extends Configurable {
     }
 
     /**
-     * getLoaded - get already loaded dependency
+     * Get already loaded dependency
      *
      * @param  {string} name
      * @returns {object}
@@ -167,7 +167,7 @@ class ContainerBuilder extends Configurable {
     }
 
     /**
-     * cache - cache a dependency
+     * Cache a dependency
      *
      * @param  {string} name
      * @param  {object} dependency
@@ -178,6 +178,61 @@ class ContainerBuilder extends Configurable {
 
         return dependency
     }
+
+	/**
+	 * Get dependencies mapping
+	 *
+	 * @readonly
+	 *
+	 * @memberOf ContainerBuilder
+	 */
+	get dependenciesMapping() {
+		return this._dependenciesMapping
+	}
+
+	/**
+	 * Set dependencies mapping
+	 *
+	 * @memberOf ContainerBuilder
+	 */
+	set dependenciesMapping( value ) {
+		if ( isPlainObject( value ) ) {
+			this._dependenciesMapping = value
+		}
+	}
+
+	/**
+	 * Get container
+	 *
+	 * @readonly
+	 *
+	 * @memberOf ContainerBuilder
+	 */
+	get container() {
+		return this._container
+	}
+
+	/**
+	 * Get ContainerBuilder configurations
+	 *
+	 * @readonly
+	 *
+	 * @memberOf ContainerBuilder
+	 */
+	get configurations() {
+		return this._configurations
+	}
+
+	/**
+	 * Get cached dependencies
+	 *
+	 * @readonly
+	 *
+	 * @memberOf ContainerBuilder
+	 */
+	get cached() {
+		return this._cached
+	}
 }
 
 module.exports = ContainerBuilder

@@ -22,9 +22,17 @@ class Configuration {
 	 *
 	 * @param {string} file
 	 * @returns {any}
+	 *
+	 * @throws {Error} if file path is invalid
 	 */
 	static load( file ) {
-		return require( require.resolve( `${Configuration.appPath}/src/config/${file}` ) )
+		const configurationFilePath = `${Configuration.appPath}/src/config/${file}`
+
+		try {
+			return require( require.resolve( configurationFilePath ) )
+		} catch ( error ) {
+			throw new Error( `Impossible to require global configuration file (${configurationFilePath}).\n${error.message}` )
+		}
 	}
 
 	/**
@@ -33,9 +41,17 @@ class Configuration {
 	 * @param {string} file
 	 * @param {string} bundle
 	 * @returns {any}
+	 *
+	 * @throws {Error} if file path is invalid
 	 */
 	static loadFromBundle( file, bundle ) {
-		return require( require.resolve( `${Configuration.appPath}/src/bundles/${bundle}/config/${file}` ) )
+		const configurationFilePath = `${Configuration.appPath}/src/bundles/${bundle}/config/${file}`
+
+		try {
+			return require( require.resolve( configurationFilePath ) )
+		} catch ( error ) {
+			throw new Error( `Impossible to require bundle configuration file (${configurationFilePath}).\n${error.message}` )
+		}
 	}
 
 	/**
@@ -46,7 +62,9 @@ class Configuration {
 	 * @memberOf Configuration
 	 */
 	static set appPath( newAppPath ) {
-		appPath = path.resolve( newAppPath )
+		if ( 'string' === typeof newAppPath ) {
+			appPath = path.resolve( newAppPath )
+		}
 	}
 
 	/**

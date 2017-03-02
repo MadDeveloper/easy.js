@@ -2,7 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- Code plus robuste avec des checks dans les classes à propos des paramètres, throw error en cas de problème
+- Code plus robuste avec des checks dans les classes à propos des API ou libs externes, throw error en cas de problème
 - Revoir l'encapsulation et jsdoc
 - refactor Router, Application, Controller classes
 - TU easy

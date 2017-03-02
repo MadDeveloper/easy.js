@@ -11,6 +11,8 @@ const directory = jasmine.createSpyObj( 'directory', [
     'loadPathInfo',
     'exists',
     'existsSync',
+	'read',
+	'readSync',
     'create',
     'createSync',
     'delete',
