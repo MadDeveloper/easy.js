@@ -72,7 +72,7 @@ class Directory extends Document {
         try {
             return fs.lstatSync( this.path ).isDirectory()
         } catch( error ) {
-            throw new Error( `Error when trying to check synchronously the existance of the directory (${this.path}).\n${error.message}` )
+            return false
         }
     }
 

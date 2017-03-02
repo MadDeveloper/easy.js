@@ -26,17 +26,16 @@ class Access extends SecurityAccess {
     constructor() {
         super()
 
-        this.roles = Configuration.load( 'roles' )
+        this._roles = Configuration.load( 'roles' )
         this._authorization = new Authorization()
     }
 
     /**
-     * authorized - check if user is authorized to access to the route requested
+     * Check if user is authorized to access to the route requested
      *
      * @param  {Object} { configurations
      * @param  {Request} request
      * @param  {Response} response }
-     *
      * @returns {boolean}
      */
     async authorized({ configurations, request, response }) {
@@ -76,6 +75,17 @@ class Access extends SecurityAccess {
      */
     get authorization() {
         return this._authorization
+    }
+
+    /**
+     * Get roles
+     *
+     * @readonly
+     *
+     * @memberOf Access
+     */
+    get roles() {
+        return this._roles
     }
 }
 

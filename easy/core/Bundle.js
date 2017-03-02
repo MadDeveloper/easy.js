@@ -25,10 +25,8 @@ class Bundle {
      */
     constructor( indexModule, router, container ) {
         this._indexModule = indexModule
-        this.router = router
-        this.container = container
-        this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
-        this.analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
+        this._router = router
+        this._container = container
     }
 
     /**
@@ -86,9 +84,11 @@ class Bundle {
      * @memberOf Bundle
      */
     defineSecurity( routeConfig, httpMethod = 'all', route ) {
+        const analyzerSecurityConfig = new AnalyzerSecurityConfig( routeConfig )
+
         httpMethod = httpMethod.toLowerCase()
 
-        if ( this.analyzerSecurityConfig.analyze( routeConfig ) && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
+        if ( analyzerSecurityConfig.analyze() && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
             this.router.defineSecurityRoute( route, httpMethod, routeConfig )
         }
     }
@@ -103,9 +103,11 @@ class Bundle {
      * @memberOf Bundle
      */
     defineMiddleware( routeConfig, httpMethod, controllers ) {
+        const analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig( routeConfig )
+
         httpMethod = httpMethod.toLowerCase()
 
-        if ( this.analyzerMiddlewaresConfig.analyze( routeConfig ) && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
+        if ( analyzerMiddlewaresConfig.analyze() && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
             this.router.defineMiddlewaresRoutes( routeConfig, httpMethod, controllers )
         }
     }
@@ -150,6 +152,28 @@ class Bundle {
      */
     get indexModule() {
         return this._indexModule
+    }
+
+    /**
+     * Get router
+     * 
+     * @readonly
+     * 
+     * @memberOf Bundle
+     */
+    get router() {
+        return this._router
+    }
+
+    /**
+     * Get container
+     * 
+     * @readonly
+     * 
+     * @memberOf Bundle
+     */
+    get container() {
+        return this._container
     }
 }
 

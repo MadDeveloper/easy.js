@@ -16,8 +16,7 @@ module.exports = {
         dependencies: [ 'easy.application' ]
     },
     'component.logwriter': {
-        path: 'easy/log/LogWriter',
-        dependencies: [ 'component.logdirectorymanager' ]
+        path: 'easy/log/LogWriter'
     },
     'component.logger': {
         path: 'easy/log/Logger',

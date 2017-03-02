@@ -8,7 +8,6 @@
 */
 
 const response = jasmine.createSpyObj( 'response', [
-    'formatParams',
     'continue',
     'switchingProtocols',
     'processing',

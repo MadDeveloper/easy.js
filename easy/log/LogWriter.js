@@ -10,28 +10,13 @@
 const File = require( '../fs/File' )
 const { strtr } = require( '../lib/string' )
 const Writer = require( '../interfaces/Writer' )
-
+const path = require( 'path' )
 
 /**
  * @class LogWriter
  * @extends {Writer}
  */
 class LogWriter extends Writer {
-    /**
-     * Creates an instance of LogWriter.
-     *
-     * @constructor
-     *
-     * @param {LogDirectoryManager} logDirectoryManager
-     *
-     * @memberOf LogWriter
-     */
-    constructor( logDirectoryManager ) {
-        super()
-
-        this.logDirectoryManager = logDirectoryManager
-    }
-
     /**
      * General log method
      *
@@ -43,7 +28,7 @@ class LogWriter extends Writer {
      * @throws {Error} if file path is incorrect or user doesn't have access rights
      */
     async write( fileName, message, context ) {
-        const filePath = `${this.logDirectoryManager.logDirectoryPath}/${fileName}.log`
+        const filePath = `${path.resolve( './logs' )}/${fileName}.log`
 
         try {
             const file = await new File( filePath )
@@ -59,6 +44,17 @@ class LogWriter extends Writer {
         } catch ( error ) {
             throw new Error( `Impossible to writing on file ${fileName}.log (${filePath})\n${error.message}` )
         }
+    }
+
+    /**
+     * Get LogDirectoryManager
+     * 
+     * @readonly
+     * 
+     * @memberOf LogWriter
+     */
+    get logDirectoryManager() {
+        return this._logDirectoryManager
     }
 }
 

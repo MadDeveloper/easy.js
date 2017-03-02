@@ -92,7 +92,7 @@ class Kernel extends Configurable {
         this.router = this.container.get( 'component.router' )
         this.logFileManager = this.container.get( 'component.logfilemanager' )
 
-        this.router.configure( this._application, express.Router() )
+        this.router.configure( this.container, express.Router() )
     }
 
     /**

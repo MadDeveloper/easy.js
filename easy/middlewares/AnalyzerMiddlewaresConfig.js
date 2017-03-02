@@ -15,39 +15,48 @@ const Analyzer = require( '../interfaces/Analyzer' )
  */
 class AnalyzerMiddlewaresConfig extends Analyzer {
     /**
-     * analyze - check if middlewares configurations are correct
-     *
-     * @param  {Object} configurations
+     * Creates an instance of AnalyzerMiddlewaresConfig.
+     * @param {Object} [configurations={}] 
+     * 
+     * @memberOf AnalyzerMiddlewaresConfig
+     */
+    constructor( configurations = {} ) {
+        super()
+
+        this._configurations = configurations
+    }
+
+    /**
+     * Check if middlewares configurations are correct
+     * 
      * @returns {boolean}
      */
-    analyze( configurations ) {
-        return 'middlewares' in configurations && Object.keys( configurations.middlewares ).length > 0
+    analyze() {
+        return 'middlewares' in this.configurations && Reflect.ownKeys( this.configurations.middlewares ).length > 0
     }
 
     /**
-     * extractMiddlewaresConfig - extract middlewares configurations from application configurations
-     *
-     * @param  {Object} configurations
+     * Extract middlewares configurations from application configurations
+     * 
      * @returns {Object}
      */
-    extractMiddlewaresConfig( configurations ) {
-        return configurations.middlewares
+    extractMiddlewaresConfig() {
+        return this.configurations.middlewares
     }
 
     /**
-     * extractMiddleware - extract single middleware configurations
+     * Extract single middleware configurations
      *
-     * @param  {Object} configurations
      * @returns {Object}
      */
-    extractMiddleware( configurations ) {
-        return configurations.controller
+    extractMiddleware() {
+        return this.configurations.controller
     }
 
     /**
-     * extractMiddlewareInfos - extract middleware informations necessary for express router
+     * Extract middleware informations necessary for express router
      *
-     * @param  {Object} configurations
+     * @param {Object} configurations
      * @returns {Object}
      */
     extractMiddlewareInfos( configurations ) {
@@ -56,6 +65,26 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
             param: configurations.use || configurations.param,
             controller: configurations.controller
         }
+    }
+
+    /**
+     * Get configurations
+     *
+     * @readonly
+     *
+     * @memberOf AnalyzerSecurityConfig
+     */
+    get configurations() {
+        return this._configurations
+    }
+
+    /**
+     * Set configurations
+     *
+     * @memberOf AnalyzerSecurityConfig
+     */
+    set configurations( value ) {
+        this._configurations = value
     }
 }
 

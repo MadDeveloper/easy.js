@@ -16,14 +16,25 @@ const Analyzer = require( '../interfaces/Analyzer' )
  */
 class AnalyzerSecurityConfig extends Analyzer {
     /**
-     * analyze - check if configurations are valids
-     *
-     * @param  {Object} configurations
+     * Creates an instance of AnalyzerSecurityConfig.
+     * @param {Object} [configurations={}] 
+     * 
+     * @memberOf AnalyzerSecurityConfig
+     */
+    constructor( configurations = {} ) {
+        super()
+
+        this._configurations = configurations
+    }
+
+    /**
+     * Check if configurations are valids
+     * 
      * @returns {boolean}
      */
-    analyze( configurations ) {
-        if ( 'security' in configurations ) {
-            const security = configurations.security
+    analyze() {
+        if ( 'security' in this.configurations ) {
+            const security = this.configurations.security
 
             if ( 'strategy' in security ) {
                 return 'roles' in security
@@ -34,13 +45,32 @@ class AnalyzerSecurityConfig extends Analyzer {
     }
 
     /**
-     * extractSecurityConfig - extract security configurations into app configurations
+     * Extract security configurations into app configurations
      *
-     * @param  {Object} configurations
      * @returns {Object}
      */
-    extractSecurityConfig( configurations ) {
-        return configurations.security
+    extractSecurityConfig() {
+        return this.configurations.security
+    }
+
+    /**
+     * Get configurations
+     *
+     * @readonly
+     *
+     * @memberOf AnalyzerSecurityConfig
+     */
+    get configurations() {
+        return this._configurations
+    }
+
+    /**
+     * Set configurations
+     *
+     * @memberOf AnalyzerSecurityConfig
+     */
+    set configurations( value ) {
+        this._configurations = value
     }
 }
 

@@ -28,19 +28,17 @@ class Router extends Configurable {
 
         this._scope = null
         this._config = null
-        this.application = null
+        this._container = null
         this.access = new Access()
-        this.analyzerSecurityConfig = new AnalyzerSecurityConfig()
-        this.analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
     }
 
     /**
-     * configure - configure easy.js router
+     * Configure easy.js router
      *
-     * @param  {Application} application
+     * @param {Container} container
      */
-    configure( application, router ) {
-        this.application = application
+    configure( container, router ) {
+        this._container = container
         this._scope = router
         this._config = Configuration.load( 'bundles/activated' )
     }
@@ -65,7 +63,7 @@ class Router extends Configurable {
 	}
 
     /**
-     * defineMiddlewaresRoutes - define all middlewares into express router
+     * Define all middlewares into express router
      *
      * @param {Object} configurations
      * @param {string} httpMethod
@@ -73,14 +71,15 @@ class Router extends Configurable {
      */
     defineMiddlewaresRoutes( configurations, httpMethod, controllers ) {
         const router = this.scope
-        const middlewaresConfig = this.analyzerMiddlewaresConfig.extractMiddlewaresConfig( configurations )
+        const analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig( configurations )
+        const middlewaresConfig = analyzerMiddlewaresConfig.extractMiddlewaresConfig()
         let middleware = ''
         let middlewareInfos = {}
         httpMethod = httpMethod.toLowerCase()
 
         for ( let config in middlewaresConfig ) {
             config = middlewaresConfig[ config ]
-            middlewareInfos = this.analyzerMiddlewaresConfig.extractMiddlewareInfos( config )
+            middlewareInfos = analyzerMiddlewaresConfig.extractMiddlewareInfos( config )
 
             const [ controllerId, controllerMethod ] = middlewareInfos.controller.split( ':' )
             const controller = controllers[ controllerId ]
@@ -103,7 +102,7 @@ class Router extends Configurable {
     }
 
     /**
-     * defineSecurityRoute - define access rules for specific route
+     * Define access rules for specific route
      *
      * @param {string} route
      * @param {string} httpMethod
@@ -111,20 +110,22 @@ class Router extends Configurable {
      */
     defineSecurityRoute( route, httpMethod, configurations ) {
         const router = this.scope
+        const analyzerSecurityConfig = new AnalyzerSecurityConfig( configurations )
+        const securityConfig = analyzerSecurityConfig.extractSecurityConfig()
+        const handler = this.getAccessHandler( securityConfig )
+
         httpMethod = httpMethod.toLowerCase()
 
         router.use( route, async ( req, res, next ) => {
             const request = this.getRequest( req )
 
             if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
-                const securityConfig = this.analyzerSecurityConfig.extractSecurityConfig( configurations )
                 const response = this.getResponse( res )
-                const handler = this.getAccessHandler( securityConfig )
                 const authorized = await handler.authorized({
                     configurations: securityConfig,
                     request,
                     response,
-                    container: this.application.container
+                    container: this._container
                 })
 
                 if ( authorized ) {
@@ -137,17 +138,17 @@ class Router extends Configurable {
     }
 
     /**
-     * getAccessHandler - returns access authority handler
+     * Returns access authority handler
      *
      * @param  {Object} configurations
      * @returns {Access|Service}
      */
     getAccessHandler( configurations ) {
-        return 'default' === configurations.strategy ? this.access : this.application.container.get( configurations.provider )
+        return 'default' === configurations.strategy ? this.access : this._container.get( configurations.provider )
     }
 
     /**
-     * defineRoute - define route into express router
+     * Define route into express router
      *
      * @param  {string} { route
      * @param  {string} method
@@ -168,9 +169,9 @@ class Router extends Configurable {
     }
 
     /**
-     * defineMethodNotAllowedRoute - define route on all http verbs which returns 405 Method Not Allowed
+     * Define route on all http verbs which returns 405 Method Not Allowed
      *
-     * @param  {string} route
+     * @param {string} route
      */
     defineMethodNotAllowedRoute( route ) {
         const router = this.scope
@@ -206,19 +207,19 @@ class Router extends Configurable {
 	}
 
     /**
-     * getRequest - get easy Request instance
+     * Get easy Request instance
      *
-     * @param  {express.Request} req
+     * @param {express.Request} req
      * @returns {Request}
      */
     getRequest( req ) {
-        return new Request( req, this.application.appName )
+        return new Request( req )
     }
 
     /**
-     * getResponse - get easy Response instance
+     * Get easy Response instance
      *
-     * @param  {express.Response} res
+     * @param {express.Response} res
      * @returns {Response}
      */
     getResponse( res ) {
@@ -226,7 +227,7 @@ class Router extends Configurable {
     }
 
     /**
-     * get - express router
+     * Get express router
      *
      * @returns {express.Router}
      */
@@ -235,7 +236,7 @@ class Router extends Configurable {
     }
 
     /**
-     * get - routes config
+     * Get routes config
      *
      * @returns {Array}
      */

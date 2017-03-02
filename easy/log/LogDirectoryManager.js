@@ -21,7 +21,7 @@ class LogDirectoryManager {
      * @param {Application} application
      */
     constructor( application ) {
-        this._logDirectoryPath = `${application.kernel.path.root}/logs`
+        this._logDirectoryPath = path.resolve( './logs' )
 
         if ( application.config.app.log ) {
             this.createLogDirectory()
@@ -50,7 +50,7 @@ class LogDirectoryManager {
     }
 
     /**
-     * get - log directory path (default: logs/)
+     * Get log directory path (default: logs/)
      *
      * @returns {string}
      */

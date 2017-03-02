@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- Quand on change le code ou écrire rs en console, nodemon ne détecte plus et ne recharge plus le projet
 - Code plus robuste avec des checks dans les classes à propos des API ou libs externes, throw error en cas de problème
 - Revoir l'encapsulation et jsdoc
 - refactor Router, Application, Controller classes
