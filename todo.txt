@@ -2,8 +2,10 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- pouvoir rm un dossier non vide
-- faire les tests du vendor
+- Code plus robuste avec des checks dans les classes à propos des paramètres, throw error en cas de problème
+- Revoir l'encapsulation et jsdoc
+- refactor Router, Application, Controller classes
+- TU easy
 - exporter role et user dans un repo externe, importable
 - faire une PR pour ecmascript stages, afin de faciliter l'écriture d'objets :
     { core: application.core, container: kernel.container } <=> { application.core, kernel.container } (the last property in path becomes the object property and assign it the current value)
@@ -13,10 +15,7 @@
 ---------|  LATER  |---------
 -----------------------------
 
-- Code plus robuste avec des checks dans les classes à propos des paramètres, throw error en cas de problème
-- Revoir l'encapsulation
-- refactor Router, Application, Controller classes
-- Working on reusable components (Logger, Router, etc.)
+- créer une classe Route pour refactorer le Router
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de tout lier en promise pour les patchs
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
 - créer une classe Cache qui pourra être instanciée dans n'importe quelle autre classe afin de pouvoir gérer son cache

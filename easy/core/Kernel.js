@@ -12,7 +12,7 @@ const path = require( 'path' )
 const Configuration = require( './Configuration' )
 const Bundle = require( './Bundle' )
 const Configurable = require( '../interfaces/Configurable' )
-const ContainerBuilder = require( '../provider/ContainerBuilder' )
+const ContainerBuilder = require( '../container/ContainerBuilder' )
 const Router = require( './Router' )
 const DatabasesManager = require( '../database/DatabasesManager' )
 

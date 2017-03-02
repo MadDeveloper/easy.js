@@ -8,7 +8,7 @@
 */
 
 module.exports.authentication = require( './authentication' )
-module.exports.provider = require( './provider' )
+module.exports.container = require( './container' )
 module.exports.core = require( './core' )
 module.exports.databse = require( './database' )
 module.exports.fs = require( './fs' )

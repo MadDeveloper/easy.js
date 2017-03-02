@@ -13,10 +13,10 @@
 class Exception {
     /**
      * Creates an instance of Exception.
-     * 
-     * @param {string} [type='Exception'] 
-     * @param {string} [message=''] 
-     * 
+     *
+     * @param {string} [type='Exception']
+     * @param {string} [message='']
+     *
      * @memberOf Exception
      */
     constructor( type = 'Exception', message = '' ) {
@@ -27,9 +27,9 @@ class Exception {
 
     /**
      * Returns exception in string format
-     * 
+     *
      * @returns {string}
-     * 
+     *
      * @memberOf Exception
      */
     toString() {
@@ -38,9 +38,9 @@ class Exception {
 
     /**
      * Get exception type
-     * 
+     *
      * @readonly
-     * 
+     *
      * @memberOf Exception
      */
     get type() {
@@ -49,9 +49,9 @@ class Exception {
 
     /**
      * Get exception message
-     * 
+     *
      * @readonly
-     * 
+     *
      * @memberOf Exception
      */
     get message() {
@@ -60,7 +60,7 @@ class Exception {
 
     /**
      * Set exception message
-     * 
+     *
      * @memberOf Exception
      */
     set message( value ) {
@@ -71,9 +71,9 @@ class Exception {
 
     /**
      * Get the exception stack
-     * 
+     *
      * @readonly
-     * 
+     *
      * @memberOf Exception
      */
     get stack() {

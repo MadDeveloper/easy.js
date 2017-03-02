@@ -12,7 +12,6 @@ const Configuration = require( '../core/Configuration' )
 const Controller = require( '../core/Controller' )
 const Configurable = require( '../interfaces/Configurable' )
 const TokenManager = require( './TokenManager' )
-
 const LocalStrategy = passportLocal.Strategy
 
 /**
@@ -29,10 +28,10 @@ class Authentication extends Configurable {
 	constructor( container, passport ) {
 		super()
 
-		this._config 			= Configuration.load( 'authentication' )
-		this._container			= container
-		this._passport			= passport
-		this._router			= container.get( 'component.router' )
+		this._config = Configuration.load( 'authentication' )
+		this._container = container
+		this._passport = passport
+		this._router = container.get( 'component.router' )
 	}
 
 	/**
@@ -58,6 +57,7 @@ class Authentication extends Configurable {
 	  */
 	initCustomStrategy() {
 		const customProvider = this._container.get( this.config.service )
+
 		this._router.scope.post( this.config.route, ( req, res ) => {
 			const request = this._router.getRequest( req )
 			const response = this._router.getResponse( res )
@@ -80,17 +80,14 @@ class Authentication extends Configurable {
 	 * @memberOf Authentication
 	 */
 	defineLoginRoute() {
-		this._router.scope.post(
-			this.config.route,
-			this._passport.authenticate( 'local', { session: false }),
-			( req, res ) => {
-				const request = this._router.getRequest( req )
-	            const response = this._router.getResponse( res )
+		this._router.scope.post( this.config.route, this._passport.authenticate( 'local', { session: false }), ( req, res ) => {
+			const request = this._router.getRequest( req )
+			const response = this._router.getResponse( res )
 
-				response.ok({
-					user: request.getProperty( 'user' ).user,
-					token: request.getProperty( 'user' ).token
-				})
+			response.ok({
+				user: request.getProperty( 'user' ).user,
+				token: request.getProperty( 'user' ).token
+			})
 		})
 	}
 
@@ -107,9 +104,7 @@ class Authentication extends Configurable {
 			usernameField: this.config.usernameField,
 			passwordField: this.config.passwordField
 		}, async ( username, password, done ) => {
-			let findBy = {
-				[ this.config.usernameField ]: username
-			}
+			let findBy = { [ this.config.usernameField ]: username }
 
 			try {
 				const user = await this._userRepository.find( findBy )
@@ -122,7 +117,7 @@ class Authentication extends Configurable {
 					return done( null, false )
 				}
 			} catch ( error ) {
-				done()
+				throw new Error( `Error when defining local authentication strategy.\n${error.message}` )
 			}
 		}) )
 	}
