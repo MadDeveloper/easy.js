@@ -18,22 +18,28 @@
  */
 class Polyfills {
     /**
-     * load - load all polyfills
+     * Load all polyfills
      */
     static load() {
         Polyfills.stringPolyfills()
     }
 
     /**
-     * stringPolyfills - polyfills for String prototype
+     * Load polyfills for String prototype
      */
     static stringPolyfills() {
+		/*
+		 * isEmpty
+		 */
         if ( !String.prototype.isEmpty ) {
             String.prototype.isEmpty = function() {
                 return 0 === this.valueOf().length
             }
         }
 
+		/*
+		 * isNumber
+		 */
         if ( !String.prototype.isNumber ) {
             String.prototype.isNumber = function() {
                 return !isNaN( this.valueOf() )

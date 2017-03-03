@@ -35,14 +35,14 @@ class LogWriter extends Writer {
             const exists = await file.exists()
 
             if ( !exists ) {
-                await file.create()
+                // await file.create()
             }
 
             const content = await file.read()
 
             return file.addContent( strtr( message, context ) ).write()
         } catch ( error ) {
-            throw new Error( `Impossible to writing on file ${file}.log (${filePath})\n${error.message}` )
+            throw new Error( `Impossible to writing on file ${file}.log (${filePath})\n${error}` )
         }
     }
 }

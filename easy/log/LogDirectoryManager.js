@@ -17,15 +17,9 @@ const Directory = require( '../fs/Directory' )
 class LogDirectoryManager {
     /**
      * @constructor
-     *
-     * @param {Application} application
      */
-    constructor( application ) {
+    constructor() {
         this._logDirectoryPath = path.resolve( './logs' )
-
-        if ( application.config.app.log ) {
-            this.createLogDirectory()
-        }
     }
 
     /**
@@ -35,7 +29,7 @@ class LogDirectoryManager {
      *
      * @memberOf LogDirectoryManager
      */
-    createLogDirectory() {
+    createLogDirectoryIfNotExists() {
         const directory = new Directory( this.logDirectoryPath )
 
         try {
@@ -45,12 +39,12 @@ class LogDirectoryManager {
                 directory.createSync()
             }
         } catch ( error ) {
-            throw new ReferenceError( `An error occured while trying to create logs directory (${this.logDirectoryPath}).\n${error.message}` )
+            throw new ReferenceError( `An error occured while trying to create logs directory (${this.logDirectoryPath}).\n${error.stack}` )
         }
     }
 
     /**
-     * Get log directory path (default: logs/)
+     * Get log directory path (default: ~/logs/)
      *
      * @returns {string}
      */

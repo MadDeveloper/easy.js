@@ -9,7 +9,6 @@
 
 const path = require( 'path' )
 
-
 let appPath = ''
 
 /**
@@ -18,7 +17,7 @@ let appPath = ''
 class Configuration {
 
 	/**
-	 * load - load file from global configurations directory
+	 * Load file from global configurations directory
 	 *
 	 * @param {string} file
 	 * @returns {any}
@@ -31,7 +30,7 @@ class Configuration {
 		try {
 			return require( require.resolve( configurationFilePath ) )
 		} catch ( error ) {
-			throw new Error( `Impossible to require global configuration file (${configurationFilePath}).\n${error.message}` )
+			throw new Error( `Impossible to require global configuration file (${configurationFilePath}).\n${error.stack}` )
 		}
 	}
 
@@ -50,7 +49,7 @@ class Configuration {
 		try {
 			return require( require.resolve( configurationFilePath ) )
 		} catch ( error ) {
-			throw new Error( `Impossible to require bundle configuration file (${configurationFilePath}).\n${error.message}` )
+			throw new Error( `Impossible to require bundle configuration file (${configurationFilePath}).\n${error.stack}` )
 		}
 	}
 

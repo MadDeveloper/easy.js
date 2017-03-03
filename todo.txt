@@ -2,7 +2,8 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- LogDirectoryManager peut ne plus être chargé par le container mais par le kernel
+- la méthode defineMiddlewaresRoutes du Router doit être déchargé dans Bundle, ce n'est pas à lui de parser les config des middleware, il faut renommer la méthode en defineMiddlewareRoute
+- addNotFoundRoute dans le Router doit utiliser entièrement Response, donc il faut rajouter headersSent dans Response
 - Quand on change le code ou écrire rs en console, nodemon ne détecte plus et ne recharge plus le projet
 - Code plus robuste avec des checks dans les classes à propos des API ou libs externes, throw error en cas de problème
 - Revoir l'encapsulation et jsdoc

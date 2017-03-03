@@ -14,16 +14,15 @@ const colors = require( 'colors' )
  */
 class Console {
     /**
-     * error - display error in console
+     * Display error in stdout
      *
-     * @param  {string} { title
-     * @param  {string} message = ''
-     * @param  {string} consequence = ''
-     * @param  {number} exit = null }
+     * @param {string} { title
+     * @param {string} [message='']
+     * @param {string} [consequence='']
+     * @param {number} [exit=false] }
      */
-    static error({ title, message = '', consequence = '', exit = null }) {
-        if ( undefined !== title ) {
-
+    static error({ title, message = '', consequence = '', exit = false }) {
+        if ( title ) {
             Console.line()
             console.log( `${colors.red( `[${title}]` )}` )
 
@@ -40,37 +39,36 @@ class Console {
             if ( Number.isInteger( exit ) ) {
                 process.exit( exit )
             }
-
         } else {
             Console.error({ title: 'Missing required title argument to Console.error() method' })
         }
     }
 
     /**
-     * warn - display warning in console
+     * Display warning in console
      *
-     * @param  {string} message = ""
+     * @param {string} [message='']
      */
-    static warn( message = "" ) {
+    static warn( message = '' ) {
         console.log( `${colors.bgYellow( colors.black( `WARN: ${message.toString()}` ) )}` )
     }
 
     /**
-     * info - display info message in console
+     * Display info message in console
      *
-     * @param  {string} message = ""
+     * @param {string} [message='']
      */
-    static info( message = "" ) {
+    static info( message = '' ) {
         console.log( `${colors.blue( message.toString() )}` )
     }
 
     /**
-     * success - display success message in console
+     * Display success message in console
      *
-     * @param  {string} message = ""
-     * @param  {number} exit
+     * @param {string} [message='']
+     * @param {number} [exit=false]
      */
-    static success( message = "", exit = null ) {
+    static success( message = '', exit = false ) {
         console.log( `${colors.green( message.toString() )}` )
 
         if ( exit ) {
@@ -79,11 +77,11 @@ class Console {
     }
 
     /**
-     * log - display sample message in console
+     * Display sample message in console
      *
-     * @param  {string} message = ""
+     * @param  {string} [message='']
      */
-    static log( message = "" ) {
+    static log( message = '' ) {
         console.log( `${message.toString()}` )
     }
 
@@ -103,7 +101,7 @@ class Console {
     }
 
     /**
-     * line - insert new line in console
+     * Insert new line in console
      */
     static line() {
         console.log( '' )

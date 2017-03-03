@@ -117,7 +117,7 @@ class Authentication extends Configurable {
 					return done( null, false )
 				}
 			} catch ( error ) {
-				throw new Error( `Error when defining local authentication strategy.\n${error.message}` )
+				done( error )
 			}
 		}) )
 	}

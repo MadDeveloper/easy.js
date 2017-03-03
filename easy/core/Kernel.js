@@ -15,6 +15,7 @@ const Configurable = require( '../interfaces/Configurable' )
 const ContainerBuilder = require( '../container/ContainerBuilder' )
 const Router = require( './Router' )
 const DatabasesManager = require( '../database/DatabasesManager' )
+const LogDirectoryManager = require( '../log/LogDirectoryManager' )
 
 /**
  * @class Kernel
@@ -23,13 +24,14 @@ class Kernel extends Configurable {
     /**
      * @constructor
      */
-    constructor( application ) {
+    constructor() {
         super()
 
-        this._application = application
         this._path = {}
-        this.databasesManager = null
-        this.container = null
+        this._databasesManager = null
+		this._router = null
+        this._container = null
+		this._logDirectoryManager = new LogDirectoryManager()
     }
 
     /**
@@ -38,9 +40,6 @@ class Kernel extends Configurable {
      * @param {string} appRootPath
      */
     configure( appRootPath ) {
-        /*
-         * paths
-         */
         this.path.root = path.resolve( appRootPath )
         this.path.bin = `${this.path.root}/bin`
         this.path.src = `${this.path.root}/src`
@@ -49,6 +48,8 @@ class Kernel extends Configurable {
         this.path.services = `${this.path.src}/services`
 
         Configuration.appPath = this.path.root
+
+		this.logDirectoryManager.createLogDirectoryIfNotExists()
     }
 
     /**
@@ -71,14 +72,14 @@ class Kernel extends Configurable {
         /*
          * Prepare container
          */
-        const containerBuilder = new ContainerBuilder( this._application )
+        const containerBuilder = new ContainerBuilder()
         containerBuilder.configure({ includeComponents: true })
 
         /*
          * Start and daemonize databases
          */
-        this.databasesManager = new DatabasesManager( this, containerBuilder.container )
-        this.databasesManager.load()
+        this._databasesManager = new DatabasesManager( this, containerBuilder.container )
+        this._databasesManager.load()
 
         /*
          * Build container
@@ -88,21 +89,72 @@ class Kernel extends Configurable {
         /*
          * Get some others components
          */
-        this.container = containerBuilder.build()
-        this.router = this.container.get( 'component.router' )
-        this.logFileManager = this.container.get( 'component.logfilemanager' )
+        this._container = containerBuilder.build()
+        this._router = this.container.get( 'component.router' )
 
         this.router.configure( this.container, express.Router() )
     }
 
     /**
-     * get - all paths
+     * Get all paths of the application
      *
      * @returns {object}
      */
     get path() {
         return this._path
     }
+
+	/**
+	 * Get databases manager
+	 *
+	 * @readonly
+	 *
+	 * @returns {DatabasesManager}
+	 *
+	 * @memberOf Kernel
+	 */
+	get databasesManager() {
+		return this._databasesManager
+	}
+
+	/**
+	 * Get container
+	 *
+	 * @readonly
+	 *
+	 * @returns {Container}
+	 *
+	 * @memberOf Kernel
+	 */
+	get container() {
+		return this._container
+	}
+
+	/**
+	 * Get router
+	 *
+	 * @readonly
+	 *
+	 * @returns {Router}
+	 *
+	 * @memberOf Kernel
+	 */
+	get router() {
+		return this._router
+	}
+
+	/**
+	 * Get log directory manager
+	 *
+	 * @readonly
+	 *
+	 * @returns {LogDirectoryManager}
+	 *
+	 * @memberOf Kernel
+	 */
+	get logDirectoryManager() {
+		return this._logDirectoryManager
+	}
 }
 
 module.exports = Kernel

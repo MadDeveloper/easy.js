@@ -32,9 +32,10 @@ class Router extends Configurable {
     }
 
     /**
-     * Configure easy.js router
+     * Configure easy router
      *
      * @param {Container} container
+	 * @param {Object} router
      */
     configure( container, router ) {
         this._container = container
@@ -42,20 +43,16 @@ class Router extends Configurable {
     }
 
 	/**
-	 * Add default final not found route
+	 * Add not found route
 	 */
 	addNotFoundRoute() {
-		/*
-		 * Express router
-		 */
 		const router = this.scope
 
-	    /*
-	     * Final middleware: No route found
-	     */
 	    router.use( ( req, res ) => {
+			const response = this.getResponse( res )
+
 	        if ( !res.headersSent ) {
-	            res.status( 404 ).end()
+	            response.notFound()
 	        }
 	    })
 	}
@@ -65,7 +62,7 @@ class Router extends Configurable {
      *
      * @param {Object} configurations
      * @param {string} httpMethod
-     * @param {Controller[]} controller
+     * @param {Controller[]} controllers
      */
     defineMiddlewaresRoutes( configurations, httpMethod, controllers ) {
         const router = this.scope
@@ -138,8 +135,8 @@ class Router extends Configurable {
     /**
      * Returns access authority handler
      *
-     * @param  {Object} configurations
-     * @returns {Access|Service}
+     * @param {Object} configurations
+     * @returns {SecurityAccess}
      */
     getAccessHandler( configurations ) {
         return 'default' === configurations.strategy ? this.access : this._container.get( configurations.provider )
@@ -148,10 +145,10 @@ class Router extends Configurable {
     /**
      * Define route into express router
      *
-     * @param  {string} { route
-     * @param  {string} method
-     * @param  {Controller} controller
-     * @param  {Function} controllerMethod }
+     * @param {string} { route
+     * @param {string} method
+     * @param {Controller} controller
+     * @param {Function} controllerMethod }
      */
     defineRoute({ route, method, controller, controllerMethod }) {
         const router = this.scope
@@ -182,32 +179,10 @@ class Router extends Configurable {
         })
     }
 
-	/**
-	 * Add check token route
-	 *
-	 * @memberOf Authentication
-	 */
-	addCheckTokenRoute() {
-		/*
-		 * Verify token
-		 */
-		this.scope.use( async ( req, res, next ) => {
-			const request = this.getRequest( req )
-			const response = this.getResponse( res )
-			const authorized = await this.authorization.checkToken( request, response )
-
-			if ( authorized ) {
-				next()
-			} else {
-				response.unauthorized()
-			}
-		})
-	}
-
     /**
      * Get easy Request instance
      *
-     * @param {express.Request} req
+     * @param {Object} req
      * @returns {Request}
      */
     getRequest( req ) {
@@ -217,7 +192,7 @@ class Router extends Configurable {
     /**
      * Get easy Response instance
      *
-     * @param {express.Response} res
+     * @param {Object} res
      * @returns {Response}
      */
     getResponse( res ) {
@@ -227,7 +202,7 @@ class Router extends Configurable {
     /**
      * Get express router
      *
-     * @returns {express.Router}
+     * @returns {Object}
      */
     get scope() {
         return this._scope
@@ -237,6 +212,8 @@ class Router extends Configurable {
 	 * Get security access instance
 	 *
 	 * @readonly
+	 *
+	 * @returns {SecurityAccess}
 	 *
 	 * @memberOf Router
 	 */

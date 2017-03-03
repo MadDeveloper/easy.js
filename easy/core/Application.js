@@ -27,39 +27,52 @@ const Configurable = require( '../interfaces/Configurable' )
  */
 class Application extends Configurable {
     /**
-     * constructor
+     * @constructor
      */
     constructor() {
         super()
 
-        /*
-         * First, load all polyfills
-         */
         Polyfills.load()
 
-        this.kernel = new Kernel( this )
-        this.config = null
-        this.app = express()
+        this._kernel = new Kernel()
+        this._config = null
+        this._app = express()
     }
 
     /**
-     * configure - configure the application
+     * Configure the application
      *
      * @param {string} appRootPath
      */
     configure( appRootPath ) {
         this.kernel.configure( appRootPath )
-        this.config = Configuration.load( 'app' )
-        this.setEnvironment()
+        this._config = Configuration.load( 'app' )
+        this._setEnvironment()
         this.kernel.loadComponents()
     }
 
     /**
-     * configure node environment
+     * Start the application
+     */
+    async start() {
+        await this.startDatabases()
+        this._plugThirdPartyMiddlewares()
+        this._exposeRawBody()
+        this._plugAuthentication()
+        this.kernel.loadBundles()
+        this.router.addNotFoundRoute()
+        this._initializePassport()
+        this._bindRoutes()
+    }
+
+    /**
+     * Configure node environment
+	 *
+	 * @private
      *
      * @memberOf Application
      */
-    setEnvironment() {
+    _setEnvironment() {
         /*
          * API environement
          */
@@ -71,30 +84,18 @@ class Application extends Configurable {
     }
 
     /**
-     * start - start application
-     */
-    async start() {
-        await this.startDatabases()
-        this.plugThirdPartyMiddlewares()
-        this.exposeRawBody()
-        this.plugAuthentication()
-        this.kernel.loadBundles()
-        this.router.addNotFoundRoute()
-        this.initializePassport()
-        this.bindRouterToExpress()
-    }
-
-    /**
-     * Bind express router to express application
+     * Bind real router's routes to global route path
+	 *
+	 * @private
      *
      * @memberOf Application
      */
-    bindRouterToExpress() {
+    _bindRoutes() {
         this.app.use( '/', this.router.scope )
     }
 
     /**
-     * start all databases
+     * Start all databases
      *
      * @returns {Promise}
      *
@@ -105,9 +106,11 @@ class Application extends Configurable {
     }
 
     /**
-     * plugThirdPartyMiddlewares - plug third-party middlewares
+     * Plug third-party middlewares
+	 *
+	 * @private
      */
-    plugThirdPartyMiddlewares() {
+    _plugThirdPartyMiddlewares() {
         /*
          * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
          */
@@ -146,24 +149,28 @@ class Application extends Configurable {
             ) )
         }
 
-        this.plugGlobalsUserMiddlewares()
+        this._plugGlobalsUserMiddlewares()
     }
 
     /**
      * Plug globals user middlewares
+	 *
+	 * @private
      *
      * @memberOf Application
      */
-    plugGlobalsUserMiddlewares() {
+    _plugGlobalsUserMiddlewares() {
         const middlewares = Configuration.load( 'middlewares' )
 
         middlewares.forEach( middleware => this.app.use( middleware ) )
     }
 
     /**
-     * exposeRawBody - permit to retrieve rawBody
+     * Permit to retrieve rawBody in request
+	 *
+	 * @private
      */
-    exposeRawBody() {
+    _exposeRawBody() {
         this.app.use( ( req, res, next ) => {
             const method = req.method.toLowerCase()
             const contentType = req.headers[ 'content-type' ] || ''
@@ -184,9 +191,11 @@ class Application extends Configurable {
     }
 
     /**
-     * plugAuthentication - Plug authentication on application
+     * Plug authentication on application
+	 *
+	 * @private
      */
-    plugAuthentication() {
+    _plugAuthentication() {
         /*
 		 * Authentication management
 		 */
@@ -201,14 +210,16 @@ class Application extends Configurable {
     }
 
     /**
-     * initializePassport - initialize passport
+     * Initialize passport
+	 *
+	 * @private
      */
-    initializePassport() {
+    _initializePassport() {
         this.app.use( passport.initialize() )
     }
 
     /**
-     * getEnv - get node environment
+     * Get node environment
      *
      * @returns {string}
      */
@@ -217,7 +228,7 @@ class Application extends Configurable {
     }
 
     /**
-     * isDevEnv - check if we are in dev environment
+     * Check if we are in dev environment
      *
      * @returns {boolean}
      */
@@ -226,7 +237,7 @@ class Application extends Configurable {
     }
 
     /**
-     * isProdEnv - check if we are in prod environment
+     * Check if we are in prod environment
      *
      * @returns {boolean}
      */
@@ -234,10 +245,25 @@ class Application extends Configurable {
         return !this.isDevEnv()
     }
 
+	/**
+	 * Get the application kernel
+	 *
+	 * @readonly
+	 *
+	 * @returns {Kernel}
+	 *
+	 * @memberOf Application
+	 */
+	get kernel() {
+		return this._kernel
+	}
+
     /**
      * Get application router
      *
      * @readonly
+	 *
+	 * @returns {Router}
      *
      * @memberOf Application
      */
@@ -249,6 +275,8 @@ class Application extends Configurable {
      * Get application container
      *
      * @readonly
+	 *
+	 * @returns {Container}
      *
      * @memberOf Application
      */
@@ -260,6 +288,8 @@ class Application extends Configurable {
      * Get databases manager
      *
      * @readonly
+	 *
+	 * @returns {DatabasesManager}
      *
      * @memberOf Application
      */
@@ -271,12 +301,40 @@ class Application extends Configurable {
      * Get the application name
      *
      * @readonly
+	 *
+	 * @returns {string}
      *
      * @memberOf Application
      */
     get appName() {
         return this.config.app.name
     }
+
+	/**
+	 * Get real app under the hood
+	 *
+	 * @readonly
+	 *
+	 * @returns {Object}
+	 *
+	 * @memberOf Application
+	 */
+	get app() {
+		return this._app
+	}
+
+	/**
+	 * Get application configurations
+	 *
+	 * @readonly
+	 *
+	 * @returns {Object}
+	 *
+	 * @memberOf Application
+	 */
+	get config() {
+		return this._config
+	}
 }
 
 module.exports = Application

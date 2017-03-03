@@ -35,7 +35,7 @@ class Bundle {
      * @memberOf Bundle
      */
     load() {
-        const controllers = this.loadControllers()
+        const controllers = this._loadControllers()
 
         for( let route in this._indexModule.routes ) {
             const routeConfig = this._indexModule.routes[ route ]
@@ -43,17 +43,17 @@ class Bundle {
             /*
              * Security
              */
-            this.defineSecurity( routeConfig, 'all', route )
+            this._defineSecurity( routeConfig, 'all', route )
 
             /*
              * Middlewares
              */
-            this.defineMiddleware( routeConfig, 'all', controllers )
+            this._defineMiddleware( routeConfig, 'all', controllers )
 
             /*
              * Methods
              */
-            this.mapHttpMethods( routeConfig, route, controllers )
+            this._mapHttpMethods( routeConfig, route, controllers )
         }
     }
 
@@ -61,14 +61,16 @@ class Bundle {
      * Load bundle controllers
      *
      * @returns {Object}
+	 *
+	 * @private
      *
      * @memberOf Bundle
      */
-    loadControllers() {
+    _loadControllers() {
         let controllers = {}
 
         for( let controller in this._indexModule.controllers ) {
-            controllers[ controller ] = new this._indexModule.controllers[ controller ]( this.container )
+            controllers[ controller ] = new this._indexModule.controllers[ controller ]( this._container )
         }
 
         return controllers
@@ -80,16 +82,18 @@ class Bundle {
      * @param {Object} routeConfig
      * @param {string} [httpMethod='all']
      * @param {string} route
+	 *
+	 * @private
      *
      * @memberOf Bundle
      */
-    defineSecurity( routeConfig, httpMethod = 'all', route ) {
+    _defineSecurity( routeConfig, httpMethod = 'all', route ) {
         const analyzerSecurityConfig = new AnalyzerSecurityConfig( routeConfig )
 
         httpMethod = httpMethod.toLowerCase()
 
         if ( analyzerSecurityConfig.analyze() && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
-            this.router.defineSecurityRoute( route, httpMethod, routeConfig )
+            this._router.defineSecurityRoute( route, httpMethod, routeConfig )
         }
     }
 
@@ -99,16 +103,18 @@ class Bundle {
      * @param {Object} routeConfig
      * @param {string} [httpMethod='all']
      * @param {Object} controllers
+	 *
+	 * @private
      *
      * @memberOf Bundle
      */
-    defineMiddleware( routeConfig, httpMethod, controllers ) {
+    _defineMiddleware( routeConfig, httpMethod, controllers ) {
         const analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig( routeConfig )
 
         httpMethod = httpMethod.toLowerCase()
 
         if ( analyzerMiddlewaresConfig.analyze() && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
-            this.router.defineMiddlewaresRoutes( routeConfig, httpMethod, controllers )
+            this._router.defineMiddlewaresRoutes( routeConfig, httpMethod, controllers )
         }
     }
 
@@ -118,20 +124,22 @@ class Bundle {
      * @param {Object} routeConfig
      * @param {string} route
      * @param {Object} controllers
+	 *
+	 * @private
      *
      * @memberOf Bundle
      */
-    mapHttpMethods( routeConfig, route, controllers ) {
+    _mapHttpMethods( routeConfig, route, controllers ) {
         for ( let httpMethod in routeConfig ) {
             const configValue = routeConfig[ httpMethod ]
 
             if ( Http.methods.includes( httpMethod ) ) {
                 const [ controllerId, controllerMethod ] = configValue.controller.split( ':' )
 
-                this.defineSecurity( routeConfig[ httpMethod ], httpMethod, route )
-                this.defineMiddleware( routeConfig[ httpMethod ], httpMethod, controllers )
+                this._defineSecurity( routeConfig[ httpMethod ], httpMethod, route )
+                this._defineMiddleware( routeConfig[ httpMethod ], httpMethod, controllers )
 
-                this.router.defineRoute({
+                this._router.defineRoute({
                     route,
                     method: httpMethod,
                     controller: controllers[ controllerId ],
@@ -140,7 +148,7 @@ class Bundle {
             }
         }
 
-        this.router.defineMethodNotAllowedRoute( route )
+        this._router.defineMethodNotAllowedRoute( route )
     }
 
     /**
@@ -152,28 +160,6 @@ class Bundle {
      */
     get indexModule() {
         return this._indexModule
-    }
-
-    /**
-     * Get router
-     * 
-     * @readonly
-     * 
-     * @memberOf Bundle
-     */
-    get router() {
-        return this._router
-    }
-
-    /**
-     * Get container
-     * 
-     * @readonly
-     * 
-     * @memberOf Bundle
-     */
-    get container() {
-        return this._container
     }
 }
 

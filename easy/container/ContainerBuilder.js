@@ -11,6 +11,7 @@ const Container = require( './Container' )
 const Configurable = require( '../interfaces/Configurable' )
 const Configuration = require( '../core/Configuration' )
 const { isPlainObject } = require( 'lodash' )
+const path = require( 'path' )
 
 /**
  * @class ContainerBuilder
@@ -18,11 +19,11 @@ const { isPlainObject } = require( 'lodash' )
 class ContainerBuilder extends Configurable {
     /**
      * @constructor
+	 * @param {Object} dependenciesMapping
      */
-    constructor( application, dependenciesMapping ) {
+    constructor( dependenciesMapping ) {
         super()
 
-        this._application = application
         this._dependenciesMapping = dependenciesMapping || Configuration.load( 'services' )
         this._container = new Container()
         this._configurations = {}
@@ -76,7 +77,7 @@ class ContainerBuilder extends Configurable {
      */
     registerDependencies() {
         Reflect.ownKeys( this.dependenciesMapping ).forEach( name => {
-			const dependency = this.load( name, this.dependenciesMapping[ name ].path, name.includes( 'component.' ) )
+			const dependency = this.load( name, name.includes( 'component.' ) )
 
 			this.container.register( name, dependency )
 		})
@@ -104,15 +105,10 @@ class ContainerBuilder extends Configurable {
         const dependencies = []
 
         requestedDependencies.forEach( dependencyName => {
-            if ( 'easy.application' === dependencyName ) {
-                dependencies.push( this._application )
-            } else if ( 'easy.container' === dependencyName ) {
+            if ( 'easy.container' === dependencyName ) {
                 dependencies.push( this.container )
             } else {
-                dependencies.push(
-                    this.load( dependencyName,
-                    this.dependenciesMapping[ dependencyName ].path,
-                    dependencyName.includes( 'component.' ) ) )
+                dependencies.push( this.load( dependencyName, dependencyName.includes( 'component.' ) ) )
             }
         })
 
@@ -123,24 +119,23 @@ class ContainerBuilder extends Configurable {
      * Load a new instance of the dependency
      *
      * @param {string} name
-     * @param {string} path
      * @param {boolean} [isComponent=false]
      * @returns {Object}
      *
      * @throws {ReferenceError} if the dependency file path is not found
      */
-    load( name, path, isComponent = false ) {
+    load( name, isComponent = false ) {
         if ( this.isLoaded( name ) ) {
             return this.getLoaded( name )
         }
 
-        const dependencyFilePath = `${isComponent ? '' : `${this._application.kernel.path.root}/src/`}${this.dependenciesMapping[ name ].path}`
+        const dependencyFilePath = path.resolve( `${isComponent ? '' : `${path.resolve( './src' )}/`}${this.dependenciesMapping[ name ].path}` )
 		let dependencyClass
 
         try {
 			dependencyClass = require( dependencyFilePath )
         } catch ( error ) {
-            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error.message}` )
+            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error.stack}` )
         }
 
 		return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
