@@ -12,14 +12,14 @@
  */
 class Document {
     /**
-     * exists - check if path is a document
+     * Check if path is a document
      *
      * @returns {Promise}
      */
     exists() {}
 
     /**
-     * exists - check, in synchronous maner, if path is a document
+     * Check, in synchronous maner, if path is a document
      *
      * @returns {boolean}
      *
@@ -28,17 +28,17 @@ class Document {
     existsSync() {}
 
     /**
-     * read the document
+     * Read the document
      *
-     * @param {Object} options={encoding: 'utf8'}
+     * @param {Object} [options = {encoding: 'utf8'}]
      * @returns {Promise}
      */
     read( options = { encoding: 'utf8' }) {}
 
     /**
-     * read the document synchronously
+     * Read the document synchronously
      *
-     * @param {object} options={encoding: 'utf8'}
+     * @param {object} [options = {encoding: 'utf8'}]
      * @returns {any}
      *
      * @throws {Error} if directory path is invalid
@@ -46,15 +46,15 @@ class Document {
     readSync( options = { encoding: 'utf8' }) {}
 
     /**
-     * create - create the document at indicated path
+     * Create the document at indicated path
      *
-     * @param {number} options = {}
+     * @param {number} [options={}]
      * @returns {Promise}
      */
     create( options = {}) {}
 
     /**
-     * createSync - create, in synchronous maner, the document at indicated path
+     * Create, in synchronous maner, the document at indicated path
      *
      * @param {object} options = {}
      * @returns {boolean}
@@ -64,7 +64,7 @@ class Document {
     createSync( options = {}) {}
 
     /**
-     * delete - Delete the document
+     * Delete the document
      *
      * @returns {Promise}
      *
@@ -73,7 +73,7 @@ class Document {
     delete() {}
 
     /**
-     * deleteSync - Delete the document synchronously
+     * Delete the document synchronously
      *
      * @returns {boolean}
      *
@@ -84,7 +84,7 @@ class Document {
     deleteSync() {}
 
     /**
-     * rename - rename the document
+     * Rename the document
      *
      * @param {string} newPath
      * @returns {Promise}
@@ -94,7 +94,7 @@ class Document {
     rename( newPath ) {}
 
     /**
-     * renameSync - renamed the document synchronously
+     * Renamed the document synchronously
      *
      * @param {string} newPath
      * @returns {boolean}
@@ -106,7 +106,7 @@ class Document {
     renameSync( newPath ) {}
 
     /**
-     * move - move document at indicated path
+     * Move document at indicated path
      *
      * @param {Object} newPath
      * @returns {Promise}
@@ -116,7 +116,7 @@ class Document {
     move( newPath ) {}
 
     /**
-     * moveSync - move document at indicated path synchronously
+     * Move document at indicated path synchronously
      *
      * @param {Object} newPath
      * @returns {boolean}

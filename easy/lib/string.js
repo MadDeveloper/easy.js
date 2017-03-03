@@ -10,12 +10,11 @@
 const { deburr, snakeCase, kebabCase, camelCase, upperFirst, upperCase, trim } = require( 'lodash' )
 
 /**
- * strtr - replace string occurences (eq. strtr php), see: http://locutus.io/php/strings/strtr/
+ * Replace string occurences (eq. strtr php), see: http://locutus.io/php/strings/strtr/
  *
  * @param {string} str
- * @param {string|object} fromObj
- * @param {string|object} to
- *
+ * @param {string|Object} fromObj
+ * @param {string|Object} to
  * @returns {string}
  */
 function strtr ( str, fromObj, to ) {
@@ -83,10 +82,9 @@ function strtr ( str, fromObj, to ) {
 }
 
 /**
- * transformAsWord - remove all caracters which are not considered as regex word
+ * Remove all caracters which are not considered as regex word
  *
  * @param {string} str
- *
  * @returns {string}
  */
 function asWord( str ) {
@@ -94,10 +92,9 @@ function asWord( str ) {
 }
 
 /**
- * asBundleName - format string as bundle name
+ * Format string as bundle name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asBundleName( name ) {
@@ -105,10 +102,9 @@ function asBundleName( name ) {
 }
 
 /**
- * asFileName - format string as file name
+ * Format string as file name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asFileName( name ) {
@@ -116,10 +112,9 @@ function asFileName( name ) {
 }
 
 /**
- * asControllerFileName - format string as controller file name
+ * Format string as controller file name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asControllerFileName( name ) {
@@ -127,10 +122,9 @@ function asControllerFileName( name ) {
 }
 
 /**
- * asRepositoryFileName - format string as repository file name
+ * Format string as repository file name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asRepositoryFileName( name ) {
@@ -138,10 +132,9 @@ function asRepositoryFileName( name ) {
 }
 
 /**
- * asEntityFileName - format string as entity file name
+ * Format string as entity file name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asEntityFileName ( name ) {
@@ -149,7 +142,7 @@ function asEntityFileName ( name ) {
 }
 
 /**
- * asServiceFileName - format string as service file name
+ * Format string as service file name
  *
  * @param {string} name
  *
@@ -160,10 +153,9 @@ function asServiceFileName( name ) {
 }
 
 /**
- * asClassName - format string as class file name
+ * Format string as class file name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asClassName( name ) {
@@ -171,10 +163,9 @@ function asClassName( name ) {
 }
 
 /**
- * asControllerName - format string as controller name
+ * Format string as controller name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asControllerName( name ) {
@@ -182,10 +173,9 @@ function asControllerName( name ) {
 }
 
 /**
- * asRepositoryName - format string as repository name
+ * Format string as repository name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asRepositoryName( name ) {
@@ -193,10 +183,9 @@ function asRepositoryName( name ) {
 }
 
 /**
- * asEntityName - format string as entity name
+ * Format string as entity name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asEntityName( name ) {
@@ -204,10 +193,9 @@ function asEntityName( name ) {
 }
 
 /**
- * asServiceName - format string as service name
+ * Format string as service name
  *
  * @param {string} name
- *
  * @returns {string}
  */
 function asServiceName( name ) {
@@ -215,10 +203,9 @@ function asServiceName( name ) {
 }
 
 /**
- * asServiceFilePath - format string as service file path
+ * Format string as service file path
  *
  * @param {string} fileName
- *
  * @returns {string}
  */
 function asServiceFilePath( fileName ) {
@@ -226,7 +213,6 @@ function asServiceFilePath( fileName ) {
 }
 
 
-// exports
 module.exports.strtr = strtr
 module.exports.transform = {}
 module.exports.transform.asWord = asWord

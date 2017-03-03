@@ -20,15 +20,15 @@ class LogWriter extends Writer {
     /**
      * General log method
      *
-     * @param {string} fileName
-     * @param {string} message
-     * @param {object} context
+     * @param {string} file
+     * @param {string} [message='']
+     * @param {object} [context={}]
      * @returns {Promise}
      *
      * @throws {Error} if file path is incorrect or user doesn't have access rights
      */
-    async write( fileName, message, context ) {
-        const filePath = `${path.resolve( './logs' )}/${fileName}.log`
+    async write( file, message = '', context = {} ) {
+        const filePath = `${path.resolve( './logs' )}/${file}.log`
 
         try {
             const file = await new File( filePath )
@@ -42,7 +42,7 @@ class LogWriter extends Writer {
 
             return file.addContent( strtr( message, context ) ).write()
         } catch ( error ) {
-            throw new Error( `Impossible to writing on file ${fileName}.log (${filePath})\n${error.message}` )
+            throw new Error( `Impossible to writing on file ${file}.log (${filePath})\n${error.message}` )
         }
     }
 

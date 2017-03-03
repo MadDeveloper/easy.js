@@ -9,14 +9,12 @@
 
 /**
  * @class Configurable
- *
- * Act as an interface
  */
 class Configurable {
     /**
-     * configure - configure component
+     * Configure component
      *
-     * @param {any} options = {}
+     * @param {any} [options = {}]
      */
     configure( options = {} ) {}
 }

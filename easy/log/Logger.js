@@ -27,7 +27,7 @@
 class Logger {
     /**
      * @constructor
-     * @param  {Writer} writer
+     * @param {Writer} writer
      */
     constructor( writer ) {
         this._writer = writer
@@ -38,7 +38,7 @@ class Logger {
      * Use fatals.log
      *
      * @param {string} message
-     * @param {object} context
+     * @param {Object} context
      */
     async emergency( message = '', context = {}) {
         await this.writer.write( 'fatals', this._appendDate( message ), context )
@@ -52,7 +52,7 @@ class Logger {
      * Use fatals.log
      *
      * @param {string} message
-     * @param {object} context
+     * @param {Object} context
      */
     async alert( message = '', context = {}) {
         await this.writer.write( 'fatals', this._appendDate( message ), context )
@@ -65,7 +65,7 @@ class Logger {
      * Use errors.log
      *
      * @param {string} [message='']
-     * @param {object} [context={}]
+     * @param {Object} [context={}]
      */
     async critical( message = '', context = {}) {
         await this.writer.write( 'errors', this._appendDate( message ), context )
@@ -77,7 +77,7 @@ class Logger {
      * Use errors.log
      *
      * @param {string} [message='']
-     * @param {object} [context={}]
+     * @param {Object} [context={}]
      */
     async error( message = '', context = {}) {
         await this.writer.write( 'errors', this._appendDate( message ), context )
@@ -91,7 +91,7 @@ class Logger {
      * that are not necessarily wrong.
      *
      * @param {string} [message='']
-     * @param {object} [context={}]
+     * @param {Object} [context={}]
      */
     async warning( message = '', context = {}) {
         await this.writer.write( 'warn', this._appendDate( message ), context )
@@ -102,7 +102,7 @@ class Logger {
      * Use events.log
      *
      * @param {string} [message='']
-     * @param {object} [context={}]
+     * @param {Object} [context={}]
      */
     async notice( message, context ) {
         await this.writer.write( 'events', this._appendDate( message ), context )
@@ -115,7 +115,7 @@ class Logger {
      * Example: User logs in, SQL logs.
      *
      * @param {string} [message='']
-     * @param {object} [context={}]
+     * @param {Object} [context={}]
      */
     async info( message = '', context = {}) {
         await this.writer.write( 'events', message, context )
@@ -126,7 +126,7 @@ class Logger {
      * Use debugs.log
      *
      * @param {string} [message='']
-     * @param {object} [context={}]
+     * @param {Object} [context={}]
      */
     async debug( message = '', context = {}) {
         await this.writer.write( 'debugs', message, context )
@@ -137,7 +137,7 @@ class Logger {
      * Use std.log
      *
      * @param {string} [message='']
-     * @param {object} [context={}]
+     * @param {Object} [context={}]
      */
     async log( message = '', context = {}) {
         await this.writer.write( 'std', message, context )
@@ -149,6 +149,8 @@ class Logger {
      * @private
      * @param {string} message
      * @returns {string}
+     * 
+     * @private
      *
      * @memberOf Logger
      */
