@@ -18,7 +18,6 @@ const Directory = require( './Directory' )
 class File extends Document {
     /**
      * @constructor
-     *
      * @param {string} filePath=''
      * @param {string} content=''
      */
@@ -30,7 +29,7 @@ class File extends Document {
     }
 
     /**
-     * loadPathInfo - load all infos relative to the file path
+     * Load all infos relative to the file path
      *
      * @param {string} filePath
      *
@@ -48,7 +47,7 @@ class File extends Document {
     }
 
     /**
-     * exists - check if path is a file
+     * Check if the file path exists
      *
      * @returns {Promise}
      */
@@ -65,7 +64,7 @@ class File extends Document {
     }
 
     /**
-     * exists - check, in synchronous maner, if path is a file
+     * Check synchronously if the file path exists
      *
      * @returns {boolean}
      */
@@ -78,9 +77,9 @@ class File extends Document {
     }
 
     /**
-     * read
+     * Read the file content
      *
-     * @param {Object} options={encoding: 'utf8'}
+     * @param {Object} [options={encoding: 'utf8'}]
      * @returns {Promise}
      */
     read( options = { encoding: 'utf8' }) {
@@ -97,9 +96,9 @@ class File extends Document {
     }
 
     /**
-     * read the file content synchronously
+     * Read the file content synchronously
      *
-     * @param {object} options={encoding: 'utf8'}
+     * @param {Object} [options={encoding: 'utf8'}]
      * @returns {string}
      *
      * @throws {Error} if file path is invalid
@@ -115,7 +114,7 @@ class File extends Document {
     }
 
     /**
-     * create - create file at indicated path
+     * Create file at indicated path
      *
      * @param {number} options = { mode: 755, encoding: 'utf8' }
      * @returns {Promise}
@@ -128,9 +127,9 @@ class File extends Document {
     }
 
     /**
-     * createSync - create, in synchronous maner, directory at indicated path
+     * Create, in synchronous maner, directory at indicated path
      *
-     * @param {object} options = { mode: 755, encoding: 'utf8' }
+     * @param {Object} [options = { mode: 755, encoding: 'utf8' }]
      * @returns {boolean}
      *
      * @throws {Error} if file path is invalid
@@ -146,9 +145,9 @@ class File extends Document {
     }
 
     /**
-     * write - write in the file
+     * Write in the file
      *
-     * @param {number} options = { mode: 755, encoding: 'utf8' }
+     * @param {number} [options = { mode: 755, encoding: 'utf8' }]
      * @returns {Promise}
      */
     write( content = '', options = { mode: 755, encoding: 'utf8' }) {
@@ -172,9 +171,9 @@ class File extends Document {
     }
 
     /**
-     * writeSync - write in the file as synchronous maner
+     * Write in the file as synchronous maner
      *
-     * @param {number} options = { mode: 755, encoding: 'utf8' }
+     * @param {number} [options = { mode: 755, encoding: 'utf8' }]
      * @returns {boolean}
      *
      * @throws {Error} if file path is invalid
@@ -198,7 +197,7 @@ class File extends Document {
     }
 
     /**
-     * delete - Delete the file
+     * Delete the file
      *
      * @returns {Promise}
      *
@@ -217,7 +216,7 @@ class File extends Document {
     }
 
     /**
-     * deleteSync - Delete the file synchronously
+     * Delete the file synchronously
      *
      * @returns {boolean}
      *
@@ -236,7 +235,7 @@ class File extends Document {
     }
 
     /**
-     * rename - rename the file
+     * Rename the file
      *
      * @param {string} newName
      * @returns {Promise}
@@ -260,7 +259,7 @@ class File extends Document {
     }
 
     /**
-     * renameSync - rename the file synchronously
+     * Rename the file synchronously
      *
      * @param {string} newName
      * @returns {boolean}
@@ -283,7 +282,7 @@ class File extends Document {
     }
 
     /**
-     * move - move the file at indicated path
+     * Move the file at indicated path
      *
      * @param {Object} newPath
      * @returns {Promise}
@@ -295,7 +294,7 @@ class File extends Document {
     }
 
     /**
-     * moveSync - move the file at indicated path synchronously
+     * Move the file at indicated path synchronously
      *
      * @param {Object} newPath
      * @returns {boolean}
@@ -337,7 +336,7 @@ class File extends Document {
     }
 
     /**
-     * path - get the file path
+     * Get the file path
      *
      * @returns {string}
      *
@@ -348,7 +347,7 @@ class File extends Document {
     }
 
     /**
-     * path - set the file path
+     * Set the file path
      *
      * @param {string} newPath
      *
@@ -361,7 +360,7 @@ class File extends Document {
     }
 
     /**
-     * content - get the file content
+     * Get the file content
      *
      * @returns {string}
      *
@@ -372,7 +371,7 @@ class File extends Document {
     }
 
     /**
-     * content - set the file content
+     * Set the file content
      *
      * @param {string} content
      *

@@ -27,7 +27,7 @@ class LogWriter extends Writer {
      *
      * @throws {Error} if file path is incorrect or user doesn't have access rights
      */
-    async write( file, message = '', context = {} ) {
+    async write( file, message = '', context = {}) {
         const filePath = `${path.resolve( './logs' )}/${file}.log`
 
         try {
@@ -44,17 +44,6 @@ class LogWriter extends Writer {
         } catch ( error ) {
             throw new Error( `Impossible to writing on file ${file}.log (${filePath})\n${error.message}` )
         }
-    }
-
-    /**
-     * Get LogDirectoryManager
-     * 
-     * @readonly
-     * 
-     * @memberOf LogWriter
-     */
-    get logDirectoryManager() {
-        return this._logDirectoryManager
     }
 }
 

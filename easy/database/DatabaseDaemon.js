@@ -12,122 +12,124 @@
  */
 class DatabaseDaemon {
     /**
-     * constructor
+     * @constructor
      */
     constructor( logger ) {
-        this.managed = null
-        this.attemps = 0
-        this.interval = null
-        this.logger = logger
+        this._managed = null
+        this._attemps = 0
+        this._interval = null
+        this._logger = logger
     }
 
     /**
-     * attach - attach database to handle
+     * Attach database to handle
      *
-     * @param  {Database} database
+     * @param {Database} database
      * @returns {DatabaseDaemon}
      */
     attach( database ) {
-        this.managed = database
+        this._managed = database
 
         return this
     }
 
     /**
-     * manage - manage database attached
+     * Manage database attached
      */
     async manage() {
         const established = await this.verifyConnection()
 
         if ( established ) {
-            this.defineAsStarted()
+            this._defineAsStarted()
         } else {
-            this.defineAsStopped()
+            this._defineAsStopped()
         }
 
         return established
     }
 
     /**
-     * verifyConnection - verify if connection is established with database
+     * Verify if connection is established with database
      *
      * @returns {boolean}
      */
     async verifyConnection() {
         try {
-            const established = await this.managed.verifyConnectionHandler()
-
-            return !!established
+            return await this.managed.verifyConnectionHandler()
         } catch ( error ) {
             return false
         }
     }
 
     /**
-     * defineAsStarted - define database as started
+     * Define database as started
+	 *
+	 * @private
      */
-    defineAsStarted() {
+    _defineAsStarted() {
         this.stopIntervalTryingReconnect()
         this.startIntervalCheckConnection()
     }
 
     /**
-     * defineAsStopped - define database as stopped
+     * Define database as stopped
+	 *
+	 * @private
      */
-    defineAsStopped() {
+    _defineAsStopped() {
         this.managed.disconnect()
         this.stopIntervalCheckConnection()
         this.startIntervalTryingReconnect()
-        this.logger.critical( `The connection to the database "${this.managed.name}" has been lost` )
+        this._logger.critical( `The connection to the database "${this.managed.name}" has been lost` )
     }
 
     /**
-     * startIntervalCheckConnection - start interval to check database connection even if it started
+     * Start interval to check database connection even if it started
      */
     startIntervalCheckConnection() {
         if ( null === this.interval ) {
-            this.interval = setInterval( async () => {
+            this._interval = setInterval( async () => {
                 try {
                     const established = await this.verifyConnection()
 
                     if ( !established ) {
-                        this.defineAsStopped()
+                        this._defineAsStopped()
                     }
                 } catch ( error ) {
-                    this.defineAsStopped()
+                    this._defineAsStopped()
                 }
             }, this.managed.config.config.intervalToCheckConnection )
         }
     }
 
     /**
-     * stopIntervalCheckConnection - stop interval to check database connection even if it started
+     * Stop interval to check database connection even if it started
      */
     stopIntervalCheckConnection() {
         if ( null !== this.interval ) {
-            clearInterval( this.interval )
-            this.interval = null
+            clearInterval( this._interval )
+            this._interval = null
         }
     }
 
     /**
-     * startIntervalTryingReconnect - start interval to trying establish connection with the database
+     * Start interval to trying establish connection with the database
      */
     startIntervalTryingReconnect() {
         if ( null === this.interval ) {
-            this.attemps = 0
-            this.interval = setInterval( async () => {
+            this._attemps = 0
+            this._interval = setInterval( async () => {
                 if ( this.attemps < this.managed.config.config.maxAttempsReconnect ) {
                     try {
                         await this.managed.restart()
 
                         if ( this.managed.connected ) {
-                            this.defineAsStarted()
+                            this._defineAsStarted()
                         } else {
-                            this.attemps++
+                            this._attemps++
                         }
                     } catch ( error ) {
-                        this.attemps++
+                        this._attemps++
                     }
                 } else {
                     this.stopIntervalTryingReconnect()
@@ -137,14 +139,53 @@ class DatabaseDaemon {
     }
 
     /**
-     * stopIntervalTryingReconnect - stop interval to trying establish connection with the database
+     * Stop interval to trying establish connection with the database
      */
     stopIntervalTryingReconnect() {
         if ( null !== this.interval ) {
-            clearInterval( this.interval )
-            this.interval = null
+            clearInterval( this._interval )
+            this._interval = null
         }
     }
+
+	/**
+	 * Get the interval
+	 *
+	 * @returns {WindowTimers}
+	 *
+	 * @readonly
+	 *
+	 * @memberOf DatabaseDaemon
+	 */
+	get interval() {
+		return this._interval
+	}
+
+	/**
+	 * Get number attemps
+	 *
+	 * @returns {number}
+	 *
+	 * @readonly
+	 *
+	 * @memberOf DatabaseDaemon
+	 */
+	get attemps() {
+		return this._attemps
+	}
+
+	/**
+	 * Get database managed
+	 *
+	 * @returns {Database}
+	 *
+	 * @readonly
+	 *
+	 * @memberOf DatabaseDaemon
+	 */
+	get managed() {
+		return this._managed
+	}
 }
 
 module.exports = DatabaseDaemon

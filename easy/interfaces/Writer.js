@@ -17,9 +17,9 @@ class Writer {
      * @param {string} file
      * @param {string} [message='']
      * @param {Object} [context={}]
-     * @returns {any}
+     * @returns {Promise}
      */
-    async write( fileName, message = '', context = {} ) {}
+    async write( file, message = '', context = {}) {}
 }
 
 module.exports = Writer

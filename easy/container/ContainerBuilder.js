@@ -101,15 +101,15 @@ class ContainerBuilder extends Configurable {
             return []
         }
 
-        let dependencies = new Set()
+        const dependencies = []
 
         requestedDependencies.forEach( dependencyName => {
             if ( 'easy.application' === dependencyName ) {
-                dependencies.add( this._application )
+                dependencies.push( this._application )
             } else if ( 'easy.container' === dependencyName ) {
-                dependencies.add( this.container )
+                dependencies.push( this.container )
             } else {
-                dependencies.add(
+                dependencies.push(
                     this.load( dependencyName,
                     this.dependenciesMapping[ dependencyName ].path,
                     dependencyName.includes( 'component.' ) ) )

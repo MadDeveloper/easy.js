@@ -13,8 +13,8 @@
 class Repository {
     /**
      * @constructor
-     * @param  {bookshelf.Model} model
-     * @param  {EntityManager} em
+     * @param {bookshelf.Model} model
+     * @param {EntityManager} em
      */
     constructor( model, em ) {
         this.model = model
@@ -23,9 +23,9 @@ class Repository {
     }
 
     /**
-     * findAll - fetch all models
+     * Fetch all models
      *
-     * @param  {Object} options = {}
+     * @param {Object} [options = {}]
      * @returns {Promise}
      */
     findAll( options = {}) {
@@ -35,10 +35,10 @@ class Repository {
     }
 
     /**
-     * find - fetch model by id
+     * Fetch model by id
      *
-     * @param  {Number} id
-     * @param  {Object} options = {}
+     * @param {Number} id
+     * @param {Object} [options = {}]
      * @returns {Promise}
      */
     find( id, options = {}) {
@@ -46,14 +46,14 @@ class Repository {
     }
 
     /**
-     * save - save or update model if already exists
+     * Save or update the model if already exists
      *
-     * @param  {bookshelf.Model} model
-     * @param  {Object} params
-     * @param  {Object} options = {}
+     * @param {bookshelf.Model} model
+     * @param {Object} [params={}]
+     * @param {Object} [options={}]
      * @returns {Promise}
      */
-    save( model, params, options = {}) {
+    save( model, params = {}, options = {}) {
         return new Promise( ( resolve, reject ) => {
             this.database.transaction( t => {
                 options.transacting = t
@@ -77,14 +77,14 @@ class Repository {
     }
 
     /**
-     * patch - patch model
+     * Patch the model
      *
-     * @param  {bookshelf.Model} model
-     * @param  {Object} patch
-     * @param  {Object} options = {}
+     * @param {bookshelf.Model} model
+     * @param {Object} [patch={ path: '', value: null }]
+     * @param {Object} [options={}]
      * @returns {Promise}
      */
-    patch( model, patch, options = {}) {
+    patch( model, patch = { path: '', value: null }, options = {}) {
         return new Promise( ( resolve, reject ) => {
             let patchToApply = {}
             patchToApply[ patch.path.substring( 1 ) ] = patch.value
@@ -109,10 +109,10 @@ class Repository {
     }
 
     /**
-     * delete - delete model
+     * Delete the model
      *
-     * @param  {bookshelf.Model} model
-     * @param  {Object} options = {}
+     * @param {bookshelf.Model} model
+     * @param {Object} [options={}]
      * @returns {Promise}
      */
     delete( model, options = {}) {

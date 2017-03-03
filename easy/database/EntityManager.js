@@ -28,10 +28,10 @@ class EntityManager extends Configurable {
     }
 
     /**
-     * configure - configure entity manager
+     * Configure entity manager
      *
-     * @param  {string} bundlesPath
-     * @param  {Database} database
+     * @param {string} bundlesPath
+     * @param {Database} database
      */
     configure( bundlesPath, database ) {
         this._bundlesPath = bundlesPath
@@ -39,10 +39,10 @@ class EntityManager extends Configurable {
     }
 
     /**
-     * getRepository - get specific bundle repository (e.g. skeleton -> SkeletonRepository)
+     * Get specific bundle repository
      *
      * @param {string} repository
-     * @param {object} options = {}
+     * @param {Object} [options = {}]
      * @returns {Repository}
      */
     getRepository( repository, options = {}) {
@@ -51,7 +51,7 @@ class EntityManager extends Configurable {
         }
 
         if ( this.isCached( repository ) ) {
-            return this.getCache( repository, this.inCacheRepositories() )
+            return this.getCache( repository, this._cacheRepositoriesNamespace() )
         }
 
         let associatedModel = {}
@@ -60,13 +60,17 @@ class EntityManager extends Configurable {
             associatedModel = 'string' === typeof options.model ? this.getModel( options.model ) : options.model
         }
 
-        const repositoryClass = require( `${this.bundlesPath}/${repository}` )
+		try {
+			const repositoryClass = require( `${this.bundlesPath}/${repository}` )
 
-        return this.cache( new repositoryClass( associatedModel, this ), repository, this.inCacheRepositories() )
+			return this.cache( new repositoryClass( associatedModel, this ), repository, this._cacheRepositoriesNamespace() )
+		} catch ( error ) {
+			throw new Error( `The repository ${repository} cannot be loaded.\n${error.stack}` )
+		}
     }
 
     /**
-     * getModel - returns entity
+     * Returns the entity model
      *
      * @param {string} model
      * @returns {bookshelf.Model}
@@ -77,37 +81,45 @@ class EntityManager extends Configurable {
         }
 
         if ( this.isCached( model ) ) {
-            return this.getCache( model, this.inCacheModels() )
+            return this.getCache( model, this._cacheModelsNamespace() )
         }
 
-        const modelClass = require( `${this.bundlesPath}/${model}` )
+		try {
+			const modelClass = require( `${this.bundlesPath}/${model}` )
 
-        return this.cache( new modelClass( this ).build(), model, this.inCacheModels() )
+			return this.cache( new modelClass( this ).build(), model, this._cacheModelsNamespace() )
+		} catch ( error ) {
+			throw new Error( `The model ${model} cannot be loaded.\n${error.stack}` )
+		}
     }
 
     /**
-     * inCacheModels - returns cache repositories namespace
+     * Returns cache repositories namespace
      *
      * @returns {string}
+	 *
+	 * @private
      */
-    inCacheModels() {
+    _cacheModelsNamespace() {
         return 'repositories'
     }
 
     /**
-     * inCacheRepositories - returns cache models namespace
+     * Returns cache models namespace
      *
      * @returns {string}
+	 *
+	 * @private
      */
-    inCacheRepositories() {
+    _cacheRepositoriesNamespace() {
         return 'models'
     }
 
     /**
-     * isCached - check if an object is cached from a key id following a type
+     * Check if an object is cached from a key id following a type
      *
-     * @param  {string} key = ''
-     * @param  {string} type = 'models'
+     * @param {string} [key='']
+     * @param {string} [type='models']
      * @returns {boolean}
      */
     isCached( key = '', type = 'models' ) {
@@ -115,11 +127,11 @@ class EntityManager extends Configurable {
     }
 
     /**
-     * getCache - retrieve cached object by a key id following a type
+     * Retrieve cached object by a key id following a type
      *
-     * @param  {string} key = ''
-     * @param  {string} type = 'models'
-     * @returns {object}
+     * @param {string} [key='']
+     * @param {string} [type='models']
+     * @returns {Object}
      */
     getCache( key = '', type = 'models' ) {
         if ( this.isCached( key, type ) ) {
@@ -130,12 +142,12 @@ class EntityManager extends Configurable {
     }
 
     /**
-     * cache - cache an object with a key id into specific type
+     * Cache an object with a key id into specific type
      *
-     * @param  {object} object = {}
-     * @param  {string} key = ''
-     * @param  {string} type = 'models'
-     * @returns {object}
+     * @param {Object} [object={}]
+     * @param {string} [key='']
+     * @param {string} [type='models']
+     * @returns {Object}
      */
     cache( object = {}, key = '', type = 'models' ) {
         if ( this.cached.has( type ) ) {
@@ -148,10 +160,10 @@ class EntityManager extends Configurable {
     }
 
     /**
-     * uncache - uncache object referenced by a key id following a type
+     * Uncache object referenced by a key id following a type
      *
-     * @param  {string} key = ''
-     * @param  {string} type = 'models'
+     * @param {string} [key='']
+     * @param {string} [type='models']
      */
     uncache( key = '', type = 'models' ) {
         if ( this.cached.has( type ) ) {
@@ -160,7 +172,7 @@ class EntityManager extends Configurable {
     }
 
     /**
-     * get - bundles path
+     * Get bundles path
      *
      * @returns {string}
      */
@@ -169,7 +181,7 @@ class EntityManager extends Configurable {
     }
 
     /**
-     * get - get cached objects
+     * Get cached objects
      *
      * @returns {Map}
      */
@@ -178,7 +190,7 @@ class EntityManager extends Configurable {
     }
 
     /**
-     * get - database
+     * Get the database instance
      *
      * @returns {Database}
      */

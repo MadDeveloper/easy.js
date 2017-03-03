@@ -17,8 +17,7 @@ const Document = require( '../interfaces/Document' )
 class Directory extends Document {
     /**
      * @constructor
-     *
-     * @param {string} directoryPath=''
+     * @param {string} [directoryPath='']
      */
     constructor( directoryPath = '' ) {
         super()
@@ -27,7 +26,7 @@ class Directory extends Document {
     }
 
     /**
-     * loadPathInfo - load all infos relative to the directory path
+     * Load all infos relative to the directory path
      *
      * @param {string} directoryPath
      *
@@ -45,7 +44,7 @@ class Directory extends Document {
     }
 
     /**
-     * exists - check if path is a directory
+     * Check if path is a directory
      *
      * @returns {Promise}
      */
@@ -62,7 +61,7 @@ class Directory extends Document {
     }
 
     /**
-     * exists - check, in synchronous maner, if path is a directory
+     * Check, in synchronous maner, if path is a directory
      *
      * @returns {boolean}
      *
@@ -77,9 +76,9 @@ class Directory extends Document {
     }
 
     /**
-     * read directory documents
+     * Read directory documents
      *
-     * @param {Object} options={encoding: 'utf8'}
+     * @param {Object} [options={encoding: 'utf8'}]
      * @returns {Promise}
      */
     read( options = { encoding: 'utf8' }) {
@@ -95,10 +94,10 @@ class Directory extends Document {
     }
 
     /**
-     * read directory documents synchronously
+     * Read directory documents synchronously
      *
-     * @param {object} options={encoding: 'utf8'}
-     * @returns {Array}
+     * @param {Object} [options={encoding: 'utf8'}]
+     * @returns {string[]}
      *
      * @throws {Error} if directory path is invalid
      */
@@ -111,9 +110,9 @@ class Directory extends Document {
     }
 
     /**
-     * create - create directory at indicated path
+     * Create directory at indicated path
      *
-     * @param {object} options = { mode: 755 }
+     * @param {Object} [options = { mode: 755 }]
      * @returns {Promise}
      */
     create( options = { mode: 755 }) {
@@ -133,9 +132,9 @@ class Directory extends Document {
     }
 
     /**
-     * createSync - create, in synchronous maner, the directory at indicated path
+     * Create, in synchronous maner, the directory at indicated path
      *
-     * @param {object} options = { mode: 755 }
+     * @param {Object} [options = { mode: 755 }]
      * @returns {boolean}
      *
      * @throws {Error} if path is invalid
@@ -157,7 +156,7 @@ class Directory extends Document {
     }
 
     /**
-     * delete - Delete the directory
+     * Delete the directory
      *
      * @returns {Promise}
      *
@@ -182,7 +181,7 @@ class Directory extends Document {
     }
 
     /**
-     * deleteSync - Delete the directory synchronously
+     * Delete the directory synchronously
      *
      * @returns {boolean}
      *
@@ -229,7 +228,7 @@ class Directory extends Document {
     }
 
     /**
-     * rename - rename the directory
+     * Rename the directory
      *
      * @param {string} newName
      * @returns {Promise}
@@ -251,7 +250,7 @@ class Directory extends Document {
     }
 
     /**
-     * renameSync - rename the directory synchronously
+     * Rename the directory synchronously
      *
      * @param {string} newName
      * @returns {boolean}
@@ -271,7 +270,7 @@ class Directory extends Document {
     }
 
     /**
-     * move - move the directory at indicated path
+     * Move the directory at indicated path
      *
      * @param {Object} newPath
      * @returns {Promise}
@@ -283,7 +282,7 @@ class Directory extends Document {
     }
 
     /**
-     * moveSync - move the directory at indicated path synchronously
+     * Move the directory at indicated path synchronously
      *
      * @param {Object} newPath
      * @returns {boolean}
@@ -297,7 +296,7 @@ class Directory extends Document {
     }
 
     /**
-     * path - get the directory path
+     * Get the directory path
      *
      * @returns {string}
      *
@@ -308,7 +307,7 @@ class Directory extends Document {
     }
 
     /**
-     * path - set the directory path
+     * Set the directory path
      *
      * @param {string} newPath
      *

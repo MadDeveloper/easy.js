@@ -6,8 +6,8 @@
   "repository": "https://github.com/MadDeveloper/easy.js.git",
   "scripts": {
     "debug": "node debug src/server.js",
-    "start": "nodemon -w src src/server.js",
-    "start:forever": "node src/server.js > stdout.txt 2> stderr.txt &"
+    "start": "nodemon -w src node_modules/easy/server.js",
+    "start:forever": "node node_modules/easy/server.js > stdout.txt 2> stderr.txt &"
   },
   "keywords": [
     "node",

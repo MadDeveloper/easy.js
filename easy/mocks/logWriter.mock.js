@@ -9,7 +9,6 @@
 
 const logWriter = jasmine.createSpyObj( 'logWriter', [
     'write',
-    'logFileManager',
     'reset'
 ])
 

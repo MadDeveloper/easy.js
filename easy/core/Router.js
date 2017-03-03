@@ -27,9 +27,8 @@ class Router extends Configurable {
         super()
 
         this._scope = null
-        this._config = null
         this._container = null
-        this.access = new Access()
+        this._access = new Access()
     }
 
     /**
@@ -40,7 +39,6 @@ class Router extends Configurable {
     configure( container, router ) {
         this._container = container
         this._scope = router
-        this._config = Configuration.load( 'bundles/activated' )
     }
 
 	/**
@@ -235,14 +233,16 @@ class Router extends Configurable {
         return this._scope
     }
 
-    /**
-     * Get routes config
-     *
-     * @returns {Array}
-     */
-    get config() {
-        return this._config
-    }
+	/**
+	 * Get security access instance
+	 *
+	 * @readonly
+	 *
+	 * @memberOf Router
+	 */
+	get access() {
+		return this._access
+	}
 }
 
 module.exports = Router

@@ -14,9 +14,9 @@ class Configurable {
     /**
      * Configure component
      *
-     * @param {any} [options = {}]
+     * @param {Object} [options = {}]
      */
-    configure( options = {} ) {}
+    configure( options = {}) {}
 }
 
 module.exports = Configurable

@@ -26,7 +26,7 @@ class Container {
      *
      * @param  {string} name
      * @param  {any} dependency
-     * @returns {Cotnainer}
+     * @returns {Container}
      */
     register( name, dependency ) {
         this.shared.set( name, dependency )

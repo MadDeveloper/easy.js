@@ -15,7 +15,7 @@ class Http {
      * HTTP status
      *
      * @returns {Object}
-     * 
+     *
      * @static
      */
     static get status() {
@@ -89,7 +89,7 @@ class Http {
      * HTTP methods
      *
      * @returns {Array}
-     * 
+     *
      * @static
      */
     static get methods() {

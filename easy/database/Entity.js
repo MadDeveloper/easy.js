@@ -21,7 +21,7 @@ class Entity {
     }
 
     /**
-     * getModel - returns entity
+     * Returns entity
      *
      * @param {string} model
      * @returns {bookshelf.Model}

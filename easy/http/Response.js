@@ -599,7 +599,7 @@ class Response {
 
     /**
      * Get response scope
-     * 
+     *
      * @returns {Object}
      */
     get scope() {
@@ -609,11 +609,10 @@ class Response {
     /**
      * Set response scope
      *
-     * @param {Object@} scope
+     * @param {Object} scope
      */
     set scope( scope ) {
         this._scope = scope
-        return this
     }
 }
 

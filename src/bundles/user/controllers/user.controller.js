@@ -7,9 +7,9 @@ const { TokenManager } = require( 'easy/authentication' )
  */
 class UserController extends Controller {
     /**
-     * isRequestWellParameterized - verify if request contains valids params
+     * Verify if request contains valids params
      *
-     * @param  {Request} request
+     * @param {Request} request
      * @returns {boolean}
      */
     isRequestWellParameterized( request ) {
@@ -22,16 +22,15 @@ class UserController extends Controller {
     }
 
     /**
-     * userExists
+     * Check if the user exists
      *
-     * @param  {Request} request
-     * @param  {Response} response
+     * @param {Request} request
+     * @param {Response} response
      * @returns {boolean}
      */
     async userExists( request, response ) {
-        const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-
         try {
+        	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             const user = await userRepository.find( request.getRouteParameter( 'user_id' ) )
 
             if ( !user ) {
@@ -49,15 +48,15 @@ class UserController extends Controller {
     }
 
     /**
-     * getUsers - get all users from specific role
+     * Get all users from specific role
      *
-     * @param  {Request} request
-     * @param  {Response} response
+     * @param {Request} request
+     * @param {Response} response
      */
     async getUsers( request, response ) {
-        const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
 
         try {
+			const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             const users = await userRepository.findAll( request.retrieve( 'role' ) )
 
             response.ok( users )
@@ -67,18 +66,18 @@ class UserController extends Controller {
     }
 
     /**
-     * createUser - create new user
+     * Create new user
      *
-     * @param  {Request} request
-     * @param  {Response} response
+     * @param {Request} request
+     * @param {Response} response
      */
     async createUser( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
             const em = this.getEntityManager()
-            const User = em.getModel( 'user/entity/user' )
-            const userRepository = em.getRepository( 'user/entity/user.repository', { model: User })
 
             try {
+				const User = em.getModel( 'user/entity/user' )
+				const userRepository = em.getRepository( 'user/entity/user.repository', { model: User })
                 const user = await userRepository.save( new User(), request.getBody() )
 
                 user.unset( 'password' )
@@ -93,20 +92,20 @@ class UserController extends Controller {
     }
 
     /**
-     * getUser - get user by id
+     * Get user by id
      *
-     * @param  {Request} request
-     * @param  {Response} response
+     * @param {Request} request
+     * @param {Response} response
      */
     getUser( request, response ) {
         response.ok( request.retrieve( 'user' ) )
     }
 
     /**
-     * updateUser - update user
+     * Update user
      *
-     * @param  {Request} request
-     * @param  {Response} response
+     * @param {Request} request
+     * @param {Response} response
      */
     async updateUser( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
@@ -114,9 +113,8 @@ class UserController extends Controller {
                 request.store( 'role_id', request.getRouteParameter( 'role_id' ) )
             }
 
-            const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-
             try {
+            	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
                 const user = await userRepository.save( request.retrieve( 'user' ), request.getBody() )
 
                 response.ok( user )
@@ -129,10 +127,10 @@ class UserController extends Controller {
     }
 
     /**
-     * patchUser - patch user from specific properties
+     * Patch user from specific properties
      *
-     * @param  {Request} request
-     * @param  {Response} response
+     * @param {Request} request
+     * @param {Response} response
      */
     async patchUser( request, response ) {
         if ( request.getRawBody().length > 0 ) {
@@ -154,9 +152,8 @@ class UserController extends Controller {
                     ops.forEach( async patch => {
                         if ( 'replace' === patch.op ) {
                             if ( validPaths.includes( patch.path ) ) {
-                                const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-
                                 try {
+                                	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
                                     const user = await userRepository.patch( request.retrieve( 'user' ), patch )
 
                                     if ( ++currentPatch >= opsLength ) {
@@ -197,15 +194,14 @@ class UserController extends Controller {
     }
 
     /**
-     * deleteUser - delete user
+     * Delete user
      *
-     * @param  {Request} request
-     * @param  {Response} response
+     * @param {Request} request
+     * @param {Response} response
      */
     async deleteUser( request, response ) {
-        const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-
         try {
+        	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             await userRepository.delete( request.retrieve( 'user' ) )
 
             response.noContent()

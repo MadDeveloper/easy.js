@@ -16,6 +16,7 @@ const EventsEmitter = require( 'events' )
 class Database {
     /**
      * @constructor
+	 * @param {Object} config
      */
     constructor( config ) {
         this._config = config
@@ -24,7 +25,7 @@ class Database {
     }
 
     /**
-     * init - init attributes
+     * Init attributes
      */
     init() {
         this._instance = null
@@ -43,14 +44,14 @@ class Database {
     }
 
     /**
-     * load - load database config
+     * Load database config
      */
     async start() {
         await this.connect()
     }
 
     /**
-     * restart - restart database component
+     * Restart database component
      */
     async restart() {
         this.resetProperties()
@@ -58,7 +59,7 @@ class Database {
     }
 
     /**
-     * connect - connect database to instance
+     * Connect database to instance
      *
      * @throws {Error} if database connection cannot be established
      */
@@ -67,8 +68,8 @@ class Database {
         const oldConnected = this.connected
 
         this.instance = instance
-        this.connected = connected
-        this.connectionError = error
+        this._connected = connected
+        this._connectionError = error
 
         if ( this.connected !== oldConnected ) {
             this.stateEmitter.emit( 'change', this.connected )
@@ -94,9 +95,9 @@ class Database {
     }
 
     /**
-     * verifyConnectionHandler - handler called by daemon which indicates if database still available or not
+     * Handler called by daemon which indicates if database still available or not
      *
-     * @returns {Promise}
+     * @returns {Promise<boolean>}
      *
      * @memberOf Database
      */
@@ -127,7 +128,7 @@ class Database {
     }
 
     /**
-     * get - get database instance
+     * Get database instance
      *
      * @returns {Object}
      */
@@ -136,7 +137,7 @@ class Database {
     }
 
     /**
-     * set - set database instance
+     * Set database instance
      *
      * @param  {Object} instance
      * @returns {Object}
@@ -147,7 +148,7 @@ class Database {
     }
 
     /**
-     * get - get database connection state
+     * Get database connection state
      *
      * @returns {Object}
      */
@@ -156,18 +157,7 @@ class Database {
     }
 
     /**
-     * set - set database connection state
-     *
-     * @param  {boolean} connected
-     * @returns {Database}
-     */
-    set connected( connected ) {
-        this._connected = connected
-        return this
-    }
-
-    /**
-     * get - get database configurations
+     * Get database configurations
      *
      * @returns {Object}
      */
@@ -177,6 +167,8 @@ class Database {
 
     /**
      * Get connection error
+	 *
+	 * @returns {Error}
      *
      * @readonly
      *
@@ -184,19 +176,6 @@ class Database {
      */
     get connectionError() {
         return this._connectionError
-    }
-
-    /**
-     * Set connection error
-     *
-     * @returns {Database}
-     *
-     * @memberOf Database
-     */
-    set connectionError( error ) {
-        this._connectionError = error
-
-        return this
     }
 }
 

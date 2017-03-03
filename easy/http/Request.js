@@ -15,9 +15,8 @@ const Http = require( './Http' )
  */
 class Request {
     /**
-     * constructor
-     *
-     * @param  {express.Request} req
+     * @constructor
+     * @param {express.Request} req
      */
     constructor( req ) {
         this._scope = req
@@ -32,9 +31,9 @@ class Request {
     }
 
     /**
-     * methodIs - compare current http method and mehod argument
+     * Compare current http method and mehod argument
      *
-     * @param  {string} method
+     * @param {string} method
      * @returns {boolean}
      */
     methodIs( method ) {
@@ -42,7 +41,7 @@ class Request {
     }
 
     /**
-     * getMethod - get http method
+     * Get http method
      *
      * @returns {string}
      */
@@ -51,9 +50,9 @@ class Request {
     }
 
     /**
-     * getHeader - get specific http header
+     * Get specific http header
      *
-     * @param  {string} header
+     * @param {string} header
      * @returns {Object|string}
      */
     getHeader( header ) {
@@ -61,7 +60,7 @@ class Request {
     }
 
     /**
-     * getBody - get http body
+     * Get http body
      *
      * @returns {Object}
      */
@@ -70,7 +69,7 @@ class Request {
     }
 
     /**
-     * getRawBody - get raw http body
+     * Get raw http body
      *
      * @returns {string}
      */
@@ -79,7 +78,7 @@ class Request {
     }
 
     /**
-     * getParams - get http GET parameters
+     * Get http GET parameters
      *
      * @returns {Object}
      */
@@ -88,9 +87,9 @@ class Request {
     }
 
     /**
-     * getBodyParameter - get specific body parameter
+     * Get specific body parameter
      *
-     * @param  {string} key
+     * @param {string} key
      * @returns {any}
      */
     getBodyParameter( key ) {
@@ -98,19 +97,19 @@ class Request {
     }
 
     /**
-     * setBodyParameter - set body parameter
+     * Set body parameter
      *
-     * @param  {string} key
-     * @param  {any} value
+     * @param {string} key
+     * @param {any} value
      */
     setBodyParameter( key, value ) {
         this.getBody()[ key ] = value
     }
 
     /**
-     * getRouteParameter - get specific http GET parameter
+     * Get specific http GET parameter
      *
-     * @param  {string} param
+     * @param {string} param
      * @returns {any}
      */
     getRouteParameter( param ) {
@@ -118,9 +117,9 @@ class Request {
     }
 
     /**
-     * getProperty - returns direct property on express request object
+     * Returns direct property on express request object
      *
-     * @param  {string} property
+     * @param {string} property
      * @returns {any}
      */
     getProperty( property ) {
@@ -128,19 +127,19 @@ class Request {
     }
 
     /**
-     * getProperty - set direct property on express request object
+     * Set direct property on express request object
      *
-     * @param  {string} property
-     * @param  {any} value
+     * @param {string} property
+     * @param {any} value
      */
     setProperty( property, value ) {
         this.scope[ property ] = value
     }
 
     /**
-     * urlContains - check if current url contains path
+     * Check if current url contains path
      *
-     * @param  {Array|string} paths
+     * @param {Array|string} paths
      * @returns {boolean}
      */
     urlContains( paths ) {
@@ -156,10 +155,10 @@ class Request {
     }
 
     /**
-     * store - store property into application parameters
+     * Store property into application parameters
      *
-     * @param  {string} property
-     * @param  {any} value
+     * @param {string} property
+     * @param {any} value
      * @returns {Request}
      */
     store( property, value ) {
@@ -172,9 +171,9 @@ class Request {
     }
 
     /**
-     * find - find property stored with store() method
+     * Find property stored with store() method
      *
-     * @param  {string} property
+     * @param {string} property
      * @returns {any}
      */
     retrieve( property ) {
@@ -182,7 +181,7 @@ class Request {
     }
 
     /**
-     * getCookies - get cookies
+     * Get all cookies
      *
      * @returns {Object}
      */
@@ -191,7 +190,7 @@ class Request {
     }
 
     /**
-     * get - get express request object
+     * Get express request object
      *
      * @returns {express.Request}
      */
@@ -200,14 +199,12 @@ class Request {
     }
 
     /**
-     * set - set express request object
+     * Set express request object
      *
-     * @param  {Object} scope
-     * @returns {Request}
+     * @param {Object} scope
      */
     set scope( scope ) {
         this._scope = scope
-        return this
     }
 }
 

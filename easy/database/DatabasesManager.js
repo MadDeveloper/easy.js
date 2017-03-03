@@ -18,12 +18,11 @@ const Database = require( './Database' )
 class DatabasesManager {
     /**
      * @constructor
-     *
      * @param {Kernel} kernel
      * @param {Container} container
      */
     constructor( kernel, container ) {
-        this.config = Configuration.load( 'database' )
+        this._config = Configuration.load( 'database' )
         this.bundlesPath = kernel.path.bundles
         this.container = container
         this.baseComponentNamespace = 'component.entitymanager'
@@ -31,9 +30,7 @@ class DatabasesManager {
     }
 
     /**
-     * load all entity manager
-     *
-     * @returns {type} Description
+     * Load all entity manager
      */
     load() {
         if ( this.hasConfiguredDatabases() ) {
@@ -46,7 +43,7 @@ class DatabasesManager {
     }
 
     /**
-     * start manager
+     * Start manager
      */
     async start() {
         if ( this.hasConfiguredDatabases() ) {
@@ -73,7 +70,7 @@ class DatabasesManager {
                 await database.start()
             }
         } catch ( error ) {
-            await logger.critical( `An error occured when trying to connect to the database "${database.config.config.name}".\n${error.message}\n` )
+            await logger.critical( `An error occured when trying to connect to the database (${database.config.config.name}).\n${error.stack}` )
         } finally {
             if ( database && database.config.config.enableDaemon ) {
                 await this.daemonizeDatabase( database )
@@ -140,11 +137,10 @@ class DatabasesManager {
     }
 
     /**
-     * getEntityManager - Description
+     * Get entity manager
      *
-     * @param {string} [name=default] Description
-     *
-     * @returns {type} Description
+     * @param {string} [name='default']
+     * @returns {type}
      */
     getEntityManager( name = 'default' ) {
         let entityManagerNamespace = this.baseComponentNamespace
@@ -159,23 +155,37 @@ class DatabasesManager {
     /**
      * Daemonize database
      *
-     * @param {any} database
+     * @param {Database} database
      *
      * @memberOf DatabasesManager
      */
     async daemonizeDatabase( database ) {
         const daemon = new DatabaseDaemon( this.container.get( 'component.logger' ) )
+
         await daemon.attach( database ).manage()
     }
 
     /**
-     * hasConfiguredDatabases - check if databases are configured in configurations
+     * Check if databases are configured in configurations
      *
      * @returns {boolean}
      */
     hasConfiguredDatabases() {
         return Reflect.ownKeys( this.config ).length > 0
     }
+
+	/**
+	 * Get config
+	 *
+	 * @returns {Object}
+	 *
+	 * @readonly
+	 *
+	 * @memberOf DatabasesManager
+	 */
+	get config() {
+		return this._config
+	}
 }
 
 module.exports = DatabasesManager
