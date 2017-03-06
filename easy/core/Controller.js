@@ -15,6 +15,7 @@ const Configuration = require( './Configuration' )
 class Controller {
     /**
      * @constructor
+	 * @param {Container} container
      */
     constructor( container ) {
         this.container = container
@@ -23,10 +24,9 @@ class Controller {
     }
 
     /**
-     * getEntityManager - get entity manager
+     * Get an entity manager
      *
      * @param {string} [name=default]
-     *
      * @returns {EntityManager}
      */
     getEntityManager( name = 'default' ) {
@@ -34,7 +34,7 @@ class Controller {
     }
 
     /**
-     * getRepository - shortcut to get repository on default entity manager
+     * Get repository on default entity manager
      *
      * @param {string} repository
      * @returns {Repository}
@@ -46,13 +46,13 @@ class Controller {
     }
 
     /**
-     * verifyParams - verify params by type expected, can be optional
+     * Verify params by type expected
      *
-     * @param  {object} required
-     * @param  {object} params = {}
+     * @param {object} [required={}]
+     * @param {object} [params={}]
      * @returns {boolean}
      */
-    verifyParams( required, params = {}) {
+    verifyParams( required = {}, params = {}) {
         let verified = true
 
         for ( let requiredParam in required ) {
@@ -80,11 +80,10 @@ class Controller {
     }
 
     /**
-     * get - get container element from id
+     * Get container dependency by id
      *
      * @param {string} id
-     *
-     * @returns {Service|Component}
+     * @returns {Object}
      */
     get( id ) {
         return this.container.get( id )

@@ -2,10 +2,10 @@
   "name": "easy",
   "version": "0.1.0",
   "description": "Node.js framework for restful API",
-  "main": "src/server.js",
+  "main": "index.js",
   "repository": "https://github.com/MadDeveloper/easy.js.git",
   "scripts": {
-    "debug": "node debug src/server.js",
+    "debug": "node debug node_modules/easy/server.js",
     "start": "nodemon -w src node_modules/easy/server.js",
     "start:forever": "node node_modules/easy/server.js > stdout.txt 2> stderr.txt &"
   },
