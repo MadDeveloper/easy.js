@@ -11,6 +11,7 @@ const Configuration = require( '../core/Configuration' )
 const EntityManager = require( './EntityManager' )
 const DatabaseDaemon = require( './DatabaseDaemon' )
 const Database = require( './Database' )
+const path = require( 'path' )
 
 /**
  * @class DatabasesManager
@@ -18,12 +19,11 @@ const Database = require( './Database' )
 class DatabasesManager {
     /**
      * @constructor
-     * @param {Kernel} kernel
      * @param {Container} container
      */
-    constructor( kernel, container ) {
+    constructor( container ) {
         this._config = Configuration.load( 'database' )
-        this.bundlesPath = kernel.path.bundles
+        this.bundlesPath = path.resolve( './src/bundles' )
         this.container = container
         this.baseComponentNamespace = 'component.entitymanager'
         this.ems = new Map()

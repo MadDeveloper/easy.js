@@ -2,6 +2,9 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- dans cli, quand on exit en ayant déjà fait stop, on affiche pas Stopping the application, conserver state dans le code
+- reject with Error in all promises
+- revoir dans l'affichage des erreurs les stack, messages, ou error tout court
 - refactor Router, Application, Controller classes
 - TU easy
 - exporter role et user dans un repo externe, importable

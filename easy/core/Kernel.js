@@ -41,10 +41,10 @@ class Kernel extends Configurable {
      */
     configure( appRootPath ) {
         this.path.root = path.resolve( appRootPath )
-        this.path.src = `${this.path.root}/src`
-        this.path.bundles = `${this.path.src}/bundles`
-        this.path.config = `${this.path.src}/config`
-        this.path.services = `${this.path.src}/services`
+        this.path.src = path.resolve( `${this.path.root}/src` )
+        this.path.bundles = path.resolve( `${this.path.src}/bundles` )
+        this.path.config = path.resolve( `${this.path.src}/config` )
+        this.path.services = path.resolve( `${this.path.src}/services` )
 
 		process.chdir( this.path.root )
         Configuration.appPath = this.path.root
@@ -79,7 +79,7 @@ class Kernel extends Configurable {
         /*
          * Start and daemonize databases
          */
-        this._databasesManager = new DatabasesManager( this, containerBuilder.container )
+        this._databasesManager = new DatabasesManager( containerBuilder.container )
         this._databasesManager.load()
 
         /*

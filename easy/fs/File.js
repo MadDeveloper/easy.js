@@ -162,7 +162,7 @@ class File extends Document {
 
             fs.writeFile( this.path, this.content, options, error => {
                 if ( error ) {
-                    reject( `Error when trying to write to the file (${this.path}).\n${error.message}` )
+                    reject( new Error( `Error when trying to write to the file (${this.path}).\n${error.message}` ) )
                 } else {
                     resolve()
                 }
