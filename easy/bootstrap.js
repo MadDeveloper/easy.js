@@ -9,11 +9,9 @@
 
 require( 'use-strict' )
 
-/*
- * Import and configure main Easy class
- */
+const path = require( 'path' )
 const { Application } = require( 'easy/core' )
-const appRootPath = `${__dirname}/../`
+const appRootPath = path.resolve( `${process.argv[ 1 ]}/../../../` )
 const application = new Application()
 
 application.configure( appRootPath )
