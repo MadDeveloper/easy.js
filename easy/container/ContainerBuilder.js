@@ -129,16 +129,16 @@ class ContainerBuilder extends Configurable {
             return this.getLoaded( name )
         }
 
-        const dependencyFilePath = path.resolve( `${isComponent ? '' : `${path.resolve( './src' )}/`}${this.dependenciesMapping[ name ].path}` )
-		let dependencyClass
-
         try {
+			const dependencyFilePath = require.resolve( `${isComponent ? '' : `${path.resolve( './src' )}/`}${this.dependenciesMapping[ name ].path}` )
+			let dependencyClass
+
 			dependencyClass = require( dependencyFilePath )
+
+			return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
         } catch ( error ) {
             throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error.stack}` )
         }
-
-		return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
     }
 
     /**
