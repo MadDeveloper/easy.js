@@ -49,7 +49,7 @@ class Server {
                 throw new Error( 'Server cannot be started' )
             }
         } catch ( error ) {
-            Console.error({ title: 'Server cannot be started', message: error.stack, exit: 1 })
+            Console.error({ title: 'Server cannot be started', message: error.stack })
         }
     }
 
@@ -128,9 +128,7 @@ class Server {
             [ 'Environment', `${upperFirst( this.application.app.get( 'env' ) )}` ]
         )
 
-        Console.line()
-        Console.info( serverInfos )
-        Console.line()
+        Console.info( `\n${serverInfos}\n` )
     }
 
 	/**

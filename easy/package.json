@@ -32,8 +32,8 @@
   "dependencies": {
     "body-parser": "^1.16.0",
     "bookshelf": "^0.10.3",
+    "chalk": "^1.1.3",
     "cli-table2": "^0.2.0",
-    "colors": "^1.1.2",
     "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",

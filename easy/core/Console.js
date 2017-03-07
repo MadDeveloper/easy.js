@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-const colors = require( 'colors' )
+const chalk = require( 'chalk' )
 
 /**
  * @class Console
@@ -18,27 +18,21 @@ class Console {
      *
      * @param {string} { title
      * @param {string} [message='']
-     * @param {string} [consequence='']
-     * @param {number} [exit=false] }
+     * @param {string} [consequence=''] }
      */
-    static error({ title, message = '', consequence = '', exit = false }) {
+    static error({ title, message = '', consequence = '' }) {
         if ( title ) {
-            Console.line()
-            console.log( `${colors.red( `[${title}]` )}` )
+            console.log( `\n${chalk.red.bold.underline( title )}` )
 
             if ( message ) {
-                console.log( `${colors.red( message )}` )
+                console.log( `\n${chalk.red.bold( message )}` )
             }
 
             if ( consequence ) {
-                console.log( colors.white( consequence ) )
+                console.log( chalk.red.bold( `\n(Consequence) ${consequence}` ) )
             }
 
-            Console.line()
-
-            if ( Number.isInteger( exit ) ) {
-                process.exit( exit )
-            }
+            console.log( '\n' )
         } else {
             Console.error({ title: 'Missing required title argument to Console.error() method' })
         }
@@ -50,7 +44,7 @@ class Console {
      * @param {string} [message='']
      */
     static warn( message = '' ) {
-        console.log( `${colors.bgYellow( colors.black( `WARN: ${message.toString()}` ) )}` )
+        console.log( `${chalk.black.bgYellow( 'WARN:' )} ${message}` )
     }
 
     /**
@@ -59,7 +53,7 @@ class Console {
      * @param {string} [message='']
      */
     static info( message = '' ) {
-        console.log( `${colors.blue( message.toString() )}` )
+        console.log( chalk.blue.bold( message ) )
     }
 
     /**
@@ -69,11 +63,7 @@ class Console {
      * @param {number} [exit=false]
      */
     static success( message = '', exit = false ) {
-        console.log( `${colors.green( message.toString() )}` )
-
-        if ( exit ) {
-            process.exit()
-        }
+        console.log( chalk.green.bold( message ) )
     }
 
     /**
@@ -82,7 +72,7 @@ class Console {
      * @param  {string} [message='']
      */
     static log( message = '' ) {
-        console.log( `${message.toString()}` )
+        console.log( message )
     }
 
     /**
@@ -96,7 +86,7 @@ class Console {
         const lines = process.stdout.getWindowSize()[ 1 ]
 
         for( let i = 0; i < lines; i++ ) {
-            console.log( '\r\n' )
+            Console.line()
         }
     }
 

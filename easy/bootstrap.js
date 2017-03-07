@@ -10,10 +10,15 @@
 require( 'use-strict' )
 
 const path = require( 'path' )
-const { Application } = require( 'easy/core' )
+const { Application, Console } = require( 'easy/core' )
 const appRootPath = path.resolve( `${process.argv[ 1 ]}/../../../` )
 const application = new Application()
 
-application.configure( appRootPath )
+try {
+	application.configure( appRootPath )
+} catch ( error ) {
+	Console.error({ title: 'The configuration of the application has failed', message: error, consequence: 'Application stopped' })
+	process.exit()
+}
 
 module.exports = { application }

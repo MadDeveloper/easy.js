@@ -2,7 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- utiliser chalk plutôt que colors
 - la méthode defineMiddlewaresRoutes du Router doit être déchargé dans Bundle, ce n'est pas à lui de parser les config des middleware, il faut renommer la méthode en defineMiddlewareRoute
 - addNotFoundRoute dans le Router doit utiliser entièrement Response, donc il faut rajouter headersSent dans Response
 - refactor Router, Application, Controller classes
