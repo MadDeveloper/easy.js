@@ -19,7 +19,7 @@ class RoleController extends Controller {
     }
 
     /**
-     * Check if tthe role exists
+     * Check if the role exists
      *
      * @param {Request} request
      * @param {Response} response

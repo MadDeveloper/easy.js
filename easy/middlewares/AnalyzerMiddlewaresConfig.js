@@ -16,11 +16,11 @@ const Analyzer = require( '../interfaces/Analyzer' )
 class AnalyzerMiddlewaresConfig extends Analyzer {
     /**
      * Creates an instance of AnalyzerMiddlewaresConfig.
-     * @param {Object} [configurations={}] 
-     * 
+     * @param {Object} [configurations={}]
+     *
      * @memberOf AnalyzerMiddlewaresConfig
      */
-    constructor( configurations = {} ) {
+    constructor( configurations = {}) {
         super()
 
         this._configurations = configurations
@@ -28,7 +28,7 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
 
     /**
      * Check if middlewares configurations are correct
-     * 
+     *
      * @returns {boolean}
      */
     analyze() {
@@ -37,20 +37,11 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
 
     /**
      * Extract middlewares configurations from application configurations
-     * 
+     *
      * @returns {Object}
      */
     extractMiddlewaresConfig() {
         return this.configurations.middlewares
-    }
-
-    /**
-     * Extract single middleware configurations
-     *
-     * @returns {Object}
-     */
-    extractMiddleware() {
-        return this.configurations.controller
     }
 
     /**
@@ -59,7 +50,7 @@ class AnalyzerMiddlewaresConfig extends Analyzer {
      * @param {Object} configurations
      * @returns {Object}
      */
-    extractMiddlewareInfos( configurations ) {
+    extractMiddlewareConfig( configurations ) {
         return {
             type: 'use' in configurations ? 'use' : 'param',
             param: configurations.use || configurations.param,

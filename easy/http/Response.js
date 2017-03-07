@@ -15,11 +15,22 @@ const Http = require( './Http' )
 class Response {
     /**
      * @constructor
-     * @param {express.Response} res
+     * @param {Object} res
      */
     constructor( res ) {
         this._scope = res
     }
+
+	/**
+	 * Check if the headers are already sent
+	 *
+	 * @returns {boolean}
+	 *
+	 * @memberOf Response
+	 */
+	headersAlreadySent() {
+		return this.scope.headersSent
+	}
 
     /**
      * continue

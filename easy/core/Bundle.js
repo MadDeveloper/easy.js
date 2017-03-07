@@ -113,9 +113,13 @@ class Bundle {
 
         httpMethod = httpMethod.toLowerCase()
 
-        if ( analyzerMiddlewaresConfig.analyze() && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
-            this._router.defineMiddlewaresRoutes( routeConfig, httpMethod, controllers )
-        }
+		if ( analyzerMiddlewaresConfig.analyze() && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
+			const middlewaresConfig = analyzerMiddlewaresConfig.extractMiddlewaresConfig()
+
+			for ( let config in middlewaresConfig ) {
+				this._router.defineMiddlewareRoute( middlewaresConfig[ config ], httpMethod, controllers )
+			}
+		}
     }
 
     /**

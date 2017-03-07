@@ -51,49 +51,43 @@ class Router extends Configurable {
 	    router.use( ( req, res ) => {
 			const response = this.getResponse( res )
 
-	        if ( !res.headersSent ) {
+	        if ( !response.headersAlreadySent() ) {
 	            response.notFound()
 	        }
 	    })
 	}
 
     /**
-     * Define all middlewares into express router
+     * Define new middleware from configurations
      *
      * @param {Object} configurations
      * @param {string} httpMethod
      * @param {Controller[]} controllers
      */
-    defineMiddlewaresRoutes( configurations, httpMethod, controllers ) {
+    defineMiddlewareRoute( configurations, httpMethod, controllers ) {
         const router = this.scope
-        const analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig( configurations )
-        const middlewaresConfig = analyzerMiddlewaresConfig.extractMiddlewaresConfig()
-        let middleware = ''
-        let middlewareInfos = {}
+		const analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig( configurations )
+		const middlewareInfos = analyzerMiddlewaresConfig.extractMiddlewareConfig( configurations )
+
         httpMethod = httpMethod.toLowerCase()
 
-        for ( let config in middlewaresConfig ) {
-            config = middlewaresConfig[ config ]
-            middlewareInfos = analyzerMiddlewaresConfig.extractMiddlewareInfos( config )
+		const [ controllerId, controllerMethod ] = middlewareInfos.controller.split( ':' )
+		const controller = controllers[ controllerId ]
 
-            const [ controllerId, controllerMethod ] = middlewareInfos.controller.split( ':' )
-            const controller = controllers[ controllerId ]
+		router[ middlewareInfos.type ]( middlewareInfos.param, async ( req, res, next ) => {
+			const request = this.getRequest( req )
 
-            router[ middlewareInfos.type ]( middlewareInfos.param, async ( req, res, next ) => {
-                const request = this.getRequest( req )
+			if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
+				const response = this.getResponse( res )
+				const authorized = await controller[ controllerMethod ]( request, response )
 
-                if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
-                    const response = this.getResponse( res )
-                    const authorized = await controller[ controllerMethod ]( request, response )
-
-                    if ( authorized ) {
-                        next()
-                    }
-                } else {
-                    next()
-                }
-            })
-        }
+				if ( authorized ) {
+					next()
+				}
+			} else {
+				next()
+			}
+		})
     }
 
     /**
