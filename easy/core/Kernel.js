@@ -31,7 +31,7 @@ class Kernel extends Configurable {
         this._databasesManager = null
 		this._router = null
         this._container = null
-		this._logDirectoryManager = new LogDirectoryManager()
+		this._logDirectoryManager = null
     }
 
     /**
@@ -41,14 +41,15 @@ class Kernel extends Configurable {
      */
     configure( appRootPath ) {
         this.path.root = path.resolve( appRootPath )
-        this.path.bin = `${this.path.root}/bin`
         this.path.src = `${this.path.root}/src`
         this.path.bundles = `${this.path.src}/bundles`
         this.path.config = `${this.path.src}/config`
         this.path.services = `${this.path.src}/services`
 
+		process.chdir( this.path.root )
         Configuration.appPath = this.path.root
 
+		this._logDirectoryManager = new LogDirectoryManager()
 		this.logDirectoryManager.createLogDirectoryIfNotExists()
     }
 

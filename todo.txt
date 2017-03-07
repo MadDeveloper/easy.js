@@ -2,7 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- la méthode defineMiddlewaresRoutes du Router doit être déchargé dans Bundle, ce n'est pas à lui de parser les config des middleware, il faut renommer la méthode en defineMiddlewareRoute
 - refactor Router, Application, Controller classes
 - TU easy
 - exporter role et user dans un repo externe, importable
