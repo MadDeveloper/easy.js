@@ -85,7 +85,7 @@ class Directory extends Document {
         return new Promise( ( resolve, reject ) => {
             fs.readdir( this.path, options, async ( error, documents ) => {
                 if ( error ) {
-                    reject( `Error when trying to read the directory (${this.path}).\n${error.message}` )
+                    reject( new Error( `Error when trying to read the directory (${this.path}).\n${error.message}` ) )
                 } else {
                     resolve( documents )
                 }
@@ -123,7 +123,7 @@ class Directory extends Document {
 
             fs.mkdir( this.path, options, error => {
                 if ( error ) {
-                    reject( `Error when trying to create the directory (${this.path}).\n${error.message}` )
+                    reject( new Error( `Error when trying to create the directory (${this.path}).\n${error.message}` ) )
                 } else {
                     resolve()
                 }
@@ -169,13 +169,13 @@ class Directory extends Document {
 
                 fs.rmdir( this.path, error => {
                     if ( error ) {
-                        reject( `Error when trying to delete the directory (${this.path}).\n${error.message}` )
+                        reject( new Error( `Error when trying to delete the directory (${this.path}).\n${error.message}` ) )
                     } else {
                         resolve()
                     }
                 })
             } catch ( error ) {
-                reject( `Error when trying to delete directory (${this.path}).\n${error.message}` )
+                reject( new Error( `Error when trying to delete directory (${this.path}).\n${error.message}` ) )
             }
         })
     }
@@ -239,7 +239,7 @@ class Directory extends Document {
         return new Promise( ( resolve, reject ) => {
             fs.rename( this.path, `${dir}/${newName}`, error => {
                 if ( error ) {
-                    reject( `Error when trying to rename the directory (${this.path}).\n${error.message}` )
+                    reject( new Error( `Error when trying to rename the directory (${this.path}).\n${error.message}` ) )
                 } else {
                     resolve()
                 }

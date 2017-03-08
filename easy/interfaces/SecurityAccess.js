@@ -14,10 +14,10 @@ class SecurityAccess {
     /**
      * Check if user is authorized to access to the route requested
      *
-     * @param  {Object} { configurations
-     * @param  {Request} request
-     * @param  {Response} response
-     * @param  {Container} container }
+     * @param {Object} { configurations
+     * @param {Request} request
+     * @param {Response} response
+     * @param {Container} container }
      * @returns {boolean}
      */
     async authorized({ configurations, request, response, container }) {}

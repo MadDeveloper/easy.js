@@ -33,7 +33,7 @@ class ContainerBuilder extends Configurable {
     /**
      * Configure container builder
      *
-     * @param  {object} options = {}
+     * @param {object} options = {}
      * @returns {ContainerBuilder}
      */
     configure( options = {}) {
@@ -86,7 +86,7 @@ class ContainerBuilder extends Configurable {
     /**
      * Inject dependencies into the dependency requested
      *
-     * @param  {string} dependency
+     * @param {string} dependency
      * @returns {Array}
      */
     injectDependencies( dependency ) {
@@ -137,7 +137,7 @@ class ContainerBuilder extends Configurable {
 
 			return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
         } catch ( error ) {
-            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error.stack}` )
+            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error}` )
         }
     }
 
@@ -154,7 +154,7 @@ class ContainerBuilder extends Configurable {
     /**
      * Get already loaded dependency
      *
-     * @param  {string} name
+     * @param {string} name
      * @returns {object}
      */
     getLoaded( name ) {
@@ -164,8 +164,8 @@ class ContainerBuilder extends Configurable {
     /**
      * Cache a dependency
      *
-     * @param  {string} name
-     * @param  {object} dependency
+     * @param {string} name
+     * @param {object} dependency
      * @returns {object}
      */
     cache( name, dependency ) {

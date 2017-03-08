@@ -9,7 +9,6 @@
 
 const passportLocal = require( 'passport-local' )
 const Configuration = require( '../core/Configuration' )
-const Controller = require( '../core/Controller' )
 const Configurable = require( '../interfaces/Configurable' )
 const TokenManager = require( './TokenManager' )
 const LocalStrategy = passportLocal.Strategy
@@ -20,24 +19,25 @@ const LocalStrategy = passportLocal.Strategy
  */
 class Authentication extends Configurable {
 	/**
-	 * constructor
-	 *
-	 * @param  {Container} router
-	 * @param  {Passport} passport
+	 * @constructor
+	 * @param {Container} router
+	 * @param {Passport} passport
 	 */
 	constructor( container, passport ) {
 		super()
 
-		this._config = Configuration.load( 'authentication' )
+		this._config = {}
 		this._container = container
 		this._passport = passport
 		this._router = container.get( 'component.router' )
 	}
 
 	/**
-	 * configure - init auth strategies
+	 * Configure auth strategies
 	 */
 	configure() {
+		this._config = Configuration.load( 'authentication' )
+
 		if ( this.useCustom() ) {
 			/*
 			 * Custom authentication process
@@ -53,7 +53,7 @@ class Authentication extends Configurable {
 
 
 	 /**
-	  * initCustomStrategy - init custom strategy
+	  * Init custom strategy
 	  */
 	initCustomStrategy() {
 		const customProvider = this._container.get( this.config.service )
@@ -67,19 +67,21 @@ class Authentication extends Configurable {
 	}
 
 	/**
-	 * initLocalStrategy - init local strategy
+	 * Init local strategy
 	 */
 	initLocalStrategy() {
-		this.defineLoginRoute()
-		this.defineLocalStrategy()
+		this._defineLoginRoute()
+		this._defineLocalStrategy()
 	}
 
 	/**
 	 * Define the default login route
 	 *
+	 * @private
+	 *
 	 * @memberOf Authentication
 	 */
-	defineLoginRoute() {
+	_defineLoginRoute() {
 		this._router.scope.post( this.config.route, this._passport.authenticate( 'local', { session: false }), ( req, res ) => {
 			const request = this._router.getRequest( req )
 			const response = this._router.getResponse( res )
@@ -94,9 +96,11 @@ class Authentication extends Configurable {
 	/**
 	 * Define local strategy behaviour
 	 *
+	 * @private
+	 *
 	 * @memberOf Authentication
 	 */
-	defineLocalStrategy() {
+	_defineLocalStrategy() {
 		const em = this._container.get( 'component.entitymanager' )
 		this._userRepository = em.getRepository( this.config.repository, { model: this.config.model })
 
@@ -123,7 +127,7 @@ class Authentication extends Configurable {
 	}
 
 	/**
-	 * useCustom - check if we use custom authentication
+	 * Check if user use custom authentication
 	 *
 	 * @returns {boolean}
 	 */
@@ -132,7 +136,7 @@ class Authentication extends Configurable {
 	}
 
 	/**
-	 * get - authentication config
+	 * Get authentication configurations
 	 *
 	 * @returns {Object}
 	 */

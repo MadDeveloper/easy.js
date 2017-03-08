@@ -69,7 +69,7 @@ class Console {
     /**
      * Display sample message in console
      *
-     * @param  {string} [message='']
+     * @param {string} [message='']
      */
     static log( message = '' ) {
         console.log( message )

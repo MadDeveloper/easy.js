@@ -86,7 +86,7 @@ class File extends Document {
         return new Promise( ( resolve, reject ) => {
             fs.readFile( this.path, options, ( error, data ) => {
                 if ( error ) {
-                    reject( `Error when trying to read the file (${this.path}).\n${error.message}` )
+                    reject( new Error( `Error when trying to read the file (${this.path}).\n${error.message}` ) )
                 } else {
                     this.content = data
                     resolve( data )
@@ -207,7 +207,7 @@ class File extends Document {
         return new Promise( ( resolve, reject ) => {
             fs.unlink( this.path, error => {
                 if ( error ) {
-                    reject( `Error when trying to delete the file (${this.path}).\n${error.message}` )
+                    reject( new Error( `Error when trying to delete the file (${this.path}).\n${error.message}` ) )
                 } else {
                     resolve()
                 }
@@ -248,7 +248,7 @@ class File extends Document {
 
             fs.rename( this.path, newPath, error => {
                 if ( error ) {
-                    reject( `Error when trying to rename the file (${this.path}).\n${error.message}` )
+                    reject( new Error( `Error when trying to rename the file (${this.path}).\n${error.message}` ) )
                 } else {
                     resolve()
                 }

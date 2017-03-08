@@ -42,7 +42,7 @@ class LogWriter extends Writer {
 
             return file.addContent( strtr( message, context ) ).write()
         } catch ( error ) {
-            throw new Error( `Impossible to writing on file ${fileName}.log (${filePath})\n${error.stack}` )
+            throw new Error( `Impossible to writing on file ${fileName}.log (${filePath})\n${error}` )
         }
     }
 }

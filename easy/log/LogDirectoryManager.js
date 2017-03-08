@@ -39,7 +39,7 @@ class LogDirectoryManager {
                 directory.createSync()
             }
         } catch ( error ) {
-            throw new ReferenceError( `An error occured while trying to create logs directory (${this.logDirectoryPath}).\n${error.stack}` )
+            throw new ReferenceError( `An error occured while trying to create logs directory (${this.logDirectoryPath}).\n${error}` )
         }
     }
 

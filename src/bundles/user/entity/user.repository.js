@@ -8,7 +8,7 @@ class UserRepository extends Repository {
     /**
      * findAll - fetch all users from role
      *
-     * @param  {Role} role
+     * @param {Role} role
      * @returns {Promise}
      */
     findAll( role ) {
@@ -22,8 +22,8 @@ class UserRepository extends Repository {
     /**
      * find - fetch user by id or email
      *
-     * @param  {Object} byParam
-     * @param  {Object} options = {}
+     * @param {Object} byParam
+     * @param {Object} options = {}
      * @returns {Promise}
      */
     find( byParam, options = {}) {

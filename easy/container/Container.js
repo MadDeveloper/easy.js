@@ -15,17 +15,14 @@ class Container {
      * @constructor
      */
     constructor() {
-        /*
-         * Dependencies
-         */
         this._shared = new Map()
     }
 
     /**
-     * register - register dependency
+     * Register a new dependency
      *
-     * @param  {string} name
-     * @param  {any} dependency
+     * @param {string} name
+     * @param {any} dependency
      * @returns {Container}
      */
     register( name, dependency ) {
@@ -35,9 +32,9 @@ class Container {
     }
 
     /**
-     * get - gets dependency by name
+     * Get a dependency by name
      *
-     * @param  {string} name
+     * @param {string} name
      * @returns {Service|Component|undefined}
      */
     get( name ) {
@@ -45,7 +42,7 @@ class Container {
     }
 
     /**
-     * get - services loaded
+     * Get all dependencies loaded
      *
      * @returns {Map}
      */

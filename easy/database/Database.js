@@ -139,7 +139,7 @@ class Database {
     /**
      * Set database instance
      *
-     * @param  {Object} instance
+     * @param {Object} instance
      * @returns {Object}
      */
     set instance( instance ) {

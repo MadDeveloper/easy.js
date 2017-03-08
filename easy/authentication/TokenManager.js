@@ -17,31 +17,43 @@ let config = null
  */
 class TokenManager {
 	/**
-	 * sign - sign new token
+	 * Sign new token
 	 *
 	 * @param {string} content
 	 * @returns {string}
+	 *
+	 * @static
 	 */
 	static sign( content ) {
 		return jwt.sign( content, TokenManager.config.secret, { expiresIn: TokenManager.config.duration })
 	}
 
 	/**
-	 * verify - verify token validity
+	 * Verify token validity
 	 *
-	 * @param  {string} token
+	 * @param {string} token
 	 * @returns {Promise}
+	 *
+	 * @static
 	 */
 	static verify( token ) {
 		return new Promise( ( resolve, reject ) => {
-			jwt.verify( token, TokenManager.config.secret, ( error, decoded ) => error ? reject( error ) : resolve( decoded ) )
+			jwt.verify( token, TokenManager.config.secret, ( error, decoded ) => {
+				if ( error ) {
+					resolve({ error })
+				} else {
+					resolve({ decoded })
+				}
+			})
 		})
 	}
 
 	/**
-	 * getConfig - get token (jwt) config
+	 * Get jwt configurations
 	 *
 	 * @returns {Object}
+	 *
+	 * @static
 	 */
 	static get config() {
 		if ( null === config ) {

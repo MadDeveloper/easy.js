@@ -14,30 +14,32 @@ const TokenManager = require( './TokenManager' )
  */
 class Authorization {
 	/**
-	 * checkToken - check if user is logged with his token
+	 * Check if user is logged with his token
 	 *
-	 * @param  {express.Request} req
-	 * @param  {express.Response} res
+	 * @param {express.Request} req
+	 * @param {express.Response} res
 	 * @returns {boolean}
+	 *
+	 * @throws {Error} if token validation failed
 	 */
 	async checkToken( request, response ) {
 		const token	= request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.getHeader( 'x-access-token' )
 
 		if ( token ) {
 			try {
-				const decoded = await TokenManager.verify( token )
+				const tokenValidation = await TokenManager.verify( token )
 
-				if ( !decoded ) {
+				if ( tokenValidation.error ) {
 					return false
 				}
 
 				request
 					.store( 'token', token )
-					.store( 'user', decoded )
+					.store( 'user', tokenValidation.decoded )
 
 				return true
 			} catch ( error ) {
-				return false
+				throw new Error( `Check token has failed.\n${error}` )
 			}
 		} else {
 			return false

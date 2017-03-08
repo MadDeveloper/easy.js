@@ -65,7 +65,7 @@ class EntityManager extends Configurable {
 
 			return this.cache( new repositoryClass( associatedModel, this ), repository, this._cacheRepositoriesNamespace() )
 		} catch ( error ) {
-			throw new Error( `The repository ${repository} cannot be loaded.\n${error.stack}` )
+			throw new Error( `The repository ${repository} cannot be loaded.\n${error}` )
 		}
     }
 
@@ -89,7 +89,7 @@ class EntityManager extends Configurable {
 
 			return this.cache( new modelClass( this ).build(), model, this._cacheModelsNamespace() )
 		} catch ( error ) {
-			throw new Error( `The model ${model} cannot be loaded.\n${error.stack}` )
+			throw new Error( `The model ${model} cannot be loaded.\n${error}` )
 		}
     }
 

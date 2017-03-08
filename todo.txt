@@ -2,9 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- dans cli, quand on exit en ayant déjà fait stop, on affiche pas Stopping the application, conserver state dans le code
-- reject with Error in all promises
-- revoir dans l'affichage des erreurs les stack, messages, ou error tout court
+- créer une classe Route pour refactorer le Router
 - refactor Router, Application, Controller classes
 - TU easy
 - exporter role et user dans un repo externe, importable
@@ -16,7 +14,7 @@
 ---------|  LATER  |---------
 -----------------------------
 
-- créer une classe Route pour refactorer le Router
+- gérer soit même la partie express
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de tout lier en promise pour les patchs
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
 - créer une classe Cache qui pourra être instanciée dans n'importe quelle autre classe afin de pouvoir gérer son cache

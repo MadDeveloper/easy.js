@@ -33,15 +33,15 @@ class Access extends SecurityAccess {
     /**
      * Check if user is authorized to access to the route requested
      *
-     * @param  {Object} { configurations
-     * @param  {Request} request
-     * @param  {Response} response }
+     * @param {Object} { configurations
+     * @param {Request} request
+     * @param {Response} response }
      * @returns {boolean}
      */
     async authorized({ configurations, request, response }) {
-        const tokenValidated = await this.authorization.checkToken( request, response )
+        const tokenValidation = await this.authorization.checkToken( request, response )
 
-        if ( !tokenValidated ) {
+        if ( !tokenValidation ) {
             response.unauthorized()
 
             return false
