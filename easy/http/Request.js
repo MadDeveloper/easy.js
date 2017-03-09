@@ -161,7 +161,7 @@ class Request {
      * @param {any} value
      * @returns {Request}
      */
-    store( property, value ) {
+    set( property, value ) {
         /*
          * Defining or redefine property in app cache scope, stored in request
          */
@@ -176,7 +176,7 @@ class Request {
      * @param {string} property
      * @returns {any}
      */
-    retrieve( property ) {
+    get( property ) {
         return this.scope[ this._applicationCacheScope ][ property ]
     }
 

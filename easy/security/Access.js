@@ -9,7 +9,7 @@
 
 const Configuration = require( '../core/Configuration' )
 const SecurityAccess = require( '../interfaces/SecurityAccess' )
-const Authorization = require( '../authentication/Authorization' )
+const TokenManager = require( '../authentication/TokenManager' )
 
 /**
  * @class Access
@@ -20,15 +20,27 @@ class Access extends SecurityAccess {
      * Creates an instance of Access.
      *
      * @constructor
+	 * @param {Object} roles
      *
      * @memberOf Access
      */
-    constructor() {
+    constructor( roles ) {
         super()
 
-        this._roles = Configuration.load( 'roles' )
-        this._authorization = new Authorization()
+        this._roles = roles || Configuration.load( 'roles' )
     }
+
+	/**
+	 * Check if user has access rights
+	 *
+	 * @param {any} role
+	 * @returns {boolean}
+	 *
+	 * @memberOf Access
+	 */
+	isGranted( role ) {
+		return this.roles.includes( roles )
+	}
 
     /**
      * Check if user is authorized to access to the route requested
@@ -39,7 +51,7 @@ class Access extends SecurityAccess {
      * @returns {boolean}
      */
     async authorized({ configurations, request, response }) {
-        const tokenValidation = await this.authorization.checkToken( request, response )
+		const tokenValidation = await this.checkToken( request )
 
         if ( !tokenValidation ) {
             response.unauthorized()
@@ -49,7 +61,7 @@ class Access extends SecurityAccess {
 
         const rolesAuthorized = configurations.roles
         const focus = configurations.focus || 'role_id'
-        const user = request.retrieve( 'user' )
+        const user = request.get( 'user' )
         const roleUser = user[ focus ]
         const hasAccess = rolesAuthorized.includes( roleUser )
 
@@ -66,19 +78,42 @@ class Access extends SecurityAccess {
         return true
     }
 
-    /**
-     * Authorization instance
-     *
-     * @readonly
-     *
-     * @memberOf Router
-     */
-    get authorization() {
-        return this._authorization
-    }
+	/**
+	 * Check if user is logged with his token
+	 *
+	 * @param {express.Request} req
+	 * @returns {boolean}
+	 *
+	 * @throws {Error} if token validation failed
+	 */
+	async checkToken( request ) {
+		const token	= request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.getHeader( 'x-access-token' )
+
+		if ( token ) {
+			try {
+				const tokenValidation = await TokenManager.verify( token )
+
+				if ( tokenValidation.error ) {
+					return false
+				}
+
+				request
+					.set( 'token', token )
+					.set( 'user', tokenValidation.decoded )
+
+				return true
+			} catch ( error ) {
+				throw new Error( `Check token has failed.\n${error}` )
+			}
+		} else {
+			return false
+		}
+	}
 
     /**
      * Get roles
+	 *
+	 * @returns {Object}
      *
      * @readonly
      *

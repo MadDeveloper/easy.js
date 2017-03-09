@@ -109,17 +109,24 @@ class Router extends Configurable {
             const request = new Request( req )
 
             if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
-                const response = new Response( res )
-                const authorized = await handler.authorized({
-                    configurations: securityConfig,
-                    request,
-                    response,
-                    container: this._container
-                })
+				const response = new Response( res )
 
-                if ( authorized ) {
-                    next()
-                }
+				try {
+					const authorized = await handler.authorized({
+						configurations: securityConfig,
+						request,
+						response,
+						container: this._container
+					})
+
+					if ( authorized ) {
+						next()
+					} else if ( !response.headersAlreadySent() ) {
+						response.forbidden()
+					}
+				} catch ( error ) {
+					response.internalServerError()
+				}
             } else {
                 next()
             }

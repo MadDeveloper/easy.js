@@ -8,10 +8,8 @@
 */
 
 const request = jasmine.createSpyObj( 'request', [
-    'retrieve',
     'getBody',
     'getRouteParameter',
-    'store',
     'methodIs',
     'getMethod',
     'getHeader',
@@ -23,8 +21,8 @@ const request = jasmine.createSpyObj( 'request', [
     'getProperty',
     'setProperty',
     'urlContains',
-    'store',
-    'retrieve',
+    'set',
+    'get',
     'getCookies',
     'scope',
     'reset'

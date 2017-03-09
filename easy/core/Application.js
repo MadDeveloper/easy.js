@@ -203,9 +203,9 @@ class Application extends Configurable {
 
 		if ( authentication.config.enabled ) {
             /*
-             * Configure authentication
+             * Activate authentication
              */
-            authentication.configure()
+            authentication.activate()
 		}
     }
 

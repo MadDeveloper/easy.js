@@ -62,7 +62,7 @@ describe( 'RoleController', () => {
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                request.retrieve.and.returnValue( role )
+                request.get.and.returnValue( role )
             })
 
             beforeEach( fakeAsync( () => {
@@ -150,7 +150,7 @@ describe( 'RoleController', () => {
             }) )
 
             it( 'should store found role in request dedicated scope', () => {
-                expect( request.retrieve( 'role' ) ).toEqual( role )
+                expect( request.get( 'role' ) ).toEqual( role )
             })
 
         })
@@ -192,7 +192,7 @@ describe( 'RoleController', () => {
     describe( 'updateRole', () => {
 
         beforeEach( () => {
-            request.retrieve.and.returnValue( role )
+            request.get.and.returnValue( role )
             request.getBody.and.returnValue( role )
         })
 
@@ -251,7 +251,7 @@ describe( 'RoleController', () => {
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                request.retrieve.and.returnValue( role )
+                request.get.and.returnValue( role )
                 entityManager.getRepository.and.returnValue({ delete: () => Promise.resolve() })
             })
 
@@ -268,7 +268,7 @@ describe( 'RoleController', () => {
         describe( 'when the delete repository method fails', () => {
 
             beforeEach( () => {
-                request.retrieve.and.returnValue( null )
+                request.get.and.returnValue( null )
                 entityManager.getRepository.and.returnValue({ delete: () => Promise.reject() })
             })
 

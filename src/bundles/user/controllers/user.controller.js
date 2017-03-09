@@ -39,7 +39,7 @@ class UserController extends Controller {
                 return false
             }
 
-            request.store( 'user', user )
+            request.set( 'user', user )
 
             return true
         } catch ( error ) {
@@ -57,7 +57,7 @@ class UserController extends Controller {
 
         try {
 			const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-            const users = await userRepository.findAll( request.retrieve( 'role' ) )
+            const users = await userRepository.findAll( request.get( 'role' ) )
 
             response.ok( users )
         } catch ( error ) {
@@ -98,7 +98,7 @@ class UserController extends Controller {
      * @param {Response} response
      */
     getUser( request, response ) {
-        response.ok( request.retrieve( 'user' ) )
+        response.ok( request.get( 'user' ) )
     }
 
     /**
@@ -109,13 +109,13 @@ class UserController extends Controller {
      */
     async updateUser( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            if ( "undefined" === typeof request.retrieve( 'role_id' ) ) {
-                request.store( 'role_id', request.getRouteParameter( 'role_id' ) )
+            if ( "undefined" === typeof request.get( 'role_id' ) ) {
+                request.set( 'role_id', request.getRouteParameter( 'role_id' ) )
             }
 
             try {
             	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-                const user = await userRepository.save( request.retrieve( 'user' ), request.getBody() )
+                const user = await userRepository.save( request.get( 'user' ), request.getBody() )
 
                 response.ok( user )
             } catch ( error ) {
@@ -154,7 +154,7 @@ class UserController extends Controller {
                             if ( validPaths.includes( patch.path ) ) {
                                 try {
                                 	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-                                    const user = await userRepository.patch( request.retrieve( 'user' ), patch )
+                                    const user = await userRepository.patch( request.get( 'user' ), patch )
 
                                     if ( ++currentPatch >= opsLength ) {
                                         // It's ok
@@ -202,7 +202,7 @@ class UserController extends Controller {
     async deleteUser( request, response ) {
         try {
         	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-            await userRepository.delete( request.retrieve( 'user' ) )
+            await userRepository.delete( request.get( 'user' ) )
 
             response.noContent()
         } catch ( error ) {

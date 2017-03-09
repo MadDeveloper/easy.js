@@ -9,7 +9,6 @@
 
 const passportLocal = require( 'passport-local' )
 const Configuration = require( '../core/Configuration' )
-const Configurable = require( '../interfaces/Configurable' )
 const TokenManager = require( './TokenManager' )
 const Request = require( '../http/Request' )
 const Response = require( '../http/Response' )
@@ -17,29 +16,25 @@ const LocalStrategy = passportLocal.Strategy
 
 /**
  * @class Authentication
- * @extends Configurable
  */
-class Authentication extends Configurable {
+class Authentication {
 	/**
 	 * @constructor
 	 * @param {Container} router
 	 * @param {Passport} passport
 	 */
 	constructor( container, passport ) {
-		super()
-
 		this._config = {}
 		this._container = container
 		this._passport = passport
 		this._router = container.get( 'component.router' )
+		this._config = Configuration.load( 'authentication' )
 	}
 
 	/**
-	 * Configure auth strategies
+	 * Activate auth strategy
 	 */
-	configure() {
-		this._config = Configuration.load( 'authentication' )
-
+	activate() {
 		if ( this.useCustom() ) {
 			/*
 			 * Custom authentication process

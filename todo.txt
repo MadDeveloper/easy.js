@@ -15,6 +15,8 @@
 ---------|  LATER  |---------
 -----------------------------
 
+- voir pour la nomenclature de certaines classes (TokenManager ?)
+- ajouter directement dans la configuration des routes le check des paramètres (ex: /roles/:id => param id, type: Number)
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de tout lier en promise pour les patchs
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
 - créer une classe Cache qui pourra être instanciée dans n'importe quelle autre classe afin de pouvoir gérer son cache
@@ -24,7 +26,5 @@
 ---------|  MAYBE  |---------
 -----------------------------
 
-- Utiliser CarminteJS (cross-db ORM)
 - translate project to ts
-- bin permettant de sync roles from db into config file, and reverse
 - renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.

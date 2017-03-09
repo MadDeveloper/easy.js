@@ -19,7 +19,7 @@ class Response {
      */
     constructor( res ) {
         this._scope = res
-		this.content = ''
+		this.content = undefined
     }
 
 	/**

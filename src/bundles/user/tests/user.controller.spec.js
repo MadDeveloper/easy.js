@@ -41,7 +41,7 @@ describe( 'UserController', () => {
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                request.retrieve.and.returnValue( user )
+                request.get.and.returnValue( user )
                 entityManager.getRepository.and.returnValue({ findAll: role => Promise.resolve( users ) })
             })
 
@@ -78,7 +78,7 @@ describe( 'UserController', () => {
         describe( 'when respond successfully', () => {
 
             beforeEach( () => {
-                request.retrieve.and.returnValue( user )
+                request.get.and.returnValue( user )
             })
 
             beforeEach( fakeAsync( () => {
@@ -167,7 +167,7 @@ describe( 'UserController', () => {
             }) )
 
             it( 'should store found user in request dedicated scope', () => {
-                expect( request.retrieve( 'user' ) ).toEqual( user )
+                expect( request.get( 'user' ) ).toEqual( user )
             })
 
         })
@@ -209,7 +209,7 @@ describe( 'UserController', () => {
     describe( 'updateUser', () => {
 
         beforeEach( () => {
-            request.retrieve.and.returnValue( user )
+            request.get.and.returnValue( user )
             request.getBody.and.returnValue( user )
         })
 
@@ -268,7 +268,7 @@ describe( 'UserController', () => {
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                request.retrieve.and.returnValue( user )
+                request.get.and.returnValue( user )
                 entityManager.getRepository.and.returnValue({ patch: () => Promise.resolve( user ) })
                 request.getRawBody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
             })
@@ -286,7 +286,7 @@ describe( 'UserController', () => {
         describe( 'when the patch repository method fails', () => {
 
             beforeEach( () => {
-                request.retrieve.and.returnValue( user )
+                request.get.and.returnValue( user )
                 entityManager.getRepository.and.returnValue({ patch: () => Promise.reject({ type: 'server' }) })
                 request.getRawBody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
             })
@@ -336,7 +336,7 @@ describe( 'UserController', () => {
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                request.retrieve.and.returnValue( user )
+                request.get.and.returnValue( user )
                 entityManager.getRepository.and.returnValue({ delete: () => Promise.resolve() })
             })
 
@@ -353,7 +353,7 @@ describe( 'UserController', () => {
         describe( 'when the delete repository method fails', () => {
 
             beforeEach( () => {
-                request.retrieve.and.returnValue( null )
+                request.get.and.returnValue( null )
                 entityManager.getRepository.and.returnValue({ delete: () => Promise.reject() })
             })
 

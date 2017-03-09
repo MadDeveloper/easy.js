@@ -39,7 +39,7 @@ class RoleController extends Controller {
                 return false
             }
 
-            request.store( 'role', role )
+            request.set( 'role', role )
 
             return true
         } catch ( error ) {
@@ -97,7 +97,7 @@ class RoleController extends Controller {
      * @param {Response} response
      */
     getRole( request, response ) {
-        response.ok( request.retrieve( 'role' ) )
+        response.ok( request.get( 'role' ) )
     }
 
     /**
@@ -110,7 +110,7 @@ class RoleController extends Controller {
         if ( this.isRequestWellParameterized( request ) ) {
             try {
             	const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
-                const role = await roleRepository.save( request.retrieve( 'role' ), request.getBody() )
+                const role = await roleRepository.save( request.get( 'role' ), request.getBody() )
 
                 response.ok( role )
             } catch ( error ) {
@@ -131,7 +131,7 @@ class RoleController extends Controller {
         try {
         	const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
 
-            await roleRepository.delete( request.retrieve( 'role' ) )
+            await roleRepository.delete( request.get( 'role' ) )
             response.noContent()
         } catch ( error ) {
             response.internalServerError()
