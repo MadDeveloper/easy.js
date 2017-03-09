@@ -81,7 +81,7 @@ class Access extends SecurityAccess {
 	/**
 	 * Check if user is logged with his token
 	 *
-	 * @param {express.Request} req
+	 * @param {Object} req
 	 * @returns {boolean}
 	 *
 	 * @throws {Error} if token validation failed

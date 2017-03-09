@@ -112,7 +112,7 @@ class Application extends Configurable {
      */
     _plugThirdPartyMiddlewares() {
         /*
-         * Will permit to retrieve remote ip: req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']
+         * Will permit to retrieve remote ips
          */
         this.app.enable( 'trust proxy' )
 
@@ -139,8 +139,8 @@ class Application extends Configurable {
         /*
          * body-parser middleware for handling request variables
          */
-        this.app.use( bodyParser.json() ) // support json encoded bodies
-        this.app.use( bodyParser.urlencoded({ extended: true }) ) // support encoded bodies
+        this.app.use( bodyParser.json() )
+        this.app.use( bodyParser.urlencoded({ extended: true }) )
 
         if ( this.config.app.log ) {
             this.app.use( morgan(

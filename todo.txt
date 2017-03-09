@@ -2,10 +2,12 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- binder les méthode de request express dans la classe Request (avec une méthode automatique comme Response)
 - ajouter les méthodes dans request et response de adonis
 - renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.
 - créer une classe Route pour refactorer le Router
 - refactor Router, Application, Controller classes
+- mettre des @example dans la jsdoc
 - TU easy
 - exporter role et user dans un repo externe, importable
 - faire une PR pour ecmascript stages, afin de faciliter l'écriture d'objets :

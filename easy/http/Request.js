@@ -16,7 +16,7 @@ const Http = require( './Http' )
 class Request {
     /**
      * @constructor
-     * @param {express.Request} req
+     * @param {Object} req
      */
     constructor( req ) {
         this._scope = req
@@ -31,13 +31,24 @@ class Request {
     }
 
     /**
-     * Compare current http method and mehod argument
+     * Compare current http method and method argument
      *
      * @param {string} method
      * @returns {boolean}
      */
     methodIs( method ) {
         return method.toLowerCase() === this.getMethod().toLowerCase()
+    }
+
+    /**
+     * Check if current request is executed with https protocol
+     * 
+     * @returns {boolean}
+     * 
+     * @memberOf Request
+     */
+    secure() {
+        return this.scope.secure
     }
 
 	/**
@@ -68,6 +79,17 @@ class Request {
      */
     getHeader( header ) {
         return this.scope.get( header )
+    }
+
+    /**
+     * Get all request headers
+     * 
+     * @returns {Object}
+     * 
+     * @memberOf Request
+     */
+    getHeaders() {
+        return this.scope.headers
     }
 
 	/**
@@ -274,7 +296,7 @@ class Request {
     /**
      * Get express request object
      *
-     * @returns {express.Request}
+     * @returns {Object}
      */
     get scope() {
         return this._scope
