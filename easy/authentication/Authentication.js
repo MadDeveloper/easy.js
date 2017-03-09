@@ -11,6 +11,8 @@ const passportLocal = require( 'passport-local' )
 const Configuration = require( '../core/Configuration' )
 const Configurable = require( '../interfaces/Configurable' )
 const TokenManager = require( './TokenManager' )
+const Request = require( '../http/Request' )
+const Response = require( '../http/Response' )
 const LocalStrategy = passportLocal.Strategy
 
 /**
@@ -59,8 +61,8 @@ class Authentication extends Configurable {
 		const customProvider = this._container.get( this.config.service )
 
 		this._router.scope.post( this.config.route, ( req, res ) => {
-			const request = this._router.getRequest( req )
-			const response = this._router.getResponse( res )
+			const request = new Request( req )
+			const response = new Response( res )
 
 			customProvider.login( request, response )
 		})
@@ -83,8 +85,8 @@ class Authentication extends Configurable {
 	 */
 	_defineLoginRoute() {
 		this._router.scope.post( this.config.route, this._passport.authenticate( 'local', { session: false }), ( req, res ) => {
-			const request = this._router.getRequest( req )
-			const response = this._router.getResponse( res )
+			const request = new Request( req )
+			const response = new Response( res )
 
 			response.ok({
 				user: request.getProperty( 'user' ).user,

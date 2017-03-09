@@ -49,7 +49,7 @@ class Router extends Configurable {
 		const router = this.scope
 
 	    router.use( ( req, res ) => {
-			const response = this.getResponse( res )
+			const response = new Response( res )
 
 	        if ( !response.headersAlreadySent() ) {
 	            response.notFound()
@@ -75,10 +75,10 @@ class Router extends Configurable {
 		const controller = controllers[ controllerId ]
 
 		router[ middlewareInfos.type ]( middlewareInfos.param, async ( req, res, next ) => {
-			const request = this.getRequest( req )
+			const request = new Request( req )
 
 			if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
-				const response = this.getResponse( res )
+				const response = new Response( res )
 				const authorized = await controller[ controllerMethod ]( request, response )
 
 				if ( authorized ) {
@@ -106,10 +106,10 @@ class Router extends Configurable {
         httpMethod = httpMethod.toLowerCase()
 
         router.use( route, async ( req, res, next ) => {
-            const request = this.getRequest( req )
+            const request = new Request( req )
 
             if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
-                const response = this.getResponse( res )
+                const response = new Response( res )
                 const authorized = await handler.authorized({
                     configurations: securityConfig,
                     request,
@@ -150,8 +150,8 @@ class Router extends Configurable {
         method = method.toLowerCase()
 
         router.route( route )[ method ]( ( req, res ) => {
-            const request = this.getRequest( req )
-            const response = this.getResponse( res )
+            const request = new Request( req )
+            const response = new Response( res )
 
             controller[ controllerMethod ]( request, response )
         })
@@ -166,31 +166,11 @@ class Router extends Configurable {
         const router = this.scope
 
         router.route( route ).all( ( req, res ) => {
-            const request = this.getRequest( req )
-            const response = this.getResponse( res )
+            const request = new Request( req )
+            const response = new Response( res )
 
             response.methodNotAllowed()
         })
-    }
-
-    /**
-     * Get easy Request instance
-     *
-     * @param {Object} req
-     * @returns {Request}
-     */
-    getRequest( req ) {
-        return new Request( req )
-    }
-
-    /**
-     * Get easy Response instance
-     *
-     * @param {Object} res
-     * @returns {Response}
-     */
-    getResponse( res ) {
-        return new Response( res )
     }
 
     /**

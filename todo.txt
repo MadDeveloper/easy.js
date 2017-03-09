@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- enrichir Request et Response selon Symfony, Adonis, Express, etc.
 - créer une classe Route pour refactorer le Router
 - refactor Router, Application, Controller classes
 - TU easy
@@ -14,7 +15,6 @@
 ---------|  LATER  |---------
 -----------------------------
 
-- gérer soit même la partie express
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de tout lier en promise pour les patchs
 - faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
 - créer une classe Cache qui pourra être instanciée dans n'importe quelle autre classe afin de pouvoir gérer son cache
