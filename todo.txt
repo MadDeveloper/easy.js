@@ -2,7 +2,8 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- enrichir Request et Response selon Symfony, Adonis, Express, etc.
+- ajouter les méthodes dans request et response de adonis
+- renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.
 - créer une classe Route pour refactorer le Router
 - refactor Router, Application, Controller classes
 - TU easy
@@ -27,4 +28,3 @@
 -----------------------------
 
 - translate project to ts
-- renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.

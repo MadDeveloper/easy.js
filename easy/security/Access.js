@@ -87,7 +87,7 @@ class Access extends SecurityAccess {
 	 * @throws {Error} if token validation failed
 	 */
 	async checkToken( request ) {
-		const token	= request.getBodyParameter( 'token' ) || request.getRouteParameter( 'token' ) || request.getHeader( 'x-access-token' )
+		const token	= request.getToken()
 
 		if ( token ) {
 			try {

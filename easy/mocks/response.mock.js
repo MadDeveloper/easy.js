@@ -8,6 +8,11 @@
 */
 
 const response = jasmine.createSpyObj( 'response', [
+	'setContentType',
+	'setHeaders',
+	'setHeader',
+	'addContent',
+	'setContent',
 	'headersAlreadySent',
     'continue',
     'switchingProtocols',
@@ -73,7 +78,6 @@ const response = jasmine.createSpyObj( 'response', [
     'networkConnectTimeoutError',
     'attachment',
     'scope',
-    'request',
     'reset'
 ])
 

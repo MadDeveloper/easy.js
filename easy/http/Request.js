@@ -40,6 +40,17 @@ class Request {
         return method.toLowerCase() === this.getMethod().toLowerCase()
     }
 
+	/**
+	 * Get the token in the headers
+	 *
+	 * @returns {string}
+	 *
+	 * @memberOf Request
+	 */
+	getToken() {
+		return this.getHeader( 'x-access-token' )
+	}
+
     /**
      * Get http method
      *
@@ -56,8 +67,79 @@ class Request {
      * @returns {Object|string}
      */
     getHeader( header ) {
-        return this.scope.headers[ header ]
+        return this.scope.get( header )
     }
+
+	/**
+	 * Get the client ip
+	 *
+	 * @returns {string}
+	 *
+	 * @memberOf Request
+	 */
+	getIP() {
+		return this.scope.ip
+	}
+
+	/**
+	 * Get all ips into the request
+	 *
+	 * @returns {String[]}
+	 *
+	 * @memberOf Request
+	 */
+	getIPs() {
+		return this.scope.ips
+	}
+
+	/**
+	 * Get request protocol
+	 *
+	 * @returns {string}
+	 *
+	 * @memberOf Request
+	 */
+	getProtocol() {
+		return this.scope.protocol
+	}
+
+	/**
+	 * Get the client hostname
+	 *
+	 * @returns {string}
+	 *
+	 * @memberOf Request
+	 */
+	getHostname() {
+		return this.scope.hostname
+	}
+
+	/**
+	 * Get url informations
+	 *
+	 * @returns {Object}
+	 *
+	 * @memberOf Request
+	 */
+	getUrlInfos() {
+		return {
+			base: this.scope.baseUrl,
+			path: this.scope.path,
+			originalUrl: this.scope.originalUrl
+		}
+	}
+
+	/**
+	 * Get route query
+	 *
+	 * @param {string} query
+	 * @returns {any}
+	 *
+	 * @memberOf Request
+	 */
+	getQuery( query ) {
+		return query ? this.scope.query[ query ] : this.scope.query
+	}
 
     /**
      * Get http body

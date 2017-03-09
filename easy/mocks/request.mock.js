@@ -25,6 +25,13 @@ const request = jasmine.createSpyObj( 'request', [
     'get',
     'getCookies',
     'scope',
+	'getToken',
+	'getIP',
+	'getIPs',
+	'getProtocol',
+	'getHostname',
+	'getUrlInfos',
+	'getQuery',
     'reset'
 ])
 

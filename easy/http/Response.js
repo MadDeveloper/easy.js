@@ -23,6 +23,79 @@ class Response {
     }
 
 	/**
+	 * Set response content type
+	 *
+	 * @param {string} type
+	 * @return {Response}
+	 *
+	 * @memberOf Response
+	 */
+	setContentType( type ) {
+		this.scope.type( type )
+
+		return this
+	}
+
+	/**
+	 * Set response headers
+	 *
+	 * @param {Object} [headers={}]
+	 * @returns {Response}
+	 *
+	 * @memberOf Response
+	 */
+	setHeaders( headers = {}) {
+		Reflect.ownKeys( headers ).forEach( header => this.setHeader( header, headers[ header ]) )
+
+		return this
+	}
+
+	/**
+	 * Set response header
+	 *
+	 * @param {string} [header='']
+	 * @param {string} [value='']
+	 * @returns {Response}
+	 *
+	 * @memberOf Response
+	 */
+	setHeader( header = '', value = '' ) {
+		if ( !header.isEmpty() && !value.isEmpty() ) {
+			this.scope.set( header, value )
+		}
+
+		return this
+	}
+
+	/**
+	 * Add response content
+	 *
+	 * @param {any} content
+	 * @returns Response
+	 *
+	 * @memberOf Response
+	 */
+	addContent( content ) {
+		this.content += content
+
+		return this
+	}
+
+	/**
+	 * Set response content
+	 *
+	 * @param {any} content
+	 * @returns Response
+	 *
+	 * @memberOf Response
+	 */
+	setContent( content ) {
+		this.content = content
+
+		return this
+	}
+
+	/**
 	 * Check if the headers are already sent
 	 *
 	 * @returns {boolean}
@@ -608,59 +681,6 @@ class Response {
             this.scope.attachment( filePath )
         }
     }
-
-	/**
-	 * Set response headers
-	 *
-	 * @param {Object} [headers={}]
-	 *
-	 * @memberOf Response
-	 */
-	setHeaders( headers = {}) {
-		Reflect.ownKeys( headers ).forEach( header => this.setHeader( header, headers[ header ]) )
-	}
-
-	/**
-	 * Set response header
-	 *
-	 * @param {string} [header='']
-	 * @param {string} [value='']
-	 *
-	 * @memberOf Response
-	 */
-	setHeader( header = '', value = '' ) {
-		if ( !header.isEmpty() && !value.isEmpty() ) {
-			this.scope.set( header, value )
-		}
-	}
-
-	/**
-	 * Add response content
-	 *
-	 * @param {any} content
-	 * @returns Response
-	 *
-	 * @memberOf Response
-	 */
-	addContent( content ) {
-		this.content += content
-
-		return this
-	}
-
-	/**
-	 * Set response content
-	 *
-	 * @param {any} content
-	 * @returns Response
-	 *
-	 * @memberOf Response
-	 */
-	setContent( content ) {
-		this.content = content
-
-		return this
-	}
 
     /**
      * Get response scope
