@@ -1,9 +1,9 @@
 const UserController = require( '../controllers/user.controller' )
 const roles = require( '../../../config/roles' )
 const container = easy.application.container
-const { TokenManager } = require( 'easy/authentication' )
+const { Token } = require( 'easy/authentication' )
 const path = require( 'path' )
-const { entityManager, response, request, tokenManager, fakeAsync } = require( 'easy/mocks' )
+const { entityManager, response, request, token, fakeAsync } = require( 'easy/mocks' )
 
 describe( 'UserController', () => {
 
@@ -11,7 +11,7 @@ describe( 'UserController', () => {
         response.reset()
         request.reset()
         entityManager.reset()
-        tokenManager.reset()
+        token.reset()
     })
 
     let userController
@@ -32,7 +32,7 @@ describe( 'UserController', () => {
         toJSON: () => userReturned,
         unset: field => {}
     }
-    const token = TokenManager.sign( userReturned )
+    const tokenSigned = Token.sign( userReturned )
 
     beforeEach( () => userController = new UserController( container ) )
 
@@ -101,7 +101,7 @@ describe( 'UserController', () => {
                 request.getBody.and.returnValue( user )
                 entityManager.getRepository.and.returnValue({ save: () => Promise.resolve( userReturned ) })
                 entityManager.getModel.and.returnValue( User )
-                tokenManager.sign.and.returnValue( token )
+                token.sign.and.returnValue( tokenSigned )
             })
 
             beforeEach( fakeAsync( () => {
@@ -109,7 +109,7 @@ describe( 'UserController', () => {
             }) )
 
             it( 'should respond with the newly created user', () => {
-                expect( response.created ).toHaveBeenCalledWith({ user: userReturned, token })
+                expect( response.created ).toHaveBeenCalledWith({ user: userReturned, token: tokenSigned })
             })
 
         })

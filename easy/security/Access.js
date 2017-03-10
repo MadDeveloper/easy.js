@@ -9,7 +9,7 @@
 
 const Configuration = require( '../core/Configuration' )
 const SecurityAccess = require( '../interfaces/SecurityAccess' )
-const TokenManager = require( '../authentication/TokenManager' )
+const Token = require( '../authentication/Token' )
 
 /**
  * @class Access
@@ -91,7 +91,7 @@ class Access extends SecurityAccess {
 
 		if ( token ) {
 			try {
-				const tokenValidation = await TokenManager.verify( token )
+				const tokenValidation = await Token.verify( token )
 
 				if ( tokenValidation.error ) {
 					return false

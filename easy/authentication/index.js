@@ -8,4 +8,4 @@
 */
 
 module.exports.Authentication = require( './Authentication' )
-module.exports.TokenManager = require( './TokenManager' )
+module.exports.Token = require( './Token' )

@@ -9,7 +9,7 @@
 
 const passportLocal = require( 'passport-local' )
 const Configuration = require( '../core/Configuration' )
-const TokenManager = require( './TokenManager' )
+const Token = require( './Token' )
 const Request = require( '../http/Request' )
 const Response = require( '../http/Response' )
 const LocalStrategy = passportLocal.Strategy
@@ -113,7 +113,7 @@ class Authentication {
 				if ( user && password === user.get( this.config.passwordField ) ) {
 					user.unset( this.config.passwordField )
 
-					return done( null, { user: user.attributes, token: TokenManager.sign( user.attributes ) })
+					return done( null, { user: user.attributes, token: Token.sign( user.attributes ) })
 				} else {
 					return done( null, false )
 				}

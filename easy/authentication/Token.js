@@ -13,9 +13,9 @@ const Configuration = require( '../core/Configuration' )
 let config = null
 
 /**
- * @class TokenManager
+ * @class Token
  */
-class TokenManager {
+class Token {
 	/**
 	 * Sign new token
 	 *
@@ -25,7 +25,7 @@ class TokenManager {
 	 * @static
 	 */
 	static sign( content ) {
-		return jwt.sign( content, TokenManager.config.secret, { expiresIn: TokenManager.config.duration })
+		return jwt.sign( content, Token.config.secret, { expiresIn: Token.config.duration })
 	}
 
 	/**
@@ -38,7 +38,7 @@ class TokenManager {
 	 */
 	static verify( token ) {
 		return new Promise( ( resolve, reject ) => {
-			jwt.verify( token, TokenManager.config.secret, ( error, decoded ) => {
+			jwt.verify( token, Token.config.secret, ( error, decoded ) => {
 				if ( error ) {
 					resolve({ error })
 				} else {
@@ -64,4 +64,4 @@ class TokenManager {
 	}
 }
 
-module.exports = TokenManager
+module.exports = Token

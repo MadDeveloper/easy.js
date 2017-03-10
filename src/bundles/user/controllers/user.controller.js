@@ -1,5 +1,5 @@
 const { Controller } = require( 'easy/core' )
-const { TokenManager } = require( 'easy/authentication' )
+const { Token } = require( 'easy/authentication' )
 
 /**
  * @class UserController
@@ -81,7 +81,7 @@ class UserController extends Controller {
                 const user = await userRepository.save( new User(), request.getBody() )
 
                 user.unset( 'password' )
-                response.created({ user: user.toJSON(), token: TokenManager.sign( user.toJSON() ) })
+                response.created({ user: user.toJSON(), token: Token.sign( user.toJSON() ) })
             } catch ( error ) {
                 response.internalServerError()
             }
