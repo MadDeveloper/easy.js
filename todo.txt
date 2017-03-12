@@ -2,7 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- binder les méthode de request express dans la classe Request (avec une méthode automatique comme Response)
+- refactorer le routing (cf. Adonis, role bundle)
 - ajouter les méthodes dans request et response de adonis
 - renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.
 - créer une classe Route pour refactorer le Router

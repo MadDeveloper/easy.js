@@ -1,6 +1,14 @@
-const middlewares = require( './middlewares' )
 const roles = require( '../../../config/roles' )
 
+/*module.exports = Route => {
+    Route.get( '/roles', 'RoleController.getRoles', {
+        security: {
+            strategy: 'default',
+            roles: [ roles.any ]
+        },
+        middleware: [ 'roleExists' ]
+    })
+*/
 module.exports = {
     '/roles': {
         get: {
@@ -41,6 +49,6 @@ module.exports = {
                 roles: [ roles.admin ]
             }
         },
-        middlewares
+        // middlewares
     }
 }
