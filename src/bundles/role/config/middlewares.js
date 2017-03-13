@@ -4,3 +4,9 @@ module.exports = {
         controller: 'role:roleExists'
     }
 }
+
+/*
+const { Middleware } = require( 'easy/middleware' )
+
+Middleware.register( 'role-exists', 'RoleController.exists' )
+*/

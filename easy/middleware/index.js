@@ -8,3 +8,4 @@
 */
 
 module.exports.AnalyzerMiddlewaresConfig = require( './AnalyzerMiddlewaresConfig' )
+module.exports.Middleware = require( './Middleware' )

@@ -1,13 +1,44 @@
 const roles = require( '../../../config/roles' )
+const { Route } = require( 'easy/routing' )
 
-/*module.exports = Route => {
-    Route.get( '/roles', 'RoleController.getRoles', {
-        security: {
-            strategy: 'default',
-            roles: [ roles.any ]
-        },
-        middleware: [ 'roleExists' ]
-    })
+/*
+Route
+	.get( '/roles', 'RoleController.all'})
+	.security({
+		strategy: 'default',
+		roles: [ roles.any ]
+	})
+
+Route
+	.post( '/roles', 'RoleController.create'})
+	.security({
+		strategy: 'default',
+		roles: [ roles.admin ]
+	})
+
+Route
+	.group( 'change-role', () => {
+		Route
+			.get( '/roles/:role_id', 'RoleController.one'})
+			.security({
+				strategy: 'default',
+				roles: [ roles.any ]
+			})
+		Route
+			.put( '/roles/:role_id', 'RoleController.update'})
+			.security({
+				strategy: 'default',
+				roles: [ roles.admin ]
+			})
+		Route
+			.delete( '/roles/:role_id', 'RoleController.delete'})
+			.security({
+				strategy: 'default',
+				roles: [ roles.admin ]
+			})
+	})
+	.middleware( 'role-exists' )
+
 */
 module.exports = {
     '/roles': {

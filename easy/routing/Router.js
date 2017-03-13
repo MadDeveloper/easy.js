@@ -7,13 +7,14 @@
 * file that was distributed with this source code.
 */
 
-const Configuration = require( './Configuration' )
+const Configuration = require( '../core/Configuration' )
 const Configurable = require( '../interfaces/Configurable' )
 const Request = require( '../http/Request' )
 const Response = require( '../http/Response' )
 const Access = require( '../security/Access' )
-const AnalyzerMiddlewaresConfig = require( '../middlewares/AnalyzerMiddlewaresConfig' )
+const AnalyzerMiddlewaresConfig = require( '../middleware/AnalyzerMiddlewaresConfig' )
 const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
+const extract = require( '../lib/extract' )
 
 /**
  * @class Router
@@ -42,21 +43,6 @@ class Router extends Configurable {
         this._scope = router
     }
 
-	/**
-	 * Add not found route
-	 */
-	addNotFoundRoute() {
-		const router = this.scope
-
-	    router.use( ( req, res ) => {
-			const response = new Response( res )
-
-	        if ( !response.headersAlreadySent() ) {
-	            response.notFound()
-	        }
-	    })
-	}
-
     /**
      * Define new middleware from configurations
      *
@@ -64,7 +50,7 @@ class Router extends Configurable {
      * @param {string} httpMethod
      * @param {Controller[]} controllers
      */
-    defineMiddlewareRoute( configurations, httpMethod, controllers ) {
+    middleware( configurations, httpMethod, controllers ) {
         const router = this.scope
 		const analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig( configurations )
 		const middlewareInfos = analyzerMiddlewaresConfig.extractMiddlewareConfig( configurations )
@@ -97,11 +83,11 @@ class Router extends Configurable {
      * @param {string} httpMethod
      * @param {Object} configurations
      */
-    defineSecurityRoute( route, httpMethod, configurations ) {
+    security( route, httpMethod, configurations ) {
         const router = this.scope
         const analyzerSecurityConfig = new AnalyzerSecurityConfig( configurations )
         const securityConfig = analyzerSecurityConfig.extractSecurityConfig()
-        const handler = this.getAccessHandler( securityConfig )
+        const handler = this.accessHandler( securityConfig )
 
         httpMethod = httpMethod.toLowerCase()
 
@@ -134,25 +120,15 @@ class Router extends Configurable {
     }
 
     /**
-     * Returns access authority handler
-     *
-     * @param {Object} configurations
-     * @returns {SecurityAccess}
-     */
-    getAccessHandler( configurations ) {
-        return 'default' === configurations.strategy ? this.access : this._container.get( configurations.provider )
-    }
-
-    /**
      * Define route into express router
      *
-     * @param {string} { route
+     * @param {string} route
      * @param {string} method
-     * @param {Controller} controller
-     * @param {Function} controllerMethod }
+     * @param {string} controllerAction
      */
-    defineRoute({ route, method, controller, controllerMethod }) {
+    route( route, method, controllerAction ) {
         const router = this.scope
+		const [ controller, action ] = extract.controllerAndAction( controllerAction )
 
         method = method.toLowerCase()
 
@@ -160,16 +136,41 @@ class Router extends Configurable {
             const request = new Request( req )
             const response = new Response( res )
 
-            controller[ controllerMethod ]( request, response )
+            controller[ action ]( request, response )
         })
     }
+
+    /**
+     * Returns access authority handler
+     *
+     * @param {Object} configurations
+     * @returns {SecurityAccess}
+     */
+    accessHandler( configurations ) {
+        return 'default' === configurations.strategy ? this.access : this._container.get( configurations.provider )
+    }
+
+	/**
+	 * Add not found route
+	 */
+	notFound() {
+		const router = this.scope
+
+	    router.use( ( req, res ) => {
+			const response = new Response( res )
+
+	        if ( !response.headersAlreadySent() ) {
+	            response.notFound()
+	        }
+	    })
+	}
 
     /**
      * Define route on all http verbs which returns 405 Method Not Allowed
      *
      * @param {string} route
      */
-    defineMethodNotAllowedRoute( route ) {
+    methodNotAllowed( route ) {
         const router = this.scope
 
         router.route( route ).all( ( req, res ) => {

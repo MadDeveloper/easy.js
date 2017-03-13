@@ -60,7 +60,7 @@ class Application extends Configurable {
         this._exposeRawBody()
         this._plugAuthentication()
         this.kernel.loadBundles()
-        this.router.addNotFoundRoute()
+        this.router.notFound()
         this._initializePassport()
         this._bindRoutes()
     }

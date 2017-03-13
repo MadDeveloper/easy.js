@@ -13,7 +13,8 @@ const Configuration = require( './Configuration' )
 const Bundle = require( './Bundle' )
 const Configurable = require( '../interfaces/Configurable' )
 const ContainerBuilder = require( '../container/ContainerBuilder' )
-const Router = require( './Router' )
+const Router = require( '../routing/Router' )
+const Route = require( '../routing/Route' )
 const DatabasesManager = require( '../database/DatabasesManager' )
 const LogDirectoryManager = require( '../log/LogDirectoryManager' )
 
@@ -94,6 +95,7 @@ class Kernel extends Configurable {
         this._router = this.container.get( 'component.router' )
 
         this.router.configure( this.container, express.Router() )
+		Route.router = this.router
     }
 
     /**

@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-const AnalyzerMiddlewaresConfig = require( '../middlewares/AnalyzerMiddlewaresConfig' )
+const AnalyzerMiddlewaresConfig = require( '../middleware/AnalyzerMiddlewaresConfig' )
 const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
 const Http = require( '../http/Http' )
 
@@ -93,7 +93,7 @@ class Bundle {
         httpMethod = httpMethod.toLowerCase()
 
         if ( analyzerSecurityConfig.analyze() && ( Http.methods.includes( httpMethod ) || 'all' === httpMethod ) ) {
-            this._router.defineSecurityRoute( route, httpMethod, routeConfig )
+            this._router.security( route, httpMethod, routeConfig )
         }
     }
 
@@ -117,7 +117,7 @@ class Bundle {
 			const middlewaresConfig = analyzerMiddlewaresConfig.extractMiddlewaresConfig()
 
 			for ( let config in middlewaresConfig ) {
-				this._router.defineMiddlewareRoute( middlewaresConfig[ config ], httpMethod, controllers )
+				this._router.middleware( middlewaresConfig[ config ], httpMethod, controllers )
 			}
 		}
     }
@@ -138,25 +138,24 @@ class Bundle {
             const configValue = routeConfig[ httpMethod ]
 
             if ( Http.methods.includes( httpMethod ) ) {
-                const [ controllerId, controllerMethod ] = configValue.controller.split( ':' )
-
                 this._defineSecurity( routeConfig[ httpMethod ], httpMethod, route )
                 this._defineMiddleware( routeConfig[ httpMethod ], httpMethod, controllers )
 
-                this._router.defineRoute({
+                this._router.route(
                     route,
-                    method: httpMethod,
-                    controller: controllers[ controllerId ],
-                    controllerMethod: controllerMethod
-                })
+                    httpMethod,
+                    configValue.controller
+                )
             }
         }
 
-        this._router.defineMethodNotAllowedRoute( route )
+        this._router.methodNotAllowed( route )
     }
 
     /**
      * Get the index module exports
+	 *
+	 * @returns {Object}
      *
      * @readonly
      *

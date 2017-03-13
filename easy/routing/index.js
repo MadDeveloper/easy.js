@@ -7,5 +7,5 @@
 * file that was distributed with this source code.
 */
 
-module.exports.extract = require( './extract' )
-module.exports.string = require( './string' )
+module.exports.Route = require( './Route' )
+module.exports.Router = require( './Router' )

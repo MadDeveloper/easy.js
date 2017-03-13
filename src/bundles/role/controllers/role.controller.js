@@ -25,7 +25,7 @@ class RoleController extends Controller {
      * @param {Response} response
      * @returns {boolean}
      */
-    async roleExists( request, response ) {
+    async exists( request, response ) {
         const em = this.getEntityManager()
 
         try {
@@ -55,9 +55,9 @@ class RoleController extends Controller {
      * @param {Request} request
      * @param {Response} response
      */
-    async getRoles( request, response ) {
+    async all( request, response ) {
         try {
-        	const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
+			const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
             const roles = await roleRepository.findAll()
 
             response.ok( roles )
@@ -72,7 +72,7 @@ class RoleController extends Controller {
      * @param {Request} request
      * @param {Response} response
      */
-    async createRole( request, response ) {
+    async create( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
             const em = this.getEntityManager()
 
@@ -96,7 +96,7 @@ class RoleController extends Controller {
      * @param {Request} request
      * @param {Response} response
      */
-    getRole( request, response ) {
+    one( request, response ) {
         response.ok( request.get( 'role' ) )
     }
 
@@ -106,10 +106,10 @@ class RoleController extends Controller {
      * @param {Request} request
      * @param {Response} response
      */
-    async updateRole( request, response ) {
+    async update( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
             try {
-            	const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
+				const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
                 const role = await roleRepository.save( request.get( 'role' ), request.getBody() )
 
                 response.ok( role )
@@ -127,9 +127,9 @@ class RoleController extends Controller {
      * @param {Request} request
      * @param {Response} response
      */
-    async deleteRole( request, response ) {
+    async delete( request, response ) {
         try {
-        	const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
+			const roleRepository = this.getEntityManager().getRepository( 'role/entity/role.repository', { model: 'role/entity/role' })
 
             await roleRepository.delete( request.get( 'role' ) )
             response.noContent()
