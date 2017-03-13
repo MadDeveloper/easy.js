@@ -33,6 +33,7 @@ class Kernel extends Configurable {
 		this._router = null
         this._container = null
 		this._logDirectoryManager = null
+		this._bundles = new Set()
     }
 
     /**
@@ -157,6 +158,19 @@ class Kernel extends Configurable {
 	 */
 	get logDirectoryManager() {
 		return this._logDirectoryManager
+	}
+
+	/**
+	 * Get all application bundles
+	 *
+	 * @returns {Set}
+	 *
+	 * @readonly
+	 *
+	 * @memberOf Kernel
+	 */
+	get bundles() {
+		return this._bundles
 	}
 }
 

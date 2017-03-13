@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- load controller from all bundles in router (inject kernel in it's configure method, and use it to load controller for specific route)
 - refactorer le routing (cf. Adonis, role bundle)
 - ajouter les méthodes dans request et response de adonis
 - renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.

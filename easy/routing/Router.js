@@ -48,11 +48,11 @@ class Router extends Configurable {
      *
      * @param {Object} configurations
      * @param {string} httpMethod
-     * @param {Controller[]} controllers
+     * @param {string} controllerAction
      */
-    middleware( configurations, httpMethod, controllers ) {
+    middleware( configurations, httpMethod, controllerAction ) {
         const router = this.scope
-		const analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig( configurations )
+		const analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
 		const middlewareInfos = analyzerMiddlewaresConfig.extractMiddlewareConfig( configurations )
 
         httpMethod = httpMethod.toLowerCase()
@@ -124,21 +124,35 @@ class Router extends Configurable {
      *
      * @param {string} route
      * @param {string} method
-     * @param {string} controllerAction
+     * @param {string} action
      */
-    route( route, method, controllerAction ) {
+    route( route, method, action ) {
         const router = this.scope
-		const [ controller, action ] = extract.controllerAndAction( controllerAction )
+
+		if ( this._isControllerMethod( action ) ) {
+			const [ controller, controllerMethod ] = extract.controllerAndAction( actions )
+
+			action = controller[ controllerMethod ]
+		}
 
         method = method.toLowerCase()
 
-        router.route( route )[ method ]( ( req, res ) => {
-            const request = new Request( req )
-            const response = new Response( res )
-
-            controller[ action ]( request, response )
-        })
+        router.route( route )[ method ]( ( req, res ) => action( new Request( req ), new Response( res ) ) )
     }
+
+	/**
+	 * Check if action is a method callable from a controller
+	 *
+	 * @param {any} action
+	 * @returns {boolean}
+	 *
+	 * @private
+	 *
+	 * @memberOf Router
+	 */
+	_isControllerMethod( action ) {
+		return 'string' === typeof action
+	}
 
     /**
      * Returns access authority handler
@@ -173,12 +187,7 @@ class Router extends Configurable {
     methodNotAllowed( route ) {
         const router = this.scope
 
-        router.route( route ).all( ( req, res ) => {
-            const request = new Request( req )
-            const response = new Response( res )
-
-            response.methodNotAllowed()
-        })
+        router.route( route ).all( ( req, res ) => new Response( res ).methodNotAllowed() )
     }
 
     /**

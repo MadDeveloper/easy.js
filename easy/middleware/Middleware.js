@@ -16,13 +16,14 @@ class Middleware {
 	/**
 	 * Register new middleware
 	 *
+	 * @static
 	 * @param {any} id
-	 * @param {tring} controllerAction
+	 * @param {string} controllerAction
 	 * @returns {Middleware}
 	 *
 	 * @memberOf Middleware
 	 */
-	register( id, controllerAction ) {
+	static register( id, controllerAction ) {
 		const [ controller, action ] = controllerAction.split( '.' )
 
 		middlewares.set( id, { controller, action })

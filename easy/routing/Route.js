@@ -22,13 +22,13 @@ class Route {
 	 *
 	 * @static
 	 * @param {string} route
-	 * @param {string} controllerAction
+	 * @param {string} action
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
-	static get( route, controllerAction ) {
-		Route.router.route( route, 'get', controllerAction )
+	static get( route, action ) {
+		Route.router.route( route, 'get', action )
 		lastRoute = { route, method: 'get' }
 
 		return Route
@@ -39,13 +39,13 @@ class Route {
 	 *
 	 * @static
 	 * @param {string} route
-	 * @param {string} controllerAction
+	 * @param {string} action
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
-	static post( route, controllerAction ) {
-		Route.router.route( route, 'post', controllerAction )
+	static post( route, action ) {
+		Route.router.route( route, 'post', action )
 		lastRoute = { route, method: 'post' }
 
 		return Route
@@ -56,13 +56,13 @@ class Route {
 	 *
 	 * @static
 	 * @param {string} route
-	 * @param {string} controllerAction
+	 * @param {string} action
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
-	static put( route, controllerAction ) {
-		Route.router.route( route, 'put', controllerAction )
+	static put( route, action ) {
+		Route.router.route( route, 'put', action )
 		lastRoute = { route, method: 'put' }
 
 		return Route
@@ -73,13 +73,13 @@ class Route {
 	 *
 	 * @static
 	 * @param {string} route
-	 * @param {string} controllerAction
+	 * @param {string} action
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
-	static patch( route, controllerAction ) {
-		Route.router.route( route, 'patch', controllerAction )
+	static patch( route, action ) {
+		Route.router.route( route, 'patch', action )
 		lastRoute = { route, method: 'patch' }
 
 		return Route
@@ -90,13 +90,13 @@ class Route {
 	 *
 	 * @static
 	 * @param {string} route
-	 * @param {string} controllerAction
+	 * @param {string} action
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
-	static delete( route, controllerAction ) {
-		Route.router.route( route, 'delete', controllerAction )
+	static delete( route, action ) {
+		Route.router.route( route, 'delete', action )
 		lastRoute = { route, method: 'delete' }
 
 		return Route
@@ -107,13 +107,13 @@ class Route {
 	 *
 	 * @static
 	 * @param {string} route
-	 * @param {string} controllerAction
+	 * @param {string} action
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
-	static options( route, controllerAction ) {
-		Route.router.route( route, 'options', controllerAction )
+	static options( route, action ) {
+		Route.router.route( route, 'options', action )
 		lastRoute = { route, method: 'options' }
 
 		return Route
@@ -124,34 +124,33 @@ class Route {
 	 *
 	 * @static
 	 * @param {string} route
-	 * @param {string} controllerAction
+	 * @param {string} action
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
-	static all( route, controllerAction ) {
+	static all( route, action ) {
 		const methods = [ 'get', 'post', 'put', 'patch', 'delete', 'options' ]
 
-		methods.forEach( method => Route[ method ]( route, controllerAction ) )
+		methods.forEach( method => Route[ method ]( route, action ) )
 
 		return Route
 	}
 
-	static route( route, methods, controllerAction ) {
+	static route( route, methods, action ) {
 		if ( Array.isArray( methods ) ) {
-			methods.forEach( method => Route.route( route, method, controllerAction ) )
+			methods.forEach( method => Route.route( route, method, action ) )
 		} else {
-			Route[ methods ]( route, controllerAction )
+			Route[ methods ]( route, action )
 		}
 
 		return Route
 	}
 
 	/**
-	 * Define security rules for last route
+	 * Define security rules for the last route
 	 *
 	 * @static
-	 *
 	 * @param {Object} configurations
 	 * @return {Route}
 	 *
@@ -163,8 +162,35 @@ class Route {
 		return this
 	}
 
-	static middleware() {}
-	static middlewares() {}
+	/**
+	 * Define use of a middleware for the last route
+	 *
+	 * @static
+	 * @param {any} id
+	 * @returns {Route}
+	 *
+	 * @memberOf Route
+	 */
+	static middleware( id ) {
+		Route.router.middleware( lastRoute.route, lastRoute.method, configurations )
+
+		return this
+	}
+
+	/**
+	 * Define use of many middlewares for the last route
+	 *
+	 * @static
+	 * @param {any} ids
+	 * @returns
+	 *
+	 * @memberOf Route
+	 */
+	static middlewares( ids ) {
+		ids.forEach( id => Route.middleware( id ) )
+
+		return this
+	}
 
 	/**
 	 * Get the router

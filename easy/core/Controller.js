@@ -20,17 +20,16 @@ class Controller {
     constructor( container ) {
         this.container = container
         this.entityManager = this.em = container.get( 'component.entitymanager' )
-        this.router = container.get( 'component.router' )
     }
 
     /**
      * Get an entity manager
      *
-     * @param {string} [name=default]
+     * @param {string} [name='default']
      * @returns {EntityManager}
      */
     getEntityManager( name = 'default' ) {
-        return this.container.get( 'component.databasesmanager' ).getEntityManager( name )
+        return this.get( 'component.databasesmanager' ).getEntityManager( name )
     }
 
     /**
