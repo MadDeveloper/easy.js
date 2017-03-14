@@ -68,6 +68,8 @@ class Kernel extends Configurable {
 			this.bundles.add( bundle )
 			bundle.load()
 		})
+
+		this.router.bundles = this.bundles
     }
 
     /**
@@ -99,7 +101,7 @@ class Kernel extends Configurable {
         this._container = containerBuilder.build()
         this._router = this.container.get( 'component.router' )
 
-        this.router.configure({ container: this.container, bundles: this.bundles })
+        this.router.configure({ container: this.container })
 		Route.router = this.router
     }
 

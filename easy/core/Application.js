@@ -58,9 +58,8 @@ class Application extends Configurable {
         await this.startDatabases()
         this._plugThirdPartyMiddlewares()
         this._plugAuthentication()
-        this.kernel.loadBundles()
-        this.router.notFound()
         this._initializePassport()
+        this.kernel.loadBundles()
         this.mountRouter()
     }
 
@@ -89,6 +88,7 @@ class Application extends Configurable {
      */
     mountRouter() {
         this.router.mount( '/', this.app )
+        this.router.notFound()
     }
 
     /**

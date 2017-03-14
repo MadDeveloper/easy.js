@@ -12,6 +12,7 @@ let lastRoute = {
 	route: '',
 	method: ''
 }
+const routes = []
 
 /**
  * @class Route
@@ -28,8 +29,7 @@ class Route {
 	 * @memberOf Route
 	 */
 	static get( route, action ) {
-		Route.router.route( route, 'get', action )
-		lastRoute = { route, method: 'get' }
+		Route.route( route, 'get', action )
 
 		return Route
 	}
@@ -45,8 +45,7 @@ class Route {
 	 * @memberOf Route
 	 */
 	static post( route, action ) {
-		Route.router.route( route, 'post', action )
-		lastRoute = { route, method: 'post' }
+		Route.route( route, 'post', action )
 
 		return Route
 	}
@@ -62,8 +61,7 @@ class Route {
 	 * @memberOf Route
 	 */
 	static put( route, action ) {
-		Route.router.route( route, 'put', action )
-		lastRoute = { route, method: 'put' }
+		Route.route( route, 'put', action )
 
 		return Route
 	}
@@ -79,8 +77,7 @@ class Route {
 	 * @memberOf Route
 	 */
 	static patch( route, action ) {
-		Route.router.route( route, 'patch', action )
-		lastRoute = { route, method: 'patch' }
+		Route.route( route, 'patch', action )
 
 		return Route
 	}
@@ -96,8 +93,7 @@ class Route {
 	 * @memberOf Route
 	 */
 	static delete( route, action ) {
-		Route.router.route( route, 'delete', action )
-		lastRoute = { route, method: 'delete' }
+		Route.route( route, 'delete', action )
 
 		return Route
 	}
@@ -113,8 +109,7 @@ class Route {
 	 * @memberOf Route
 	 */
 	static options( route, action ) {
-		Route.router.route( route, 'options', action )
-		lastRoute = { route, method: 'options' }
+		Route.route( route, 'options', action )
 
 		return Route
 	}
@@ -139,68 +134,100 @@ class Route {
 
 	/**
 	 * Define a route
-	 * 
+	 *
 	 * @static
-	 * @param {string} route 
-	 * @param {string[]|string} methods 
-	 * @param {string|Function} action 
+	 * @param {string} route
+	 * @param {string[]|string} methods
+	 * @param {string|Function} action
 	 * @returns {Route}
-	 * 
+	 *
 	 * @memberOf Route
 	 */
 	static route( route, methods, action ) {
 		if ( Array.isArray( methods ) ) {
 			methods.forEach( method => Route.route( route, method, action ) )
 		} else {
-			Route[ methods ]( route, action )
+			lastRoute = { route, method: methods, action, middlewares: [], security: [] }
+			Route.routes.push( lastRoute )
 		}
 
 		return Route
 	}
 
 	/**
-	 * Define security rules for the last route
+	 * Define one or many security rules for the last route
 	 *
 	 * @static
-	 * @param {Object} configurations
+	 * @param {Object|Object[]} configurations
 	 * @return {Route}
 	 *
 	 * @memberOf Route
 	 */
 	static security( configurations ) {
-		Route.router.security( lastRoute.route, lastRoute.method, configurations )
+		if ( Array.isArray( configurations ) ) {
+			configurations.forEach( configuration => Route.security( configuration ) )
+		} else {
+			Route._appendSecurity( configurations, lastRoute )
+		}
 
 		return this
 	}
 
 	/**
-	 * Define use of a middleware for the last route
+	 * Define use of one or many middlewares for the last route
 	 *
 	 * @static
-	 * @param {string} id
+	 * @param {string[]|string} ids
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
-	static middleware( id ) {
-		Route.router.middleware( lastRoute.route, lastRoute.method, id )
+	static middleware( ids ) {
+		if ( Array.isArray( ids ) ) {
+			ids.forEach( id => Route.middleware( id ) )
+		} else {
+			Route._appendMiddleware( ids, lastRoute )
+		}
 
 		return this
 	}
 
 	/**
-	 * Define use of many middlewares for the last route
+	 * Append middleware to a specific route
 	 *
 	 * @static
-	 * @param {string[]} ids
-	 * @returns
+	 * @param {string} id
+	 * @param {Object} route
+	 *
+	 * @private
 	 *
 	 * @memberOf Route
 	 */
-	static middlewares( ids ) {
-		ids.forEach( id => Route.middleware( id ) )
+	static _appendMiddleware( id, route ) {
+		routes.forEach( current => {
+			if ( current.route === route.route ) {
+				route.middlewares.push( id )
+			}
+		})
+	}
 
-		return this
+	/**
+	 * Append middleware to a specific route
+	 *
+	 * @static
+	 * @param {Object} configurations
+	 * @param {Object} route
+	 *
+	 * @private
+	 *
+	 * @memberOf Route
+	 */
+	static _appendSecurity( configurations, route ) {
+		routes.forEach( current => {
+			if ( current.route === route.route ) {
+				route.security.push( configurations )
+			}
+		})
 	}
 
 	/**
@@ -226,6 +253,19 @@ class Route {
 	 */
 	static set router( value ) {
 		router = value
+	}
+
+	/**
+	 * Get all routes
+	 *
+	 * @readonly
+	 * @static
+	 * @returns {Object[]}
+	 *
+	 * @memberOf Route
+	 */
+	static get routes() {
+		return routes
 	}
 }
 

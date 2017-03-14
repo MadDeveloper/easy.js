@@ -8,6 +8,7 @@
 */
 
 const express = require( 'express' )
+const Route = require( './Route' )
 const Configurable = require( '../interfaces/Configurable' )
 const Request = require( '../http/Request' )
 const Response = require( '../http/Response' )
@@ -158,10 +159,53 @@ class Router extends Configurable {
      * @memberOf Router
      */
     mount( path, app ) {
+		this._mountRoutes()
         app.use( path, this.scope )
 
         return this
     }
+
+	/**
+	 * Mount all routes declared with Route
+	 *
+	 * @private
+	 *
+	 * @memberOf Router
+	 */
+	_mountRoutes() {
+		Route.routes.forEach( route => {
+			// first we mount security, then middlewares, and finally the route
+			this._mountSecurity( route )
+			this._mountMiddlewares( route )
+			this.route( route.route, route.method, route.action )
+		})
+	}
+
+	/**
+	 * Mount all securities for the route
+	 *
+	 * @param {Object} route
+	 *
+	 * @private
+	 *
+	 * @memberOf Router
+	 */
+	_mountSecurity( route ) {
+		route.security.forEach( security => this.security( route.route, route.method, security ) )
+	}
+
+	/**
+	 * Mount all middlewares for the route
+	 *
+	 * @param {Object} route
+	 *
+	 * @private
+	 *
+	 * @memberOf Router
+	 */
+	_mountMiddlewares( route ) {
+		route.middlewares.forEach( middleware => this.middleware( route.route, route.method, middleware ) )
+	}
 
 	/**
 	 * Check if action is a method callable from a controller
@@ -232,7 +276,7 @@ class Router extends Configurable {
      * @memberOf Router
      */
     _findMiddleware( id ) {
-        return Middleware.all.get( id )
+        return Middleware.all().get( id )
     }
 
     /**
@@ -298,6 +342,28 @@ class Router extends Configurable {
 	 */
 	get access() {
 		return this._access
+	}
+
+	/**
+	 * Get all bundles
+	 *
+	 * @returns {Set}
+	 *
+	 * @memberOf Router
+	 */
+	get bundles() {
+		return this._bundles
+	}
+
+	/**
+	 * Set bundles
+	 *
+	 * @param {Set} bundes
+	 *
+	 * @memberOf Router
+	 */
+	set bundles( bundles ) {
+		this._bundles = new Set( bundles )
 	}
 }
 
