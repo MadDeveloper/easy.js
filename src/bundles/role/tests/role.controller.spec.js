@@ -21,7 +21,7 @@ describe( 'RoleController', () => {
 
     beforeEach( () => roleController = new RoleController( container ) )
 
-    describe( 'getRoles', () => {
+    describe( 'all', () => {
 
         describe( 'when the repository respond successfully', () => {
 
@@ -30,7 +30,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.getRoles({}, response )
+                roleController.all({}, response )
             }) )
 
             it( 'should respond with the provided roles', () => {
@@ -46,7 +46,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.getRoles({}, response )
+                roleController.all({}, response )
             }) )
 
             it( 'should respond with internal server error', () => {
@@ -57,7 +57,7 @@ describe( 'RoleController', () => {
 
     })
 
-    describe( 'getRole', () => {
+    describe( 'one', () => {
 
         describe( 'when the repository respond successfully', () => {
 
@@ -66,7 +66,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.getRole( request, response )
+                roleController.one( request, response )
             }) )
 
             it( 'should respond with the provided role', () => {
@@ -77,7 +77,7 @@ describe( 'RoleController', () => {
 
     })
 
-    describe( 'createRole', () => {
+    describe( 'create', () => {
 
         describe( 'when the repository respond successfully', () => {
 
@@ -88,7 +88,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.createRole( request, response )
+                roleController.create( request, response )
             }) )
 
             it( 'should respond with the newly created role', () => {
@@ -106,7 +106,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.createRole( request, response )
+                roleController.create( request, response )
             }) )
 
             it( 'should respond with internal server error', () => {
@@ -122,7 +122,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.createRole( request, response )
+                roleController.create( request, response )
             }) )
 
             it( 'should respond with bad request', () => {
@@ -133,7 +133,7 @@ describe( 'RoleController', () => {
 
     })
 
-    describe( 'roleExists', () => {
+    describe( 'exists', () => {
 
         beforeEach( () => {
             entityManager.getModel.and.returnValue( Role )
@@ -146,7 +146,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.roleExists( request, response )
+                roleController.exists( request, response )
             }) )
 
             it( 'should store found role in request dedicated scope', () => {
@@ -162,7 +162,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.roleExists( request, response )
+                roleController.exists( request, response )
             }) )
 
             it( 'should respond with not found', () => {
@@ -178,7 +178,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.roleExists( request, response )
+                roleController.exists( request, response )
             }) )
 
             it( 'should respond with bad request', () => {
@@ -189,7 +189,7 @@ describe( 'RoleController', () => {
 
     })
 
-    describe( 'updateRole', () => {
+    describe( 'update', () => {
 
         beforeEach( () => {
             request.get.and.returnValue( role )
@@ -203,7 +203,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.updateRole( request, response )
+                roleController.update( request, response )
             }) )
 
             it( 'should respond with ok and return updated role', () => {
@@ -219,7 +219,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.updateRole( request, response )
+                roleController.update( request, response )
             }) )
 
             it( 'should respond with internal server error', () => {
@@ -235,7 +235,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.updateRole( request, response )
+                roleController.update( request, response )
             }) )
 
             it( 'should respond with bad request', () => {
@@ -246,7 +246,7 @@ describe( 'RoleController', () => {
 
     })
 
-    describe( 'deleteRole', () => {
+    describe( 'delete', () => {
 
         describe( 'when the repository respond successfully', () => {
 
@@ -256,7 +256,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.deleteRole( request, response )
+                roleController.delete( request, response )
             }) )
 
             it( 'should respond with no content', () => {
@@ -273,7 +273,7 @@ describe( 'RoleController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                roleController.deleteRole( request, response )
+                roleController.delete( request, response )
             }) )
 
             it( 'should respond with an internal server error', () => {

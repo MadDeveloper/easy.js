@@ -178,15 +178,16 @@ class Route {
 	 *
 	 * @static
 	 * @param {string[]|string} ids
+	 * @param {Object} options
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
-	static middleware( ids ) {
+	static middleware( ids, options = {}) {
 		if ( Array.isArray( ids ) ) {
-			ids.forEach( id => Route.middleware( id ) )
+			ids.forEach( id => Route.middleware( id, options ) )
 		} else {
-			Route._appendMiddleware( ids, lastRoute )
+			Route._appendMiddleware( ids, lastRoute, options )
 		}
 
 		return this
@@ -198,15 +199,16 @@ class Route {
 	 * @static
 	 * @param {string} id
 	 * @param {Object} route
+	 * @param {Object} options
 	 *
 	 * @private
 	 *
 	 * @memberOf Route
 	 */
-	static _appendMiddleware( id, route ) {
+	static _appendMiddleware( id, route, options ) {
 		routes.forEach( current => {
 			if ( current.route === route.route ) {
-				route.middlewares.push( id )
+				route.middlewares.push({ id, options })
 			}
 		})
 	}

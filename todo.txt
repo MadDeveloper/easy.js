@@ -3,9 +3,9 @@
 -----------------------------
 
 - la ou il y a require, faire appel à error.stack dans les try catch englobant
-- revoir les Analyzer, peux utiles, ou refactorer
 - refactorer le routing (manque la notion de Group)
 - voir pour les components du container les instancier dans le kernel et les addToBuild() avec ContainerBuilder
+- update mocks
 - ajouter les méthodes dans request et response de adonis
 - renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.
 - mettre des @example dans la jsdoc

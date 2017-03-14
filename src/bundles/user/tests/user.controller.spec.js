@@ -36,7 +36,7 @@ describe( 'UserController', () => {
 
     beforeEach( () => userController = new UserController( container ) )
 
-    describe( 'getUsers', () => {
+    describe( 'all', () => {
 
         describe( 'when the repository respond successfully', () => {
 
@@ -46,7 +46,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.getUsers( request, response )
+                userController.all( request, response )
             }) )
 
             it( 'should respond with the provided users', () => {
@@ -62,7 +62,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.getUsers( request, response )
+                userController.all( request, response )
             }) )
 
             it( 'should respond with internal server error', () => {
@@ -73,7 +73,7 @@ describe( 'UserController', () => {
 
     })
 
-    describe( 'getUser', () => {
+    describe( 'one', () => {
 
         describe( 'when respond successfully', () => {
 
@@ -82,7 +82,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.getUser( request, response )
+                userController.one( request, response )
             }) )
 
             it( 'should respond with the provided user', () => {
@@ -93,7 +93,7 @@ describe( 'UserController', () => {
 
     })
 
-    describe( 'createUser', () => {
+    describe( 'create', () => {
 
         describe( 'when the repository respond successfully', () => {
 
@@ -105,7 +105,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.createUser( request, response )
+                userController.create( request, response )
             }) )
 
             it( 'should respond with the newly created user', () => {
@@ -123,7 +123,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.createUser( request, response )
+                userController.create( request, response )
             }) )
 
             it( 'should respond with internal server error', () => {
@@ -139,7 +139,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.createUser( request, response )
+                userController.create( request, response )
             }) )
 
             it( 'should respond with bad request', () => {
@@ -150,7 +150,7 @@ describe( 'UserController', () => {
 
     })
 
-    describe( 'userExists', () => {
+    describe( 'exists', () => {
 
         beforeEach( () => {
             entityManager.getModel.and.returnValue( User )
@@ -163,7 +163,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.userExists( request, response )
+                userController.exists( request, response )
             }) )
 
             it( 'should store found user in request dedicated scope', () => {
@@ -179,7 +179,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.userExists( request, response )
+                userController.exists( request, response )
             }) )
 
             it( 'should respond with not found', () => {
@@ -195,7 +195,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.userExists( request, response )
+                userController.exists( request, response )
             }) )
 
             it( 'should respond with bad request', () => {
@@ -206,7 +206,7 @@ describe( 'UserController', () => {
 
     })
 
-    describe( 'updateUser', () => {
+    describe( 'update', () => {
 
         beforeEach( () => {
             request.get.and.returnValue( user )
@@ -220,7 +220,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.updateUser( request, response )
+                userController.update( request, response )
             }) )
 
             it( 'should respond with ok and return updated user', () => {
@@ -236,7 +236,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.updateUser( request, response )
+                userController.update( request, response )
             }) )
 
             it( 'should respond with internal server error', () => {
@@ -252,7 +252,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.updateUser( request, response )
+                userController.update( request, response )
             }) )
 
             it( 'should respond with bad request', () => {
@@ -263,7 +263,7 @@ describe( 'UserController', () => {
 
     })
 
-    describe( 'patchUser', () => {
+    describe( 'patch', () => {
 
         describe( 'when the repository respond successfully', () => {
 
@@ -274,7 +274,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.patchUser( request, response )
+                userController.patch( request, response )
             }) )
 
             it( 'should respond with the patched user', () => {
@@ -292,7 +292,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.patchUser( request, response )
+                userController.patch( request, response )
             }) )
 
             it( 'should respond with internal server error', () => {
@@ -308,7 +308,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.patchUser( request, response )
+                userController.patch( request, response )
             }) )
 
             it( 'should respond with bad request', () => {
@@ -321,7 +321,7 @@ describe( 'UserController', () => {
 
             beforeEach( () => request.getRawBody.and.returnValue( '' ) )
 
-            beforeEach( fakeAsync( () => userController.patchUser( request, response ) ) )
+            beforeEach( fakeAsync( () => userController.patch( request, response ) ) )
 
             it( 'should respond with bad request', () => {
                 expect( response.badRequest ).toHaveBeenCalledWith()
@@ -331,7 +331,7 @@ describe( 'UserController', () => {
 
     })
 
-    describe( 'deleteUser', () => {
+    describe( 'delete', () => {
 
         describe( 'when the repository respond successfully', () => {
 
@@ -341,7 +341,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.deleteUser( request, response )
+                userController.delete( request, response )
             }) )
 
             it( 'should respond with no content', () => {
@@ -358,7 +358,7 @@ describe( 'UserController', () => {
             })
 
             beforeEach( fakeAsync( () => {
-                userController.deleteUser( request, response )
+                userController.delete( request, response )
             }) )
 
             it( 'should respond with internal server error', () => {

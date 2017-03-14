@@ -13,8 +13,6 @@ const Configurable = require( '../interfaces/Configurable' )
 const Request = require( '../http/Request' )
 const Response = require( '../http/Response' )
 const Access = require( '../security/Access' )
-const AnalyzerMiddlewaresConfig = require( '../middleware/AnalyzerMiddlewaresConfig' )
-const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
 const extract = require( '../lib/extract' )
 const Middleware = require( '../middleware/Middleware' )
 
@@ -57,9 +55,10 @@ class Router extends Configurable {
      * @param {Object} route
      * @param {string} method
      * @param {string} id
+	 * @param {Object} [options={}]
      * @returns {Router}
      */
-    middleware( route, method, id ) {
+    middleware( route, method, id, options = {}) {
         const router = this.scope
         const middleware = this._findMiddleware( id )
 
@@ -77,7 +76,7 @@ class Router extends Configurable {
 		router.use( route, ( req, res, next ) => {
 			const request = new Request( req )
 
-			if ( 'all' === method || method === request.getMethod().toLowerCase() ) {
+			if ( ( 'all' === method || method === request.getMethod().toLowerCase() ) && ( route === request.getUrlInfos().originalUrl || options.deep ) ) {
 				const response = new Response( res )
 
                 action( request, response, next )
@@ -106,7 +105,8 @@ class Router extends Configurable {
         router.use( route, ( req, res, next ) => {
             const request = new Request( req )
 
-            if ( 'all' === method || method === request.getMethod().toLowerCase() ) {
+			if ( ( 'all' === method || method === request.getMethod().toLowerCase() ) && ( route === request.getUrlInfos().originalUrl || configurations.deep ) ) {
+
 				const response = new Response( res )
 
 				try {
@@ -204,7 +204,7 @@ class Router extends Configurable {
 	 * @memberOf Router
 	 */
 	_mountMiddlewares( route ) {
-		route.middlewares.forEach( middleware => this.middleware( route.route, route.method, middleware ) )
+		route.middlewares.forEach( middleware => this.middleware( route.route, route.method, middleware.id, middleware.options ) )
 	}
 
 	/**

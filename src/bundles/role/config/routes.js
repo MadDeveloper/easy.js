@@ -5,7 +5,7 @@ Route
 	.get( '/roles', 'RoleController.all' )
 	.security({
 		strategy: 'default',
-		roles: [ roles.any ]
+		roles: [ roles.user ]
 	})
 
 Route
@@ -21,7 +21,7 @@ Route
 		strategy: 'default',
 		roles: [ roles.any ]
 	})
-	.middleware( 'role-exists' )
+	.middleware( 'role-exists', { deep: true })
 
 Route
 	.put( '/roles/:role_id', 'RoleController.update' )
@@ -29,7 +29,7 @@ Route
 		strategy: 'default',
 		roles: [ roles.admin ]
 	})
-	.middleware( 'role-exists' )
+	.middleware( 'role-exists', { deep: true })
 
 Route
 	.delete( '/roles/:role_id', 'RoleController.delete' )
@@ -37,7 +37,7 @@ Route
 		strategy: 'default',
 		roles: [ roles.admin ]
 	})
-	.middleware( 'role-exists' )
+	.middleware( 'role-exists', { deep: true })
 /*
 Route
 	.group( 'change-role', () => {
