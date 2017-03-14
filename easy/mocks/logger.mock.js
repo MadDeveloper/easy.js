@@ -29,4 +29,8 @@ logger.reset = () => {
     }
 }
 
+const container = easy.application.container
+
+container.set( 'component.logger', logger )
+
 module.exports = logger

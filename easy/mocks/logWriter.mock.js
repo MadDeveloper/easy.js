@@ -20,4 +20,8 @@ logWriter.reset = () => {
     }
 }
 
+const container = easy.application.container
+
+container.set( 'component.logwriter', logWriter )
+
 module.exports = logWriter

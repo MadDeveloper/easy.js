@@ -8,38 +8,23 @@
 */
 
 const Container = require( './Container' )
-const Configurable = require( '../interfaces/Configurable' )
-const Configuration = require( '../core/Configuration' )
 const { isPlainObject } = require( 'lodash' )
 const path = require( 'path' )
 
 /**
  * @class ContainerBuilder
  */
-class ContainerBuilder extends Configurable {
+class ContainerBuilder {
     /**
      * @constructor
 	 * @param {Object} dependenciesMapping
+	 * @param {Object} configurations
      */
-    constructor( dependenciesMapping ) {
-        super()
-
-        this._dependenciesMapping = dependenciesMapping || Configuration.load( 'services' )
+    constructor( dependenciesMapping, configurations ) {
+        this._dependenciesMapping = dependenciesMapping
         this._container = new Container()
-        this._configurations = {}
+        this._configurations = configurations
         this._cached = new Map()
-    }
-
-    /**
-     * Configure container builder
-     *
-     * @param {object} options = {}
-     * @returns {ContainerBuilder}
-     */
-    configure( options = {}) {
-        this.configurations.includeComponents = options.includeComponents || false
-
-        return this
     }
 
     /**
@@ -50,9 +35,9 @@ class ContainerBuilder extends Configurable {
      *
      * @returns {ContainerBuilder}
      */
-    addToBuild( name, dependency ) {
+    add( name, dependency ) {
         this.cache( name, dependency )
-        this.container.register( name, dependency )
+        this.container.set( name, dependency )
 
         return this
     }
@@ -63,8 +48,8 @@ class ContainerBuilder extends Configurable {
      * @returns {Container}
      */
     build() {
-        if ( this.configurations.includeComponents ) {
-            this.dependenciesMapping = Object.assign( this.dependenciesMapping, require( './components' ) )
+        if ( this.configurations.components ) {
+            this.dependenciesMapping = Object.assign( this.dependenciesMapping, require( this.configurations.components ) )
         }
 
         this.registerDependencies()
@@ -79,7 +64,7 @@ class ContainerBuilder extends Configurable {
         Reflect.ownKeys( this.dependenciesMapping ).forEach( name => {
 			const dependency = this.load( name, name.includes( 'component.' ) )
 
-			this.container.register( name, dependency )
+			this.container.set( name, dependency )
 		})
     }
 
@@ -105,7 +90,7 @@ class ContainerBuilder extends Configurable {
         const dependencies = []
 
         requestedDependencies.forEach( dependencyName => {
-            if ( 'easy.container' === dependencyName ) {
+            if ( 'container' === dependencyName ) {
                 dependencies.push( this.container )
             } else {
                 dependencies.push( this.load( dependencyName, dependencyName.includes( 'component.' ) ) )
@@ -125,11 +110,11 @@ class ContainerBuilder extends Configurable {
      * @throws {ReferenceError} if the dependency file path is not found
      */
     load( name, isComponent = false ) {
-        if ( this.isLoaded( name ) ) {
-            return this.getLoaded( name )
+        if ( this.loaded( name ) ) {
+            return this.dependency( name )
         }
 
-		const dependencyFilePath = `${isComponent ? '' : `${path.resolve( './src' )}/`}${this.dependenciesMapping[ name ].path}`
+		let dependencyFilePath = this.dependenciesMapping[ name ].path
 		let dependencyClass
 
         try {
@@ -147,7 +132,7 @@ class ContainerBuilder extends Configurable {
      * @param {name} name
      * @returns {boolean}
      */
-    isLoaded( name ) {
+    loaded( name ) {
         return this.cached.has( name )
     }
 
@@ -157,7 +142,7 @@ class ContainerBuilder extends Configurable {
      * @param {string} name
      * @returns {object}
      */
-    getLoaded( name ) {
+    dependency( name ) {
         return this.cached.get( name )
     }
 

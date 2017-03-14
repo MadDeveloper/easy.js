@@ -19,13 +19,13 @@ class Container {
     }
 
     /**
-     * Register a new dependency
+     * Set a dependency
      *
      * @param {string} name
      * @param {any} dependency
      * @returns {Container}
      */
-    register( name, dependency ) {
+    set( name, dependency ) {
         this.shared.set( name, dependency )
 
         return this
@@ -35,7 +35,7 @@ class Container {
      * Get a dependency by name
      *
      * @param {string} name
-     * @returns {Service|Component|undefined}
+     * @returns {any}
      */
     get( name ) {
         return this.shared.get( name )

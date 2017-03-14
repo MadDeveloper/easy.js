@@ -149,7 +149,7 @@ class Logger {
      * @private
      * @param {string} message
      * @returns {string}
-     * 
+     *
      * @private
      *
      * @memberOf Logger
@@ -159,7 +159,7 @@ class Logger {
     }
 
     /**
-     * get - log writer instance
+     * get log writer instance
      *
      * @returns {LogWriter}
      */

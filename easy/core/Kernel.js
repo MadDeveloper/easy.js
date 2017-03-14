@@ -81,8 +81,8 @@ class Kernel extends Configurable {
         /*
          * Prepare container
          */
-        const containerBuilder = new ContainerBuilder()
-        containerBuilder.configure({ includeComponents: true })
+		const services = Configuration.load( 'services' )
+        const containerBuilder = new ContainerBuilder( services, { components: require.resolve( '../container/components' ) })
 
         /*
          * Start and daemonize databases
@@ -93,7 +93,7 @@ class Kernel extends Configurable {
         /*
          * Build container
          */
-        containerBuilder.addToBuild( 'component.databasesmanager', this.databasesManager )
+        containerBuilder.add( 'component.databasesmanager', this.databasesManager )
 
         /*
          * Get some others components
