@@ -9,7 +9,7 @@
 
 module.exports = {
     'component.router': {
-        path: 'easy/core/Router'
+        path: 'easy/routing/Router'
     },
     'component.logwriter': {
         path: 'easy/log/LogWriter'

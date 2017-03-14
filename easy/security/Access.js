@@ -48,15 +48,14 @@ class Access extends SecurityAccess {
      * @param {Object} { configurations
      * @param {Request} request
      * @param {Response} response }
-     * @returns {boolean}
      */
-    async authorized({ configurations, request, response }) {
+    async authorize({ configurations, request, response, next }) {
 		const tokenValidation = await this.checkToken( request )
 
         if ( !tokenValidation ) {
             response.unauthorized()
 
-            return false
+            return
         }
 
         const rolesAuthorized = configurations.roles
@@ -66,16 +65,18 @@ class Access extends SecurityAccess {
         const hasAccess = rolesAuthorized.includes( roleUser )
 
         if ( rolesAuthorized.includes( this.roles.any ) ) {
-            return true
+            next()
+
+            return
         }
 
         if ( !hasAccess ) {
             response.forbidden()
 
-            return false
+            return
         }
 
-        return true
+        next()
     }
 
 	/**

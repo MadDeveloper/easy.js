@@ -30,7 +30,7 @@ class Configuration {
 		try {
 			return require( require.resolve( configurationFilePath ) )
 		} catch ( error ) {
-			throw new ReferenceError( `Impossible to require global configuration file (${configurationFilePath}).\n${error}` )
+			throw new ReferenceError( `Impossible to require global configuration file (${configurationFilePath}).\n${error.stack}` )
 		}
 	}
 
@@ -49,7 +49,7 @@ class Configuration {
 		try {
 			return require( require.resolve( configurationFilePath ) )
 		} catch ( error ) {
-			throw new Error( `Impossible to require bundle configuration file (${configurationFilePath}).\n${error}` )
+			throw new Error( `Impossible to require bundle configuration file (${configurationFilePath}).\n${error.stack}` )
 		}
 	}
 

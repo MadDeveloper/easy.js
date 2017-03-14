@@ -137,6 +137,17 @@ class Route {
 		return Route
 	}
 
+	/**
+	 * Define a route
+	 * 
+	 * @static
+	 * @param {string} route 
+	 * @param {string[]|string} methods 
+	 * @param {string|Function} action 
+	 * @returns {Route}
+	 * 
+	 * @memberOf Route
+	 */
 	static route( route, methods, action ) {
 		if ( Array.isArray( methods ) ) {
 			methods.forEach( method => Route.route( route, method, action ) )
@@ -166,13 +177,13 @@ class Route {
 	 * Define use of a middleware for the last route
 	 *
 	 * @static
-	 * @param {any} id
+	 * @param {string} id
 	 * @returns {Route}
 	 *
 	 * @memberOf Route
 	 */
 	static middleware( id ) {
-		Route.router.middleware( lastRoute.route, lastRoute.method, configurations )
+		Route.router.middleware( lastRoute.route, lastRoute.method, id )
 
 		return this
 	}
@@ -181,7 +192,7 @@ class Route {
 	 * Define use of many middlewares for the last route
 	 *
 	 * @static
-	 * @param {any} ids
+	 * @param {string[]} ids
 	 * @returns
 	 *
 	 * @memberOf Route

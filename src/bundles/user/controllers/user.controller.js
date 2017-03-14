@@ -26,22 +26,21 @@ class UserController extends Controller {
      *
      * @param {Request} request
      * @param {Response} response
-     * @returns {boolean}
+     * @param {Function} next
      */
-    async userExists( request, response ) {
+    async exists( request, response, next ) {
         try {
-        	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+            const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             const user = await userRepository.find( request.getRouteParameter( 'user_id' ) )
 
             if ( !user ) {
                 response.notFound()
 
-                return false
+                return
             }
 
             request.set( 'user', user )
-
-            return true
+            next()
         } catch ( error ) {
             response.internalServerError()
         }
@@ -53,16 +52,16 @@ class UserController extends Controller {
      * @param {Request} request
      * @param {Response} response
      */
-    async getUsers( request, response ) {
+    async all( request, response ) {
 
-        try {
-			const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
-            const users = await userRepository.findAll( request.get( 'role' ) )
+        // try {
+		// 	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+        //     const users = await userRepository.findAll( request.get( 'role' ) )
 
-            response.ok( users )
-        } catch ( error ) {
-            response.internalServerError()
-        }
+        //     response.ok( users )
+        // } catch ( error ) {
+        //     response.internalServerError()
+        // }
     }
 
     /**
@@ -114,7 +113,7 @@ class UserController extends Controller {
             }
 
             try {
-            	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+                const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
                 const user = await userRepository.save( request.get( 'user' ), request.getBody() )
 
                 response.ok( user )
@@ -153,7 +152,7 @@ class UserController extends Controller {
                         if ( 'replace' === patch.op ) {
                             if ( validPaths.includes( patch.path ) ) {
                                 try {
-                                	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+                                    const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
                                     const user = await userRepository.patch( request.get( 'user' ), patch )
 
                                     if ( ++currentPatch >= opsLength ) {
@@ -201,7 +200,7 @@ class UserController extends Controller {
      */
     async deleteUser( request, response ) {
         try {
-        	const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+            const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
             await userRepository.delete( request.get( 'user' ) )
 
             response.noContent()

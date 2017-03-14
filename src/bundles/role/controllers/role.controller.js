@@ -23,9 +23,9 @@ class RoleController extends Controller {
      *
      * @param {Request} request
      * @param {Response} response
-     * @returns {boolean}
+     * @param {Function} next
      */
-    async exists( request, response ) {
+    async exists( request, response, next ) {
         const em = this.getEntityManager()
 
         try {
@@ -36,16 +36,13 @@ class RoleController extends Controller {
             if ( !role ) {
                 response.notFound()
 
-                return false
+                return
             }
 
             request.set( 'role', role )
-
-            return true
+            next()
         } catch ( error ) {
             response.internalServerError()
-
-            return false
         }
     }
 

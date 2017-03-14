@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-const Configuration = require( '../core/Configuration' )
+const express = require( 'express' )
 const Configurable = require( '../interfaces/Configurable' )
 const Request = require( '../http/Request' )
 const Response = require( '../http/Response' )
@@ -15,6 +15,7 @@ const Access = require( '../security/Access' )
 const AnalyzerMiddlewaresConfig = require( '../middleware/AnalyzerMiddlewaresConfig' )
 const AnalyzerSecurityConfig = require( '../security/AnalyzerSecurityConfig' )
 const extract = require( '../lib/extract' )
+const Middleware = require( '../middleware/Middleware' )
 
 /**
  * @class Router
@@ -30,86 +31,91 @@ class Router extends Configurable {
         this._scope = null
         this._container = null
         this._access = new Access()
+        this._bundles = new Set()
     }
 
     /**
      * Configure easy router
      *
-     * @param {Container} container
-	 * @param {Object} router
+     * @param {Container} { container
+	 * @param {Set|Bundle[]} bundles
+     * @param {Object} router }
+     * @returns {Router}
      */
-    configure( container, router ) {
+    configure({ container, bundles, router }) {
         this._container = container
-        this._scope = router
+        this._bundles = bundles
+        this._scope = router || express.Router()
+
+        return this
     }
 
     /**
      * Define new middleware from configurations
      *
-     * @param {Object} configurations
-     * @param {string} httpMethod
-     * @param {string} controllerAction
+     * @param {Object} route
+     * @param {string} method
+     * @param {string} id
+     * @returns {Router}
      */
-    middleware( configurations, httpMethod, controllerAction ) {
+    middleware( route, method, id ) {
         const router = this.scope
-		const analyzerMiddlewaresConfig = new AnalyzerMiddlewaresConfig()
-		const middlewareInfos = analyzerMiddlewaresConfig.extractMiddlewareConfig( configurations )
+        const middleware = this._findMiddleware( id )
 
-        httpMethod = httpMethod.toLowerCase()
+        if ( !middleware ) {
+            throw new ReferenceError( `Cannot load middleware, middleware ${id} hasn't been found` )
+        }
 
-		const [ controllerId, controllerMethod ] = middlewareInfos.controller.split( ':' )
-		const controller = controllers[ controllerId ]
+        let action = middleware
 
-		router[ middlewareInfos.type ]( middlewareInfos.param, async ( req, res, next ) => {
+        if ( this._isControllerMethod( middleware ) ) {
+            action = this._findControllerAction( middleware )
+        }
+
+        method = method.toLowerCase()
+		router.use( route, ( req, res, next ) => {
 			const request = new Request( req )
 
-			if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
+			if ( 'all' === method || method === request.getMethod().toLowerCase() ) {
 				const response = new Response( res )
-				const authorized = await controller[ controllerMethod ]( request, response )
 
-				if ( authorized ) {
-					next()
-				}
+                action( request, response, next )
 			} else {
 				next()
 			}
 		})
+
+        return this
     }
 
     /**
      * Define access rules for specific route
      *
      * @param {string} route
-     * @param {string} httpMethod
+     * @param {string} method
      * @param {Object} configurations
+     * @return {Router}
      */
-    security( route, httpMethod, configurations ) {
+    security( route, method, configurations ) {
         const router = this.scope
-        const analyzerSecurityConfig = new AnalyzerSecurityConfig( configurations )
-        const securityConfig = analyzerSecurityConfig.extractSecurityConfig()
-        const handler = this.accessHandler( securityConfig )
+        const handler = this.accessHandler( configurations )
 
-        httpMethod = httpMethod.toLowerCase()
+        method = method.toLowerCase()
 
-        router.use( route, async ( req, res, next ) => {
+        router.use( route, ( req, res, next ) => {
             const request = new Request( req )
 
-            if ( 'all' === httpMethod || httpMethod === request.getMethod().toLowerCase() ) {
+            if ( 'all' === method || method === request.getMethod().toLowerCase() ) {
 				const response = new Response( res )
 
 				try {
-					const authorized = await handler.authorized({
-						configurations: securityConfig,
+				    handler.authorize({
+						configurations,
 						request,
 						response,
+                        next,
 						container: this._container
 					})
-
-					if ( authorized ) {
-						next()
-					} else if ( !response.headersAlreadySent() ) {
-						response.forbidden()
-					}
 				} catch ( error ) {
 					response.internalServerError()
 				}
@@ -117,6 +123,8 @@ class Router extends Configurable {
                 next()
             }
         })
+
+        return this
     }
 
     /**
@@ -125,19 +133,34 @@ class Router extends Configurable {
      * @param {string} route
      * @param {string} method
      * @param {string} action
+     * @returns {Router}
      */
     route( route, method, action ) {
         const router = this.scope
 
 		if ( this._isControllerMethod( action ) ) {
-			const [ controller, controllerMethod ] = extract.controllerAndAction( actions )
-
-			action = controller[ controllerMethod ]
+            action = this._findControllerAction( action )
 		}
 
         method = method.toLowerCase()
-
         router.route( route )[ method ]( ( req, res ) => action( new Request( req ), new Response( res ) ) )
+
+        return this
+    }
+
+    /**
+     * Mount router on app
+     *
+     * @param {string} path
+     * @param {Object} app
+     * @returns {Router}
+     *
+     * @memberOf Router
+     */
+    mount( path, app ) {
+        app.use( path, this.scope )
+
+        return this
     }
 
 	/**
@@ -155,6 +178,64 @@ class Router extends Configurable {
 	}
 
     /**
+     * Find controller action
+     *
+     * @param {string} action
+     * @returns {Function}
+     *
+     * @throws {ReferenceError} if the controller cannot be found in bundles
+     *
+     * @private
+     *
+     * @memberOf Router
+     */
+    _findControllerAction( action ) {
+        const [ controllerId, controllerMethod ] = extract.controllerAndAction( action )
+        const controller = this._findController( controllerId )
+
+        if ( !controller ) {
+            throw new ReferenceError( `Cannot load controller's action, controller ${controllerId} hasn't been found in bundles list` )
+        }
+
+        return controller[ controllerMethod ].bind( controller )
+    }
+
+    /**
+     * Find controller from it's id
+     *
+     * @param {string} id
+     * @returns {Controller}
+     *
+     * @private
+     *
+     * @memberOf Router
+     */
+    _findController( id ) {
+        let controller
+
+        for ( let bundle of this._bundles ) {
+            if ( bundle.hasController( id ) ) {
+                controller = bundle.controller( id )
+                break
+            }
+        }
+
+        return controller
+    }
+
+    /**
+     * Find the middleware from it's id
+     *
+     * @param {string} id
+     * @returns {Object}
+     *
+     * @memberOf Router
+     */
+    _findMiddleware( id ) {
+        return Middleware.all.get( id )
+    }
+
+    /**
      * Returns access authority handler
      *
      * @param {Object} configurations
@@ -166,6 +247,8 @@ class Router extends Configurable {
 
 	/**
 	 * Add not found route
+     *
+     * @returns {Router}
 	 */
 	notFound() {
 		const router = this.scope
@@ -177,17 +260,22 @@ class Router extends Configurable {
 	            response.notFound()
 	        }
 	    })
+
+        return this
 	}
 
     /**
      * Define route on all http verbs which returns 405 Method Not Allowed
      *
      * @param {string} route
+     * @returns {Router}
      */
     methodNotAllowed( route ) {
         const router = this.scope
 
         router.route( route ).all( ( req, res ) => new Response( res ).methodNotAllowed() )
+
+        return this
     }
 
     /**

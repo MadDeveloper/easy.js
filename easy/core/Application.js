@@ -57,12 +57,11 @@ class Application extends Configurable {
     async start() {
         await this.startDatabases()
         this._plugThirdPartyMiddlewares()
-        this._exposeRawBody()
         this._plugAuthentication()
         this.kernel.loadBundles()
         this.router.notFound()
         this._initializePassport()
-        this._bindRoutes()
+        this.mountRouter()
     }
 
     /**
@@ -85,13 +84,11 @@ class Application extends Configurable {
 
     /**
      * Bind real router's routes to global route path
-	 *
-	 * @private
      *
      * @memberOf Application
      */
-    _bindRoutes() {
-        this.app.use( '/', this.router.scope )
+    mountRouter() {
+        this.router.mount( '/', this.app )
     }
 
     /**
@@ -111,6 +108,8 @@ class Application extends Configurable {
 	 * @private
      */
     _plugThirdPartyMiddlewares() {
+        this._exposeRawBody()
+
         /*
          * Will permit to retrieve remote ips
          */

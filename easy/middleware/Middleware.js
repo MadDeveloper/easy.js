@@ -23,10 +23,8 @@ class Middleware {
 	 *
 	 * @memberOf Middleware
 	 */
-	static register( id, controllerAction ) {
-		const [ controller, action ] = controllerAction.split( '.' )
-
-		middlewares.set( id, { controller, action })
+	static register( id, action ) {
+		middlewares.set( id, action )
 
 		return this
 	}
@@ -39,7 +37,7 @@ class Middleware {
 	 *
 	 * @memberOf Middleware
 	 */
-	static get middlewares() {
+	static all() {
 		return middlewares
 	}
 }

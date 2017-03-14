@@ -2,8 +2,10 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- load controller from all bundles in router (inject kernel in it's configure method, and use it to load controller for specific route)
+- la ou il y a require, faire appel à error.stack dans les try catch englobant
+- revoir les Analyzer, peux utiles, ou refactorer
 - refactorer le routing (cf. Adonis, role bundle)
+- voir pour les components du container les instancier dans le kernel et les addToBuild() avec ContainerBuilder
 - ajouter les méthodes dans request et response de adonis
 - renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.
 - créer une classe Route pour refactorer le Router

@@ -1,14 +1,13 @@
 const roles = require( '../../../config/roles' )
 const { Route } = require( 'easy/routing' )
 
-/*
 Route
-	.get( '/roles', 'RoleController.all'})
+	.get( '/roles', 'RoleController.all' )
 	.security({
 		strategy: 'default',
 		roles: [ roles.any ]
 	})
-
+/*
 Route
 	.post( '/roles', 'RoleController.create'})
 	.security({
@@ -39,7 +38,6 @@ Route
 	})
 	.middleware( 'role-exists' )
 
-*/
 module.exports = {
     '/roles': {
         get: {
@@ -83,3 +81,4 @@ module.exports = {
         // middlewares
     }
 }
+*/

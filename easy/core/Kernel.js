@@ -7,7 +7,6 @@
 * file that was distributed with this source code.
 */
 
-const express = require( 'express' )
 const path = require( 'path' )
 const Configuration = require( './Configuration' )
 const Bundle = require( './Bundle' )
@@ -63,7 +62,12 @@ class Kernel extends Configurable {
     loadBundles() {
         const bundles = Configuration.load( 'bundles/activated' )
 
-        bundles.forEach( indexModule => new Bundle( indexModule, this.router, this.container ).load() )
+        bundles.forEach( indexModule => {
+			const bundle = new Bundle( indexModule, this.container )
+
+			this.bundles.add( bundle )
+			bundle.load()
+		})
     }
 
     /**
@@ -95,14 +99,14 @@ class Kernel extends Configurable {
         this._container = containerBuilder.build()
         this._router = this.container.get( 'component.router' )
 
-        this.router.configure( this.container, express.Router() )
+        this.router.configure({ container: this.container, bundles: this.bundles })
 		Route.router = this.router
     }
 
     /**
      * Get all paths of the application
      *
-     * @returns {object}
+     * @returns {Object}
      */
     get path() {
         return this._path

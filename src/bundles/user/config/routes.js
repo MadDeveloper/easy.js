@@ -1,4 +1,14 @@
 const roles = require( '../../../config/roles' )
+const { Route } = require( 'easy/routing' )
+
+// Route
+// 	.get( '/roles/:role_id/users', 'UserController.all' )
+// 	.security({
+// 		strategy: 'default',
+// 		roles: [ roles.any ]
+// 	})
+
+/*
 const middlewares = require( './middlewares' )
 
 module.exports = {
@@ -51,3 +61,4 @@ module.exports = {
         middlewares
     }
 }
+*/
