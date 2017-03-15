@@ -37,7 +37,7 @@ class Middleware {
 	 *
 	 * @memberOf Middleware
 	 */
-	static all() {
+	static get middlewares() {
 		return middlewares
 	}
 }

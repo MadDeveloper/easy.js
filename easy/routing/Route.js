@@ -7,11 +7,15 @@
 * file that was distributed with this source code.
 */
 
+const Group = require( './Group' )
+
 let router = {}
 let lastRoute = {
 	route: '',
-	method: ''
+	method: '',
+	group: ''
 }
+let lastGroup = ''
 const routes = []
 
 /**
@@ -147,7 +151,14 @@ class Route {
 		if ( Array.isArray( methods ) ) {
 			methods.forEach( method => Route.route( route, method, action ) )
 		} else {
-			lastRoute = { route, method: methods, action, middlewares: [], security: [] }
+			lastRoute = {
+				route,
+				method: methods,
+				action,
+				middlewares: [],
+				security: [],
+				group: lastGroup
+			}
 			Route.routes.push( lastRoute )
 		}
 
@@ -170,7 +181,7 @@ class Route {
 			Route._appendSecurity( configurations, lastRoute )
 		}
 
-		return this
+		return Route
 	}
 
 	/**
@@ -190,7 +201,25 @@ class Route {
 			Route._appendMiddleware( ids, lastRoute, options )
 		}
 
-		return this
+		return Route
+	}
+
+	/**
+	 * Define a group for all routes in the context
+	 *
+	 * @static
+	 * @param {string} id
+	 * @param {Function} context
+	 * @returns {Group}
+	 *
+	 * @memberOf Route
+	 */
+	static group( id, context ) {
+		lastGroup = id
+		context()
+		lastGroup = ''
+
+		return new Group( id )
 	}
 
 	/**

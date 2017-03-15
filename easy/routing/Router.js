@@ -15,6 +15,7 @@ const Response = require( '../http/Response' )
 const Access = require( '../security/Access' )
 const extract = require( '../lib/extract' )
 const Middleware = require( '../middleware/Middleware' )
+const Group = require( './Group' )
 
 /**
  * @class Router
@@ -175,14 +176,16 @@ class Router extends Configurable {
 	_mountRoutes() {
 		Route.routes.forEach( route => {
 			// first we mount security, then middlewares, and finally the route
+            this._mountGroupSecurity( route )
 			this._mountSecurity( route )
+            this._mountGroupMiddlewares( route )
 			this._mountMiddlewares( route )
 			this.route( route.route, route.method, route.action )
 		})
 	}
 
 	/**
-	 * Mount all securities for the route
+	 * Mount all security rules for the route
 	 *
 	 * @param {Object} route
 	 *
@@ -193,6 +196,21 @@ class Router extends Configurable {
 	_mountSecurity( route ) {
 		route.security.forEach( security => this.security( route.route, route.method, security ) )
 	}
+
+    /**
+     * Mount all security rules of the route group
+     *
+     * @param {Object} route
+     *
+     * @memberOf Router
+     */
+    _mountGroupSecurity( route ) {
+        if ( !route.group.isEmpty() ) {
+            const group = this._findGroup( route.group )
+
+            group.security.forEach( security => this.security( route.route, route.method, security ) )
+        }
+    }
 
 	/**
 	 * Mount all middlewares for the route
@@ -206,6 +224,21 @@ class Router extends Configurable {
 	_mountMiddlewares( route ) {
 		route.middlewares.forEach( middleware => this.middleware( route.route, route.method, middleware.id, middleware.options ) )
 	}
+
+    /**
+     * Mount all middlewares of the route group
+     *
+     * @param {Object} route
+     *
+     * @memberOf Router
+     */
+    _mountGroupMiddlewares( route ) {
+        if ( !route.group.isEmpty() ) {
+            const group = this._findGroup( route.group )
+
+            group.middlewares.forEach( middleware => this.middleware( route.route, route.method, middleware.id, middleware.options ) )
+        }
+    }
 
 	/**
 	 * Check if action is a method callable from a controller
@@ -276,7 +309,19 @@ class Router extends Configurable {
      * @memberOf Router
      */
     _findMiddleware( id ) {
-        return Middleware.all().get( id )
+        return Middleware.middlewares.get( id )
+    }
+
+    /**
+     * Find the group from it's id
+     *
+     * @param {string} id
+     * @returns {Object}
+     *
+     * @memberOf Router
+     */
+    _findGroup( id ) {
+        return Group.groups.get( id )
     }
 
     /**

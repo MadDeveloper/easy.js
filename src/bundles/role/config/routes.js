@@ -16,32 +16,26 @@ Route
 	})
 
 Route
-	.get( '/roles/:role_id', 'RoleController.one' )
-	.security({
-		strategy: 'default',
-		roles: [ roles.any ]
-	})
-	.middleware( 'role-exists', { deep: true })
-
-Route
-	.put( '/roles/:role_id', 'RoleController.update' )
-	.security({
-		strategy: 'default',
-		roles: [ roles.admin ]
-	})
-	.middleware( 'role-exists', { deep: true })
-
-Route
-	.delete( '/roles/:role_id', 'RoleController.delete' )
-	.security({
-		strategy: 'default',
-		roles: [ roles.admin ]
-	})
-	.middleware( 'role-exists', { deep: true })
-/*
-Route
 	.group( 'change-role', () => {
+		Route
+			.get( '/roles/:role_id', 'RoleController.one' )
+			.security({
+				strategy: 'default',
+				roles: [ roles.any ]
+			})
 
+		Route
+			.put( '/roles/:role_id', 'RoleController.update' )
+			.security({
+				strategy: 'default',
+				roles: [ roles.admin ]
+			})
+
+		Route
+			.delete( '/roles/:role_id', 'RoleController.delete' )
+			.security({
+				strategy: 'default',
+				roles: [ roles.admin ]
+			})
 	})
-	.middleware( 'role-exists' )
-*/
+	.middleware( 'role-exists', { deep: true })

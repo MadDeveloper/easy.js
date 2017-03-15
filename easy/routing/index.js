@@ -7,5 +7,6 @@
 * file that was distributed with this source code.
 */
 
+module.exports.Group = require( './Group' )
 module.exports.Route = require( './Route' )
 module.exports.Router = require( './Router' )
