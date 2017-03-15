@@ -19,7 +19,7 @@ class Controller {
      */
     constructor( container ) {
         this.container = container
-        this.entityManager = this.em = container.get( 'component.entitymanager' )
+        this.entityManager = this.em = container.get( 'entitymanager' )
     }
 
     /**
@@ -29,7 +29,7 @@ class Controller {
      * @returns {EntityManager}
      */
     getEntityManager( name = 'default' ) {
-        return this.get( 'component.databasesmanager' ).getEntityManager( name )
+        return this.get( 'databasesmanager' ).getEntityManager( name )
     }
 
     /**

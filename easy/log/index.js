@@ -7,6 +7,6 @@
 * file that was distributed with this source code.
 */
 
-module.exports.LogDirectoryManager = require( './LogDirectoryManager' )
+module.exports.LogDirectory = require( './LogDirectory' )
 module.exports.Logger = require( './Logger' )
 module.exports.LogWriter = require( './LogWriter' )

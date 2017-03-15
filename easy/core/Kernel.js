@@ -15,7 +15,9 @@ const ContainerBuilder = require( '../container/ContainerBuilder' )
 const Router = require( '../routing/Router' )
 const Route = require( '../routing/Route' )
 const DatabasesManager = require( '../database/DatabasesManager' )
-const LogDirectoryManager = require( '../log/LogDirectoryManager' )
+const LogDirectory = require( '../log/LogDirectory' )
+const Logger = require( '../log/Logger' )
+const LogWriter = require( '../log/LogWriter' )
 
 /**
  * @class Kernel
@@ -30,8 +32,10 @@ class Kernel extends Configurable {
         this._path = {}
         this._databasesManager = null
 		this._router = null
+		this._logWriter = null
+		this._logger = null
         this._container = null
-		this._logDirectoryManager = null
+		this._logDirectory = null
 		this._bundles = new Set()
     }
 
@@ -50,8 +54,23 @@ class Kernel extends Configurable {
 		process.chdir( this.path.root )
         Configuration.appPath = this.path.root
 
-		this._logDirectoryManager = new LogDirectoryManager()
-		this.logDirectoryManager.createLogDirectoryIfNotExists()
+		this._logDirectory = new LogDirectory()
+		this.logDirectory.create()
+
+        /*
+         * Load components which will be injected into the container
+         */
+        this._router = new Router()
+		this._logWriter = new LogWriter()
+		this._logger = new Logger( this._logWriter )
+
+        /*
+         * Prepare the container
+         */
+		const services = Configuration.load( 'services' )
+
+        this._containerBuilder = new ContainerBuilder( services, { prefix: path.resolve( this.path.src ) })
+        this._databasesManager = new DatabasesManager( this._containerBuilder.container )
     }
 
     /**
@@ -78,29 +97,24 @@ class Kernel extends Configurable {
      * @memberOf Kernel
      */
     loadComponents() {
-        /*
-         * Prepare container
+		/*
+         * Prepare databases and entities managers
          */
-		const services = Configuration.load( 'services' )
-        const containerBuilder = new ContainerBuilder( services, { components: require.resolve( '../container/components' ) })
-
-        /*
-         * Start and daemonize databases
-         */
-        this._databasesManager = new DatabasesManager( containerBuilder.container )
         this._databasesManager.load()
 
         /*
          * Build container
          */
-        containerBuilder.add( 'component.databasesmanager', this.databasesManager )
+        this._container = this._containerBuilder
+			.add( 'databasesmanager', this.databasesManager )
+			.add( 'router', this.router )
+			.add( 'logwriter', this.logWriter )
+			.add( 'logger', this.logger )
+			.build()
 
-        /*
-         * Get some others components
-         */
-        this._container = containerBuilder.build()
-        this._router = this.container.get( 'component.router' )
-
+		/*
+		 * Configure router
+		 */
         this.router.configure({ container: this.container })
 		Route.router = this.router
     }
@@ -154,16 +168,42 @@ class Kernel extends Configurable {
 	}
 
 	/**
-	 * Get log directory manager
+	 * Get LogWriter instance
+	 *
+	 * @returns {Writer}
 	 *
 	 * @readonly
 	 *
-	 * @returns {LogDirectoryManager}
+	 * @memberOf Kernel
+	 */
+	get logWriter() {
+		return this._logWriter
+	}
+
+	/**
+	 * Get logger instance
+	 *
+	 * @returns {Logger}
+	 *
+	 * @readonly
 	 *
 	 * @memberOf Kernel
 	 */
-	get logDirectoryManager() {
-		return this._logDirectoryManager
+	get logger() {
+		return this._logger
+	}
+
+	/**
+	 * Get log directory instance
+	 *
+	 * @readonly
+	 *
+	 * @returns {LogDirectory}
+	 *
+	 * @memberOf Kernel
+	 */
+	get logDirectory() {
+		return this._logDirectory
 	}
 
 	/**

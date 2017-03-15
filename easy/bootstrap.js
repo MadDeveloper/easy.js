@@ -22,7 +22,7 @@ const application = new Application()
 try {
 	application.configure( appRootPath )
 } catch ( error ) {
-	Console.error({ title: 'The configuration of the application has failed', message: error, consequence: 'Application stopped' })
+	Console.error({ title: 'The configuration of the application has failed', message: error.stack || error, consequence: 'Application stopped' })
 	process.exit()
 }
 

@@ -12,14 +12,14 @@ const File = require( '../fs/File' )
 const Directory = require( '../fs/Directory' )
 
 /**
- * @class LogDirectoryManager
+ * @class LogDirectory
  */
-class LogDirectoryManager {
+class LogDirectory {
     /**
      * @constructor
      */
     constructor() {
-        this._logDirectoryPath = path.resolve( './logs' )
+        this._directoryPath = path.resolve( './logs' )
     }
 
     /**
@@ -27,10 +27,10 @@ class LogDirectoryManager {
      *
      * @throws {ReferenceError} if directory path is invalid
      *
-     * @memberOf LogDirectoryManager
+     * @memberOf LogDirectory
      */
-    createLogDirectoryIfNotExists() {
-        const directory = new Directory( this.logDirectoryPath )
+    create() {
+        const directory = new Directory( this.directoryPath )
 
         try {
             const exists = directory.existsSync()
@@ -39,7 +39,7 @@ class LogDirectoryManager {
                 directory.createSync()
             }
         } catch ( error ) {
-            throw new ReferenceError( `An error occured while trying to create logs directory (${this.logDirectoryPath}).\n${error}` )
+            throw new ReferenceError( `An error occured while trying to create logs directory (${this.directoryPath}).\n${error}` )
         }
     }
 
@@ -48,9 +48,9 @@ class LogDirectoryManager {
      *
      * @returns {string}
      */
-    get logDirectoryPath() {
-        return this._logDirectoryPath
+    get directoryPath() {
+        return this._directoryPath
     }
 }
 
-module.exports = LogDirectoryManager
+module.exports = LogDirectory

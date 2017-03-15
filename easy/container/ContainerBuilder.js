@@ -62,7 +62,7 @@ class ContainerBuilder {
      */
     registerDependencies() {
         Reflect.ownKeys( this.dependenciesMapping ).forEach( name => {
-			const dependency = this.load( name, name.includes( 'component.' ) )
+			const dependency = this.load( name )
 
 			this.container.set( name, dependency )
 		})
@@ -93,7 +93,7 @@ class ContainerBuilder {
             if ( 'container' === dependencyName ) {
                 dependencies.push( this.container )
             } else {
-                dependencies.push( this.load( dependencyName, dependencyName.includes( 'component.' ) ) )
+                dependencies.push( this.load( dependencyName ) )
             }
         })
 
@@ -104,17 +104,16 @@ class ContainerBuilder {
      * Load a new instance of the dependency
      *
      * @param {string} name
-     * @param {boolean} [isComponent=false]
      * @returns {Object}
      *
      * @throws {ReferenceError} if the dependency file path is not found
      */
-    load( name, isComponent = false ) {
+    load( name ) {
         if ( this.loaded( name ) ) {
             return this.dependency( name )
         }
 
-		let dependencyFilePath = this.dependenciesMapping[ name ].path
+		let dependencyFilePath = this.prefix( this.dependenciesMapping[ name ].path )
 		let dependencyClass
 
         try {
@@ -122,7 +121,7 @@ class ContainerBuilder {
 
 			return this.cache( name, new dependencyClass( ...this.injectDependencies( name ) ) )
         } catch ( error ) {
-            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error}` )
+            throw new ReferenceError( `Impossible to load dependency ${name} (${dependencyFilePath})\n${error.stack || error}` )
         }
     }
 
@@ -157,6 +156,26 @@ class ContainerBuilder {
         this.cached.set( name, dependency )
 
         return dependency
+    }
+
+    /**
+     * Prefix file path with prefix configuration
+     *
+     * @param {string} filePath
+     * @returns {string}
+     *
+     * @memberOf ContainerBuilder
+     */
+    prefix( filePath ) {
+        if ( !this.configurations.prefix ) {
+            return filePath
+        }
+
+        if ( !this.configurations.prefix.endsWith( '/' ) ) {
+            this.configurations.prefix += '/'
+        }
+
+        return `${this.configurations.prefix}${filePath}`
     }
 
 	/**

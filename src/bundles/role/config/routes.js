@@ -5,7 +5,7 @@ Route
 	.get( '/roles', 'RoleController.all' )
 	.security({
 		strategy: 'default',
-		roles: [ roles.user ]
+		roles: [ roles.any ]
 	})
 
 Route

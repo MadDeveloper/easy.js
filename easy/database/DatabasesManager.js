@@ -25,7 +25,7 @@ class DatabasesManager {
         this._config = Configuration.load( 'database' )
         this.bundlesPath = path.resolve( './src/bundles' )
         this.container = container
-        this.baseComponentNamespace = 'component.entitymanager'
+        this.baseComponentNamespace = 'entitymanager'
         this.ems = new Map()
     }
 
@@ -63,7 +63,7 @@ class DatabasesManager {
      * @memberOf DatabasesManager
      */
     async startDatabase( database ) {
-        const logger = this.container.get( 'component.logger' )
+        const logger = this.container.get( 'logger' )
 
         try {
             if ( database ) {
@@ -160,7 +160,7 @@ class DatabasesManager {
      * @memberOf DatabasesManager
      */
     async daemonizeDatabase( database ) {
-        const daemon = new DatabaseDaemon( this.container.get( 'component.logger' ) )
+        const daemon = new DatabaseDaemon( this.container.get( 'logger' ) )
 
         await daemon.attach( database ).manage()
     }

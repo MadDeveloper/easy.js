@@ -27,7 +27,7 @@ class Authentication {
 		this._config = {}
 		this._container = container
 		this._passport = passport
-		this._router = container.get( 'component.router' )
+		this._router = container.get( 'router' )
 		this._config = Configuration.load( 'authentication' )
 	}
 
@@ -98,7 +98,7 @@ class Authentication {
 	 * @memberOf Authentication
 	 */
 	_defineLocalStrategy() {
-		const em = this._container.get( 'component.entitymanager' )
+		const em = this._container.get( 'entitymanager' )
 		this._userRepository = em.getRepository( this.config.repository, { model: this.config.model })
 
 		this._passport.use( new LocalStrategy({

@@ -25,6 +25,6 @@ entityManager.reset = () => {
 
 const container = easy.application.container
 
-container.set( 'component.entitymanager', entityManager )
+container.set( 'entitymanager', entityManager )
 
 module.exports = entityManager
