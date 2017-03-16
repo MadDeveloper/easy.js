@@ -21,12 +21,13 @@ class Group {
      */
     constructor( id ) {
         this._id = id
-
-        groups.set( id, {
+        this._state = {
             prefix: '',
             middlewares: [],
             security: []
-        })
+        }
+
+        groups.set( this._id, this._state )
     }
 
     /**
@@ -38,6 +39,11 @@ class Group {
      * @memberOf Group
      */
     prefix( prefix ) {
+        if ( 'string' === typeof prefix ) {
+            this._state.prefix = prefix
+            this.update()
+        }
+
         return this
     }
 
@@ -50,7 +56,8 @@ class Group {
      * @memberOf Group
      */
     security( configurations ) {
-        groups.get( this.id ).security.push( configurations )
+        this._state.security.push( configurations )
+        this.update()
 
         return this
     }
@@ -68,8 +75,22 @@ class Group {
         if ( Array.isArray( ids ) ) {
             ids.forEach( id => this.middleware( ids, options ) )
         } else {
-            groups.get( this.id ).middlewares.push({ id: ids, options })
+            this._state.middlewares.push({ id: ids, options })
+            this.update()
         }
+
+        return this
+    }
+
+    /**
+     * Update group state
+     *
+     * @returns {Group}
+     *
+     * @memberOf Group
+     */
+    update() {
+        groups.set( this._id, this._state )
 
         return this
     }

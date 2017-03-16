@@ -2,9 +2,8 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- finir prefix Group
-- virer les @constructor
-- enlever pour EntityManager la méthode configure(), faire en constructeur direct (cf. DatabasesManager)
+- virer les polyfills
+- pouvoir emboiter plusieurs groups, lastGroup dans Route doit être un tableau
 - la ou il y a require, faire appel à error.stack dans les try catch englobant
 - update mocks
 - ajouter les méthodes dans request et response de adonis

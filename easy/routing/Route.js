@@ -298,6 +298,34 @@ class Route {
 	static get routes() {
 		return routes
 	}
+
+	/**
+	 * Get the last route defined
+	 *
+	 * @returns {Object}
+	 *
+	 * @readonly
+	 * @static
+	 *
+	 * @memberOf Route
+	 */
+	static get lastRoute() {
+		return lastRoute
+	}
+
+	/**
+	 * Get the last group defined
+	 *
+	 * @returns {Object}
+	 *
+	 * @readonly
+	 * @static
+	 *
+	 * @memberOf Route
+	 */
+	static get lastGroup() {
+		return lastGroup
+	}
 }
 
 module.exports = Route

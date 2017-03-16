@@ -7,35 +7,22 @@
 * file that was distributed with this source code.
 */
 
-const Configurable = require( '../interfaces/Configurable' )
-
 /**
  * @class EntityManager
- * @extends Configurable
  */
-class EntityManager extends Configurable {
+class EntityManager {
     /**
-     * @constructor
+     * Creates an instance of EntityManager.
+     * @param {Object} { directorySearchPath = '', database = null }
+     *
+     * @memberOf EntityManager
      */
-    constructor() {
-        super()
-
-        this._database = null
-        this._bundlesPath = ''
+    constructor({ directorySearchPath = '', database = null }) {
+        this._database = database
+        this._directorySearchPath = directorySearchPath
         this._cached = new Map()
         this._cached.set( 'models', new Map() )
         this._cached.set( 'repositories', new Map() )
-    }
-
-    /**
-     * Configure entity manager
-     *
-     * @param {string} bundlesPath
-     * @param {Database} database
-     */
-    configure( bundlesPath, database ) {
-        this._bundlesPath = bundlesPath
-        this._database = database
     }
 
     /**
@@ -61,7 +48,7 @@ class EntityManager extends Configurable {
         }
 
 		try {
-			const repositoryClass = require( `${this.bundlesPath}/${repository}` )
+			const repositoryClass = require( `${this.directorySearchPath}/${repository}` )
 
 			return this.cache( new repositoryClass( associatedModel, this ), repository, this._cacheRepositoriesNamespace() )
 		} catch ( error ) {
@@ -85,7 +72,7 @@ class EntityManager extends Configurable {
         }
 
 		try {
-			const modelClass = require( `${this.bundlesPath}/${model}` )
+			const modelClass = require( `${this.directorySearchPath}/${model}` )
 
 			return this.cache( new modelClass( this ).build(), model, this._cacheModelsNamespace() )
 		} catch ( error ) {
@@ -176,8 +163,21 @@ class EntityManager extends Configurable {
      *
      * @returns {string}
      */
-    get bundlesPath() {
-        return this._bundlesPath
+    get directorySearchPath() {
+        return this._directorySearchPath
+    }
+
+    /**
+     * Set the directorySearchPath
+     *
+     * @param {string} value
+     *
+     * @memberOf EntityManager
+     */
+    set directorySearchPath( directorySearchPath ) {
+        if ( 'string' === typeof value ) {
+            this._directorySearchPath = directorySearchPath
+        }
     }
 
     /**
@@ -196,6 +196,17 @@ class EntityManager extends Configurable {
      */
     get database() {
         return this._database
+    }
+
+    /**
+     * Set the database
+     *
+     * @param {Database} database
+     *
+     * @memberOf EntityManager
+     */
+    set database( database ) {
+        this._database = database
     }
 }
 

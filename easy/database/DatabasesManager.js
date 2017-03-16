@@ -102,10 +102,9 @@ class DatabasesManager {
      * @param {Object} config
      */
     createEntityManager( name, config ) {
-        const em = new EntityManager()
         const database = new Database( config )
+        const em = new EntityManager({ directorySearchPath: this.bundlesPath, database })
 
-        em.configure( this.bundlesPath, database )
         this.addEntityManager( name, em )
         this.injectEntityManagerInContainer( name, em )
     }

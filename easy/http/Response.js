@@ -25,14 +25,14 @@ class Response {
 
     /**
      * Bind descriptive http methods
-     * 
+     *
      * @private
-     * 
+     *
      * @memberOf Response
      */
     _bindDescriptiveMethods() {
         Reflect.ownKeys( Http.status ).forEach( method => {
-            this[ method ] = content => this.scope.status( Http.status[ method ] ).json( content || this.content )
+            this[ method ] = content => this.scope.status( Http.status[ method ]).json( content || this.content )
         })
     }
 
@@ -74,7 +74,7 @@ class Response {
 	 * @memberOf Response
 	 */
 	setHeader( header = '', value = '' ) {
-		if ( !header.isEmpty() && !value.isEmpty() ) {
+		if ( !header.length > 0 && !value.length > 0 ) {
 			this.scope.set( header, value )
 		}
 

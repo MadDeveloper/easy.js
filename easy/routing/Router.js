@@ -175,7 +175,7 @@ class Router extends Configurable {
 	 */
 	_mountRoutes() {
 		Route.routes.forEach( route => {
-			// first we mount security, then middlewares, and finally the route
+            this._prefix( route )
             this._mountGroupSecurity( route )
 			this._mountSecurity( route )
             this._mountGroupMiddlewares( route )
@@ -183,6 +183,25 @@ class Router extends Configurable {
 			this.route( route.route, route.method, route.action )
 		})
 	}
+
+    /**
+     * Prefix route if group prefix was specified
+     *
+     * @param {Object} route
+     *
+     * @private
+     *
+     * @memberOf Router
+     */
+    _prefix( route ) {
+        if ( route.group.length > 0 ) {
+            const group = this._findGroup( route.group )
+
+            if ( group.prefix ) {
+                route.route = `${group.prefix}${route.route}`
+            }
+        }
+    }
 
 	/**
 	 * Mount all security rules for the route
@@ -205,7 +224,7 @@ class Router extends Configurable {
      * @memberOf Router
      */
     _mountGroupSecurity( route ) {
-        if ( !route.group.isEmpty() ) {
+        if ( route.group.length > 0 ) {
             const group = this._findGroup( route.group )
 
             group.security.forEach( security => this.security( route.route, route.method, security ) )
@@ -233,7 +252,7 @@ class Router extends Configurable {
      * @memberOf Router
      */
     _mountGroupMiddlewares( route ) {
-        if ( !route.group.isEmpty() ) {
+        if ( route.group.length > 0 ) {
             const group = this._findGroup( route.group )
 
             group.middlewares.forEach( middleware => this.middleware( route.route, route.method, middleware.id, middleware.options ) )
