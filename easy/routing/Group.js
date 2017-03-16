@@ -38,7 +38,7 @@ class Group {
      * @memberOf Group
      */
     prefix( prefix ) {
-
+        return this
     }
 
     /**
@@ -50,7 +50,9 @@ class Group {
      * @memberOf Group
      */
     security( configurations ) {
-        group.get( this.id ).security.push( configurations )
+        groups.get( this.id ).security.push( configurations )
+
+        return this
     }
 
     /**
@@ -68,6 +70,8 @@ class Group {
         } else {
             groups.get( this.id ).middlewares.push({ id: ids, options })
         }
+
+        return this
     }
 
     /**

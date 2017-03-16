@@ -9,7 +9,7 @@ Route
 	})
 
 Route
-	.post( '/roles', 'RoleController.create' )
+	.post( '/roles$', 'RoleController.create' )
 	.security({
 		strategy: 'default',
 		roles: [ roles.admin ]
@@ -25,17 +25,17 @@ Route
 			})
 
 		Route
-			.put( '/roles/:role_id', 'RoleController.update' )
+			.put( '/roles/:role_id$', 'RoleController.update' )
 			.security({
 				strategy: 'default',
 				roles: [ roles.admin ]
 			})
 
 		Route
-			.delete( '/roles/:role_id', 'RoleController.delete' )
+			.delete( '/roles/:role_id$', 'RoleController.delete' )
 			.security({
 				strategy: 'default',
 				roles: [ roles.admin ]
 			})
 	})
-	.middleware( 'role-exists', { deep: true })
+	.middleware( 'role-exists' )

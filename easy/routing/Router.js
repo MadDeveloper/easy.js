@@ -77,7 +77,7 @@ class Router extends Configurable {
 		router.use( route, ( req, res, next ) => {
 			const request = new Request( req )
 
-			if ( ( 'all' === method || method === request.getMethod().toLowerCase() ) && ( route === request.getUrlInfos().originalUrl || options.deep ) ) {
+			if ( ( 'all' === method || method === request.getMethod().toLowerCase() ) ) {
 				const response = new Response( res )
 
                 action( request, response, next )
@@ -106,7 +106,7 @@ class Router extends Configurable {
         router.use( route, ( req, res, next ) => {
             const request = new Request( req )
 
-			if ( ( 'all' === method || method === request.getMethod().toLowerCase() ) && ( route === request.getUrlInfos().originalUrl || configurations.deep ) ) {
+			if ( ( 'all' === method || method === request.getMethod().toLowerCase() ) ) {
 
 				const response = new Response( res )
 
