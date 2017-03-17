@@ -19,20 +19,21 @@ class Container {
     }
 
     /**
-     * Set a dependency
+     * Set a provider
      *
      * @param {string} name
-     * @param {any} dependency
+     * @param {any} provider
+     * @param {Object|string[]} options
      * @returns {Container}
      */
-    set( name, dependency ) {
-        this.shared.set( name, dependency )
+    register( name, provider, options ) {
+        this.shared.set( name, provider )
 
         return this
     }
 
     /**
-     * Get a dependency by name
+     * Get a provider by name
      *
      * @param {string} name
      * @returns {any}
@@ -42,7 +43,39 @@ class Container {
     }
 
     /**
-     * Get all dependencies loaded
+     * Inject dependencies into the dependency requested
+     *
+     * @param {string} dependency
+     * @returns {Array}
+     */
+    _injectDependencies( dependency ) {
+        const dependencyMapping = this._providerDependencies[ dependency ]
+
+        if ( !( 'dependencies' in dependencyMapping ) ) {
+            return []
+        }
+
+        const requestedDependencies = dependencyMapping.dependencies
+
+        if ( 0 === requestedDependencies.length ) {
+            return []
+        }
+
+        const dependencies = []
+
+        requestedDependencies.forEach( dependencyName => {
+            if ( 'container' === dependencyName ) {
+                dependencies.push( this.container )
+            } else {
+                dependencies.push( this.load( dependencyName ) )
+            }
+        })
+
+        return dependencies
+    }
+
+    /**
+     * Get all providers shared
      *
      * @returns {Map}
      */
