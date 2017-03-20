@@ -7,14 +7,6 @@ module.exports = container => {
 	 * logwriter
      *
      * @example
-     * 'auth.facebook': {
-     *     path: 'services/auth/facebook.service',
-     *     dependencies: [ 'logger' ]
-     * }
+     * container.register( 'auth', Auth, [ 'router', 'logger' ])
      */
-
-    const Auth = require( '../services/auth.service' )
-    const Test = () => {}
-
-    container.register( 'auth', Auth, [ 'router', 'logger' ])
 }

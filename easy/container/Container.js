@@ -22,14 +22,37 @@ class Container {
      * Register a dependency
      *
      * @param {string} name
-     * @param {class} dependencyClass
-     * @param {Object|string[]} dependencies
-     * @param {Object} [metadata={}]
+     * @param {class} dependency
+     * @param {Object|string[]} [dependencies=[]]
+     * @param {Object} [metadata={ shared: true }]
      * @returns {Container}
      */
-    register( name, dependencyClass, dependencies, metadata = {}) {
+    register( name, dependency, dependencies = [], metadata = { shared: true }) {
         metadata.loaded = false
+        metadata.shared = metadata.shared || true
         this.stored.set( name, { dependency, dependencies, metadata })
+
+        return this
+    }
+
+    /**
+     * Force a dependency to be set
+     *
+     * @param {string} name
+     * @param {any} dependency
+     * @returns {Container}
+     *
+     * @memberOf Container
+     */
+    set( name, dependency ) {
+        const stored = {
+            dependency,
+            metadata: {
+                loaded: true
+            }
+        }
+
+        this.stored.set( name, stored )
 
         return this
     }
@@ -54,7 +77,7 @@ class Container {
         if ( false === stored.metadata.shared || false === stored.metadata.loaded ) {
             dependencyInstance = new dependency( ...this._dependencies( dependencies ) )
 
-            if ( !stored.metadata.hasOwnProperty( 'shared' ) || true === stored.metadata.shared ) {
+            if ( stored.metadata.shared ) {
                 this._load( name, dependencyInstance )
             }
         }

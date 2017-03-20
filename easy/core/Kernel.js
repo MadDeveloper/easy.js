@@ -11,7 +11,7 @@ const path = require( 'path' )
 const Configuration = require( './Configuration' )
 const Bundle = require( './Bundle' )
 const Configurable = require( '../interfaces/Configurable' )
-const ContainerBuilder = require( '../container/ContainerBuilder' )
+const Container = require( '../container/Container' )
 const Router = require( '../routing/Router' )
 const Route = require( '../routing/Route' )
 const DatabasesManager = require( '../database/DatabasesManager' )
@@ -57,20 +57,15 @@ class Kernel extends Configurable {
 		this._logDirectory = new LogDirectory()
 		this.logDirectory.create()
 
+		this._container = new Container()
+
         /*
          * Load components which will be injected into the container
          */
         this._router = new Router()
 		this._logWriter = new LogWriter()
-		this._logger = new Logger( this._logWriter )
-
-        /*
-         * Prepare the container
-         */
-		const services = Configuration.load( 'services' )
-
-        this._containerBuilder = new ContainerBuilder( services, { prefix: path.resolve( this.path.src ) })
-        this._databasesManager = new DatabasesManager( this._containerBuilder.container )
+		this._logger = new Logger( this.logWriter )
+        this._databasesManager = new DatabasesManager( this.container )
     }
 
     /**
@@ -105,18 +100,22 @@ class Kernel extends Configurable {
         /*
          * Build container
          */
-        this._container = this._containerBuilder
-			.add( 'databasesmanager', this.databasesManager )
-			.add( 'router', this.router )
-			.add( 'logwriter', this.logWriter )
-			.add( 'logger', this.logger )
-			.build()
+        this._container
+			.set( 'databasesmanager', this.databasesManager )
+			.set( 'router', this.router )
+			.set( 'logwriter', this.logWriter )
+			.set( 'logger', this.logger )
 
 		/*
 		 * Configure router
 		 */
         this.router.configure({ container: this.container })
 		Route.router = this.router
+
+		/*
+		 * Load user providers
+		 */
+		Configuration.load( 'services' )( this.container )
     }
 
     /**

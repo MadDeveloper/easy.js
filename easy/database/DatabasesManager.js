@@ -122,7 +122,7 @@ class DatabasesManager {
             entityManagerNamespace += `.${name}`
         }
 
-        this.container.register( entityManagerNamespace, em )
+        this.container.set( entityManagerNamespace, em )
     }
 
     /**
