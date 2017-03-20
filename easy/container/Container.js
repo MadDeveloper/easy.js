@@ -28,9 +28,10 @@ class Container {
      * @returns {Container}
      */
     register( name, dependency, dependencies = [], metadata = { shared: true }) {
-        metadata.loaded = false
-        metadata.shared = metadata.shared || true
-        this.stored.set( name, { dependency, dependencies, metadata })
+		const newMetadata = Object.assign({}, metadata )
+        newMetadata.loaded = false
+        newMetadata.shared = newMetadata.shared || true
+        this.stored.set( name, { dependency, dependencies, metadata: newMetadata })
 
         return this
     }
@@ -68,7 +69,7 @@ class Container {
             return undefined
         }
 
-        const stored = this.stored.get( name )
+        const stored = Object.assign({}, this.stored.get( name ) )
         let dependency = stored.dependency
         let dependencyInstance = dependency
         const metadata = stored.metadata
@@ -118,7 +119,7 @@ class Container {
      * @memberOf Container
      */
     _load( name, dependency ) {
-        const stored = this.stored.get( name )
+        const stored = Object.assign({}, this.stored.get( name ) )
 
         stored.metadata.loaded = true
         stored.dependency = dependency

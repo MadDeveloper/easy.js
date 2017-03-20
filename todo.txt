@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- utiliser Object.assign() et éviter éviter de muter les données, toujours en renvoyer de nouvelles
 - simplifier logger et logwriter en logger
 - virer les polyfills
 - pouvoir emboiter plusieurs groups, lastGroup dans Route doit être un tableau
