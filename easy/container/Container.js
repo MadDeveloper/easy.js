@@ -15,72 +15,121 @@ class Container {
      * @constructor
      */
     constructor() {
-        this._shared = new Map()
+        this._stored = new Map()
     }
 
     /**
-     * Set a provider
+     * Register a dependency
      *
      * @param {string} name
-     * @param {any} provider
-     * @param {Object|string[]} options
+     * @param {class} dependencyClass
+     * @param {Object|string[]} dependencies
+     * @param {Object} [metadata={}]
      * @returns {Container}
      */
-    register( name, provider, options ) {
-        this.shared.set( name, provider )
+    register( name, dependencyClass, dependencies, metadata = {}) {
+        metadata.loaded = false
+        this.stored.set( name, { dependency, dependencies, metadata })
 
         return this
     }
 
     /**
-     * Get a provider by name
+     * Get a dependency by name
      *
      * @param {string} name
-     * @returns {any}
+     * @returns {Object}
      */
     get( name ) {
-        return this.shared.get( name )
+        if ( !this.registered( name ) ) {
+            return undefined
+        }
+
+        const stored = this.stored.get( name )
+        let dependency = stored.dependency
+        let dependencyInstance = dependency
+        const metadata = stored.metadata
+        const dependencies = stored.dependencies
+
+        if ( false === stored.metadata.shared || false === stored.metadata.loaded ) {
+            dependencyInstance = new dependency( ...this._dependencies( dependencies ) )
+
+            if ( !stored.metadata.hasOwnProperty( 'shared' ) || true === stored.metadata.shared ) {
+                this._load( name, dependencyInstance )
+            }
+        }
+
+        return dependencyInstance
     }
 
     /**
-     * Inject dependencies into the dependency requested
+     * Check if the dependency is already registered
      *
-     * @param {string} dependency
-     * @returns {Array}
+     * @param {name} name
+     * @returns {boolean}
      */
-    _injectDependencies( dependency ) {
-        const dependencyMapping = this._providerDependencies[ dependency ]
+    registered( name ) {
+        return this.stored.has( name )
+    }
 
-        if ( !( 'dependencies' in dependencyMapping ) ) {
-            return []
-        }
+    /**
+     * Check if dependency is loaded
+     *
+     * @param {string} name
+     * @returns {boolean}
+     *
+     * @memberOf Container
+     */
+    loaded( name ) {
+        return this.stored.get( name ).metadata.loaded
+    }
 
-        const requestedDependencies = dependencyMapping.dependencies
+    /**
+     * Define dependency as loaded
+     *
+     * @param {string} name
+     * @param {Object} dependency
+     *
+     * @private
+     *
+     * @memberOf Container
+     */
+    _load( name, dependency ) {
+        const stored = this.stored.get( name )
 
-        if ( 0 === requestedDependencies.length ) {
-            return []
-        }
+        stored.metadata.loaded = true
+        stored.dependency = dependency
 
-        const dependencies = []
+        this.stored.set( name, stored )
+    }
 
-        requestedDependencies.forEach( dependencyName => {
-            if ( 'container' === dependencyName ) {
-                dependencies.push( this.container )
+    /**
+     * Get dependencies
+     *
+     * @param {Object[]} dependencies
+     * @returns {Object[]}
+     */
+    _dependencies( dependencies ) {
+        const dependenciesInstances = []
+
+        dependencies.forEach( dependency => {
+            if ( 'container' === dependency ) {
+                dependenciesInstances.push( this )
             } else {
-                dependencies.push( this.load( dependencyName ) )
+                dependenciesInstances.push( this.get( dependency ) )
             }
         })
 
-        return dependencies
+        return dependenciesInstances
     }
 
     /**
-     * Get all providers shared
+     * Get all dependencies stored
      *
      * @returns {Map}
      */
-    get shared() {
-        return this._shared
+    get stored() {
+        return this._stored
     }
 }
 

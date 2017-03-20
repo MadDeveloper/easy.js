@@ -37,7 +37,7 @@ class ContainerBuilder {
      */
     add( name, dependency ) {
         this.cache( name, dependency )
-        this.container.set( name, dependency )
+        this.container.register( name, dependency )
 
         return this
     }
@@ -64,7 +64,7 @@ class ContainerBuilder {
         Reflect.ownKeys( this.dependenciesMapping ).forEach( name => {
 			const dependency = this.load( name )
 
-			this.container.set( name, dependency )
+			this.container.register( name, dependency )
 		})
     }
 
