@@ -30,7 +30,7 @@ class UserController extends Controller {
      */
     async exists( request, response, next ) {
         try {
-            const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+            const userRepository = this.entityManager().repository( 'user/entity/user.repository', { model: 'user/entity/user' })
             const user = await userRepository.find( request.getRouteParameter( 'user_id' ) )
 
             if ( !user ) {
@@ -54,7 +54,7 @@ class UserController extends Controller {
      */
     async all( request, response ) {
         try {
-			const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+			const userRepository = this.entityManager().repository( 'user/entity/user.repository', { model: 'user/entity/user' })
             const users = await userRepository.findAll( request.get( 'role' ) )
 
             response.ok( users )
@@ -71,11 +71,11 @@ class UserController extends Controller {
      */
     async create( request, response ) {
         if ( this.isRequestWellParameterized( request ) ) {
-            const em = this.getEntityManager()
+            const em = this.entityManager()
 
             try {
-				const User = em.getModel( 'user/entity/user' )
-				const userRepository = em.getRepository( 'user/entity/user.repository', { model: User })
+				const User = em.model( 'user/entity/user' )
+				const userRepository = em.repository( 'user/entity/user.repository', { model: User })
                 const user = await userRepository.save( new User(), request.getBody() )
 
                 user.unset( 'password' )
@@ -112,7 +112,7 @@ class UserController extends Controller {
             }
 
             try {
-                const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+                const userRepository = this.entityManager().repository( 'user/entity/user.repository', { model: 'user/entity/user' })
                 const user = await userRepository.save( request.get( 'user' ), request.getBody() )
 
                 response.ok( user )
@@ -151,7 +151,7 @@ class UserController extends Controller {
                         if ( 'replace' === patch.op ) {
                             if ( validPaths.includes( patch.path ) ) {
                                 try {
-                                    const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+                                    const userRepository = this.entityManager().repository( 'user/entity/user.repository', { model: 'user/entity/user' })
                                     const user = await userRepository.patch( request.get( 'user' ), patch )
 
                                     if ( ++currentPatch >= opsLength ) {
@@ -199,7 +199,7 @@ class UserController extends Controller {
      */
     async delete( request, response ) {
         try {
-            const userRepository = this.getEntityManager().getRepository( 'user/entity/user.repository', { model: 'user/entity/user' })
+            const userRepository = this.entityManager().repository( 'user/entity/user.repository', { model: 'user/entity/user' })
             await userRepository.delete( request.get( 'user' ) )
 
             response.noContent()

@@ -2,12 +2,11 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- simplifier la classe Entity (supprimer ?), les classes entity ne doivent étendre de rien, ce sont la base d'un modèle
 - pouvoir emboiter plusieurs groups, lastGroup dans Route doit être un tableau
 - la ou il y a require, faire appel à error.stack dans les try catch englobant
 - update mocks
 - ajouter les méthodes dans request et response de adonis
-- renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getRepository() -> repository(), getModel() -> model(), getBody() -> body, getRouteParameter() -> routeParameter(), etc.
+- renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getBody() -> body, getRouteParameter() -> routeParameter(), etc.
 - mettre des @example dans la jsdoc
 - TU easy
 - exporter role et user dans un repo externe, importable

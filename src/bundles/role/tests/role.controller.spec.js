@@ -26,7 +26,7 @@ describe( 'RoleController', () => {
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ findAll: () => Promise.resolve( roles ) })
+                entityManager.repository.and.returnValue({ findAll: () => Promise.resolve( roles ) })
             })
 
             beforeEach( fakeAsync( () => {
@@ -42,7 +42,7 @@ describe( 'RoleController', () => {
         describe( 'when the findAll repository method fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ findAll: () => Promise.reject() })
+                entityManager.repository.and.returnValue({ findAll: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -83,8 +83,8 @@ describe( 'RoleController', () => {
 
             beforeEach( () => {
                 request.getBody.and.returnValue( role )
-                entityManager.getRepository.and.returnValue({ save: () => Promise.resolve( role ) })
-                entityManager.getModel.and.returnValue( Role )
+                entityManager.repository.and.returnValue({ save: () => Promise.resolve( role ) })
+                entityManager.model.and.returnValue( Role )
             })
 
             beforeEach( fakeAsync( () => {
@@ -101,8 +101,8 @@ describe( 'RoleController', () => {
 
             beforeEach( () => {
                 request.getBody.and.returnValue( role )
-                entityManager.getRepository.and.returnValue({ save: () => Promise.reject() })
-                entityManager.getModel.and.returnValue( Role )
+                entityManager.repository.and.returnValue({ save: () => Promise.reject() })
+                entityManager.model.and.returnValue( Role )
             })
 
             beforeEach( fakeAsync( () => {
@@ -136,13 +136,13 @@ describe( 'RoleController', () => {
     describe( 'exists', () => {
 
         beforeEach( () => {
-            entityManager.getModel.and.returnValue( Role )
+            entityManager.model.and.returnValue( Role )
         })
 
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ find: () => Promise.resolve( role ) })
+                entityManager.repository.and.returnValue({ find: () => Promise.resolve( role ) })
             })
 
             beforeEach( fakeAsync( () => {
@@ -158,7 +158,7 @@ describe( 'RoleController', () => {
         describe( 'when the repository respond successfully but with no role found', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ find: () => Promise.resolve( null ) })
+                entityManager.repository.and.returnValue({ find: () => Promise.resolve( null ) })
             })
 
             beforeEach( fakeAsync( () => {
@@ -174,7 +174,7 @@ describe( 'RoleController', () => {
         describe( 'when the find repository method fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ find: () => Promise.reject() })
+                entityManager.repository.and.returnValue({ find: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -199,7 +199,7 @@ describe( 'RoleController', () => {
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ save: () => Promise.resolve( role ) })
+                entityManager.repository.and.returnValue({ save: () => Promise.resolve( role ) })
             })
 
             beforeEach( fakeAsync( () => {
@@ -215,7 +215,7 @@ describe( 'RoleController', () => {
         describe( 'when the save repository method fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ save: () => Promise.reject() })
+                entityManager.repository.and.returnValue({ save: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -252,7 +252,7 @@ describe( 'RoleController', () => {
 
             beforeEach( () => {
                 request.get.and.returnValue( role )
-                entityManager.getRepository.and.returnValue({ delete: () => Promise.resolve() })
+                entityManager.repository.and.returnValue({ delete: () => Promise.resolve() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -269,7 +269,7 @@ describe( 'RoleController', () => {
 
             beforeEach( () => {
                 request.get.and.returnValue( null )
-                entityManager.getRepository.and.returnValue({ delete: () => Promise.reject() })
+                entityManager.repository.and.returnValue({ delete: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {

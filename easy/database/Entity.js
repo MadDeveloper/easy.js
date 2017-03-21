@@ -19,16 +19,6 @@ class Entity {
         this.entityManager = this.em = em
         this.database = this.db = em.database.instance
     }
-
-    /**
-     * Returns entity
-     *
-     * @param {string} model
-     * @returns {bookshelf.Model}
-     */
-    getModel( model ) {
-        return this.em.getModel( model )
-    }
 }
 
 module.exports = Entity

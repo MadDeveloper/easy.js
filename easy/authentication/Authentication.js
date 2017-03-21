@@ -99,7 +99,7 @@ class Authentication {
 	 */
 	_defineLocalStrategy() {
 		const em = this._container.get( 'entitymanager' )
-		this._userRepository = em.getRepository( this.config.repository, { model: this.config.model })
+		this._userRepository = em.repository( this.config.repository, { model: this.config.model })
 
 		this._passport.use( new LocalStrategy({
 			usernameField: this.config.usernameField,

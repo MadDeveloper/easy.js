@@ -18,8 +18,8 @@ class Controller {
 	 * @param {Container} container
      */
     constructor( container ) {
-        this.container = container
-        this.entityManager = this.em = container.get( 'entitymanager' )
+        this._container = container
+        this._databasesManager = container.get( 'databasesmanager' )
     }
 
     /**
@@ -28,8 +28,8 @@ class Controller {
      * @param {string} [name='default']
      * @returns {EntityManager}
      */
-    getEntityManager( name = 'default' ) {
-        return this.get( 'databasesmanager' ).getEntityManager( name )
+    entityManager( name = 'default' ) {
+        return this._databasesManager.entityManager( name )
     }
 
     /**
@@ -40,8 +40,8 @@ class Controller {
      *
      * @memberOf Controller
      */
-    getRepository( repository ) {
-        return this.getEntityManager().getRepository( repository )
+    repository( repository ) {
+        return this.entityManager().repository( repository )
     }
 
     /**
@@ -86,6 +86,19 @@ class Controller {
      */
     get( id ) {
         return this.container.get( id )
+    }
+
+    /**
+     * Get the application container
+     *
+     * @readonly
+     *
+     * @returns {Container}
+     *
+     * @memberOf Controller
+     */
+    get container() {
+        return this._container
     }
 }
 
