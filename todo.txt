@@ -2,6 +2,7 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- simplifier la classe Entity (supprimer ?), les classes entity ne doivent étendre de rien, ce sont la base d'un modèle
 - pouvoir emboiter plusieurs groups, lastGroup dans Route doit être un tableau
 - la ou il y a require, faire appel à error.stack dans les try catch englobant
 - update mocks
