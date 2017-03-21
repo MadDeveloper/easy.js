@@ -14,7 +14,7 @@ const chalk = require( 'chalk' )
  */
 class Console {
     /**
-     * Display error in stdout
+     * Display error with the console
      *
      * @param {string} { title
      * @param {string} [message='']
@@ -39,7 +39,7 @@ class Console {
     }
 
     /**
-     * Display warning in console
+     * Display warning with the console
      *
      * @param {string} [message='']
      */
@@ -48,7 +48,7 @@ class Console {
     }
 
     /**
-     * Display info message in console
+     * Display info message with the console
      *
      * @param {string} [message='']
      */
@@ -57,7 +57,7 @@ class Console {
     }
 
     /**
-     * Display success message in console
+     * Display success message with the console
      *
      * @param {string} [message='']
      * @param {number} [exit=false]
@@ -67,7 +67,7 @@ class Console {
     }
 
     /**
-     * Display sample message in console
+     * Display sample message with the console
      *
      * @param {string} [message='']
      */
@@ -91,7 +91,7 @@ class Console {
     }
 
     /**
-     * Insert new line in console
+     * Insert new line with the console
      */
     static line() {
         console.log( '' )

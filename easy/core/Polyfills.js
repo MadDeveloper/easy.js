@@ -9,43 +9,21 @@
 
 /*
  * Not recommended to change this file if you do not know the consequences.
- * Some classes in easy vendor use these functions.
- * /!\ Never add a polyfill on Object prototype (can cause problems with ORM or librairies which are based on objects).
+ * Some classes of easy use these polyfills.
  */
 
-/**
- * @class Polyfills
+/*
+ * String
  */
-class Polyfills {
-    /**
-     * Load all polyfills
-     */
-    static load() {
-        Polyfills.stringPolyfills()
-    }
-
-    /**
-     * Load polyfills for String prototype
-     */
-    static stringPolyfills() {
-		/*
-		 * isEmpty
-		 */
-        if ( !String.prototype.isEmpty ) {
-            String.prototype.isEmpty = function() {
-                return 0 === this.valueOf().length
-            }
-        }
-
-		/*
-		 * isNumber
-		 */
-        if ( !String.prototype.isNumber ) {
-            String.prototype.isNumber = function() {
-                return !isNaN( this.valueOf() )
-            }
-        }
-    }
+if ( !String.prototype.isEmpty ) {
+	String.prototype.isEmpty = function() {
+		return 0 === this.valueOf().length
+	}
 }
 
-module.exports = Polyfills
+
+if ( !String.prototype.isNumber ) {
+	String.prototype.isNumber = function() {
+		return !isNaN( this.valueOf() )
+	}
+}

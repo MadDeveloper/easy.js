@@ -17,7 +17,6 @@ const cors = require( 'cors' )
 const compression = require( 'compression' )
 const cookieParser = require( 'cookie-parser' )
 const passport = require( 'passport' )
-const Polyfills = require( './Polyfills' )
 const Configuration = require( './Configuration' )
 const Authentication = require( '../authentication/Authentication' )
 const Configurable = require( '../interfaces/Configurable' )
@@ -31,8 +30,6 @@ class Application extends Configurable {
      */
     constructor() {
         super()
-
-        Polyfills.load()
 
         this._kernel = new Kernel()
         this._config = null

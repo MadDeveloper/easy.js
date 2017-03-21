@@ -7,6 +7,8 @@
 * file that was distributed with this source code.
 */
 
+require( './polyfills' )
+
 const path = require( 'path' )
 const Configuration = require( './Configuration' )
 const Bundle = require( './Bundle' )
@@ -95,12 +97,12 @@ class Kernel extends Configurable {
 		/*
          * Prepare databases and entities managers
          */
-        this._databasesManager.load()
+        this.databasesManager.load()
 
         /*
          * Build container
          */
-        this._container
+        this.container
 			.set( 'databasesmanager', this.databasesManager )
 			.set( 'router', this.router )
 			.set( 'logwriter', this.logWriter )
@@ -130,9 +132,9 @@ class Kernel extends Configurable {
 	/**
 	 * Get databases manager
 	 *
-	 * @readonly
-	 *
 	 * @returns {DatabasesManager}
+	 *
+	 * @readonly
 	 *
 	 * @memberOf Kernel
 	 */
@@ -143,9 +145,9 @@ class Kernel extends Configurable {
 	/**
 	 * Get container
 	 *
-	 * @readonly
-	 *
 	 * @returns {Container}
+	 *
+	 * @readonly
 	 *
 	 * @memberOf Kernel
 	 */
@@ -156,9 +158,9 @@ class Kernel extends Configurable {
 	/**
 	 * Get router
 	 *
-	 * @readonly
-	 *
 	 * @returns {Router}
+	 *
+	 * @readonly
 	 *
 	 * @memberOf Kernel
 	 */
@@ -195,9 +197,9 @@ class Kernel extends Configurable {
 	/**
 	 * Get log directory instance
 	 *
-	 * @readonly
-	 *
 	 * @returns {LogDirectory}
+	 *
+	 * @readonly
 	 *
 	 * @memberOf Kernel
 	 */

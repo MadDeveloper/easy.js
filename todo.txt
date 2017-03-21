@@ -2,9 +2,6 @@
 ----------|  NOW  |----------
 -----------------------------
 
-- utiliser Object.assign() et éviter éviter de muter les données, toujours en renvoyer de nouvelles
-- simplifier logger et logwriter en logger
-- virer les polyfills
 - pouvoir emboiter plusieurs groups, lastGroup dans Route doit être un tableau
 - la ou il y a require, faire appel à error.stack dans les try catch englobant
 - update mocks
@@ -21,6 +18,7 @@
 ---------|  LATER  |---------
 -----------------------------
 
+- utiliser Object.assign() ou Immutable.js
 - voir pour la nomenclature de certaines classes (TokenManager ?)
 - ajouter directement dans la configuration des routes le check des paramètres (ex: /roles/:id => param id, type: Number)
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de tout lier en promise pour les patchs
