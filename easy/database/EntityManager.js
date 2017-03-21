@@ -32,7 +32,7 @@ class EntityManager {
      * @param {Object} [options = {}]
      * @returns {Repository}
      */
-    getRepository( repository, options = {}) {
+    repository( repository, options = {}) {
         if ( 0 === repository.length ) {
             return {}
         }
@@ -44,7 +44,7 @@ class EntityManager {
         let associatedModel = {}
 
         if ( 'model' in options ) {
-            associatedModel = 'string' === typeof options.model ? this.getModel( options.model ) : options.model
+            associatedModel = 'string' === typeof options.model ? this.model( options.model ) : options.model
         }
 
 		try {
@@ -62,7 +62,7 @@ class EntityManager {
      * @param {string} model
      * @returns {bookshelf.Model}
      */
-    getModel( model ) {
+    model( model ) {
         if ( 0 === model.length ) {
             return {}
         }
@@ -74,7 +74,7 @@ class EntityManager {
 		try {
 			const modelClass = require( `${this.directorySearchPath}/${model}` )
 
-			return this.cache( new modelClass( this ).build(), model, this._cacheModelsNamespace() )
+			return this.cache( new modelClass( this ), model, this._cacheModelsNamespace() )
 		} catch ( error ) {
 			throw new Error( `The model ${model} cannot be loaded.\n${error}` )
 		}

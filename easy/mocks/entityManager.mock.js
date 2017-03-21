@@ -8,8 +8,8 @@
 */
 
 const entityManager = jasmine.createSpyObj( 'em', [
-    'getRepository',
-    'getModel',
+    'repository',
+    'model',
     'getCollection',
     'database',
     'reset'

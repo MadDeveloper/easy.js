@@ -141,7 +141,7 @@ class DatabasesManager {
      * @param {string} [name='default']
      * @returns {type}
      */
-    getEntityManager( name = 'default' ) {
+    entityManager( name = 'default' ) {
         let entityManagerNamespace = this.baseComponentNamespace
 
         if ( 'default' !== name.toLowerCase() ) {

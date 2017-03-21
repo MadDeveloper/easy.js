@@ -42,7 +42,7 @@ describe( 'UserController', () => {
 
             beforeEach( () => {
                 request.get.and.returnValue( user )
-                entityManager.getRepository.and.returnValue({ findAll: role => Promise.resolve( users ) })
+                entityManager.repository.and.returnValue({ findAll: role => Promise.resolve( users ) })
             })
 
             beforeEach( fakeAsync( () => {
@@ -58,7 +58,7 @@ describe( 'UserController', () => {
         describe( 'when the findAll repository method fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ findAll: () => Promise.reject() })
+                entityManager.repository.and.returnValue({ findAll: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -99,8 +99,8 @@ describe( 'UserController', () => {
 
             beforeEach( () => {
                 request.getBody.and.returnValue( user )
-                entityManager.getRepository.and.returnValue({ save: () => Promise.resolve( userReturned ) })
-                entityManager.getModel.and.returnValue( User )
+                entityManager.repository.and.returnValue({ save: () => Promise.resolve( userReturned ) })
+                entityManager.model.and.returnValue( User )
                 token.sign.and.returnValue( tokenSigned )
             })
 
@@ -118,8 +118,8 @@ describe( 'UserController', () => {
 
             beforeEach( () => {
                 request.getBody.and.returnValue( user )
-                entityManager.getRepository.and.returnValue({ save: () => Promise.reject() })
-                entityManager.getModel.and.returnValue( User )
+                entityManager.repository.and.returnValue({ save: () => Promise.reject() })
+                entityManager.model.and.returnValue( User )
             })
 
             beforeEach( fakeAsync( () => {
@@ -153,13 +153,13 @@ describe( 'UserController', () => {
     describe( 'exists', () => {
 
         beforeEach( () => {
-            entityManager.getModel.and.returnValue( User )
+            entityManager.model.and.returnValue( User )
         })
 
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ find: () => Promise.resolve( user ) })
+                entityManager.repository.and.returnValue({ find: () => Promise.resolve( user ) })
             })
 
             beforeEach( fakeAsync( () => {
@@ -175,7 +175,7 @@ describe( 'UserController', () => {
         describe( 'when the repository respond successfully but with no user found', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ find: () => Promise.resolve( null ) })
+                entityManager.repository.and.returnValue({ find: () => Promise.resolve( null ) })
             })
 
             beforeEach( fakeAsync( () => {
@@ -191,7 +191,7 @@ describe( 'UserController', () => {
         describe( 'when the find repository methods fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ find: () => Promise.reject() })
+                entityManager.repository.and.returnValue({ find: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -216,7 +216,7 @@ describe( 'UserController', () => {
         describe( 'when the repository respond successfully', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ save: () => Promise.resolve( user ) })
+                entityManager.repository.and.returnValue({ save: () => Promise.resolve( user ) })
             })
 
             beforeEach( fakeAsync( () => {
@@ -232,7 +232,7 @@ describe( 'UserController', () => {
         describe( 'when the save repository method fails', () => {
 
             beforeEach( () => {
-                entityManager.getRepository.and.returnValue({ save: () => Promise.reject() })
+                entityManager.repository.and.returnValue({ save: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -269,7 +269,7 @@ describe( 'UserController', () => {
 
             beforeEach( () => {
                 request.get.and.returnValue( user )
-                entityManager.getRepository.and.returnValue({ patch: () => Promise.resolve( user ) })
+                entityManager.repository.and.returnValue({ patch: () => Promise.resolve( user ) })
                 request.getRawBody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
             })
 
@@ -287,7 +287,7 @@ describe( 'UserController', () => {
 
             beforeEach( () => {
                 request.get.and.returnValue( user )
-                entityManager.getRepository.and.returnValue({ patch: () => Promise.reject({ type: 'server' }) })
+                entityManager.repository.and.returnValue({ patch: () => Promise.reject({ type: 'server' }) })
                 request.getRawBody.and.returnValue( '[{ "op": "replace", "path": "/email", "value": "patched@example.com" }]' )
             })
 
@@ -337,7 +337,7 @@ describe( 'UserController', () => {
 
             beforeEach( () => {
                 request.get.and.returnValue( user )
-                entityManager.getRepository.and.returnValue({ delete: () => Promise.resolve() })
+                entityManager.repository.and.returnValue({ delete: () => Promise.resolve() })
             })
 
             beforeEach( fakeAsync( () => {
@@ -354,7 +354,7 @@ describe( 'UserController', () => {
 
             beforeEach( () => {
                 request.get.and.returnValue( null )
-                entityManager.getRepository.and.returnValue({ delete: () => Promise.reject() })
+                entityManager.repository.and.returnValue({ delete: () => Promise.reject() })
             })
 
             beforeEach( fakeAsync( () => {

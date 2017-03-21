@@ -6,16 +6,19 @@ const { Entity } = require( 'easy/database' )
  */
 class User extends Entity {
     /**
-     * build - build entity the first time
+     * Creates an instance of User.
+     * @param {EntityManager} em
      *
-     * @returns {Bookshelf.Model}
+     * @memberOf User
      */
-    build() {
+    constructor( em ) {
+        super( em )
+
         return this.database.Model.extend({
             tableName: 'users',
 
             role() {
-                return this.belongsTo( this.em.getModel( 'role/entity/role' ) )
+                return this.belongsTo( em.model( 'role/entity/role' ) )
             }
         })
     }
