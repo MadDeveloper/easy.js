@@ -2,13 +2,19 @@
 ----------|  NOW  |----------
 -----------------------------
 
+- mettre un index.js dans src qui va faire office de main.ts pour angular
+  - voir pour remettre server.js et bootstrap dans index libre au user de faire ce qu'il veut
+- rendre Configuration paramétrable -> qu'il ne cherche plus dans /config par défaut, etc.
+- renommer activated par index.js dans config/ pour bundles/
+- revoir touts les fichiers de config/
+- rename appPath en srcPath
 - pouvoir emboiter plusieurs groups, lastGroup dans Route doit être un tableau
 - la ou il y a require, faire appel à error.stack dans les try catch englobant
 - update mocks
 - ajouter les méthodes dans request et response de adonis
 - renommer les méthodes getQuelqueChose, en simplifiées. Exemples : getBody() -> body, getRouteParameter() -> routeParameter(), etc.
 - mettre des @example dans la jsdoc
-- TU easy
+- TU
 - exporter role et user dans un repo externe, importable
 - faire une PR pour ecmascript stages, afin de faciliter l'écriture d'objets :
     { core: application.core, container: kernel.container } <=> { application.core, kernel.container } (the last property in path becomes the object property and assign it the current value)
@@ -19,10 +25,9 @@
 -----------------------------
 
 - utiliser Object.assign() ou Immutable.js
-- voir pour la nomenclature de certaines classes (TokenManager ?)
+- voir pour la nomenclature de certaines classes
 - ajouter directement dans la configuration des routes le check des paramètres (ex: /roles/:id => param id, type: Number)
 - simplifier le patch, faire une methode dans controller qui permet d'extraire les ops en un tableau d'objets simple, ou bien de tout lier en promise pour les patchs
-- faire un système d'abonnement sur des routes pour être linker avec les données modifiées de la vue, faire un flux pour les clients
 - créer une classe Cache qui pourra être instanciée dans n'importe quelle autre classe afin de pouvoir gérer son cache
 - mettre chaque composant (ou groupe de) easy indépendant en module externe github et npm (cf. @angular, @angular-router, etc.)
 
